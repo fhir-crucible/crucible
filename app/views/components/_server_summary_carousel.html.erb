@@ -1,0 +1,39 @@
+<div>
+  <div id="ember630" class="ember-view carousel slide server-summaries">
+    <ol class="carousel-indicators">
+      <% (0..servers.count/6).each do |i| %>
+        <li data-target="#serverPage<%=i%>" data-slide-to="<%=i%>" <%if i==0%>class="active"<%end%>></li>
+      <% end %>
+    </ol>
+
+<div class="carousel-inner" role="listbox">
+
+  <%
+    first = true
+    servers.each_slice(6) do |server_page|
+  %>
+    <div class="item <%if first%>active<%end%>">
+      <div class="row">
+        <% first = false %>
+        <% server_page.each do |server| %>
+          <div class="col-md-4">
+            <%= render partial: "components/server_summary", locals: {server: server}%>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<a class="left carousel-control" role="button" data-slide="prev" href="#ember630">
+  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  <span class="sr-only">Previous</span>
+</a>
+
+<a class="right carousel-control" role="button" data-slide="next" href="#ember630">
+  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+  <span class="sr-only">Next</span>
+</a>
+</div>
+  </div>
+

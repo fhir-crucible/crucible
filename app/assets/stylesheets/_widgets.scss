@@ -1,0 +1,27 @@
+#animation{
+  height: 450px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*START*/
+// @media only screen and (max-width: 800px) {
+#resource-chart{
+  margin-bottom: 50px;
+
+  thead tr th {
+    text-align: center;
+  }
+
+  .hiddenRow {
+    padding: 0 !important;
+  }
+}
+
+.starburst{
+  min-height: 300px;
+}
+input[type="checkbox"]{
+  margin-right: 10px;
+}
+/*END*/

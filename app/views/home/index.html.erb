@@ -1,0 +1,92 @@
+<% if @registered%>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" {{action 'closeRegisteredAlert'}}>
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Registration successful</strong>, you may now login.
+  </div>
+<% end %>
+
+<div class="container main">
+  <div class="picture landing-page visible-lg-block">
+    <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
+  </div>
+
+  <div class="c-notification__container">
+<!--     {{#each notifications as |notification|}}
+      {{notification-message notification=notification}}
+    {{/each}}
+ -->  </div>
+
+  <form>
+    <div class="row form">
+      <div class="col-md-10">
+        <div>
+          <input id="ember617" placeholder="FHIR Server URL" type="text" class="form-control ember-view ember-text-field">
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <button class="btn" data-ember-action="618">Begin</button>
+        <!--<button class="btn" {{action "submit"}} disabled={{submitBtnDisabled}}>
+          {{#if loadingServer}}
+            <span class="fa fa-lg fa-fw fa-spinner fa-pulse"></span> Loading...
+          {{else}} 
+            Begin
+          {{/if}}
+        </button> -->
+      </div>
+    </div>
+
+    <!--
+    <div class="row form">
+      <div class="col-md-10">
+        <div class="form-group">
+          {{#if multiServer}}
+            {{input value=server2 class="form-control" placeholder="Comparison FHIR Server URL"}}
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        {{#if multiServer}}
+          <a {{action 'removeUrl'}} class="toggle-info" ><i class="fa fa-minus fa-fw"></i> Remove Server</a>
+        {{else}}
+          <a {{action 'addUrl'}} class="toggle-info" ><i class="fa fa-plus fa-fw"></i> Add A Server</a>
+        {{/if}}
+      </div>
+    </div>
+  -->
+  </form>
+
+  <!-- Summaries -->
+
+  <%= render partial: 'components/server_summary_carousel', locals: {servers: @servers}%>
+
+  <div class="row tri-row">
+    <div class="col-md-4">
+      <div class="palette">
+        <i class="fa fa-medkit fa-5x"></i>
+        <h2>Healthcare Data</h2>
+        <p>Electronic health data exchange will yield many benefits from reduced cost to improved patient outcomes. FHIR will help enable successful exchange of computable health data.</p>
+      </div>
+    </div>
+
+      <div class="col-md-4">
+        <div class="palette">
+          <img src="<%= image_path("fhir.png")%>"  width="75" alt="logo" />
+          <h2>FHIR</h2>
+          <p>The emerging Fast Healthcare Interoperability Resources (FHIR) standard developed by HL7 (Health Level Seven) aims to define the transport and data standards for healthcare information.</p>
+        </div>
+      </div>
+
+    <div class="col-md-4">
+      <div class="palette">
+        <img src="<%= image_path("logo.png")%>"  width="55" alt="logo" />
+        <h2>Crucible</h2>
+        <p>Crucible is a comprehensive, open source FHIR testing tool designed to help ensure accurate implementation of FHIR. Crucible provides an efficient and automated framework to succeed with FHIR.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

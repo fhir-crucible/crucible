@@ -1,0 +1,111 @@
+<div class="container main">
+  <div class="row content">
+    <div class="col-md-12">
+      <div class="palette report">
+        <div class="row">
+          <div class="col-md-9">
+            <h1>Select Tests</h1>
+          </div>
+          <div class="col-md-3">
+          </div>
+        </div>
+        <p class="helper_text">
+          Each FHIR Interface will first generate a conformance statement. Based on the conformance, a given set of recommended tests will be shown to the user.
+        </p>
+        <div class="row">
+          <div class="col-md-7 col-md-offset-4 server-test-details">
+            <div id="ember6112" class="ember-view">
+              <div class="server-details">
+                <div class="server-icon pull-left">
+                  <a id="ember6113" href="#" class="ember-view">      <i class="fa fa-server"></i>
+                  </a>  
+                </div>
+                <div class="server-url-name">
+                  <div class="server-name emphasize">
+                    <%= @server.name %> <a href="#" data-ember-action="6114"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
+                  </div>
+                  <div class="server-url">
+                    <a target="_blank" href="<%= @server.url %>"><%= @server.url %></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!---->
+          </div>
+        </div>
+        <div class="row">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped active execution-progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="81.03448275862068" style="width: 81.0345%;">
+              <span class="sr-only">81.03448275862068% Complete</span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <ul class="nav nav-tabs tabbed-data-container">
+            <li class="tabbed-data active"><a data-toggle="tab" href="#test-data" aria-expanded="true">Tests</a></li>
+            <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false">Conformance</a></li>
+            <li class="tabbed-data"><a data-toggle="tab" href="#test-run-summary-data">Test Run Summary</a></li>
+          </ul>
+        </div>
+        <div class="row">
+          <div class="tab-content">
+            <!-- TEST PANEL START -->
+            <div class="tab-pane test-results active" id="test-data">
+              <div id="ember6125" class="ember-view">
+                <!-- START: Left side, with filters -->
+                <div class="col-md-3">
+                  <div class=" filter">
+                    <div>  
+                      <input id="ember6126" placeholder="Enter Search" type="text" class="form-control {{if testsExecuting 'disabled'}} ember-view ember-text-field">
+                    </div>
+                    <div class="button-holder ">
+                      <button type="button" class="btn secondary" data-ember-action="6127"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
+                      <button type="button" class="btn secondary" data-ember-action="6130"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
+                    </div>
+                    <!--   <div>
+                      {{starburst-chart data=chartData on-zoom="updateCategories" selectedNode=currentNodeName showHeader=false}}
+                      </div> -->
+                    <div class="button-holder ">
+                      <button class="btn">
+                        <!-- <span class="fa fa-lg fa-fw fa-spinner fa-pulse"></span>  -->Execute
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- END: Left side, with filters -->
+                <div class="col-md-9 tab-content-holder">
+                  <!-- grouping option selectors -->
+                  <div class="row grouping-options">
+                    <button type="button" class="btn secondary col-md-6 selected" data-ember-action="6131">Group By Crucible Test Suites</button>
+                    <button type="button" class="btn secondary col-md-6 " data-ember-action="6132">Show Individual Tests</button>
+                  </div>
+                  <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div>
+                      <% @tests.each do |test| %>
+                        <%= render partial: 'test_select', locals: {test: test}%>
+                      <% end %>
+                    </div>
+                    <%= render partial: 'individual_results'%>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- CONFORMANCE PANEL START -->
+            <div class="tab-pane" id="conformance-data">
+              <div id="ember6161" class="ember-view">
+                <div class="col-md-12 tab-content-holder">
+                  <%= render partial: "conformance" %>
+                  <!-- METADATA CONTAINER -->
+                  <%= render partial: 'metadata' %>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="test-run-summary-data">
+              <%= render partial: 'summary'%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

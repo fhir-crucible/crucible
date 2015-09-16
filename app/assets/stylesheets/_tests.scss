@@ -1,0 +1,116 @@
+.summary-cell {
+  text-align: center;
+}
+
+.tab-content {
+  &.details {
+    background-color: $base;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 4px;
+
+    .test-run-result-id {
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+  &.test-results{
+    word-break: break-word;
+  }
+}
+
+.test-results {
+  .pass, .fail, .skip, .error {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .pass {
+    color: $result-pass;
+  }
+
+  .fail {
+    color: $result-fail;
+  }
+
+  .error {
+    color: $result-error;
+  }
+
+  .skip {
+    color: $result-skip;
+  }
+
+  .warning {
+    color: $result-warning;
+  }
+
+  .details {
+    min-height: 250px;
+    max-height: 500px;
+    margin-top: 20px;
+    overflow: auto;
+    h4 {
+      &.heading {
+        text-align: center;
+        margin-top: 0px;
+      }
+    }
+    padding: 15px;
+    padding-left: 20px;
+  }
+  .tab-content-holder{
+    border-left: 1px solid $structure;
+  }
+
+}
+
+.test-run-result {
+  &.filteredOut{
+    display: none;
+  }
+  .panel-title{
+    label {
+      color: $brand-accent;
+    }
+  }
+  .details{
+    border-top: 2px solid $structure;
+    border-bottom: 2px solid $structure;
+    margin-bottom: 20px;
+  }
+  .tab-content{
+    border: 5px solid $base;
+  }
+}
+
+.grouping-options{
+  margin-bottom: 20px;
+  border-left: none;
+  button{
+    width: 50%;
+    &.selected{
+      background-color: $brand-accent;
+      color: white;
+    }
+  }
+}
+
+.filter{
+  margin-top: 30px;
+  .button-holder{
+    margin-top: 10px;
+    button{
+      text-align: left;
+      &.hide{
+        visibility: none;
+      }
+    }
+  }
+}
+
+.test-results{
+  .hidden{
+    visibility: none;
+  }
+}

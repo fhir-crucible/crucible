@@ -1,0 +1,21 @@
+/*Navigation has a navbar-header and then the actual nav itself*/
+
+.navbar-header{
+  .navbar-brand{
+    font-weight: 500;
+    font-size: 32px;
+    color: $brand-tertiary;
+  }
+}
+
+nav {
+  .navButton {
+    font-weight: 100;
+    font-size: 18px;
+    color: $brand-tertiary;
+  }
+}
+
+.nav-tabs > li > a:hover {
+  background-color: $base-darken;
+}

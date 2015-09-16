@@ -1,0 +1,14 @@
+<div class="summary" data-server-id="<%= server.id %>" data-synchronized="true">
+  <div class="starburst">
+    <%= render partial: "components/starburst" %>
+  </div>
+  <a id="ember931" href="/servers/<%= server.id %>">
+    <div class="server-summary-details">
+      <span class="server-name"><%= server.name %> - </span>
+      <span class="percent-passed"></span>
+    </div>
+  </a>
+  <div class="summary-time-details">
+    <span class="server-time"><i class="fa fa-fw fa-clock-o"></i><span class="last-run"></span></span>
+  </div>
+</div>

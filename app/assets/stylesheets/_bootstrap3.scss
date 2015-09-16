@@ -1,0 +1,115 @@
+/*****************************************************************************/
+/**         This file is for overridding the default bootstrap behavior     **/
+/*****************************************************************************/
+body {
+  background-color: $base;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  font-size: 18px;
+}
+
+header {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+  border-radius: 0px;
+
+  .nav > li > a{
+    &:visited{
+      background-color: $brand-primary;
+    }
+    &:hover{
+      background-color: $brand-primary;
+    }
+  }
+
+}
+
+footer {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+  margin-top: 100px;
+
+  .nav > li > a{
+    &:visited{
+      background-color: $brand-primary;
+    }
+    &:hover{
+      background-color: $brand-primary;
+    }
+  }
+}
+
+h1{
+  font-size: 32px;
+  color: $brand-primary;
+  margin-top: 0;
+  text-align: left;
+}
+
+h2{
+  font-size: 24px;
+  color: $brand-primary;
+}
+
+a{
+  color: $brand-accent;
+  &.toggle-info{
+    font-size: 18px;
+    &:hover{
+      text-decoration: none;
+    }
+  }
+  small{
+    color: $brand-accent;
+  }
+}
+
+.helper_text{
+  font-size: 14px;
+  text-align: left;
+  color: $brand-primary;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  &.url{
+    display: inline;
+    margin-top: 5px;
+  }
+}
+
+.emphasize{
+  font-size: 125%;
+}
+
+p{
+  font-size: 18px;
+}
+
+.row{
+  &.metadata{
+    background-color: $brand-tertiary;
+  }
+  &.conformance{
+    &.header-data{
+      margin-top: 50px;
+      & .info-box{
+        text-align: left;
+        padding-left: 100px;
+      }
+    }
+  }
+  &.server-header-data{
+    margin-top: 20px;
+    text-align: left;
+    & h4{
+      font-weight: lighter;
+      font-size: 20px;
+      display: inline;
+      color: $brand-primary;
+    }
+    & a{
+      color: $brand-accent;
+      font-size: 20px;
+      font-weight: 500;
+      display: inline;
+    }
+  }
+}

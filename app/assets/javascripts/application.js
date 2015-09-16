@@ -10,7 +10,14 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require turbolinks
+//= require jquery/dist/jquery
+//= require bootstrap-sass-official/assets/javascripts/bootstrap-sprockets
+//= require d3/d3
+//= require d3-tip/index
+//= require moment/moment
+//= require handlebars/handlebars.runtime
+
+//= require_tree ./views
+//= require_tree ./views/component
+//= require_tree ./views/templates
 //= require_tree .

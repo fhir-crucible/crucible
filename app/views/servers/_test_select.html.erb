@@ -1,0 +1,33 @@
+<div id="ember6142" class="ember-view">
+  <div class="test-run-result ">
+    <div class="toggleable panel-heading">
+      <h4 class="panel-title">
+        <input id="ember6143" type="checkbox" name="55d4c96e4d4d321095620000" class="ember-view ember-checkbox">
+        <a class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#<%=test.id%>_details">
+        <label><%= test.name %></label>
+        </a>
+      </h4>
+    </div>
+    <div class="panel-collapse collapse" id="<%=test.id%>_details" aria-expanded="false" style="height: 0px;">
+      <p class="helper_text"><%= test.description %></p>
+      <div class="row details">
+        <div>
+          <table class="table report-table nav nav-stacked">
+            <tbody>
+              <% test.methods.each do |method| %>
+                <tr>
+                  <td>
+                    KEY
+                  </td>
+                  <td>
+                    <%= method %>
+                  </td>
+                </tr>
+              <% end%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

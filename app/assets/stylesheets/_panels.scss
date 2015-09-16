@@ -1,0 +1,84 @@
+.panel-heading{
+  text-align: left;
+  padding: 0px 0px;
+}
+
+.panel-group .panel{
+  border-bottom: 1px solid $structure;
+  box-shadow: none;
+}
+
+.panel-body{
+  text-align: left;
+  label{
+    color: $brand-accent;
+  }
+}
+
+.panel-title{
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 15px;
+
+  label {
+    font-weight: normal;
+  }
+}
+
+/*START COLLAPSE PANEL*/
+.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
+
+.test-panel-heading {
+  font-weight: bold;
+}
+
+.tab-content-holder{
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+#test-data{
+  & .panel-collapse{
+    text-align: left;
+  }
+}
+
+.panel-collapse{
+  &.test-results{
+    margin-bottom: 15px;
+    & .listed-results {
+      padding-right: 0px;
+    }
+  }
+}
+
+.individual-test-result-panel{
+  & .panel-title{
+    margin-bottom: 10px;
+  }
+  & .panel-heading{
+    label{
+      font-size: 14px;
+    }
+  }
+  & .tab-content{
+    margin-left: 23px;
+    margin-bottom: 25px;
+    font-size: 16px;
+  }
+  &.filteredOut{
+    display: none;
+  }
+}
+
+
+
+

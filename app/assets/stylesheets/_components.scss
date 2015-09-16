@@ -1,0 +1,234 @@
+.container.main {
+  margin-top: 50px;
+}
+
+.palette {
+  text-align: center;
+  background-color: $brand-tertiary;
+  border-radius: 10px;
+  padding: 60px;
+  margin-bottom: 50px;
+
+  &.report {
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  &.user {
+    text-align: left;
+
+    &.analytics {
+      #addServerInput {
+        display:none;
+      }
+      min-height: 200px;
+    }
+
+    &.header {
+      min-height: 200px;
+    }
+
+    &.dash {
+      min-height: 500px;
+    }
+  }
+}
+
+.tri-row {
+  text-align: center;
+  margin: 40px 0;
+
+  .palette {
+    padding: 20px;
+    min-height: 350px;
+  }
+}
+
+// ------------------------- TABBED DATA ----------------------------------- //
+
+.tabbed-data {
+  font-size: 24px;
+  font-weight: 50;
+  display: inline-block;
+  width:33%;
+}
+
+.nav-tabs > li > a {
+  color: $brand-primary;
+}
+
+.picture {
+  text-align: center;
+  margin-bottom: 40px;
+  img {
+    padding: 20px;
+  }
+}
+
+.word-wrap {
+  overflow:hidden;
+  word-wrap:break-word;
+}
+
+
+.add_server_button {
+  float:right;
+  &:hover{
+    font-size: 20px;
+  }
+}
+
+#serverList {
+  font-size: 16px;
+  color: $brand-primary;
+  & .btn {
+    width: 100px;
+    height: 25px;
+    padding: 0px;
+    display: none;
+  }
+  & .clickable-list-item {
+    &:hover {
+      font-weight: bold;
+      font-size: 20px;
+      & .btn {
+        display: inline-block;
+      }
+    }
+    &.active {
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+}
+
+// ------------------------- D3 VISUALIZATION ------------------------------ //
+
+.axis text {
+  font: 10px sans-serif;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+.metadata-selector {
+  .nav-pills > li > a {
+    color: $brand-primary;
+    border-radius: 4px;
+    padding: 5px 10px;
+    &:hover {
+      background-color: $base-darken;
+    }
+  }
+  .nav-pills > li.active > a {
+    background-color: $base-lighten;
+    color: $brand-primary;
+    border-radius: 4px;
+    &:focus {
+      background-color: $base-lighten;
+    }
+    &:hover {
+      background-color: $base-lighten;
+    }
+  }
+}
+
+.histogram-bar-label {
+  font: 10px sans-serif;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+// ------------------------- D3 TIPS --------------------------------------- //
+
+.d3-tip {
+  text-align: center;
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: $brand-tertiary-inverse;
+  color: $brand-tertiary;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: $brand-tertiary-inverse;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Northward tooltips */
+.d3-tip.n:after {
+  content: "\25BC";
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+  text-align: center;
+}
+
+/* Eastward tooltips */
+.d3-tip.e:after {
+  content: "\25C0";
+  margin: -4px 0 0 0;
+  top: 50%;
+  left: -8px;
+}
+
+/* Southward tooltips */
+.d3-tip.s:after {
+  content: "\25B2";
+  margin: 0 0 1px 0;
+  top: -8px;
+  left: 0;
+  text-align: center;
+}
+
+/* Westward tooltips */
+.d3-tip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -1px;
+  top: 50%;
+  left: 100%;
+}
+
+// ------------------------- CAROUSEL -------------------------------------- //
+
+.carousel {
+  .carousel-control {
+    color: $brand-primary;
+    width: 5%;
+    text-shadow: none;
+    opacity: 1;
+
+    &:hover {
+      color: $brand-secondary;
+    }
+
+    &.left,
+    &.right {
+      background-image: none;
+    }
+  }
+
+  .carousel-inner {
+    width: inherit;
+
+    .row {
+      padding: 0 50px;
+    }
+  }
+
+  .carousel-indicators li {
+    background-color: $brand-primary;
+
+    &.active {
+      background-color: $brand-secondary;
+    }
+  }
+}

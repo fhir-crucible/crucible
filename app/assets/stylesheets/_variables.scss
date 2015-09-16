@@ -1,0 +1,23 @@
+$brand-primary: #505152;             // dark gray
+$brand-secondary: #D85D20;           // orange
+$brand-tertiary: #FFFFFF;            // white
+$brand-tertiary-inverse: #000000;    // black
+$brand-accent: #7F9FC5;              // washed out blue
+$brand-accent-darken: #23527c;       // dark washed out blue for hover
+
+$base: #EEEEEE;                      // background shade
+$base-lighten: #F5F5F5;              // background shade
+$base-darken: #DDDDDD;               // background shade darkened, used for hover
+$base-header-small: #777;            // gray used for small header text for summaries
+$structure: #DDD;                    // gray used for structural components
+
+$failure: #800010;
+$success: #417505;
+
+$font-size-h1: 30px;
+
+$result-pass: #417505;
+$result-fail: #800010;
+$result-error: #4B0082;
+$result-skip: #00E1E1;
+$result-warning: #fec42e;

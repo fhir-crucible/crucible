@@ -1,0 +1,310 @@
+.conformance-badge-popover {
+  opacity: 0;
+  cursor: default;
+}
+
+.server.selectBox {
+  margin-bottom: 30px;
+  text-align: left;
+  color: $brand-accent;
+  font-size: 20px;
+
+  button {
+    border: none;
+    font-size: 16px;
+    text-align: left;
+  }
+}
+
+.popover-js {
+  width: 200px;
+}
+
+.spec-table {
+  tr > div{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+// ------------------------- SERVER DETAILS -------------------------------- //
+
+.server-details {
+  height: 60px;
+  border-radius: 10px;
+
+  .server-icon {
+    margin-right: 30px;
+    font-size: 55px;
+    line-height: 60px;
+    color: $brand-accent;
+  }
+
+  .server-url-name {
+    text-align: left;
+    line-height: 26px;
+    padding: 5px 0 0 0;
+
+    .server-name {
+      color: $brand-primary;
+    }
+
+    .edit-server-name {
+      font-size: 16px;
+      margin-left: 10px;
+    }
+
+    .server-url {
+      a {
+        color: $brand-primary;
+      }
+    }
+  }
+}
+
+.server-test-details,
+.server-show-details {
+  margin-bottom: 20px;
+}
+
+// ------------------------- FHIR SPECIFICATION STARBURST ------------------ //
+
+.server-fhir-spec-display {
+  margin: 20px 0 50px 0;
+}
+
+.percent-supported {
+  text-align: left;
+  border-bottom: 1px solid $structure;
+
+  .percent-supported-value {
+    font-size: 30px;
+  }
+  .percent-supported-text {
+    font-size: 16px;
+  }
+}
+
+.server-fhir-specification {
+  margin-bottom: 40px;
+
+  .spec-starburst-chart {
+    padding: 0 40px 0 40px;
+    text-align: left;
+  }
+
+  .spec-details {
+    padding-top: 40px;
+
+    .spec-headers {
+      margin-bottom: 15px;
+      text-align: left;
+
+      .spec-headers-specification {
+        margin-left: 32px;
+        text-decoration: underline;
+      }
+
+      .spec-headers-passing {
+        text-align: right;
+        text-decoration: underline;
+      }
+    }
+
+    .spec-icon{
+      font-size: 24px;
+      line-height: 24px;
+    }
+
+    .spec-title{
+      text-align: left;
+    }
+
+    .spec-bar-graph{
+      & .progress-small{
+        margin-bottom: 0;
+      }
+    }
+    .spec-percent-passing{}
+  }
+}
+
+.starburst-header {
+  text-align: center;
+  margin-top: 20px;
+}
+
+// ------------------------- SERVER SUMMARIES ------------------------------ //
+
+.server-summaries {
+  margin: 15px;
+  background-color: $brand-tertiary;
+  border-radius: 10px;
+  min-height: 920px;
+  text-align: center;
+  padding: 40px 0;
+
+  .summary {
+    padding: 5px;
+  }
+
+  .server-summary-details {
+    margin: 10px;
+    margin-bottom: 0px;
+
+    .percent-passed {
+      font-weight: bold;
+    }
+  }
+
+  .summary-time-details {
+    margin-bottom: 10px;
+    line-height: 1em;
+  }
+}
+
+.action-buttons{
+  button{
+    margin-bottom: 5px;
+  }
+}
+
+// ------------------------- FAILURES -------------------------------------- //
+
+.failures {
+  .failures-title {
+    text-align: left;
+    font-size: 30px;
+    border-bottom: 1px solid $structure;
+    margin-bottom: 15px;
+
+    .failures-count {
+      color: $brand-accent;
+    }
+  }
+
+  .failures-search {
+    margin: 20px 0 20px -15px;
+  }
+
+  .tag {
+    display: inline-block;
+    background-color: $brand-accent;
+    border: 3px solid $brand-accent;
+    color: $brand-tertiary;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px;
+    margin: 0 0 5px 5px;
+    cursor: pointer;
+
+    &.selected-tag {
+      background-color: $brand-accent-darken;
+    }
+  }
+
+  .tag-list {
+    display: inline-block;
+
+    a {
+      color: $brand-tertiary;
+      text-decoration: none;
+    }
+  }
+
+  .failure-messages {
+    position: relative;
+    text-align: left;
+
+    .active-test-failure {
+      .failures-nav {
+        .metadata {
+          .failure-message-level-one-count {
+            background-color: $brand-accent-darken;
+            color: $brand-tertiary;
+          }
+
+          .failure-message-level-one-text {
+            background-color: $base-darken;
+          }
+        }
+      }
+    }
+
+    .failures-nav {
+      .metadata {
+        position: relative;
+        min-height: 70px;
+        cursor: pointer;
+
+        .failure-message-level-one-count {
+          position: absolute;
+          height: 50px;
+          width: 50px;
+          padding: 5px;
+          top: 0;
+          left: 0;
+
+          border-radius: 50%;
+          border: 3px solid $brand-accent;
+          color: $brand-accent;
+          font-size: 1.2em;
+          text-align: center;
+        }
+
+        .failure-message-level-one-text {
+          margin: 10px 0 10px 65px;
+          padding: 10px;
+          font-size: 0.9em;
+          border-radius: 5px;
+        }
+
+        &:hover {
+          .failure-message-level-one-count {
+            background-color: $brand-accent-darken;
+            color: $brand-tertiary;
+          }
+
+          .failure-message-level-one-text {
+            background-color: $base-darken;
+          }
+        }
+      }
+
+      .failed-tests {
+        margin-left: 100px;
+
+        .test-id {
+          font-weight: bold;
+        }
+
+        .test-stats {
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+}
+
+.failure-inspector {
+  .failure-inspector-starburst {
+    width: 250px;
+    margin: 0 auto;
+  }
+}
+
+.error-report{
+  word-wrap: break-word;
+}
+
+// ------------------------- SERVER TIME ----------------------------------- //
+
+.server-time {
+  font-size: 0.7em;
+  color: $base-header-small;
+}
+
+.servers-show-time {
+  margin-left: 10px;
+}

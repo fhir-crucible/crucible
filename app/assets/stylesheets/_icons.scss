@@ -1,0 +1,165 @@
+.tests {
+  float: right;
+  margin-right: 10px;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+.conformance-test-badge{
+  margin-left: 29px;
+  margin-right: 29px;
+  &.results-passed {
+    background: $result-pass;
+    border: none;
+  }
+  &.results-failed {
+    background: $result-fail;
+    border: none;
+  }
+}
+
+.animation-icons{
+  float:right;
+}
+
+.progress{
+  margin-top: 35px;
+  height: 30px;
+  background-color: $brand-tertiary;
+  border: 1px solid $brand-secondary;
+
+}
+
+.progress-bar{
+  background-color: $brand-secondary;
+  width: 2%;
+}
+
+.progress-small {
+  @extend .progress;
+
+  margin-top: 0;
+  height: 20px;
+  background-color: #bbb;
+  border: 1px solid $brand-primary;
+
+  .progress-bar-success {
+    background-color: $result-pass;
+  }
+
+  .progress-bar-danger {
+    background-color: $result-fail;
+  }
+
+  .progress-bar-untested {
+    background-color: #bbb;
+  }
+}
+
+@mixin circle($color, $diameter){
+  display: inline-block;
+  border-radius: 50%;
+  width: $diameter;
+  height: $diameter;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border: 1px solid $color;
+  &.filled{
+    background: $color;
+  }
+  &.results-failed {
+    background: $failure;
+  }
+  &.results-passed {
+    background: $success;
+  }
+}
+
+.nav-circle{
+  @include circle($brand-secondary, 30px);
+}
+
+.test-circle{
+  margin-left: 27px;
+  margin-right: 27px;
+  @include circle($brand-accent, 15px);
+}
+
+.test-circle-holder{
+  text-align: right;
+  padding-right: 30px;
+}
+
+.row-of-circles{
+  float: right;
+  padding-right: 30px;
+}
+
+/**********  testing purposes, will re work  **********/
+.test-filled{
+  margin-left: 27px;
+  margin-right: 27px;
+  @include circle($brand-accent, 15px);
+  background: $brand-accent;
+}
+
+.test-empty{
+  margin-left: 27px;
+  margin-right: 27px;
+  @include circle($brand-accent, 15px);
+}
+
+.right-circle{
+  margin-left: 34px;
+  margin-right: 27px;
+  height:16px;
+  width:8px;
+  border-radius: 0px 90px 90px 0px;
+  -moz-border-radius: 0px 90px 90px 0px;
+  -webkit-border-radius: 0px 90px 90px 0px;
+  background:$brand-accent;
+}
+
+.left-circle{
+  margin-left: 27px;
+  margin-right: 34px;
+  height:16px;
+  width:8px;
+  border-radius: 90px 0px 0px 90px;
+  -moz-border-radius: 90px 0px 0px 90px;
+  -webkit-border-radius: 90px 0px 0px 90px;
+  background:$brand-accent;
+}
+/**********  /END testing purposes, will re work  **********/
+
+.passed{
+  color: $success;
+  float: right;
+  margin-right: 17px;
+}
+
+.failed{
+  color: $failure;
+  float: right;
+  margin-right: 17px;
+}
+
+.icon-failed {
+  color: $result-fail;
+}
+
+.icon-untested {
+  color: #bbb;
+}
+
+.icon-passed {
+  color: $result-pass;
+}

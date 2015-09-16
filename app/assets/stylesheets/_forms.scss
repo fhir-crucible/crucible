@@ -1,0 +1,10 @@
+.form {
+
+  &.row {
+    padding: 5px 15px;
+  }
+}
+
+.form-control:focus {
+  border-color: $brand-accent;
+}

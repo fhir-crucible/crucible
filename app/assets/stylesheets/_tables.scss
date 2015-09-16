@@ -1,0 +1,112 @@
+.table {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  tr {
+    border-bottom: 1px solid $base;
+  }
+
+  thead {
+    border-bottom: 1px solid $base;
+    font-size: 14px;
+  }
+}
+
+.table-header{
+  font-size: 14px;
+}
+
+.table-label-holder{
+  float: right;
+  padding-right: 22px
+}
+
+table > tbody > tr > td {
+  text-align: left;
+}
+
+table > thead > tr > th {
+  text-align: left;
+}
+
+.table-container {
+  height: 300px;
+  overflow: auto;
+}
+
+span .table-cell {
+  display: inline-block;
+  width: 70px;
+  font-size: 14px;
+  text-align: center;
+}
+
+table > tbody > tr > td {
+  .passed {
+    float: none;
+    margin-right: 0px;
+  }
+
+  .failed {
+    float: none;
+    margin-right: 0px;
+  }
+}
+
+.conformance {
+  table > tbody > tr > td {
+    border: none;
+  }
+
+  .table-mega-striped > tbody > tr:nth-child(4n-3) > td,
+  .table-mega-striped > tbody > tr:nth-child(4n-3) > th,
+  .table-mega-striped > tbody > tr:nth-child(4n-2) > td,
+  .table-mega-striped > tbody > tr:nth-child(4n-2) > th {
+     background-color: $base;
+  }
+
+  .table {
+    tr {
+      border: none;
+    }
+
+    &.inner-table {
+      background-color: transparent;
+    }
+  }
+}
+
+/* Bootstrap overrides for report-table */
+.table.report-table{
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.table.report-table tr{
+  border-bottom: none;
+}
+
+.table.report-table > tbody > tr > td {
+  border-top: none;
+}
+
+.table.report-table > tbody > tr.active > td {
+  background-color: $base;
+}
+
+.table.report-table > tbody > tr > td:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.table.report-table > tbody > tr > td:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.table-hover > tbody > tr:hover{
+  background-color: $base-darken;
+}
+
+
