@@ -6,7 +6,9 @@ Rails.application.routes.draw do
 
   resources :tests, defaults: { format: :json }
   resources :servers do
-    get :test
+    resources :tests do
+      post 'execute'
+    end
   end
 
   root to: "home#index"

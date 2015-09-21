@@ -1,11 +1,14 @@
-<div id="ember6142" class="ember-view">
+<div id="test-<%=test.id%>">
   <div class="test-run-result ">
     <div class="toggleable panel-heading">
       <h4 class="panel-title">
-        <input id="ember6143" type="checkbox" name="55d4c96e4d4d321095620000" class="ember-view ember-checkbox">
+        <input type="checkbox" name="<%= test.id %>">
         <a class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#<%=test.id%>_details">
         <label><%= test.name %></label>
         </a>
+        <span class="test-status hidden">
+          <span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>
+        </span>
       </h4>
     </div>
     <div class="panel-collapse collapse" id="<%=test.id%>_details" aria-expanded="false" style="height: 0px;">

@@ -103,57 +103,36 @@ class TestsController < ApplicationController
   end
 
   def execute
-    params[:title] ||= 'BaseTest'
-    url = params[:url] || params[:url1]
-    url ||= 'http://fhir.healthintersections.com.au/open' # valid endpoint, commented to prevent spamming
-    client1 = FHIR::Client.new(url)
-    client2 = FHIR::Client.new(params[:url2]) if params[:url2]
+    @server = Server.find(params[:server_id])
+    client1 = FHIR::Client.new(@server.url)
+    # client2 = FHIR::Client.new(result.test_run.destination_server.url) if result.test_run.is_multiserver
+    # TODO: figure out multi server
+    client2 = nil
+    executor = Crucible::Tests::Executor.new(client1, client2)
 
-    test = Crucible::Tests.const_get(params[:title]).new(client1, client2)
+    mtest = Test.find(params[:test_id])
+    test = executor.find_test(mtest.title)
 
-    if params[:resource_class]
-      val = { debug: params, results: test.execute(params[:resource_class].constantize) }
+    val = nil
+    if mtest.resource_class?
+      val = test.execute(mtest.resource_class.constantize)[0]["#{result.test.title}_#{result.test.resource_class.split("::")[1]}"][:tests]
     else
-      val = { debug: params, results: test.execute }
+      val = test.execute()[0][mtest.title][:tests]
     end
 
-    respond_with JSON.pretty_generate(val)
+    # TODO: save results
+    # result.has_run = true
+    # result.result = val
+    # result.save()
 
-    # Returns:
+    # if we just executed a result and all the results have been run
+    # TODO: this seems really really messy
+    # if TestRun.find(result.test_run.id).test_results.all?(&:has_run)
+    #   # build a summary for the run
+    #   Compliance.build_compliance_json(result.test_run)
+    # end
 
-    # http://localhost:3000/tests/execute/ReadTest
-
-    # {
-    #   "debug": {
-    #     "format": "json",
-    #     "controller": "tests",
-    #     "action": "execute",
-    #     "title": "ReadTest",
-    #     "url": "http://fhir.healthintersections.com.au/"
-    #   },
-    #   "results": {
-    #     "r001_get_person_data_test": {
-    #       "test_method": "r001_get_person_data_test",
-    #       "status": "passed",
-    #       "result": null
-    #     },
-    #     "r002_get_unknown_resource_type_test": {
-    #       "test_method": "r002_get_unknown_resource_type_test",
-    #       "status": "missing",
-    #       "result": "r002_get_unknown_resource_type_test failed. Error: Implementation missing: r002_get_unknown_resource_type_test."
-    #     },
-    #     "r003_get_non_existing_resource_test": {
-    #       "test_method": "r003_get_non_existing_resource_test",
-    #       "status": "missing",
-    #       "result": "r003_get_non_existing_resource_test failed. Error: Implementation missing: r003_get_non_existing_resource_test."
-    #     },
-    #     "r004_get_bad_formatted_resource_id_test": {
-    #       "test_method": "r004_get_bad_formatted_resource_id_test",
-    #       "status": "missing",
-    #       "result": "r004_get_bad_formatted_resource_id_test failed. Error: Implementation missing: r004_get_bad_formatted_resource_id_test."
-    #     }
-    #   }
-    # }
+    render json: val
 
   end
 

@@ -33,10 +33,11 @@
             <!---->
           </div>
         </div>
-        <div class="row">
-          <div class="progress">
-            <div class="progress-bar progress-bar-striped active execution-progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="81.03448275862068" style="width: 81.0345%;">
-              <span class="sr-only">81.03448275862068% Complete</span>
+
+        <div class="row collapse">
+          <div class="progress" id="execution-progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;">
+              <span class="sr-only">0% Complete</span>
             </div>
           </div>
         </div>
@@ -51,7 +52,7 @@
           <div class="tab-content">
             <!-- TEST PANEL START -->
             <div class="tab-pane test-results active" id="test-data">
-              <div id="ember6125" class="ember-view">
+              <div class="test-executor" data-progress="execution-progress">
                 <!-- START: Left side, with filters -->
                 <div class="col-md-3">
                   <div class=" filter">
@@ -59,15 +60,15 @@
                       <input id="ember6126" placeholder="Enter Search" type="text" class="form-control {{if testsExecuting 'disabled'}} ember-view ember-text-field">
                     </div>
                     <div class="button-holder ">
-                      <button type="button" class="btn secondary" data-ember-action="6127"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
-                      <button type="button" class="btn secondary" data-ember-action="6130"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
+                      <button type="button" class="btn secondary"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
+                      <button type="button" class="btn secondary"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
                     </div>
                     <!--   <div>
                       {{starburst-chart data=chartData on-zoom="updateCategories" selectedNode=currentNodeName showHeader=false}}
                       </div> -->
                     <div class="button-holder ">
-                      <button class="btn">
-                        <!-- <span class="fa fa-lg fa-fw fa-spinner fa-pulse"></span>  -->Execute
+                      <button class="btn execute">
+                        Execute
                       </button>
                     </div>
                   </div>
@@ -76,8 +77,8 @@
                 <div class="col-md-9 tab-content-holder">
                   <!-- grouping option selectors -->
                   <div class="row grouping-options">
-                    <button type="button" class="btn secondary col-md-6 selected" data-ember-action="6131">Group By Crucible Test Suites</button>
-                    <button type="button" class="btn secondary col-md-6 " data-ember-action="6132">Show Individual Tests</button>
+                    <button type="button" class="btn secondary col-md-6 selected">Group By Crucible Test Suites</button>
+                    <button type="button" class="btn secondary col-md-6 ">Show Individual Tests</button>
                   </div>
                   <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
                     <div>

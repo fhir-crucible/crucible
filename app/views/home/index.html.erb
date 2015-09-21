@@ -18,16 +18,16 @@
     {{/each}}
  -->  </div>
 
-  <form>
+  <form action="/servers" method="post">
     <div class="row form">
       <div class="col-md-10">
         <div>
-          <input id="ember617" placeholder="FHIR Server URL" type="text" class="form-control ember-view ember-text-field">
+          <input placeholder="FHIR Server URL" type="text" name="server[url]" class="form-control">
         </div>
       </div>
 
       <div class="col-md-2">
-        <button class="btn" data-ember-action="618">Begin</button>
+        <input type="submit" class="btn" data-ember-action="618" value="Begin"></input>
         <!--<button class="btn" {{action "submit"}} disabled={{submitBtnDisabled}}>
           {{#if loadingServer}}
             <span class="fa fa-lg fa-fw fa-spinner fa-pulse"></span> Loading...

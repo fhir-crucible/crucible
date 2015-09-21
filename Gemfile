@@ -33,6 +33,7 @@ gem 'bcp47'
 gem 'nokogiri-diff'
 gem 'addressable'
 gem 'handlebars_assets'
+gem 'postrank-uri'
 
 group :development do
   gem 'pry-byebug'
