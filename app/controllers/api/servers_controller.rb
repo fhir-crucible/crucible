@@ -67,6 +67,25 @@ module Api
       render json: {summary:Summary.where(server_id: params[:id]).try(:last)}
     end
 
+    def generate_summary
+
+      test_run = TestRun.where(server_id: params[:id]).order_by(date: 'desc').first
+      server = Server.find(params[:id])
+      binding.pry
+      if test_run.date <= server.summary.generated_at
+        binding.pry
+        render json: {summary: server.summary}
+        return
+      end
+      summary = Compliance.build_compliance_json(test_run)
+
+
+      server.summary = summary
+      server.percent_passing = (summary.compliance['passed'].to_f / summary.compliance['total'].to_f) * 100.0
+      server.save
+      render json: {summary: summary}
+    end
+
     private
 
     def server_params

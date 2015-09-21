@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   namespace :api, format: :json do
     get 'servers/:id/conformance', to: 'servers#conformance'
     get 'servers/:id/summary', to: 'servers#summary'
+    get 'servers/:id/generate_summary', to: 'servers#generate_summary'
     resources :servers
     resources :multiservers
     resources :tests

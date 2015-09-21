@@ -4,6 +4,8 @@ class Server
   include Mongoid::Document
   field :name, type: String
   field :url, type: String
+  has_one :summary
+  field :percent_passing, type: Float
 
   def load_conformance
     @raw_conformance ||= FHIR::Client.new(self.url).conformanceStatement
