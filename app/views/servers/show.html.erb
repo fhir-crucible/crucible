@@ -59,9 +59,9 @@
                     <div>  
                       <input id="ember6126" placeholder="Enter Search" type="text" class="form-control {{if testsExecuting 'disabled'}} ember-view ember-text-field">
                     </div>
-                    <div class="button-holder ">
-                      <button type="button" class="btn secondary"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
-                      <button type="button" class="btn secondary"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
+                    <div class="button-holder">
+                      <button type="button" class="btn secondary selectDeselectAll"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
+                      <button type="button" class="btn secondary expandCollapseAll"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
                     </div>
                     <!--   <div>
                       {{starburst-chart data=chartData on-zoom="updateCategories" selectedNode=currentNodeName showHeader=false}}
@@ -81,10 +81,8 @@
                     <button type="button" class="btn secondary col-md-6 ">Show Individual Tests</button>
                   </div>
                   <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div>
-                      <% @tests.each do |test| %>
-                        <%= render partial: 'test_select', locals: {test: test}%>
-                      <% end %>
+                    <div class="test-suites">
+                      loading indicator
                     </div>
                     <%= render partial: 'individual_results'%>
                   </div>

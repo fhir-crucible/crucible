@@ -3,10 +3,47 @@ $(window).on('load', ->
 )
 
 class Crucible.TestExecutor
+  tests: []
 
   constructor: ->
     @element = $('.test-executor')
     @element.find('.execute').click(@execute)
+    @element.find('.selectDeselectAll').click(@selectDeselectAll)
+    @element.find('.expandCollapseAll').click(@expandCollapseAll)
+
+    $.getJSON("api/tests.json").success((data) => 
+      @tests = data['tests']
+      @renderSuites()
+    )
+
+  renderSuites: =>
+    suitesElement = @element.find('.test-suites')
+    suitesElement.empty()
+    $(@tests).each (i, test) =>
+      html = HandlebarsTemplates['views/templates/servers/test_select']({test: test})
+      suitesElement.append(html)
+
+  selectDeselectAll: =>
+    suiteElements = @element.find('.test-run-result :checkbox')
+    button = $('.selectDeselectAll')
+    if !$(suiteElements).prop('checked')
+      $(suiteElements).prop('checked', true)
+      $(button).html('<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites')
+    else
+      $(suiteElements).prop('checked', false)
+      $(button).html('<i class="fa fa-check"></i>&nbsp;Select All Test Suites')
+
+  expandCollapseAll: =>
+    suiteElements = @element.find('.test-run-result .collapse')
+    button = $('.expandCollapseAll')
+    if !$(suiteElements).hasClass('in')    
+      $(suiteElements).each (i, panel) ->
+        $(panel).collapse('show')
+      $(button).html('<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites')
+    else
+      $(suiteElements).each (i, panel) ->
+        $(panel).collapse('hide')
+        $(button).html('<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites')
 
   execute: =>
     tests = $($.map(@element.find(':checked'), (e) -> e.name))
