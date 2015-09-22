@@ -1,4 +1,4 @@
-$(window).on('load', -> 
+$(window).on('load', ->
   new Crucible.TestExecutor()
 )
 
@@ -67,6 +67,7 @@ class Crucible.TestExecutor
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     @showOnlyExecutedSuites()
     progress = $("##{this.element.data('progress')}")
+    serverId = this.element.data('server-id')
     progress.parent().collapse('show')
     progress.find('.progress-bar').css('width',"2%")
     suiteIds.each (i, suiteId) =>

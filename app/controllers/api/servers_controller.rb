@@ -71,9 +71,7 @@ module Api
 
       test_run = TestRun.where(server_id: params[:id]).order_by(date: 'desc').first
       server = Server.find(params[:id])
-      binding.pry
       if test_run.date <= server.summary.generated_at
-        binding.pry
         render json: {summary: server.summary}
         return
       end
