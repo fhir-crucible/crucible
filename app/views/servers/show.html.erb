@@ -66,6 +66,7 @@
                     <!--   <div>
                       {{starburst-chart data=chartData on-zoom="updateCategories" selectedNode=currentNodeName showHeader=false}}
                       </div> -->
+                    <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
                     <div class="button-holder ">
                       <button class="btn execute">
                         Execute
@@ -77,8 +78,8 @@
                 <div class="col-md-9 tab-content-holder">
                   <!-- grouping option selectors -->
                   <div class="row grouping-options">
-                    <button type="button" class="btn secondary col-md-6 selected">Group By Crucible Test Suites</button>
-                    <button type="button" class="btn secondary col-md-6 ">Show Individual Tests</button>
+                    <button type="button" class="btn secondary col-md-6 selected">Test Suites</button>
+                    <button type="button" class="btn secondary col-md-6 ">Individual Tests</button>
                   </div>
                   <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="test-suites">
@@ -100,7 +101,7 @@
               </div>
             </div>
             <div class="tab-pane" id="test-run-summary-data">
-              <%= render partial: 'summary'%>
+              <%= render partial: 'summary', locals: {server: @server}%>
             </div>
           </div>
         </div>

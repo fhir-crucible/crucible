@@ -15,7 +15,7 @@ class Crucible.Summary
     $('.summary').each (index, value) =>
       serverId = $(value).data('serverId')
       if serverId?
-        $.getJSON("api/summary/#{serverId}.json")
+        $.getJSON("/api/summary/#{serverId}.json")
           .success((data) => 
             starburstElement = $(value).find('.starburst')
             # TODO: _renderChart seems messy... this could use a better interface

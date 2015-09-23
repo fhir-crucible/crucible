@@ -1,0 +1,42 @@
+<div class="test-run-result" id="test-{{suite.id}}">
+  <div class="toggleable panel-heading">
+    <h4 class="panel-title">
+      <input type="checkbox" name="{{suite.id}}" checked="checked">
+      <a class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#{{suite.id}}_details">
+        <label>{{suite.name}}</label>
+      </a>
+      <span class="test-status">
+        <i class="glyphicon glyphicon-remove-circle failed"></i>
+      </span>
+    </h4>
+  </div>
+  <div class="panel-collapse collapse" id="{{suite.id}}_details" aria-expanded="false" style="height: 0px;">
+    <p class="helper_text">{{suite.description}}</p>
+    <div class="row details">
+      <div class="col-md-5">
+        <table class="table table-hover report-table nav nav-stacked">
+          <tbody>
+            {{#each result.tests as |test|}}
+            <tr class="suite-handle" data-key="{{test.key}}">
+              <td>
+                <span class="pass"><i class="{{test-status test}}"></i></span>
+              </td>
+              <td>
+                {{#if test.warnings}}
+                  <i class="fa fa-exclamation-triangle warning"></i>
+                {{/if}}
+              </td>
+              <td>
+                {{test.description}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-7 tab-content test-results">
+        {{> test_result test=result.tests.[0]}}
+      </div>
+    </div>
+  </div>
+</div>

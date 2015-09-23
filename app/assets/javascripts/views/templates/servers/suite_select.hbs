@@ -1,0 +1,33 @@
+<div class="test-run-result" id="test-{{suite.id}}">
+  <div class="toggleable panel-heading">
+    <h4 class="panel-title">
+      <input type="checkbox" name="{{suite.id}}">
+      <a class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#{{suite.id}}_details">
+      <label>{{suite.name}}</label>
+      </a>
+      <span class="test-status">
+      </span>
+    </h4>
+  </div>
+  <div class="panel-collapse collapse" id="{{suite.id}}_details" aria-expanded="false" style="height: 0px;">
+    <p class="helper_text">{{suite.description}}</p>
+    <div class="row details">
+      <div>
+        <table class="table report-table nav nav-stacked">
+          <tbody>
+            {{#each suite.methods as |method|}}
+              <tr>
+                <td>
+                  KEY
+                </td>
+                <td>
+                  {{method}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

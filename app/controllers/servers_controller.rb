@@ -8,7 +8,10 @@ class ServersController < ApplicationController
   def create
     url = PostRank::URI.normalize(params['server']['url'])
     server = Server.where(url: url).first
-    server = Server.new(params.require(:server).permit(:url, :name)) unless server
+    unless server
+      server = Server.new(params.require(:server).permit(:url, :name)) 
+      server.save
+    end
     redirect_to action: "show", id: server.id
   end
 
