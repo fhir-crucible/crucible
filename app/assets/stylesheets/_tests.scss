@@ -107,6 +107,21 @@
       }
     }
   }
+  .tag {
+    display: inline-block;
+    background-color: $brand-accent;
+    border: 3px solid $brand-accent;
+    color: $brand-tertiary;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px;
+    margin: 0 0 5px 5px;
+    cursor: pointer;
+    a {
+        color: $brand-tertiary;
+    }
+  }
 }
 
 .test-results{

@@ -62,10 +62,9 @@
                     <div class="button-holder">
                       <button type="button" class="btn secondary selectDeselectAll"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
                       <button type="button" class="btn secondary expandCollapseAll"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
+                      <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
                     </div>
-                    <!--   <div>
-                      {{starburst-chart data=chartData on-zoom="updateCategories" selectedNode=currentNodeName showHeader=false}}
-                      </div> -->
+
                     <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
                     <div class="button-holder ">
                       <button class="btn execute">
