@@ -91,7 +91,6 @@ class Crucible.TestExecutor
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
-    debugger
     handle.click =>
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
