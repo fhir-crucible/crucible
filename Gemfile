@@ -38,6 +38,7 @@ gem 'oauth2'
 
 group :development do
   gem 'pry-byebug'
+  gem 'guard-livereload'
 end
 
 group :test do

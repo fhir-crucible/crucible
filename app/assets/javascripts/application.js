@@ -14,6 +14,7 @@
 //= require bootstrap-sass-official/assets/javascripts/bootstrap-sprockets
 //= require d3/d3
 //= require d3-tip/index
+//= require Case/dist/Case
 //= require moment/moment
 //= require handlebars/handlebars.runtime
 //= require jquery-sticky/jquery.sticky

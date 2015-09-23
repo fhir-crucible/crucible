@@ -1,0 +1,129 @@
+<div class="col-md-12 tab-content-holder">
+
+  <!-- RESOURCE CHART -->
+  <div class="row conformance">
+    <div id="resource-chart" class="table-responsive">
+      <table class="col-md-12 table table-mega-striped table-condensed">
+        <thead>
+          <tr>
+            <th>Resource Type</th>
+            <th>Read</th>
+            <th>VRead</th>
+            <th>Update</th>
+            <th>Delete</th>
+            <th>History</th>
+            <th>Validate</th>
+            <th>History Type</th>
+            <th>Create</th>
+            <th>Search Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each testedResources as |res|}}
+            <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target={{res.toggleSelector}}>
+              <td data-title="Read" class="test-circle-holder">
+                <a>{{title-case res.fhirType}}</a>
+              </td>
+              {{#each operations as |operation|}}
+                <td>
+                  {{> resource_operation resource=res validatedResources=validatedResources operation=operation}}
+                </td>
+              {{/each}}
+            </tr>
+            <tr class="hidden">
+              <td colspan="10">
+                <div id={{res.toggleId}} class="panel-collapse collapse" aria-expanded="false">
+                  Conforms to
+                  <a href={{res.profile.reference}}>{{res.profile.reference}}</a>
+                  <table class="table inner-table">
+                    <tr>
+                      <th>Search Param</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                    {{#each res.searchParam as |param|}}
+                      <tr>
+                        <td>{{param.name}}</td>
+                        <td>{{param.fhirType}}</td>
+                        <td>{{param.documentation}}</td>
+                      </tr>
+                    {{/each}}
+                  </table>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+  <!-- METADATA CONTAINER -->
+  <div class="row conformance metadata">
+    <div class="metadata-selector col-md-3">
+      <ul class="nav nav-pills nav-stacked metadata">
+        <li class="active"><a data-toggle="tab" href="#conformance_metadata">Conformance Metadata</a></li>
+        <li><a data-toggle="tab" href="#rest-metadata">REST Metadata</a></li>
+        <li><a data-toggle="tab" href="#document-metadata">Document Metadata</a></li>
+        <li><a data-toggle="tab" href="#messaging-metadata">Messaging Metadata</a></li>
+      </ul>
+    </div>
+
+    <!-- METADATA EXPAND CONTAINER -->
+    <div class="metadata-expand-container col-md-9 tab-content">
+
+      <!-- CONFORMANCE METADATA  -->
+      <div id="conformance_metadata" class="tab-pane active">
+        <div class="panel-body">
+          {{> conformance_metadata title="NAME" value=conformance.name}}
+          {{> conformance_metadata title="IDENTIFIER" value=conformance.identifier}}
+          {{> conformance_metadata title="VERSION" value=conformance.versionNum}}
+          {{> conformance_metadata title="PUBLISHER INFORMATION" value=conformance.publisher}}
+          {{> conformance_metadata title="DESCRIPTION" value=conformance.description}}
+          {{> conformance_metadata title="STATUS" value=conformance.status}}
+          {{> conformance_metadata title="EXPERIMENTAL" value=conformance.date boolean=true}}
+          {{> conformance_metadata title="DATE" value=conformance.date}}
+          {{> conformance_metadata title="SOFTWARE" value="unknown"}}
+          {{> conformance_metadata title="IMPLEMENTATION" value="unknown"}}
+          {{> conformance_metadata title="FHIR VERSION" value=conformance.fhirVersion}}
+          {{> conformance_metadata title="ACCEPT UNKNOWN" value=conformance.acceptUnknown boolean=true}}
+          <div class="row">
+            <div class="col-md-4">
+              <div><label>FORMATS SUPPORTED:</label></div>
+            </div>
+            <div class="col-md-8">
+              <div>{{#each conformance.format as |f|}}{{f}} {{/each}}</div>
+            </div>
+          </div>
+          {{> conformance_metadata title="ADDITIONAL PROFILES SUPPORTED" value=conformance.profile.length}}
+        </div>
+      </div>
+
+      <!-- REST METADATA  -->
+      <div id="rest-metadata" class="tab-pane">
+        <div class="panel-body">
+          {{> conformance_metadata title="MODE" value=conformance.rest.0.mode}}
+          {{> conformance_metadata title="IDENTIFIER" value=conformance.identifier}}
+          {{> conformance_metadata title="DOCUMENTATION" value=conformance.rest.0.documentation}}
+        </div>
+      </div>
+
+      <!-- DOCUMENT METADATA  -->
+      <div id="document-metadata" class="tab-pane">
+        <div class="panel-body">
+          {{> conformance_metadata title="MODE" value=conformance.document.0.mode}}
+          {{> conformance_metadata title="PROFILE" value=conformance.document.0.profile.reference}}
+          {{> conformance_metadata title="DOCUMENTATION" value=conformance.document.0.documentation}}
+        </div>
+      </div>
+
+      <!-- MESSAGING METADATA  -->
+      <div id="messaging-metadata" class="tab-pane">
+        <div class="panel-body">
+          {{> conformance_metadata title="ENDPOINT" value=conformance.messaging.0.endpoint}}
+          {{> conformance_metadata title="RELIABLE CACHE" value=conformance.messaging.0.reliableCache}}
+          {{> conformance_metadata title="DOCUMENTATION" value=conformance.messaging.0.documentation}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

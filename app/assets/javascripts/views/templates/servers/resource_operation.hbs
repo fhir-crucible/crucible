@@ -1,0 +1,14 @@
+<span class="glyphicon {{supportedStatus}} {{operationTestStatus}} conformance-test-badge" aria-hidden="true">
+  {{#if operationTestStatus}}
+    {{#bootstrap-popover title="'''''" tagName="span"}}
+    <ul class="list-group">
+      {{#each failingTests as |fail|}}
+        <li class="list-group-item list-group-item-danger">{{fail.test}}: {{fail.description}}</li>
+      {{/each}}
+      {{#each passingTests as |pass|}}
+        <li class="list-group-item list-group-item-success">{{pass.test}}: {{pass.description}}</li>
+      {{/each}}
+    </ul>
+    {{/bootstrap-popover}}
+  {{/if}}
+</span>
