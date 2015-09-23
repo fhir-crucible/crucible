@@ -17,7 +17,7 @@
 //= require moment/moment
 //= require handlebars/handlebars.runtime
 
+//= require_tree ./views/templates
 //= require_tree ./views
 //= require_tree ./views/component
-//= require_tree ./views/templates
 //= require_tree .

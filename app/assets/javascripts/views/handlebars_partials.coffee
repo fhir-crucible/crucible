@@ -1,0 +1,1 @@
+Handlebars.registerPartial('test_result', HandlebarsTemplates['views/templates/servers/test_result'])
