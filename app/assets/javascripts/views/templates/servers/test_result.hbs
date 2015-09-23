@@ -1,47 +1,60 @@
 <div class="media">
   <h4 class="test-run-result-id">{{test.key}}: {{test.description}}</h4>
-  <div class="media test-message">
-    <div class="media-body">
-      <h4 class="media-heading">Message</h4>
-      {{test.message}}
+  {{#if test.message}}
+    <div class="media test-message">
+      <div class="media-body">
+        <h4 class="media-heading">Message</h4>
+        {{test.message}}
+      </div>
     </div>
-  </div>
-  <div class="media test-warnings">
-    <div class="media-body">
-      <h4 class="media-heading">Warnings</h4>
-      {{#each test.warnings as |warning|}}
-        <div>{{warning}}</div>
-      {{/each}}
+  {{/if}}
+  {{#if test.warnings}}
+    <div class="media test-warnings">
+      <div class="media-body">
+        <h4 class="media-heading">Warnings</h4>
+        {{#each test.warnings as |warning|}}
+          <div>{{warning}}</div>
+        {{/each}}
+      </div>
     </div>
-  </div>
-  <div class="media test-links">
-    <div class="media-body">
-      <h4 class="media-heading">Links</h4>
-      {{#each test.links as |link|}}
-        <div><a target="_blank" href="{{link}}">Related FHIR Spec Location</a></div>
-      {{/each}}
+  {{/if}}
+  {{#if test.links}}
+    <div class="media test-links">
+      <div class="media-body">
+        <h4 class="media-heading">Links</h4>
+        {{#each test.links as |link|}}
+          <div><a target="_blank" href="{{link}}">Related FHIR Spec Location</a></div>
+        {{/each}}
+      </div>
     </div>
-  </div>
-  <div class="media test-requires">
-    <div class="media-body">
-      <h4 class="media-heading">Test Requires</h4>
-      {{#each test.requires as |requirement|}}
-        <div>{{requirement.resource}}: {{#each requirement.methods as |method|}}{{method}},{{/each}}</div>
-      {{/each}}
+  {{/if}}
+  {{#if test.requires}}
+    <div class="media test-requires">
+      <div class="media-body">
+        <h4 class="media-heading">Test Requires</h4>
+        {{#each test.requires as |requirement|}}
+          <div>{{requirement.resource}}: {{#each requirement.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
+        {{/each}}
+      </div>
     </div>
-  </div>
-  <div class="media test-validates">
-    <div class="media-body">
-      <h4 class="media-heading">Test Validates</h4>
-      {{#each test.validates as |validation|}}
-        <div>{{validation.resource}}: {{#each validation.methods as |method|}}{{method}},{{/each}}</div>
-      {{/each}}
+  {{/if}}
+  {{#if test.validates}}
+    <div class="media test-validates">
+      <div class="media-body">
+        <h4 class="media-heading">Test Validates</h4>
+        {{#each test.validates as |validation|}}
+          <div>{{validation.resource}}: {{#each validation.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
+        {{/each}}
+      </div>
     </div>
-  </div>
-  <div class="media test-response-data">
-    <div class="media-body">
-      <h4 class="media-heading">Data</h4>
-      {{test.data}}
+  {{/if}}
+  {{#if test.data}}
+    <div class="media test-response-data">
+      <div class="media-body">
+        <h4 class="media-heading">Data</h4>
+        {{test.data}}
+      </div>
     </div>
-  </div>
+  {{/if}}
+
 </div>

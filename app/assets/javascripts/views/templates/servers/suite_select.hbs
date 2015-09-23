@@ -12,21 +12,24 @@
   <div class="panel-collapse collapse" id="{{suite.id}}_details" aria-expanded="false" style="height: 0px;">
     <p class="helper_text">{{suite.description}}</p>
     <div class="row details">
-      <div>
+      <div class="col-md-5">
         <table class="table report-table nav nav-stacked">
           <tbody>
             {{#each suite.methods as |method|}}
-              <tr>
+              <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{method.key}}">
                 <td>
-                  KEY
+                  {{method.key}}
                 </td>
                 <td>
-                  {{method}}
+                  {{method.description}}
                 </td>
               </tr>
             {{/each}}
           </tbody>
         </table>
+      </div>
+      <div class="col-md-7 tab-content test-results">
+        {{> test_result test=suite.methods.[0]}}
       </div>
     </div>
   </div>

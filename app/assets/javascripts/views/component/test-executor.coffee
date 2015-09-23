@@ -38,6 +38,9 @@ class Crucible.TestExecutor
     $(@suites).each (i, suite) =>
       @suitesById[suite.id] = suite
       suitesElement.append(HandlebarsTemplates[@templates.suiteSelect]({suite: suite}))
+      suiteElement = suitesElement.find("#test-#{suite.id}")
+      $(suite.methods).each (i, test) =>
+        @addClickTestHandler(test, suiteElement)
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :checkbox')
@@ -80,13 +83,16 @@ class Crucible.TestExecutor
       )
     @element.dequeue("executionQueue")
     
-  handleSuiteResult: (suite, result, testElement) =>
-    testElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
-    testElement = @element.find("#test-"+suite.id)
+  handleSuiteResult: (suite, result, suiteElement) =>
+    suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
+    suiteElement = @element.find("#test-"+suite.id)
     $(result.tests).each (i, test) =>
-      handle = testElement.find(".suite-handle[data-key='#{test.key}']")
-      handle.click =>
-        testElement.find(".suite-handle").removeClass('active')
-        handle.addClass('active')
-        testElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
+      @addClickTestHandler(test, suiteElement)
 
+  addClickTestHandler: (test, suiteElement) => 
+    handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
+    debugger
+    handle.click =>
+      suiteElement.find(".suite-handle").removeClass('active')
+      handle.addClass('active')
+      suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))

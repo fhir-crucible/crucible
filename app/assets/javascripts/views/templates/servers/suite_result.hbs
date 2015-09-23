@@ -17,7 +17,7 @@
         <table class="table table-hover report-table nav nav-stacked">
           <tbody>
             {{#each result.tests as |test|}}
-            <tr class="suite-handle" data-key="{{test.key}}">
+            <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{test.key}}">
               <td>
                 <span class="pass"><i class="{{test-status test}}"></i></span>
               </td>
