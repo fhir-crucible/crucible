@@ -25,6 +25,7 @@ class Crucible.TestExecutor
     @element.find('.execute').click(@execute)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
+    @element.find('.filter-by-executed a').click(@showAllSuites)
 
   loadTests: =>
     $.getJSON("api/tests.json").success((data) => 
@@ -61,6 +62,7 @@ class Crucible.TestExecutor
 
   execute: =>
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
+    @showOnlyExecutedSuites()
     progress = $("##{this.element.data('progress')}")
     progress.parent().collapse('show')
     progress.find('.progress-bar').css('width',"2%")
@@ -79,6 +81,16 @@ class Crucible.TestExecutor
         )
       )
     @element.dequeue("executionQueue")
+
+  showAllSuites: =>
+    @element.find('.filter-by-executed').collapse('hide')
+    @element.find('.test-run-result').show()
+
+  showOnlyExecutedSuites: =>
+    @element.find('.filter-by-executed').collapse('show')
+    @element.find('.test-run-result').hide()
+    @element.find(':checked').closest('.test-run-result').show()
+    @element.find('.test-run-result.executed').show()
     
   handleSuiteResult: (suite, result, testElement) =>
     testElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
