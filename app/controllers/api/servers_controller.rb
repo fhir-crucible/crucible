@@ -3,11 +3,7 @@ module Api
     respond_to :json
 
     def index
-      if current_user.nil?
-        render json: Server.all
-      else
-        render json: current_user.servers
-      end
+      render json: Server.where({percent_passing: {"$gte" => 0}}).order_by("percent_passing"=>:desc)
     end
 
     def create
