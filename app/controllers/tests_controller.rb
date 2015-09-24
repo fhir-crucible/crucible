@@ -26,7 +26,7 @@ class TestsController < ApplicationController
 
     val = nil
     if mtest.resource_class?
-      val = test.execute(mtest.resource_class.constantize)[0]["#{result.test.title}_#{result.test.resource_class.split("::")[1]}"][:tests]
+      val = test.execute(mtest.resource_class.constantize)[0]["#{mtest.title}_#{mtest.resource_class.split("::")[1]}"][:tests]
     else
       val = test.execute()[0][mtest.title][:tests]
     end
