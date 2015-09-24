@@ -5,7 +5,7 @@ $(window).on('load', ->
 class Crucible.TestExecutor
   suites: []
   suitesById: {}
-  templates: 
+  templates:
     suiteSelect: 'views/templates/servers/suite_select'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/test_result'
@@ -15,6 +15,8 @@ class Crucible.TestExecutor
     collapseAllButton: '<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites'
     expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
+  serverId: null
+  testRun: null
 
   constructor: ->
     @element = $('.test-executor')
@@ -28,7 +30,7 @@ class Crucible.TestExecutor
     @element.find('.filter-by-executed a').click(@showAllSuites)
 
   loadTests: =>
-    $.getJSON("api/tests.json").success((data) => 
+    $.getJSON("api/tests.json").success((data) =>
       @suites = data['tests']
       @renderSuites()
     )
@@ -67,14 +69,15 @@ class Crucible.TestExecutor
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     @showOnlyExecutedSuites()
     progress = $("##{this.element.data('progress')}")
-    serverId = this.element.data('server-id')
+    this.serverId = this.element.data('server-id')
     progress.parent().collapse('show')
     progress.find('.progress-bar').css('width',"2%")
     suiteIds.each (i, suiteId) =>
       testElement = @element.find("#test-#{suiteId}")
       testElement.find('.test-status').empty().append(@html.spinner)
+      @element.queue("executionQueue", this.registerTestRun)
       @element.queue("executionQueue", =>
-        $.post("#{$(location).attr('pathname')}/tests/#{suiteId}/execute").success((result) =>
+        $.post("#{$(location).attr('pathname')}/tests/#{suiteId}/execute",{test_result: {test_run_id: this.testRun}}).success((result) =>
           progress.find('.progress-bar').css('width',"#{(i+1)/suiteIds.length*100}%")
           @handleSuiteResult(@suitesById[suiteId], result, testElement)
           if i < suiteIds.length-1
@@ -82,8 +85,11 @@ class Crucible.TestExecutor
           else
             progress.parent().collapse('hide')
             progress.find('.progress-bar').css('width',"0%")
+            @element.queue("executionQueue", this.regenerateSummary)
+            @element.dequeue("executionQueue")
         )
       )
+
     @element.dequeue("executionQueue")
 
   showAllSuites: =>
@@ -95,7 +101,20 @@ class Crucible.TestExecutor
     @element.find('.test-run-result').hide()
     @element.find(':checked').closest('.test-run-result').show()
     @element.find('.test-run-result.executed').show()
-    
+  
+   registerTestRun: =>
+    $.post("/api/test_runs", {test_run: {server_id: this.serverId}}).success((result) =>
+      this.testRun = result.test_run._id.$oid
+      @element.dequeue("executionQueue")
+    )
+
+
+  regenerateSummary: =>
+    $.get("/api/servers/#{this.serverId}/generate_summary").success((result) =>
+      console.log "Generated Summary at #{Date(result.summary.generated_at)}"
+      @element.dequeue("executionQueue")
+    )
+  
   handleSuiteResult: (suite, result, suiteElement) =>
     suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
     suiteElement = @element.find("#test-"+suite.id)
