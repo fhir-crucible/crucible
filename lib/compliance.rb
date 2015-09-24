@@ -17,7 +17,11 @@ module Compliance
       compliance: updated_compliance,
       generated_at: Time.now
     )
-    summary.save
+    if summary.save
+      return summary
+    else
+      return nil
+    end
   end
 
   # Removes the specified array of keys from category and it's children hashes
@@ -44,6 +48,19 @@ module Compliance
       end
     end
     category
+  end
+
+  def self.get_nodes(compliance, name)
+    nodes = []
+    if (compliance['name'].downcase == name.downcase) || (compliance['name'].downcase == "$#{name.downcase}")
+      nodes << compliance
+    elsif compliance['children']
+      compliance['children'].each do |child|
+        temp = get_nodes(child, name)
+        nodes.concat(temp) if !temp.nil? && !temp.empty?
+      end
+    end
+    nodes
   end
 
   # Aggregate metadata across test results for the given test_run
@@ -109,9 +126,9 @@ module Compliance
   # Updates the given compliance with each metadata in aggregated_metadata
   def self.update_compliance(compliance, aggregated_metadata)
     aggregated_metadata.each do |metadata|
-      update_operations(compliance, metadata) if metadata[:method]
-      update_resources(compliance, metadata) if metadata[:resource]
-      update_formats(compliance, metadata) if metadata[:format]
+      update_operations(get_nodes(compliance,'operations'), metadata) if metadata[:method]
+      update_resources(get_nodes(compliance,'resources'), metadata) if metadata[:resource]
+      update_formats(get_nodes(compliance,'format'), metadata) if metadata[:format]
     end
     update_compliance_totals(compliance)
     compliance
@@ -147,9 +164,10 @@ module Compliance
         summary['failed'] += section['failed']
         summary['skipped'] += section['skipped']
         summary['errors'] += section['errors']
-        summary['issues'].concat section['issues'] if section['issues']
+        summary['issues'].concat(section['issues']).uniq! if section['issues']
       end
       category.merge! summary
+      category['issues'].uniq!
     end
   end
 
@@ -157,29 +175,21 @@ module Compliance
   def self.update_operations(compliance, metadata)
     method = metadata[:method]
     status = metadata[:result]['status']
+    compliance.each do |c|
+      nodes = get_nodes(c, method)
+      nodes.each do |node|
+        update_metadata(node, status, metadata, method)
+      end
+    end
 
     # FIXME: Figure out how to handle system-wide operations
-    method = method.split('-')[0] if method.include?('-')
-
-    # extract operation leaves from categories
-    api = compliance[SECTION]
-    operations = api[0][SECTION]
-    restful_api = operations[0][SECTION]
-
-    instance = restful_api[0][SECTION]
-    type = restful_api[1][SECTION]
-    whole = restful_api[2][SECTION]
-
-    extended = operations[1][SECTION]
-
-    # array containing lists of operation leaves
-    aggregate_operations = [instance, type, whole, extended]
-
-    # update any operation leaves with a name matching method
-    aggregate_operations.each do |list|
-      list.each do |operation|
-        if operation['name'] == method
-          update_metadata(operation, status, metadata, method)
+    # this is because of things like: "validates": [{ "resource": "Patient", "methods": ["history-instance"]}]
+    if method.include?('-')
+      method = method.split('-')[0]
+      compliance.each do |c|
+        nodes = get_nodes(c, method)
+        nodes.each do |node|
+          update_metadata(node, status, metadata, method)
         end
       end
     end
@@ -189,47 +199,10 @@ module Compliance
   def self.update_resources(compliance, metadata)
     resource = metadata[:resource]
     status = metadata[:result]['status']
-
-    # extract resource leaves from categories
-    api = compliance[SECTION]
-    resources = api[1][SECTION]
-    clinical = resources[0][SECTION]
-    administrative = resources[1][SECTION]
-    infrastructure = resources[2][SECTION]
-    financial = resources[3][SECTION]
-
-    general = clinical[0][SECTION]
-    data_col_care_plan = clinical[1][SECTION]
-    med_imm_nut = clinical[2][SECTION]
-    diagnostics = clinical[3][SECTION]
-
-    attribution = administrative[0][SECTION]
-    entities = administrative[1][SECTION]
-    workflow = administrative[2][SECTION]
-    scheduling = administrative[3][SECTION]
-
-    isupport = infrastructure[0][SECTION]
-    idocument = infrastructure[1][SECTION]
-    exchange = infrastructure[2][SECTION]
-    conformance = infrastructure[3][SECTION]
-
-    fsupport = financial[0][SECTION]
-    billing = financial[1][SECTION]
-    payment = financial[2][SECTION]
-    other = financial[3][SECTION]
-
-    # array containing lists of resource leaves
-    aggregate_resources = [
-      general, data_col_care_plan, med_imm_nut,
-      diagnostics, attribution, entities, workflow, scheduling, isupport,
-      idocument, exchange, conformance, fsupport, billing, payment, other]
-
-    # update any resource leaves with a name matching resource, lowercased
-    aggregate_resources.each do |list|
-      list.each do |res|
-        if res['name'].downcase == resource.downcase
-          update_metadata(res, status, metadata, resource.downcase)
-        end
+    compliance.each do |c|
+      nodes = get_nodes(c, resource)
+      nodes.each do |node|
+        update_metadata(node, status, metadata, resource.downcase)
       end
     end
   end
@@ -238,15 +211,10 @@ module Compliance
   def self.update_formats(compliance, metadata)
     format = metadata[:format]
     status = metadata[:result]['status']
-
-    # extract format leaves from categories
-    api = compliance[SECTION]
-    formats = api[2][SECTION]
-
-    # update any format leaves with a name matching method
-    formats.each do |fhir_format|
-      if fhir_format['name'] == format
-        update_metadata(fhir_format, status, metadata, format)
+    compliance.each do |c|
+      nodes = get_nodes(c, format)
+      nodes.each do |node|
+        update_metadata(node, status, metadata, format)
       end
     end
   end
@@ -285,6 +253,7 @@ module Compliance
 
       metadata['issues'] ||= []
       metadata['issues'] << issue
+      metadata['issues'].uniq!
     end
   end
 

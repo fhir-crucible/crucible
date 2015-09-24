@@ -1,0 +1,519 @@
+{
+  "name": "FHIR",
+  "children": [
+    {
+      "name": "OPERATIONS",
+      "children": [
+        {
+          "name": "RESTful API",
+          "children": [
+            {
+              "name": "Instance Level Interactions",
+              "children": [
+                {
+                  "name": "read"
+                },{
+                  "name": "vread"
+                },{
+                  "name": "update"
+                },{
+                  "name": "delete"
+                },{
+                  "name": "history"
+                }
+              ]
+            },{
+              "name": "Type Level Interactions",
+              "children": [
+                {
+                  "name": "create"
+                },{
+                  "name": "search"
+                },{
+                  "name": "history"
+                }
+              ]
+            },{
+              "name": "Whole System Interactions",
+              "children": [
+                {
+                  "name": "conformance"
+                },{
+                  "name": "transaction"
+                },{
+                  "name": "history"
+                },{
+                  "name": "search"
+                }
+              ]
+            }
+          ]
+        },{
+          "name": "Extended Operations",
+          "children": [
+            {
+              "name": "$validate"
+            },{
+              "name": "$meta"
+            },{
+              "name": "$meta-add"
+            },{
+              "name": "$meta-delete"
+            },{
+              "name": "$document"
+            },{
+              "name": "$translate"
+            },{
+              "name": "$closure"
+            },{
+              "name": "$everything"
+            },{
+              "name": "$find"
+            },{
+              "name": "$process-message"
+            },{
+              "name": "$populate"
+            },{
+              "name": "$questionnaire"
+            },{
+              "name": "$expand"
+            },{
+              "name": "$lookup"
+            },{
+              "name": "$validate-code"
+            },{
+              "name": "$guidance"
+            },{
+              "name": "$guidance-requirements"
+            }
+          ]
+        }
+      ]
+    },{
+      "name": "RESOURCES",
+      "children": [
+        {
+          "name": "Clinical",
+          "children": [
+            {
+              "name": "General",
+              "children": [
+                {
+                  "name": "allergy intolerance"
+                },{
+                  "name": "condition"
+                },{
+                  "name": "procedure"
+                },{
+                  "name": "family member history"
+                },{
+                  "name": "clinical impression"
+                },{
+                  "name": "risk assessment"
+                },{
+                  "name": "detected issue"
+                }
+              ]
+            },{
+              "name": "Care Provision",
+              "children": [
+                {
+                  "name": "care plan"
+                },{
+                  "name": "goal"
+                },{
+                  "name": "referral request"
+                },{
+                  "name": "procedure request"
+                },{
+                  "name": "nutrition order"
+                },{
+                  "name": "vision prescription"
+                }
+              ]
+            },{
+              "name": "Medication Management",
+              "children": [
+                {
+                  "name": "medication"
+                },{
+                  "name": "medication dispense"
+                },{
+                  "name": "medication order"
+                },{
+                  "name": "medication statement"
+                },{
+                  "name": "immunizatiot"
+                },{
+                  "name": "immunization recommendation"
+                }
+              ]
+            },{
+              "name": "Diagnostics",
+              "children": [
+                {
+                  "name": "observation"
+                },{
+                  "name": "diagnostic report"
+                },{
+                  "name": "diagnostic order"
+                },{
+                  "name": "imaging study"
+                },{
+                  "name": "imaging object selection"
+                },{
+                  "name": "specimen"
+                },{
+                  "name": "body site"
+                }
+              ]
+            }
+          ]
+        },{
+          "name": "Administrative",
+          "children": [
+            {
+              "name": "Individuals",
+              "children": [
+                {
+                  "name": "patient"
+                },{
+                  "name": "related person"
+                },{
+                  "name": "practitioner"
+                }
+              ]
+            },{
+              "name": "Groups",
+              "children": [
+                {
+                  "name": "organization"
+                },{
+                  "name": "healthcare service"
+                },{
+                  "name": "group"
+                }
+              ]
+            },{
+              "name": "Entities",
+              "children": [
+                {
+                  "name": "location"
+                },{
+                  "name": "substance"
+                },{
+                  "name": "person"
+                }
+              ]
+            },{
+              "name": "Device",
+              "children": [
+                {
+                  "name": "device"
+                },{
+                  "name": "device component"
+                },{
+                  "name": "device metric"
+                }
+              ]
+            }
+          ]
+        },{
+          "name": "Work Flow",
+          "children": [
+            { "name": "Work Flow",
+              "children": [
+                {
+                  "name": "encounter"
+                },{
+                  "name": "episode of care"
+                },{
+                  "name": "flag"
+                },{
+                  "name": "communication"
+                }
+              ]
+            },{
+              "name": "Scheduling",
+              "children": [
+                {
+                  "name": "appointment"
+                },{
+                  "name": "appointment response"
+                },{
+                  "name": "schedule"
+                },{
+                  "name": "slot"
+                }
+              ]
+            },{
+              "name": "Order Management",
+              "children": [
+                {
+                  "name": "order"
+                },{
+                  "name": "order response"
+                },{
+                  "name": "communication request"
+                },{
+                  "name": "device use request"
+                },{
+                  "name": "device use statement"
+                },{
+                  "name": "process request"
+                },{
+                  "name": "process response"
+                },{
+                  "name": "supply delivery"
+                },{
+                  "name": "supply request"
+                }
+              ]
+            }
+          ]
+        },{
+          "name": "Infrastructure",
+          "children": [
+            {
+              "name": "Information Management",
+              "children": [
+                {
+                  "name": "questionnaire"
+                },{
+                  "name": "questionnaire response"
+                },{
+                  "name": "provenance"
+                },{
+                  "name": "audit event"
+                }
+              ]
+            },{
+              "name": "Documents",
+              "children": [
+                {
+                  "name": "list"
+                },{
+                  "name": "composition"
+                },{
+                  "name": "document reference"
+                },{
+                  "name": "document manifest"
+                }
+              ]
+            },{
+              "name": "Structures",
+              "children": [
+                {
+                  "name": "media"
+                },{
+                  "name": "binary"
+                },{
+                  "name": "bundle"
+                },{
+                  "name": "basic"
+                }
+              ]
+            },{
+              "name": "Exchange",
+              "children": [
+                {
+                  "name": "message header"
+                },{
+                  "name": "operation outcome"
+                },{
+                  "name": "subscription"
+                },{
+                  "name": "parameters"
+                }
+              ]
+            }
+          ]
+        },{
+          "name": "Conformance",
+          "children": [
+            {
+              "name": "Terminology",
+              "children": [
+                {
+                  "name": "value set"
+                },{
+                  "name": "concept map"
+                },{
+                  "name": "naming system"
+                }
+              ]
+            },{
+              "name": "Content",
+              "children": [
+                {
+                  "name": "structure definition"
+                },{
+                  "name": "data element"
+                }
+              ]
+            },{
+              "name": "Behavior",
+              "children": [
+                {
+                  "name": "conformance"
+                },{
+                  "name": "operation definition"
+                },{
+                  "name": "search parameter"
+                }
+              ]
+            },{
+              "name": "Miscellaneous",
+              "children": [
+                {
+                  "name": "implementation guide"
+                },{
+                  "name": "test script"
+                }
+              ]
+            }
+          ]
+        },{
+          "name": "Financial",
+          "children": [
+            {
+              "name": "Support",
+              "children": [
+                {
+                  "name": "coverage"
+                },{
+                  "name": "eligibility request"
+                },{
+                  "name": "eligibility response"
+                },{
+                  "name": "enrollment request"
+                },{
+                  "name": "enrollment response"
+                }
+              ]
+            },{
+              "name": "Billing",
+              "children": [
+                {
+                  "name": "claim"
+                },{
+                  "name": "claim response"
+                }
+              ]
+            },{
+              "name": "Payment",
+              "children": [
+                {
+                  "name": "payment notice"
+                },{
+                  "name": "payment reconciliation"
+                }
+              ]
+            },{
+              "name": "Other",
+              "children": [
+                {
+                  "name": "explanation of benefit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },{
+      "name": "FORMAT",
+      "children": [
+        {
+          "name": "XML"
+        },{
+          "name": "JSON"
+        }
+      ]
+    },{
+      "name": "SECURITY",
+      "children": [
+        {
+          "name": "General",
+          "children": [
+            {
+              "name": "Authorization/Access Control"
+            },{
+              "name": "OAuth2"
+            },{
+              "name": "Audit Logging"
+            },{
+              "name": "Digital Signatures"
+            }
+          ]
+        },{
+          "name": "Security Labels",
+          "children": [
+            {
+              "name": "Confidentiality Codes"
+            },{
+              "name": "Celebrity / VIP"
+            },{
+              "name": "Staff"
+            },{
+              "name": "Keep information from patient"
+            },{
+              "name": "Contact/Employment Details Confidential"
+            },{
+              "name": "Diagnosis-related confidentiality"
+            },{
+              "name": "Author consent needed"
+            },{
+              "name": "Delete After Use"
+            },{
+              "name": "Do Not Reuse"
+            },{
+              "name": "Break The Glass"
+            },{
+              "name": "Confidentiality Classification"
+            },{
+              "name": "Sensitivity Category"
+            },{
+              "name": "Compartment Category"
+            },{
+              "name": "Integrity Category"
+            },{
+              "name": "Handling Caveat"
+            },{
+              "name": "US Privacy Law"
+            }
+          ]
+        }
+      ]
+    },{
+      "name": "MESSAGING",
+      "children": [
+        {
+          "name": "Consequence"
+        },{
+          "name": "Currency"
+        },{
+          "name": "Notification"
+        }
+      ]
+    },{
+      "name": "DOCUMENTS",
+      "children": []
+    },{
+      "name": "PROFILES",
+      "children": []
+    },{
+      "name": "EXTENSIONS",
+      "children": [
+        {
+          "name": "extensions"
+        },{
+          "name": "modifying extensions"
+        },{
+          "name": "complex extensions"
+        },{
+          "name": "primitive extensions"
+        }
+      ]
+    }
+  ]
+}

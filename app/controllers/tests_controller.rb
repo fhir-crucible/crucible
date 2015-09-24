@@ -32,10 +32,19 @@ class TestsController < ApplicationController
     end
 
     # TODO: save results
-    # result.has_run = true
-    # result.result = val
-    # result.save()
+    # result = TestResult.new
+    test_run = TestRun.find(params[:test_result][:test_run_id])
+    result = TestResult.new
+    result.server_id = params[:server_id]
+    result.test_id = params[:test_id]
+    # TODO Remove this
+    result.has_run = true
 
+    # result.has_run = true
+    result.result = val
+    result.save
+    test_run.test_results << result
+    test_run.save
     # if we just executed a result and all the results have been run
     # TODO: this seems really really messy
     # if TestRun.find(result.test_run.id).test_results.all?(&:has_run)
@@ -43,8 +52,9 @@ class TestsController < ApplicationController
     #   Compliance.build_compliance_json(result.test_run)
     # end
 
-    render json: val
+    render json: result.result
 
   end
 
+  private
 end

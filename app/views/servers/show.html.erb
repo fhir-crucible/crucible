@@ -18,7 +18,7 @@
               <div class="server-details">
                 <div class="server-icon pull-left">
                   <a id="ember6113" href="#" class="ember-view">      <i class="fa fa-server"></i>
-                  </a>  
+                  </a>
                 </div>
                 <div class="server-url-name">
                   <div class="server-name emphasize">
@@ -52,11 +52,11 @@
           <div class="tab-content">
             <!-- TEST PANEL START -->
             <div class="tab-pane test-results active" id="test-data">
-              <div class="test-executor" data-progress="execution-progress">
+              <div class="test-executor" data-server-id="<%=@server.id %>" "data-progress="execution-progress">
                 <!-- START: Left side, with filters -->
                 <div class="col-md-3">
                   <div class=" filter">
-                    <div>  
+                    <div>
                       <input id="ember6126" placeholder="Enter Search" type="text" class="form-control {{if testsExecuting 'disabled'}} ember-view ember-text-field">
                     </div>
                     <div class="button-holder">
