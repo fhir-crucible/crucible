@@ -12,22 +12,25 @@ percentMe = (data) ->
 
 class Crucible.Summary
   constructor: ->
-    $('.summary').each (index, value) =>
-      serverId = $(value).data('serverId')
+    $('.summary').each (index, summaryElement) =>
+      summaryElement = $(summaryElement)
+      serverId = summaryElement.data('serverId')
       if serverId?
         $.getJSON("/api/summary/#{serverId}.json")
           .success((data) => 
-            starburstElement = $(value).find('.starburst')
+            starburstElement = summaryElement.find('.starburst')
             # TODO: _renderChart seems messy... this could use a better interface
             starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance)
             starburst._renderChart()
-            starburst.addListener(this)
+            if summaryElement.data('synchronized')
+              starburst.addListener(this)
+            summaryElement.data('generated-at', data.summary.generated_at)
+            summaryElement.find('.percent-passed').html("#{percentMe(starburst.data)}%")
+            summaryElement.find('.last-run').html(moment(data.summary.generated_at).fromNow())
             starburstElement.data('starburst', starburst).trigger('starburstInitialized')
-            $(value).find('.percent-passed').html("#{percentMe(starburst.data)}%")
-            $(value).find('.last-run').html(moment(data.summary.generated_at).fromNow())
           )
           .error((e) ->
-            $(value).remove()
+            summaryElement.remove()
           )
 
   transitionTo: (name) ->

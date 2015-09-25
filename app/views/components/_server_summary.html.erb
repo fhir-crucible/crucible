@@ -1,5 +1,8 @@
-<% noHeader ||= false %>
-<div class="summary" data-server-id="<%= server.id %>" data-synchronized="true">
+<% 
+noHeader ||= false 
+synchronized ||= false 
+%>
+<div class="summary" data-server-id="<%= server.id %>" <%if synchronized%> data-synchronized="true" <%end%>>
   <div class="starburst">
     <%= render partial: "components/starburst" %>
   </div>

@@ -48,8 +48,7 @@ tip = d3.tip()
   .html((d) -> "#{d.name}:<br>#{d.passed} / #{d.total} passed (#{percentMe(d)}%)")
 
 class Crucible.Starburst
-  data: []
-  listeners: []
+  nodeMap: {}
   size: 350
   padding: 5
   threshold: 0.65
@@ -61,6 +60,9 @@ class Crucible.Starburst
   constructor: (element, data) ->
     @element = element
     @data = data
+    @nodeMap = {}
+    @_constructNodeMap(data)
+    @listeners = []
 
   get: (v) ->
     @[v]
@@ -169,8 +171,13 @@ class Crucible.Starburst
 
   transitionTo: (name) ->
     @selectedNode = name
-    debugger
     @_updatePlot()
+
+  _constructNodeMap: (data) ->
+    @nodeMap[data.name] = data
+    return unless data.children
+    for child in data.children
+      @_constructNodeMap(child)
 
   _updatePlot: (->
     # This allows the containing element to change what's selected
