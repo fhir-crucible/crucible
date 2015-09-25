@@ -169,6 +169,7 @@ class Crucible.Starburst
 
   transitionTo: (name) ->
     @selectedNode = name
+    debugger
     @_updatePlot()
 
   _updatePlot: (->

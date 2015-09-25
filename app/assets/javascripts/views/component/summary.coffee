@@ -22,7 +22,7 @@ class Crucible.Summary
             starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance)
             starburst._renderChart()
             starburst.addListener(this)
-            starburstElement.data('starburst', starburst)
+            starburstElement.data('starburst', starburst).trigger('starburstInitialized')
             $(value).find('.percent-passed').html("#{percentMe(starburst.data)}%")
             $(value).find('.last-run').html(moment(data.summary.generated_at).fromNow())
           )
