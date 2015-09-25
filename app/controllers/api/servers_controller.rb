@@ -3,11 +3,7 @@ module Api
     respond_to :json
 
     def index
-      if current_user.nil?
-        render json: Server.all
-      else
-        render json: current_user.servers
-      end
+      render json: Server.where({percent_passing: {"$gte" => 0}}).order_by("percent_passing"=>:desc)
     end
 
     def create
@@ -65,6 +61,23 @@ module Api
 
     def summary
       render json: {summary:Summary.where(server_id: params[:id]).try(:last)}
+    end
+
+    def generate_summary
+
+      test_run = TestRun.where(server_id: params[:id]).order_by(date: 'desc').first
+      server = Server.find(params[:id])
+      if test_run.date <= server.summary.generated_at
+        render json: {summary: server.summary}
+        return
+      end
+      summary = Compliance.build_compliance_json(test_run)
+
+
+      server.summary = summary
+      server.percent_passing = (summary.compliance['passed'].to_f / summary.compliance['total'].to_f) * 100.0
+      server.save
+      render json: {summary: summary}
     end
 
     private
