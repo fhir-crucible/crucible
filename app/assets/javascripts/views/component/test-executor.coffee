@@ -21,6 +21,7 @@ class Crucible.TestExecutor
 
   constructor: ->
     @element = $('.test-executor')
+    return unless @element.length
     @registerHandlers()
     @loadTests()
 
