@@ -6,7 +6,7 @@
         <label>{{suite.name}}</label>
       </a>
       <span class="test-status">
-        <i class="glyphicon glyphicon-remove-circle failed"></i>
+        <span><i class="{{test-status result.suiteStatus}}"></i></span>
       </span>
     </h4>
   </div>
@@ -19,7 +19,7 @@
             {{#each result.tests as |test|}}
             <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{test.key}}">
               <td>
-                <span class="pass"><i class="{{test-status test}}"></i></span>
+                <span><i class="{{test-status test.status}}"></i></span>
               </td>
               <td>
                 {{#if test.warnings}}

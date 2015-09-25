@@ -1,5 +1,5 @@
-Handlebars.registerHelper('test-status', (test) -> 
-  result = switch test.status
+Handlebars.registerHelper('test-status', (status) -> 
+  result = switch status
     when 'pass'
       "glyphicon glyphicon-ok-circle passed"
     when 'fail'

@@ -17,6 +17,7 @@ class Crucible.TestExecutor
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
   serverId: null
   testRun: null
+  statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
 
   constructor: ->
     @element = $('.test-executor')
@@ -116,6 +117,11 @@ class Crucible.TestExecutor
     )
   
   handleSuiteResult: (suite, result, suiteElement) =>
+    suiteStatus = 'pass'
+    $(result.tests).each (i, test) =>
+      suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
+    result.suiteStatus = suiteStatus
+
     suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
     suiteElement = @element.find("#test-"+suite.id)
     $(result.tests).each (i, test) =>
