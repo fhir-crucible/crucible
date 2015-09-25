@@ -10,6 +10,7 @@ class Crucible.TestRunReport
 
   constructor: ->
     @element = $('.test-run-report')
+    return unless @element.length
     @registerHandlers()
     @childrenChart = @element.find('.spec-details')
 
