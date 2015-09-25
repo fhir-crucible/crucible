@@ -15,8 +15,8 @@ class Crucible.TestExecutor
     collapseAllButton: '<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites'
     expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
-  serverId: null
-  testRun: null
+    serverId: null
+    testRun: null
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
 
   constructor: ->

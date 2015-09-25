@@ -1,0 +1,26 @@
+<div class="test-run-report">
+  <div class="percent-supported">
+    <span class="percent-supported-value percent-passed">
+    </span>
+    <span class="percent-supported-text">
+    of the FHIR Specification is currently supported by this server
+    </span>
+    <span class="server-time servers-show-time">
+    <i class="fa fa-fw fa-clock-o"></i> <span class="last-run"></span>
+    </span>
+  </div>
+  <div class="row server-fhir-specification section-data">
+    <div class="col-md-5 spec-starburst-chart">
+      <div id="ember9720" class="ember-view">
+        <div class="starburst-header">
+        </div>
+        <%= render partial: "components/server_summary", locals: {server: server, noHeader: true}%>
+      </div>
+    </div>
+    <div class="col-md-7 spec-details">
+      <!-- details bars go here for children -->
+    </div>
+  </div>
+  <!---->
+  <!---->
+</div>
