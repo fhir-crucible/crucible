@@ -29,6 +29,8 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
+    @filterBox = @element.find('.test-results-filter')
+    @filterBox.on('keyup', @filter)
 
   loadTests: =>
     $.getJSON("api/tests.json").success((data) =>
@@ -43,6 +45,7 @@ class Crucible.TestExecutor
       @suitesById[suite.id] = suite
       suitesElement.append(HandlebarsTemplates[@templates.suiteSelect]({suite: suite}))
       suiteElement = suitesElement.find("#test-#{suite.id}")
+      suiteElement.data('suite', suite)
       $(suite.methods).each (i, test) =>
         @addClickTestHandler(test, suiteElement)
 
@@ -93,6 +96,20 @@ class Crucible.TestExecutor
 
     @element.dequeue("executionQueue")
 
+  filter: =>
+    filterValue = @filterBox.val().toLowerCase()
+    elements = @element.find('.test-run-result')
+    if (filterValue.length == 0)
+      elements.show()
+      return
+    $(elements).each (i, suiteElement) =>
+      suiteElement = $(suiteElement)
+      suite = suiteElement.data('suite')
+      if (suite.name.toLowerCase()).indexOf(filterValue) < 0
+        suiteElement.hide()
+      else
+        suiteElement.show()
+        
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
     @element.find('.test-run-result').show()
@@ -124,6 +141,7 @@ class Crucible.TestExecutor
 
     suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
     suiteElement = @element.find("#test-"+suite.id)
+    suiteElement.data('suite', suite)
     $(result.tests).each (i, test) =>
       @addClickTestHandler(test, suiteElement)
 
