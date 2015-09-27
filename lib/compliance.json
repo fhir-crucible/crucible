@@ -30,20 +30,20 @@
                 },{
                   "name": "search"
                 },{
-                  "name": "history"
+                  "name": "history-type"
                 }
               ]
             },{
               "name": "Whole System Interactions",
               "children": [
                 {
-                  "name": "conformance"
+                  "name": "conformance-system"
                 },{
-                  "name": "transaction"
+                  "name": "transaction-system"
                 },{
-                  "name": "history"
+                  "name": "history-system"
                 },{
-                  "name": "search"
+                  "name": "search-system"
                 }
               ]
             }
@@ -96,7 +96,7 @@
           "name": "Clinical",
           "children": [
             {
-              "name": "General",
+              "name": "General Clinical",
               "children": [
                 {
                   "name": "allergy intolerance"
@@ -221,7 +221,7 @@
         },{
           "name": "Work Flow",
           "children": [
-            { "name": "Work Flow",
+            { "name": "Patient Management",
               "children": [
                 {
                   "name": "encounter"
@@ -433,7 +433,7 @@
       "name": "SECURITY",
       "children": [
         {
-          "name": "General",
+          "name": "General Security",
           "children": [
             {
               "name": "Authorization/Access Control"

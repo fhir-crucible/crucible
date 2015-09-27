@@ -15,6 +15,6 @@
 /log/*.log
 /tmp
 vendor/assets/bower_components
-fhir_client.log
+fhir_client.log*
 fhir_client_verbose.log*
 **/.DS_Store

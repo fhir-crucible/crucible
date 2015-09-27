@@ -4,7 +4,8 @@ class Server
   include Mongoid::Document
   field :name, type: String
   field :url, type: String
-  has_one :summary
+  belongs_to :summary
+  has_one :aggregate_run
   field :percent_passing, type: Float
 
   def load_conformance

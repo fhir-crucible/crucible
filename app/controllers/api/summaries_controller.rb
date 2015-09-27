@@ -7,13 +7,7 @@ module Api
     end
 
     def show
-      # TODO: fix this... currently this is server id instead of summary
-      summary = Summary.where({server_id: params[:summary_id]}).desc(:generated_at).first
-      #fresh_when(etag: summary, last_modified: summary.generated_at, public: true)
-      #summary = Summary.where(_id: params[:summary_id]).try(:last)
-      unless params[:issues]
-        summary.compliance = Compliance.remove_compliance_fields(summary.compliance, ['issues'])
-      end
+      summary = Server.find(params[:summary_id]).summary
       render json: {summary: summary}
     end
 

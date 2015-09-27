@@ -9,4 +9,11 @@ class TestRun
   belongs_to :user
   field :nightly, type: Boolean, default: false
   has_many :test_results, autosave: true
+
+  def serializable_hash(options = nil)
+    hash = super(options)
+    hash['id'] = hash.delete('_id').to_s if(hash.has_key?('_id'))
+    hash
+  end
+
 end
