@@ -36,7 +36,17 @@ module Api
     end
 
     def summary
-      render json: {summary:Summary.where(server_id: params[:id]).try(:last)}
+      summary = Server.find(params[:id]).summary
+      render json: {summary: summary}
+    end
+
+    def aggregate_run
+      server = Server.find(params[:id])
+      aggregate_run = server.aggregate_run
+      if (params[:only_failures])
+        aggregate_run.results.select! {|r| r if r['status'] != 'pass'}
+      end
+      render json: server.aggregate_run
     end
 
     def generate_summary
@@ -46,14 +56,7 @@ module Api
       Aggregate.update(server, test_run)
       compliance = Aggregate.get_compliance(server)
 
-      summary = Summary.new(
-        server_id: server.id,
-        test_run: test_run,
-        compliance: compliance,
-        generated_at: Time.now
-      )
-
-
+      summary = Summary.new({server_id: server.id, test_run: test_run, compliance: compliance, generated_at: Time.now})
       server.summary = summary
       server.percent_passing = (compliance['passed'].to_f / (compliance['total'].to_f || 1)) * 100.0
       summary.save!

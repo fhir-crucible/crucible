@@ -20,6 +20,8 @@ class Crucible.TestExecutor
   constructor: ->
     @element = $('.test-executor')
     return unless @element.length
+    @element.data('testExecutor', this)
+    @serverId = @element.data('server-id')
     @registerHandlers()
     @loadTests()
 
@@ -35,6 +37,7 @@ class Crucible.TestExecutor
     $.getJSON("api/tests.json").success((data) =>
       @suites = data['tests']
       @renderSuites()
+      @element.trigger('testsLoaded')
     )
 
   renderSuites: =>
@@ -72,7 +75,6 @@ class Crucible.TestExecutor
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     @showOnlyExecutedSuites()
     progress = $("##{this.element.data('progress')}")
-    this.serverId = this.element.data('server-id')
     progress.parent().collapse('show')
     progress.find('.progress-bar').css('width',"2%")
     @element.queue("executionQueue", this.registerTestRun)

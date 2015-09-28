@@ -5,18 +5,21 @@ $(window).on('load', ->
 class Crucible.TestRunReport
   templates: 
     childrenChart: 'views/templates/servers/starburst_children_chart'
+    failures: 'views/templates/servers/failures_report'
   # html:
   #   selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
 
   constructor: ->
     @element = $('.test-run-report')
     return unless @element.length
+    @serverId = @element.data('server-id')
     @registerHandlers()
     @childrenChart = @element.find('.spec-details')
+    @failuresReportElement = @element.find('.failures')
+    @loadAggregateRun()
 
 
   registerHandlers: =>
-    # @element.find('.execute').click(@execute)
     @element.find('.starburst').on('starburstInitialized', (event) =>
       @starburst = @element.find('.starburst').data('starburst')
       @starburst.addListener(this)
@@ -24,6 +27,29 @@ class Crucible.TestRunReport
       @renderHeader(@starburst.selectedNode)
       @renderServerHeader()
       false
+    )
+    $('.test-executor').on('testsLoaded', (event) =>
+      @suitesById = $(event.target).data('testExecutor').suitesById
+      @renderFailures()
+    )
+
+  renderFailures: ->
+    messageMap = {}
+    @failures = _.sortBy(@failures, (v) -> "#{v.key} #{v.description}")
+    for failure in @failures
+      messageMap[failure.message] ||= {message: failure.message, failures: []}
+      failure.suite = @suitesById[failure.test_id.$oid] if @suitesById?
+      messageMap[failure.message].failures.push failure
+    failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
+    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: @failures.length}))
+    
+
+  loadAggregateRun: =>
+    $.getJSON("/api/servers/#{@serverId}/aggregate_run?only_failures=true").success((data) =>
+      return unless data
+      $('.test-run-summary-handle').removeClass('hidden')
+      @failures = data['results']
+      @renderFailures()
     )
 
   renderChart: (node) ->
@@ -53,8 +79,13 @@ class Crucible.TestRunReport
       val = node[type]/(node.total||1)
     Math.round(val*100)
 
+  filterFailures: (node) =>
+    starburstNode = @starburst.nodeMap[node]
+    # renderFailures() -- mark failures as hidden and remove
+    # remove hidden
 
   transitionTo: (node) ->
     @renderChart(node)
     @renderHeader(node)
+    @filterFailures(node)
 
