@@ -16,21 +16,25 @@ class Crucible.Summary
       summaryElement = $(summaryElement)
       serverId = summaryElement.data('serverId')
       if serverId?
-        $.getJSON("/api/summary/#{serverId}.json")
+        $.getJSON("/api/servers/#{serverId}/summary.json")
           .success((data) => 
-            starburstElement = summaryElement.find('.starburst')
-            # TODO: _renderChart seems messy... this could use a better interface
-            starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance)
-            starburst._renderChart()
-            if summaryElement.data('synchronized')
-              starburst.addListener(this)
-            summaryElement.data('generated-at', data.summary.generated_at)
-            summaryElement.find('.percent-passed').html("#{percentMe(starburst.data)}%")
-            summaryElement.find('.last-run').html(moment(data.summary.generated_at).fromNow())
-            starburstElement.data('starburst', starburst).trigger('starburstInitialized')
+            if (data.summary)
+              starburstElement = summaryElement.find('.starburst')
+              summaryElement.show()
+              # TODO: _renderChart seems messy... this could use a better interface
+              starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance)
+              starburst._renderChart()
+              if summaryElement.data('synchronized')
+                starburst.addListener(this)
+              summaryElement.data('generated-at', data.summary.generated_at)
+              summaryElement.find('.percent-passed').html("#{percentMe(starburst.data)}%")
+              summaryElement.find('.last-run').html(moment(data.summary.generated_at).fromNow())
+              starburstElement.data('starburst', starburst).trigger('starburstInitialized')
+            else
+              summaryElement.hide()
           )
           .error((e) ->
-            summaryElement.remove()
+            summaryElement.hide()
           )
 
   transitionTo: (name) ->

@@ -45,14 +45,14 @@
           <ul class="nav nav-tabs tabbed-data-container">
             <li class="tabbed-data active"><a data-toggle="tab" href="#test-data" aria-expanded="true">Tests</a></li>
             <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false">Conformance</a></li>
-            <li class="tabbed-data"><a data-toggle="tab" href="#test-run-summary-data">Test Run Summary</a></li>
+            <li class="tabbed-data test-run-summary-handle hidden"><a data-toggle="tab" href="#test-run-summary-data">Test Run Summary</a></li>
           </ul>
         </div>
         <div class="row">
           <div class="tab-content">
             <!-- TEST PANEL START -->
             <div class="tab-pane test-results active" id="test-data">
-              <div class="test-executor" data-server-id="<%=@server.id %>" "data-progress="execution-progress">
+              <div class="test-executor" data-server-id="<%=@server.id %>" data-progress="execution-progress">
                 <!-- START: Left side, with filters -->
                 <div class="col-md-3">
                   <div class="filter">
@@ -82,7 +82,7 @@
                   </div>
                   <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="test-suites">
-                      loading indicator
+                      loading...
                     </div>
                     <%= render partial: 'individual_results'%>
                   </div>

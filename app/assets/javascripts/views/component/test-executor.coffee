@@ -15,13 +15,13 @@ class Crucible.TestExecutor
     collapseAllButton: '<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites'
     expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
-    serverId: null
-    testRun: null
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
 
   constructor: ->
     @element = $('.test-executor')
     return unless @element.length
+    @element.data('testExecutor', this)
+    @serverId = @element.data('server-id')
     @registerHandlers()
     @loadTests()
 
@@ -37,6 +37,7 @@ class Crucible.TestExecutor
     $.getJSON("api/tests.json").success((data) =>
       @suites = data['tests']
       @renderSuites()
+      @element.trigger('testsLoaded')
     )
 
   renderSuites: =>
@@ -74,27 +75,25 @@ class Crucible.TestExecutor
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     @showOnlyExecutedSuites()
     progress = $("##{this.element.data('progress')}")
-    this.serverId = this.element.data('server-id')
     progress.parent().collapse('show')
     progress.find('.progress-bar').css('width',"2%")
+    @element.queue("executionQueue", this.registerTestRun)
     suiteIds.each (i, suiteId) =>
       testElement = @element.find("#test-#{suiteId}")
       testElement.find('.test-status').empty().append(@html.spinner)
-      @element.queue("executionQueue", this.registerTestRun)
       @element.queue("executionQueue", =>
-        $.post("#{$(location).attr('pathname')}/tests/#{suiteId}/execute",{test_result: {test_run_id: this.testRun}}).success((result) =>
+        $.post("/servers/#{@serverId}/tests/#{suiteId}/execute",{test_result: {test_run_id: @testRunId}}).success((result) =>
           progress.find('.progress-bar').css('width',"#{(i+1)/suiteIds.length*100}%")
           @handleSuiteResult(@suitesById[suiteId], result, testElement)
           if i < suiteIds.length-1
-            setTimeout((=> @element.dequeue("executionQueue")), 1)
+            @element.dequeue("executionQueue")
           else
             progress.parent().collapse('hide')
             progress.find('.progress-bar').css('width',"0%")
-            @element.queue("executionQueue", this.regenerateSummary)
             @element.dequeue("executionQueue")
         )
       )
-
+    @element.queue("executionQueue", this.regenerateSummary)
     @element.dequeue("executionQueue")
 
   filter: =>
@@ -121,16 +120,15 @@ class Crucible.TestExecutor
     @element.find(':checked').closest('.test-run-result').show()
     @element.find('.test-run-result.executed').show()
   
-   registerTestRun: =>
-    $.post("/api/test_runs", {test_run: {server_id: this.serverId}}).success((result) =>
-      this.testRun = result.test_run._id.$oid
+  registerTestRun: =>
+    $.post("/api/test_runs", {test_run: {server_id: @serverId}}).success((result) =>
+      @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
     )
 
-
   regenerateSummary: =>
-    $.get("/api/servers/#{this.serverId}/generate_summary").success((result) =>
-      console.log "Generated Summary at #{Date(result.summary.generated_at)}"
+    $.post("/api/servers/#{@serverId}/generate_summary", {test_run_id: @testRunId}).success((result) =>
+      new Crucible.Summary()
       @element.dequeue("executionQueue")
     )
   

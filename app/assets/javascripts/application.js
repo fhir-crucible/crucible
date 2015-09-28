@@ -16,6 +16,9 @@
 //= require d3-tip/index
 //= require moment/moment
 //= require handlebars/handlebars.runtime
+//= require jquery-sticky/jquery.sticky
+//= require underscore/underscore
+
 
 //= require_tree ./views/templates
 //= require_tree ./views

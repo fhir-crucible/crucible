@@ -1,0 +1,99 @@
+  <div class="failures-title">
+    <div id="ember1145" class="ember-view pull-right">
+      <button class="btn secondary" data-ember-action="1146"><i class="fa fa-cog"></i> Tag Filters</button>
+      <!---->
+    </div>
+    Failures
+    <span class="failures-count">({{total}})</span>
+    <div id="ember1155" class="ember-view tag-list">
+      <!---->
+    </div>
+  </div>
+  <div class="failure-messages row">
+    <div class="col-md-8">
+      {{#each failuresByMessage as |failureGroup|}}
+      <div class="ember-view active-test-failure">
+        <div class="test-compliance-fail">
+          <div class="failures-nav">
+            <div class="metadata" data-ember-action="2454">
+              <div class="failure-message-level-one-count">
+                {{failureGroup.failures.length}}
+              </div>
+              <div class="failure-message-level-one-text">
+                {{failureGroup.message}} 
+              </div>
+            </div>
+            <div class="failed-tests">
+              <div>
+                {{#each failureGroup.failures as |failure|}}
+                  <div class="failed-test" id="failed_test_{{failure.id}}">
+                    <div class="test-id">
+                      {{failure.key}} {{failure.description}}
+                       <span class="tag" data-ember-action="2456">read</span>
+                    </div>
+                    <div class="row test-stats">
+                      {{#if failure.suite}}
+                        <div class="col-md-4 test-suite">
+                          Suite
+                        </div>
+                        <div class="col-md-8 test-stats-suite">
+                          {{failure.suite.name}}
+                        </div>
+                      {{/if}}
+                      {{#if failure.validates}}
+                        <div class="col-md-4 test-stats-label">
+                          Validates
+                        </div>
+                        <div class="col-md-8 test-stats-validates">
+                          {{#each failure.validates as |validation|}}
+                            <div>{{validation.resource}}: {{#each validation.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
+                          {{/each}}
+                        </div>
+                      {{/if}}
+                      {{#if failure.links}}
+                        <div class="col-md-4 test-stats-label">
+                          Links
+                        </div>
+                        <div class="col-md-8 test-stats-links">
+                          {{#each failure.links as |link|}}
+                            <div><a target="_blank" href="{{link}}">Related FHIR Spec Location</a></div>
+                          {{/each}}
+                        </div>
+                      {{/if}}
+                      {{#if failure.data}}
+                        <div class="col-md-4 test-stats-label">
+                          Data
+                        </div>
+                        <div class="col-md-5 test-stats-data">
+                          <div><a href="#">!!Data!!</a></div>
+                        </div>
+                      {{/if}}
+                        <div class="col-md-3">
+                          <!-- button -->
+                        </div>
+                    </div>
+                    {{#unless @last}}<hr/>{{/unless}}
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    <div class="col-md-4">
+      <div id="ember2260-sticky-wrapper" class="sticky-wrapper" style="height: 356px;">
+        <div id="ember2260" class="ember-view" style="width: 320px;">
+          <div class="failure-inspector">
+            <div class="failure-inspector-starburst">
+              <div id="ember2261" class="ember-view"></div>
+            </div>
+            <div class="failure-inspector-message">
+              message 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
