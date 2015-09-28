@@ -24,9 +24,9 @@
               <td data-title="Read" class="test-circle-holder">
                 <a>{{title-case res.fhirType}}</a>
               </td>
-              {{#each operations as |operation|}}
+              {{#each ../operations as |operation|}}
                 <td>
-                  {{> resource_operation resource=res validatedResources=validatedResources operation=operation}}
+                  {{> resource_operation resource=res validatedResources=validatedResources operation=operation supportedStatus=../supportedStatus(res)}}
                 </td>
               {{/each}}
             </tr>
