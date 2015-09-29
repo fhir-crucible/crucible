@@ -20,6 +20,7 @@ class Crucible.TestExecutor
   constructor: ->
     @element = $('.test-executor')
     return unless @element.length
+    debugger
     @element.data('testExecutor', this)
     @serverId = @element.data('server-id')
     @progress = $("##{@element.data('progress')}")
@@ -31,8 +32,6 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
-    $('.edit-server-name-icon').click(@toggleEditDialogue)
-    $('.submit-server-name').click(@editServerName)
     @filterBox = @element.find('.test-results-filter')
     @filterBox.on('keyup', @filter)
 
@@ -138,26 +137,6 @@ class Crucible.TestExecutor
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
     @element.find('.test-run-result').show()
-
-  toggleEditDialogue: =>
-    $('.edit-panel').toggleClass('hide')
-    $('.server-name-panel').toggleClass('hide')
-
-  editServerName: (newName) =>
-    newName = $('#edit-server-name-dialogue').val()
-    $.ajax({
-      type: 'PUT',
-      url: "/api/servers/#{@serverId}",
-      data: {server: {name: newName}},
-      success: ((data) =>
-        $('.server-name-label').html(newName) 
-        @toggleEditDialogue()
-      )
-      fail: ((data) =>
-        $('.edit-panel').show()
-        $('.server-name-panel').hide()
-      )
-    });
 
   showOnlyExecutedSuites: =>
     @element.find('.filter-by-executed').collapse('show')
