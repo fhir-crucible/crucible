@@ -158,6 +158,7 @@ class Crucible.TestExecutor
   regenerateSummary: =>
     $.post("/api/servers/#{@serverId}/generate_summary", {test_run_id: @testRunId}).success((result) =>
       new Crucible.Summary()
+      new Crucible.TestRunReport()
       @element.dequeue("executionQueue")
     )
 

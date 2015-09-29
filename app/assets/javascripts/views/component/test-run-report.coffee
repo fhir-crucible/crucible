@@ -6,8 +6,6 @@ class Crucible.TestRunReport
   templates: 
     childrenChart: 'views/templates/servers/starburst_children_chart'
     failures: 'views/templates/servers/failures_report'
-  # html:
-  #   selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
 
   constructor: ->
     @element = $('.test-run-report')
