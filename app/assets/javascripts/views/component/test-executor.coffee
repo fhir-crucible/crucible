@@ -20,7 +20,6 @@ class Crucible.TestExecutor
   constructor: ->
     @element = $('.test-executor')
     return unless @element.length
-    debugger
     @element.data('testExecutor', this)
     @serverId = @element.data('server-id')
     @progress = $("##{@element.data('progress')}")
