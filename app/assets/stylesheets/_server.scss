@@ -97,14 +97,13 @@
   }
 
   .spec-details {
-    padding-top: 30px;
+    padding-top: 60px;
 
     .spec-headers {
       margin-bottom: 15px;
       text-align: left;
 
       .spec-headers-specification {
-        margin-left: 32px;
         text-decoration: underline;
       }
 
@@ -324,8 +323,10 @@
 }
 
 // ------------------------- TEST RUN SUMMARY TAB ----------------------------------- // 
-/*.test-run-report{
+.test-run-report{
   margin-top: 30px;
+  .spec-row{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
-*/
-

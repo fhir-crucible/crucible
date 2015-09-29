@@ -1,12 +1,12 @@
 <div class="row spec-headers">
-  <div class="col-md-4 col-md-offset-1 spec-headers-specification">Specification</div>
+  <div class="col-md-4 spec-headers-specification">Specification</div>
   <div class="col-md-3 col-md-offset-4 spec-headers-passing">% Passing</div>
 </div>
-<div class="row">
+<div class="row spec-headers-table">
   <div class="col-md-12">
   {{#each children as |child|}}
-    <tr class="row spec-row">
-      <div class="col-md-4 col-md-offset-1 spec-title">{{child.name}}</div>
+    <div class="row spec-row">
+      <div class="col-md-5 spec-title">{{child.name}}</div>
       <div class="col-md-4 spec-bar-graph">
         <div class="progress-small">
           <div class="progress-bar progress-bar-success" role="progressbar" data-original-title="" title="" style="width: {{child.percentPassed}}%;"></div>
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="col-md-3 spec-percent-passing">{{child.percentPassed}}%</div>
-    </tr>
+    </div>
   {{/each}}
   </div>
 </div>
