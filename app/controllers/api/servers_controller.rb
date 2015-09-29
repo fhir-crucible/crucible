@@ -57,7 +57,7 @@ module Api
 
       summary = Summary.new({server_id: server.id, test_run: test_run, compliance: compliance, generated_at: Time.now})
       server.summary = summary
-      server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].min)) * 100.0
+      server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
       summary.save!
       server.save!
 
