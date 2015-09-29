@@ -1,20 +1,20 @@
 GIT
   remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: dd4fe140bdfe347f128c60288f0f7f7877e30e22
+  revision: 13e887ca2ba2a39e820f2a4dbdb8ad66139c2500
   branch: master
   specs:
     fhir_client (1.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_dstu2_models.git
-  revision: 9c0fbe5a9dbb246d4b019d2a7ce29ccc531084cf
+  revision: b8ee06be16616b590919e393463655cf11000846
   branch: master
   specs:
     fhir_model (1.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 965f43f6439738f3687c61c3e08fedaddba4bc0b
+  revision: c2f42fad554765ec4bfd3457352cb0ae1d482274
   branch: master
   specs:
     plan_executor (1.0.0)
@@ -85,6 +85,8 @@ GEM
     easy_diff (0.0.3)
     erubis (2.7.0)
     execjs (2.2.1)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
     handlebars_assets (0.16)
       execjs (>= 1.2.9)
       multi_json
@@ -96,6 +98,7 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.1)
+    jwt (1.5.1)
     mail (2.6.1)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
@@ -116,11 +119,19 @@ GEM
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
     multi_json (1.10.1)
+    multi_xml (0.5.5)
+    multipart-post (2.0.0)
     nokogiri (1.6.3)
       mini_portile (~> 0.5.0)
     nokogiri-diff (0.2.0)
       nokogiri (~> 1.5)
       tdiff (~> 0.3, >= 0.3.2)
+    oauth2 (1.0.0)
+      faraday (>= 0.8, < 0.10)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (~> 1.2)
     optionable (0.2.0)
     origin (2.1.1)
     orm_adapter (0.5.0)
@@ -219,6 +230,7 @@ DEPENDENCIES
   mongoid-history
   nokogiri
   nokogiri-diff
+  oauth2
   plan_executor!
   postrank-uri
   pry

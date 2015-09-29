@@ -5,7 +5,9 @@ Handlebars.registerHelper('test-status', (status) ->
     when 'fail'
       "glyphicon glyphicon-remove-circle failed"
     when 'skip'
-      "glyphicon glyphicon-remove-circle skip"
+      "glyphicon glyphicon glyphicon-ban-circle skip"
+    when 'error'
+      "glyphicon glyphicon-exclamation-sign error"
     else
       ""
   new Handlebars.SafeString(result)

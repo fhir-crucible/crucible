@@ -22,6 +22,7 @@ class Crucible.TestExecutor
     return unless @element.length
     @element.data('testExecutor', this)
     @serverId = @element.data('server-id')
+    @progress = $("##{@element.data('progress')}")
     @registerHandlers()
     @loadTests()
 
@@ -72,29 +73,48 @@ class Crucible.TestExecutor
       $(button).html(@html.expandAllButton)
 
   execute: =>
+    @element.find('.execute').addClass('disabled')
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     @showOnlyExecutedSuites()
-    progress = $("##{this.element.data('progress')}")
-    progress.parent().collapse('show')
-    progress.find('.progress-bar').css('width',"2%")
+    @progress.parent().collapse('show')
+    @progress.find('.progress-bar').css('width',"2%")
     @element.queue("executionQueue", this.registerTestRun)
     suiteIds.each (i, suiteId) =>
-      testElement = @element.find("#test-#{suiteId}")
-      testElement.find('.test-status').empty().append(@html.spinner)
+      suiteElement = @element.find("#test-#{suiteId}")
+      suiteElement.find('.test-status').empty().append(@html.spinner)
       @element.queue("executionQueue", =>
-        $.post("/servers/#{@serverId}/tests/#{suiteId}/execute",{test_result: {test_run_id: @testRunId}}).success((result) =>
-          progress.find('.progress-bar').css('width',"#{(i+1)/suiteIds.length*100}%")
-          @handleSuiteResult(@suitesById[suiteId], result, testElement)
-          if i < suiteIds.length-1
-            @element.dequeue("executionQueue")
-          else
-            progress.parent().collapse('hide')
-            progress.find('.progress-bar').css('width',"0%")
-            @element.dequeue("executionQueue")
+        $.post("/servers/#{@serverId}/tests/#{suiteId}/execute",{test_result: {test_run_id: @testRunId}}
+        ).success((result) =>
+          @processTestResult(i, suiteId, suiteIds, result, suiteElement)
+        ).error(=>
+          @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
         )
       )
     @element.queue("executionQueue", this.regenerateSummary)
     @element.dequeue("executionQueue")
+
+  processTestResult: (i, suiteId, suiteIds, result, suiteElement) ->
+    @progress.find('.progress-bar').css('width',"#{(i+1)/suiteIds.length*100}%")
+    @handleSuiteResult(@suitesById[suiteId], result, suiteElement)
+    if i < suiteIds.length-1
+      @element.dequeue("executionQueue")
+    else
+      @progress.parent().collapse('hide')
+      @progress.find('.progress-bar').css('width',"0%")
+      @element.find('.execute').removeClass('disabled')
+      @element.dequeue("executionQueue")
+
+  handleSuiteResult: (suite, result, suiteElement) =>
+    suiteStatus = 'pass'
+    $(result.tests).each (i, test) =>
+      suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
+    result.suiteStatus = suiteStatus
+
+    suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
+    suiteElement = @element.find("#test-"+suite.id)
+    suiteElement.data('suite', suite)
+    $(result.tests).each (i, test) =>
+      @addClickTestHandler(test, suiteElement)
 
   filter: =>
     filterValue = @filterBox.val().toLowerCase()
@@ -131,18 +151,6 @@ class Crucible.TestExecutor
       new Crucible.Summary()
       @element.dequeue("executionQueue")
     )
-  
-  handleSuiteResult: (suite, result, suiteElement) =>
-    suiteStatus = 'pass'
-    $(result.tests).each (i, test) =>
-      suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
-    result.suiteStatus = suiteStatus
-
-    suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
-    suiteElement = @element.find("#test-"+suite.id)
-    suiteElement.data('suite', suite)
-    $(result.tests).each (i, test) =>
-      @addClickTestHandler(test, suiteElement)
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
@@ -150,3 +158,16 @@ class Crucible.TestExecutor
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
+      suiteElement.find(".data-link").click (e) -> 
+        $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
+        hljs.highlightBlock($('#data-modal .modal-body')[0]);
+
+
+  createErrorSuite: (suiteId) ->
+    suite = _.clone(@suitesById[suiteId])
+    suite.tests = suite.methods
+    for test in suite.tests
+      test.status = 'error'
+      test.message = 'The test could not be executed'
+    suite
+

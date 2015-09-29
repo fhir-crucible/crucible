@@ -34,6 +34,7 @@ gem 'nokogiri-diff'
 gem 'addressable'
 gem 'handlebars_assets'
 gem 'postrank-uri'
+gem 'oauth2'
 
 group :development do
   gem 'pry-byebug'

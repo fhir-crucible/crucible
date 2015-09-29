@@ -18,6 +18,7 @@
 //= require handlebars/handlebars.runtime
 //= require jquery-sticky/jquery.sticky
 //= require underscore/underscore
+//= require highlightjs/highlight.pack.js
 
 
 //= require_tree ./views/templates

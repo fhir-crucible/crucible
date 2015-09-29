@@ -52,7 +52,11 @@
     <div class="media test-response-data">
       <div class="media-body">
         <h4 class="media-heading">Data</h4>
-        {{test.data}}
+        <div>
+          <a href="#" class="data-link" data-toggle="modal" data-target="#data-modal" data-content="">response data</a>
+          <div class="hidden data-content"><pre><code>{{test.data}}</code></pre></div>
+        </div>
+        
       </div>
     </div>
   {{/if}}
