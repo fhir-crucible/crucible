@@ -309,3 +309,13 @@
 .servers-show-time {
   margin-left: 10px;
 }
+
+.server-name-panel{
+  .server-name-label{display: inline}
+  .edit-server-name-icon{display: inline}
+}
+
+.edit-panel{
+  #edit-server-name-dialogue{display: inline}
+  button{width: 100px; display: inline}
+}

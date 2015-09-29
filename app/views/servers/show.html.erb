@@ -14,19 +14,20 @@
         </p>
         <div class="row">
           <div class="col-md-7 col-md-offset-4 server-test-details">
-            <div id="ember6112" class="ember-view">
-              <div class="server-details">
-                <div class="server-icon pull-left">
-                  <a id="ember6113" href="#" class="ember-view">      <i class="fa fa-server"></i>
-                  </a>
+            <div class="server-details" data-server-id="<%=@server.id%>">
+              <div class="server-icon pull-left">
+                <a href="#"><i class="fa fa-server"></i></a>
+              </div>
+              <div class="server-url-name">
+                <div class="server-name-panel emphasize">
+                  <div class="server-name-label"><%= @server.name %></div> <a class="edit-server-name-icon"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
                 </div>
-                <div class="server-url-name">
-                  <div class="server-name emphasize">
-                    <%= @server.name %> <a href="#" data-ember-action="6114"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
-                  </div>
-                  <div class="server-url">
-                    <a target="_blank" href="<%= @server.url %>"><%= @server.url %></a>
-                  </div>
+                <div class="edit-panel hide">
+                  <input id="edit-server-name-dialogue" name="name" value='<%= @server.name %>'>
+                  <button class="btn secondary submit-server-name">Save</button>
+                </div>
+                <div class="server-url">
+                  <a target="_blank" href="<%= @server.url %>"><%= @server.url %></a>
                 </div>
               </div>
             </div>

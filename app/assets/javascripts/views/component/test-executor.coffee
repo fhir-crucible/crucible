@@ -73,9 +73,9 @@ class Crucible.TestExecutor
       $(button).html(@html.expandAllButton)
 
   execute: =>
-    @element.find('.execute').addClass('disabled')
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     if suiteIds.length > 0
+      @element.find('.execute').addClass('disabled')
       @showOnlyExecutedSuites()
       @progress.parent().collapse('show')
       @progress.find('.progress-bar').css('width',"2%")
