@@ -500,7 +500,11 @@
       "children": []
     },{
       "name": "PROFILES",
-      "children": []
+      "children": [
+        {
+          "name": "validate-profile"
+        }
+      ]
     },{
       "name": "EXTENSIONS",
       "children": [

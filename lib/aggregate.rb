@@ -54,6 +54,11 @@ module Aggregate
             update_node(node_map, extension, result)
           end
         end
+        if validation['profiles']
+          validation['profiles'].each do |profile|
+            update_node(node_map, profile, result)
+          end
+        end
 
       end if result['validates']
     end
