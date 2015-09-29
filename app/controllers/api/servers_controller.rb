@@ -52,12 +52,13 @@ module Api
     def generate_summary
       test_run = TestRun.find(params[:test_run_id])
       server = Server.find(params[:id])
+
       Aggregate.update(server, test_run)
       compliance = Aggregate.get_compliance(server)
 
       summary = Summary.new({server_id: server.id, test_run: test_run, compliance: compliance, generated_at: Time.now})
       server.summary = summary
-      server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
+      server.percent_passing = (compliance['passed'].to_f / (compliance['total'].to_f || 1)) * 100.0
       summary.save!
       server.save!
 
