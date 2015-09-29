@@ -31,12 +31,7 @@ module Api
 
     def conformance
       server = Server.find(params[:id])
-      if !server.conformance || params[:refresh]
-        conformance = server.load_conformance
-        server.conformance = conformance
-        server.save
-      end
-      render json: {conformance: server.conformance}
+      render json: {conformance: server.load_conformance(params[:refresh])}
     end
 
     def summary

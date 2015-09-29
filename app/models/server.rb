@@ -7,17 +7,23 @@ class Server
   belongs_to :summary
   has_one :aggregate_run
   field :percent_passing, type: Float
-  field :conformance
+  field :conformance, type: String
 
-  def load_conformance
-    @raw_conformance ||= FHIR::Client.new(self.url).conformanceStatement
-    conformance = JSON.parse(@raw_conformance.to_json(except: :_id))
-    conformance['rest'].each do |rest|
+  def load_conformance(refresh=false)
+    if (self.conformance.nil? || refresh)
+      @raw_conformance ||= FHIR::Client.new(self.url).conformanceStatement
+      self.conformance = @raw_conformance.to_json(except: :_id)
+      self.save!
+    end
+    value = JSON.parse(self.conformance)
+
+    value['rest'].each do |rest|
       rest['operation'] = rest['operation'].reduce({}) {|memo,operation| memo[operation['name']]=true; memo}
       rest['resource'].each do |resource|
         resource['operation'] = resource['interaction'].reduce({}) {|memo,operation| memo[operation['code']]=true; memo}
       end
     end
-    conformance
+    value
   end
+
 end
