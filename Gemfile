@@ -35,6 +35,8 @@ gem 'addressable'
 gem 'handlebars_assets'
 gem 'postrank-uri'
 gem 'oauth2'
+gem 'ruby-progressbar'
+
 
 group :development do
   gem 'pry-byebug'
