@@ -1,1 +1,2 @@
-Handlebars.registerPartial('test_result', HandlebarsTemplates['views/templates/servers/test_result'])
+Handlebars.registerPartial('test_result', HandlebarsTemplates['views/templates/servers/partials/test_result'])
+Handlebars.registerPartial('validation', HandlebarsTemplates['views/templates/servers/partials/validation'])

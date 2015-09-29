@@ -14,15 +14,17 @@
       <div class="ember-view active-test-failure">
         <div class="test-compliance-fail">
           <div class="failures-nav">
-            <div class="metadata" data-ember-action="2454">
+            <div class="metadata toggleable panel-heading">
               <div class="failure-message-level-one-count">
                 {{failureGroup.failures.length}}
               </div>
               <div class="failure-message-level-one-text">
-                {{failureGroup.message}} 
+                <a class="collapsed" data-toggle="collapse" data-target="#collapse{{@index}}">
+                  {{failureGroup.message}}
+                </a>
               </div>
             </div>
-            <div class="failed-tests">
+            <div class="failed-tests collapse" id="collapse{{@index}}">
               <div>
                 {{#each failureGroup.failures as |failure|}}
                   <div class="failed-test" id="failed_test_{{failure.id}}">
@@ -39,13 +41,23 @@
                           {{failure.suite.name}}
                         </div>
                       {{/if}}
+                      {{#if failure.requires}}
+                        <div class="col-md-4 test-stats-label">
+                          Requires
+                        </div>
+                        <div class="col-md-8 test-stats-validates">
+                          {{#each failure.requires as |requirement|}}
+                            <div>{{requirement.resource}}: {{#each requirement.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
+                          {{/each}}
+                        </div>
+                      {{/if}}
                       {{#if failure.validates}}
                         <div class="col-md-4 test-stats-label">
                           Validates
                         </div>
                         <div class="col-md-8 test-stats-validates">
                           {{#each failure.validates as |validation|}}
-                            <div>{{validation.resource}}: {{#each validation.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
+                            {{> validation validation=validation}}
                           {{/each}}
                         </div>
                       {{/if}}
