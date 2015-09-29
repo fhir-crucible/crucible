@@ -4,14 +4,14 @@ module Api
 
     def update
       # Unauthenticated users can't update.
-      unless current_user
-        head :forbidden
-        return
-      end
+      # unless current_user
+      #   head :forbidden
+      #   return
+      # end
       server = Server.find(params[:id])
       server.update(server_params)
       if server.save
-        respond_with server, location: api_servers_path
+        respond_with server
       else
         respond_with server, status: 422
       end

@@ -31,6 +31,8 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
+    $('.edit-server-name-icon').click(@toggleEditDialogue)
+    $('.submit-server-name').click(@editServerName)
     @filterBox = @element.find('.test-results-filter')
     @filterBox.on('keyup', @filter)
 
@@ -73,9 +75,9 @@ class Crucible.TestExecutor
       $(button).html(@html.expandAllButton)
 
   execute: =>
-    @element.find('.execute').addClass('disabled')
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     if suiteIds.length > 0
+      @element.find('.execute').addClass('disabled')
       @showOnlyExecutedSuites()
       @progress.parent().collapse('show')
       @progress.find('.progress-bar').css('width',"2%")
@@ -136,6 +138,26 @@ class Crucible.TestExecutor
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
     @element.find('.test-run-result').show()
+
+  toggleEditDialogue: =>
+    $('.edit-panel').toggleClass('hide')
+    $('.server-name-panel').toggleClass('hide')
+
+  editServerName: (newName) =>
+    newName = $('#edit-server-name-dialogue').val()
+    $.ajax({
+      type: 'PUT',
+      url: "/api/servers/#{@serverId}",
+      data: {server: {name: newName}},
+      success: ((data) =>
+        $('.server-name-label').html(newName) 
+        @toggleEditDialogue()
+      )
+      fail: ((data) =>
+        $('.edit-panel').show()
+        $('.server-name-panel').hide()
+      )
+    });
 
   showOnlyExecutedSuites: =>
     @element.find('.filter-by-executed').collapse('show')
