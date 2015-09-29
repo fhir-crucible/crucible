@@ -30,3 +30,11 @@
     {{/each}}
   </div>
 {{/if}}
+{{#if validation.profiles}}
+  <div>
+    Profiles: 
+    {{#each validation.profiles as |profile|}}
+      {{profile}}{{#unless @last}},{{/unless}}
+    {{/each}}
+  </div>
+{{/if}}
