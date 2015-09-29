@@ -1,4 +1,4 @@
-Handlebars.registerHelper('test-status', (status) -> 
+Handlebars.registerHelper('test-status', (status) ->
   result = switch status
     when 'pass'
       "glyphicon glyphicon-ok-circle passed"
@@ -13,3 +13,13 @@ Handlebars.registerHelper('test-status', (status) ->
   new Handlebars.SafeString(result)
 )
 
+Handlebars.registerHelper('title-case', (value) ->
+  Case.title(value)
+)
+
+Handlebars.registerHelper('supported-status', (resource, operation) ->
+  if resource.operation[operation] == true
+    return "test-filled"
+  else
+    return "test-empty"
+)
