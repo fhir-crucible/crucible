@@ -31,8 +31,12 @@ module Api
 
     def conformance
       server = Server.find(params[:id])
-      conformance = server.load_conformance
-      render json: {conformance: conformance}
+      if !server.conformance || params[:refresh]
+        conformance = server.load_conformance
+        server.conformance = conformance
+        server.save
+      end
+      render json: {conformance: server.conformance}
     end
 
     def summary
@@ -43,6 +47,7 @@ module Api
     def aggregate_run
       server = Server.find(params[:id])
       aggregate_run = server.aggregate_run
+      return unless aggregate_run
       if (params[:only_failures])
         aggregate_run.results.select! {|r| r if r['status'] != 'pass'}
       end
