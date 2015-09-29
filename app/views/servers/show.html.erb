@@ -44,7 +44,7 @@
         <div class="row">
           <ul class="nav nav-tabs tabbed-data-container">
             <li class="tabbed-data active"><a data-toggle="tab" href="#test-data" aria-expanded="true">Tests</a></li>
-            li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false"><i class="fa fa-lg fa-fw fa-spinner fa-pulse" id="conformance_spinner"></i>Conformance</a></li>
+            <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false"><i class="fa fa-lg fa-fw fa-spinner fa-pulse" id="conformance_spinner"></i>Conformance</a></li>
             <li class="tabbed-data test-run-summary-handle hidden"><a data-toggle="tab" href="#test-run-summary-data">Test Run Summary</a></li>
           </ul>
         </div>
@@ -92,10 +92,8 @@
             </div>
             <!-- CONFORMANCE PANEL START -->
             <div class="tab-pane" id="conformance-data">
-              <div class="col-md-12 tab-content-holder">
-                <%= render partial: "conformance" %>
-                <!-- METADATA CONTAINER -->
-                <%= render partial: 'metadata' %>
+              <div>
+                loading...
               </div>
             </div>
             <div class="tab-pane" id="test-run-summary-data">

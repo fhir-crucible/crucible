@@ -9,18 +9,14 @@ class Crucible.Conformance
     @element = $('.metadata-expand-container')
     @template = HandlebarsTemplates['views/templates/servers/conformance']
 
-    $.ajax({
-        type: 'GET',
-        url: "/api#{$(location).attr('pathname')}/conformance",
-        dataType: 'JSON',
-        success: ((data) =>
-          @updateConformance(data)
-          @removeConformanceSpinner()
-        ),
-        fail: ((data) =>
-          @removeConformanceSpinner()
-        )
-    });
+    $.getJSON("/api#{$(location).attr('pathname')}/conformance")
+    .success ((data) =>
+      @updateConformance(data)
+      @removeConformanceSpinner()
+    )
+    .error ((data) =>
+      @removeConformanceSpinner()
+    )
 
   updateConformance: (data)=>
     @conformance = data.conformance
