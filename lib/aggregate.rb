@@ -49,6 +49,12 @@ module Aggregate
             update_node(node_map, format, result)
           end
         end
+        if validation['extensions']
+          binding.pry
+          validation['extensions'].each do |extension|
+            update_node(node_map, extension, result)
+          end
+        end
 
       end if result['validates']
     end

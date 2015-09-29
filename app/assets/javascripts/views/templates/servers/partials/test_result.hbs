@@ -43,7 +43,7 @@
       <div class="media-body">
         <h4 class="media-heading">Test Validates</h4>
         {{#each test.validates as |validation|}}
-          <div>{{validation.resource}}: {{#each validation.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
+          {{> validation validation=validation}}
         {{/each}}
       </div>
     </div>

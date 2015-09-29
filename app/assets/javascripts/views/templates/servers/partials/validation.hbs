@@ -1,0 +1,32 @@
+{{#if validation.resource}}
+  <div>
+    {{validation.resource}}: 
+    {{#each validation.methods as |method|}}
+      {{method}}{{#unless @last}},{{/unless}}
+    {{/each}}
+  </div>
+{{else}}
+  {{#if validation.methods}}
+    <div>
+      {{#each validation.methods as |method|}}
+        {{method}}{{#unless @last}},{{/unless}}
+      {{/each}}
+    </div>
+  {{/if}}
+{{/if}}
+{{#if validation.formats}}
+  <div>
+    Format: 
+    {{#each validation.formats as |format|}}
+      {{format}}{{#unless @last}},{{/unless}}
+    {{/each}}
+  </div>
+{{/if}}
+{{#if validation.extensions}}
+  <div>
+    Extensions: 
+    {{#each validation.extensions as |extension|}}
+      {{extension}}{{#unless @last}},{{/unless}}
+    {{/each}}
+  </div>
+{{/if}}
