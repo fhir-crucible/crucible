@@ -152,6 +152,18 @@
   margin-right: 17px;
 }
 
+.skip{
+  color: $result-error;
+  float: right;
+  margin-right: 17px;
+}
+
+.error{
+  color: $result-error;
+  float: right;
+  margin-right: 17px;
+}
+
 .icon-failed {
   color: $result-fail;
 }

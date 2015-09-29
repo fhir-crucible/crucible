@@ -42,6 +42,9 @@ class Crucible.TestRunReport
       messageMap[failure.message].failures.push failure
     failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
     @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: @failures.length}))
+    @failuresReportElement.find(".data-link").click (e) -> 
+      $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
+      hljs.highlightBlock($('#data-modal .modal-body')[0]);
     
 
   loadAggregateRun: =>
