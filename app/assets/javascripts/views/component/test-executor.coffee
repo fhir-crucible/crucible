@@ -53,7 +53,7 @@ class Crucible.TestExecutor
         @addClickTestHandler(test, suiteElement)
 
   selectDeselectAll: =>
-    suiteElements = @element.find('.test-run-result :checkbox')
+    suiteElements = @element.find('.test-run-result :visible :checkbox')
     button = $('.selectDeselectAll')
     if !$(suiteElements).prop('checked')
       $(suiteElements).prop('checked', true)
