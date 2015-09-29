@@ -31,6 +31,7 @@ class Crucible.Conformance
     @conformance = data.conformance
     html = @template(({conformance: data.conformance, testedResources: @testedResources(), operations: Crucible.Conformance.operations, supportedStatus: @supportedStatus}))
     @element.children().replaceWith(html)
+    @element.trigger('conformanceLoaded')
 
   removeConformanceSpinner: =>
     $("#conformance_spinner").hide()
