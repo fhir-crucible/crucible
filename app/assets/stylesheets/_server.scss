@@ -21,9 +21,12 @@
 }
 
 .spec-table {
-  tr > div{
+  table > tr > div{
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+  .spec-row{
+    
   }
 }
 
@@ -89,12 +92,12 @@
   margin-bottom: 40px;
 
   .spec-starburst-chart {
-    padding: 0 40px 0 40px;
+    padding: 30px;
     text-align: left;
   }
 
   .spec-details {
-    padding-top: 40px;
+    padding-top: 30px;
 
     .spec-headers {
       margin-bottom: 15px;
@@ -132,7 +135,6 @@
 
 .starburst-header {
   text-align: center;
-  margin-top: 20px;
 }
 
 // ------------------------- SERVER SUMMARIES ------------------------------ //
@@ -310,6 +312,7 @@
   margin-left: 10px;
 }
 
+
 .server-name-panel{
   .server-name-label{display: inline}
   .edit-server-name-icon{display: inline}
@@ -319,3 +322,10 @@
   #edit-server-name-dialogue{display: inline}
   button{width: 100px; display: inline}
 }
+
+// ------------------------- TEST RUN SUMMARY TAB ----------------------------------- // 
+/*.test-run-report{
+  margin-top: 30px;
+}
+*/
+

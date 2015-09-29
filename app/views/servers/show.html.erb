@@ -98,7 +98,9 @@
               </div>
             </div>
             <div class="tab-pane" id="test-run-summary-data">
-              <%= render partial: 'test_run_report', locals: {server: @server}%>
+              <div class="col-md-12">
+                <%= render partial: 'test_run_report', locals: {server: @server}%>
+              </div>
             </div>
           </div>
         </div>
