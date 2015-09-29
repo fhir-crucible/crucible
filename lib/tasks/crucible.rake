@@ -9,7 +9,7 @@ namespace :crucible do
       test_run.server = s
       test_run.save
       begin
-        Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}[0..2].each do |t|
+        Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}.each do |t|
           client1 = FHIR::Client.new(s.url)
           # client2 = FHIR::Client.new(result.test_run.destination_server.url) if result.test_run.is_multiserver
           # TODO: figure out multi server
