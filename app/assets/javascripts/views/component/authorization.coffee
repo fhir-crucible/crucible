@@ -10,7 +10,8 @@ class Crucible.Authorization
 
   registerHandlers: =>
     $('#conformance-data').on('conformanceLoaded', (event) =>
-      $('#authorize_app').attr("disabled", false)
+
+      console.log('conformance loaded')
     )
     @element.find("#authorize_app").on('click', (event) =>
       event.preventDefault()
