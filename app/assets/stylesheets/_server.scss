@@ -78,7 +78,6 @@
 
 .percent-supported {
   text-align: left;
-  border-bottom: 1px solid $structure;
 
   .percent-supported-value {
     font-size: 30px;
@@ -92,7 +91,7 @@
   margin-bottom: 40px;
 
   .spec-starburst-chart {
-    padding: 30px;
+    padding: 30px 0px 30px 30px;
     text-align: left;
   }
 
@@ -242,16 +241,16 @@
 
         .failure-message-level-one-count {
           position: absolute;
-          height: 50px;
-          width: 50px;
+          height: 40px;
+          width: 40px;
           padding: 5px;
           top: 0;
           left: 0;
 
           border-radius: 50%;
-          border: 3px solid $brand-accent;
+          border: 2px solid $brand-accent;
           color: $brand-accent;
-          font-size: 1.2em;
+          font-size: 1.1em;
           text-align: center;
         }
 
@@ -264,7 +263,7 @@
 
         &:hover {
           .failure-message-level-one-count {
-            background-color: $brand-accent-darken;
+            background-color: $brand-accent;
             color: $brand-tertiary;
           }
 
@@ -299,6 +298,12 @@
 .error-report{
   word-wrap: break-word;
 }
+
+/*.failure-inspector-message{
+  border: 1px solid $structure;
+  margin-top: 20px;
+  border-radius: 5px;
+}*/
 
 // ------------------------- SERVER TIME ----------------------------------- //
 
