@@ -50,7 +50,6 @@ module Aggregate
           end
         end
         if validation['extensions']
-          binding.pry
           validation['extensions'].each do |extension|
             update_node(node_map, extension, result)
           end
