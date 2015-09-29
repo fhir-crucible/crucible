@@ -20,19 +20,19 @@
         </thead>
         <tbody>
           {{#each testedResources as |res|}}
-            <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target={{res.toggleSelector}}>
+            <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#resource-{{@index}}">
               <td data-title="Read" class="test-circle-holder">
                 <a>{{title-case res.fhirType}}</a>
               </td>
               {{#each ../operations as |operation|}}
                 <td>
-                  {{> resource_operation resource=res validatedResources=validatedResources operation=operation supportedStatus=../supportedStatus(res)}}
+                  {{> resource_operation resource=res validatedResources=validatedResources operation=operation }}
                 </td>
               {{/each}}
             </tr>
-            <tr class="hidden">
+            <tr id="resource-{{@index}}" class="panel-collapse collapse" aria-expanded="false">
               <td colspan="10">
-                <div id={{res.toggleId}} class="panel-collapse collapse" aria-expanded="false">
+                <div>
                   Conforms to
                   <a href={{res.profile.reference}}>{{res.profile.reference}}</a>
                   <table class="table inner-table">

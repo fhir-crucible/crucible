@@ -16,3 +16,10 @@ Handlebars.registerHelper('test-status', (status) ->
 Handlebars.registerHelper('title-case', (value) ->
   Case.title(value)
 )
+
+Handlebars.registerHelper('supported-status', (resource, operation) ->
+  if resource.operation[operation] == true
+    return "test-filled"
+  else
+    return "test-empty"
+)

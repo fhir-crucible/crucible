@@ -38,9 +38,5 @@ class Crucible.Conformance
     )
     resources
 
-  supportedStatus: (resource)=>
-    console.log(resource)
-    "test-filled"
-
   ensureArray = (array) ->
     array || []
