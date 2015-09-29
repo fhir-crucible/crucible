@@ -36,12 +36,15 @@ class Crucible.TestRunReport
   renderFailures: ->
     messageMap = {}
     @failures = _.sortBy(@failures, (v) -> "#{v.key} #{v.description}")
+    total = 0
     for failure in @failures
+      continue if failure.hidden
+      total += 1
       messageMap[failure.message] ||= {message: failure.message, failures: []}
       failure.suite = @suitesById[failure.test_id.$oid] if @suitesById?
       messageMap[failure.message].failures.push failure
     failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
-    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: @failures.length}))
+    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: total}))
     @failuresReportElement.find(".data-link").click (e) -> 
       $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
       hljs.highlightBlock($('#data-modal .modal-body')[0]);
@@ -84,11 +87,14 @@ class Crucible.TestRunReport
 
   filterFailures: (node) =>
     starburstNode = @starburst.nodeMap[node]
-    # renderFailures() -- mark failures as hidden and remove
-    # remove hidden
+    failureIds = (starburstNode.failedIds.concat starburstNode.skippedIds).concat starburstNode.errorsIds
+    for failure in @failures
+      failure.hidden = (failureIds.indexOf(failure.id) < 0)
+    @renderFailures() 
 
   transitionTo: (node) ->
-    @renderChart(node)
-    @renderHeader(node)
-    @filterFailures(node)
+    _.defer(=>
+      @renderChart(node)
+      @renderHeader(node)
+      @filterFailures(node))
 
