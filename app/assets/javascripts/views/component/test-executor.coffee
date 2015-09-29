@@ -8,7 +8,7 @@ class Crucible.TestExecutor
   templates:
     suiteSelect: 'views/templates/servers/suite_select'
     suiteResult: 'views/templates/servers/suite_result'
-    testResult: 'views/templates/servers/test_result'
+    testResult: 'views/templates/servers/partials/test_result'
   html:
     selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
     deselectAllButton: '<i class="fa fa-check"></i>&nbsp;Select All Test Suites'
