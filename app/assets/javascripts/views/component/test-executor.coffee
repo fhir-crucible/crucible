@@ -75,23 +75,26 @@ class Crucible.TestExecutor
   execute: =>
     @element.find('.execute').addClass('disabled')
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
-    @showOnlyExecutedSuites()
-    @progress.parent().collapse('show')
-    @progress.find('.progress-bar').css('width',"2%")
-    @element.queue("executionQueue", this.registerTestRun)
-    suiteIds.each (i, suiteId) =>
-      suiteElement = @element.find("#test-#{suiteId}")
-      suiteElement.find('.test-status').empty().append(@html.spinner)
-      @element.queue("executionQueue", =>
-        $.post("/servers/#{@serverId}/tests/#{suiteId}/execute",{test_result: {test_run_id: @testRunId}}
-        ).success((result) =>
-          @processTestResult(i, suiteId, suiteIds, result, suiteElement)
-        ).error(=>
-          @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
+    if suiteIds.length > 0
+      @showOnlyExecutedSuites()
+      @progress.parent().collapse('show')
+      @progress.find('.progress-bar').css('width',"2%")
+      @element.queue("executionQueue", this.registerTestRun)
+      suiteIds.each (i, suiteId) =>
+        suiteElement = @element.find("#test-#{suiteId}")
+        suiteElement.find('.test-status').empty().append(@html.spinner)
+        @element.queue("executionQueue", =>
+          $.post("/servers/#{@serverId}/tests/#{suiteId}/execute",{test_result: {test_run_id: @testRunId}}
+          ).success((result) =>
+            @processTestResult(i, suiteId, suiteIds, result, suiteElement)
+          ).error(=>
+            @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
+          )
         )
-      )
-    @element.queue("executionQueue", this.regenerateSummary)
-    @element.dequeue("executionQueue")
+      @element.queue("executionQueue", this.regenerateSummary)
+      @element.dequeue("executionQueue")
+    else 
+      @flashWarning('Please select at least one test suite')
 
   processTestResult: (i, suiteId, suiteIds, result, suiteElement) ->
     @progress.find('.progress-bar').css('width',"#{(i+1)/suiteIds.length*100}%")
@@ -145,6 +148,12 @@ class Crucible.TestExecutor
       @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
     )
+
+  flashWarning: (message) =>
+    warningBanner = @element.find('.warning-message')
+    $(warningBanner).html(message)
+    $(warningBanner).fadeIn()
+    $(warningBanner).delay(1000).fadeOut(1500)
 
   regenerateSummary: =>
     $.post("/api/servers/#{@serverId}/generate_summary", {test_run_id: @testRunId}).success((result) =>
