@@ -21,9 +21,12 @@
 }
 
 .spec-table {
-  tr > div{
+  table > tr > div{
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+  .spec-row{
+    
   }
 }
 
@@ -75,7 +78,6 @@
 
 .percent-supported {
   text-align: left;
-  border-bottom: 1px solid $structure;
 
   .percent-supported-value {
     font-size: 30px;
@@ -89,19 +91,18 @@
   margin-bottom: 40px;
 
   .spec-starburst-chart {
-    padding: 0 40px 0 40px;
+    padding: 30px 0px 30px 30px;
     text-align: left;
   }
 
   .spec-details {
-    padding-top: 40px;
+    padding-top: 60px;
 
     .spec-headers {
       margin-bottom: 15px;
       text-align: left;
 
       .spec-headers-specification {
-        margin-left: 32px;
         text-decoration: underline;
       }
 
@@ -132,7 +133,6 @@
 
 .starburst-header {
   text-align: center;
-  margin-top: 20px;
 }
 
 // ------------------------- SERVER SUMMARIES ------------------------------ //
@@ -241,16 +241,16 @@
 
         .failure-message-level-one-count {
           position: absolute;
-          height: 50px;
-          width: 50px;
+          height: 40px;
+          width: 40px;
           padding: 5px;
           top: 0;
           left: 0;
 
           border-radius: 50%;
-          border: 3px solid $brand-accent;
+          border: 2px solid $brand-accent;
           color: $brand-accent;
-          font-size: 1.2em;
+          font-size: 1.1em;
           text-align: center;
         }
 
@@ -263,7 +263,7 @@
 
         &:hover {
           .failure-message-level-one-count {
-            background-color: $brand-accent-darken;
+            background-color: $brand-accent;
             color: $brand-tertiary;
           }
 
@@ -299,6 +299,12 @@
   word-wrap: break-word;
 }
 
+/*.failure-inspector-message{
+  border: 1px solid $structure;
+  margin-top: 20px;
+  border-radius: 5px;
+}*/
+
 // ------------------------- SERVER TIME ----------------------------------- //
 
 .server-time {
@@ -310,6 +316,7 @@
   margin-left: 10px;
 }
 
+
 .server-name-panel{
   .server-name-label{display: inline}
   .edit-server-name-icon{display: inline}
@@ -318,4 +325,13 @@
 .edit-panel{
   #edit-server-name-dialogue{display: inline}
   button{width: 100px; display: inline}
+}
+
+// ------------------------- TEST RUN SUMMARY TAB ----------------------------------- // 
+.test-run-report{
+  margin-top: 30px;
+  .spec-row{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
