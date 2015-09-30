@@ -1,21 +1,55 @@
 namespace :crucible do
+
+  namespace :db do
+    desc 'Reset DB; by default pulls from a local dump under the db directory.'
+    task :reset, [:source] => :environment do |t, args|
+      source = "_#{args.source}" if args.source
+      dump_archive = File.join('db', "crucible_reset#{source}.tar.gz")
+      dump_extract = File.join('tmp', 'crucible_reset')
+      target_db = Mongoid.default_session.options[:database]
+      puts "Resetting #{target_db} from #{dump_archive}"
+      Mongoid.default_session.with(database: target_db) { |db| db.drop }
+      system "tar xf #{dump_archive} -C tmp"
+      system "mongorestore -d #{target_db} #{dump_extract}"
+      FileUtils.rm_r dump_extract
+    end
+  end
+  
+
   desc "Execute all tests against all servers"
   task :test_all => [:environment] do
     test_count = Test.count
+    i = 0
+    length = Server.all.count
+    binding.pry
     Server.all.each do |s|
+      i+=1
       puts  "#{s.name}(#{s.url})"
+      begin
+        x = (RestClient::Request.execute(:method => :get, :url => s.url+'/metadata', :timeout => 30, :open_timeout => 30)).match /Conformance/
+        unless x
+          puts "#{s.name}(#{s.url}) skipped for bad return"
+          next
+        end
+      rescue
+        puts  "#{s.name}(#{s.url}) skipped for error"
+        next
+      end
+      puts  "#{s.name}(#{s.url}) - GOT CONFORMANCE"
       progressbar = ProgressBar.create(:total => test_count)
       test_run = TestRun.new
       test_run.server = s
       test_run.save
-      begin
-        Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}.each do |t|
-          client1 = FHIR::Client.new(s.url)
-          # client2 = FHIR::Client.new(result.test_run.destination_server.url) if result.test_run.is_multiserver
-          # TODO: figure out multi server
-          client2 = nil
-          executor = Crucible::Tests::Executor.new(client1, client2)
 
+      client1 = FHIR::Client.new(s.url)
+      # client2 = FHIR::Client.new(result.test_run.destination_server.url) if result.test_run.is_multiserver
+      # TODO: figure out multi server
+      client2 = nil
+      executor = Crucible::Tests::Executor.new(client1, client2)
+
+      Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}.each do |t|
+        begin
+          puts  "\t #{i}/#{length}: #{s.name}(#{s.url})"
 
           test = executor.find_test(t.title)
           val = nil
@@ -32,9 +66,11 @@ namespace :crucible do
           test_run.test_results << result
           test_run.save
           progressbar.increment
+
+        rescue Exception => e
+          puts  "Error on #{t.title} against #{s.url}!"
+          e.backtrace
         end
-      rescue e
-        puts  "Error on #{t.title} against #{s.url}!"
       end
       Aggregate.update(s, test_run)
       compliance = Aggregate.get_compliance(s)
@@ -46,4 +82,5 @@ namespace :crucible do
       s.save!
     end
   end
+
 end
