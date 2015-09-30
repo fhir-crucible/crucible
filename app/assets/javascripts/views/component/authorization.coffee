@@ -10,11 +10,10 @@ class Crucible.Authorization
 
   registerHandlers: =>
     $('#conformance-data').on('conformanceLoaded', (event) =>
-
-      $('#authorize_app').attr("disabled", false)
+      $('.authorize_form_element').attr("disabled", false)
+      authUrl = $('#conformance-data').children().data('authorize-url')
+      $('#authorize_form').attr("action", authUrl)
     )
-    @element.find("#authorize_app").on('click', (event) =>
-      event.preventDefault()
+    @element.find("#authorize_form").on('submit', (event) =>
 
-      false
     )

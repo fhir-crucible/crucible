@@ -29,7 +29,7 @@ class Crucible.Conformance
 
   updateConformance: (data)=>
     @conformance = data.conformance
-    html = @template(({conformance: data.conformance, testedResources: @testedResources(), operations: Crucible.Conformance.operations, supportedStatus: @supportedStatus}))
+    html = @template({conformance: data.conformance, testedResources: @testedResources(), operations: Crucible.Conformance.operations, supportedStatus: @supportedStatus, authorizeUrl: @oauthUrl("authorize"), tokenUrl: @oauthUrl("token") })
     @element.children().replaceWith(html)
     @element.trigger('conformanceLoaded')
 
@@ -43,6 +43,12 @@ class Crucible.Conformance
       resources = resources.concat(mode.resource)
     )
     resources
+
+  oauthUrl: (url) =>
+    auth = @conformance.rest[0].security.extension[0].extension.find((elem, ind, arr)->
+      elem.url == url
+    )
+    auth.value.value
 
   ensureArray = (array) ->
     array || []
