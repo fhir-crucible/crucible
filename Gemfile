@@ -36,7 +36,7 @@ gem 'handlebars_assets'
 gem 'postrank-uri'
 gem 'oauth2'
 gem 'ruby-progressbar'
-
+gem "non-stupid-digest-assets"
 
 group :development do
   gem 'pry-byebug'

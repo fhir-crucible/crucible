@@ -151,6 +151,7 @@ GEM
     nokogiri-diff (0.2.0)
       nokogiri (~> 1.5)
       tdiff (~> 0.3, >= 0.3.2)
+    non-stupid-digest-assets (1.0.5)
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -264,6 +265,7 @@ DEPENDENCIES
   mongoid-history
   nokogiri
   nokogiri-diff
+  non-stupid-digest-assets
   oauth2
   plan_executor!
   postrank-uri
