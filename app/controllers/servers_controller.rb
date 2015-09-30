@@ -15,4 +15,23 @@ class ServersController < ApplicationController
     redirect_to action: "show", id: server.id
   end
 
+  def oauth_redirect
+    server = Server.where(state: params[:state]).first
+    if server
+      server.oauth_code = params[:code]
+      server.save!
+      options = {
+        authorize_url: server.authorize_url,
+        token_url: server.token_url,
+        raise_errors: false
+      }
+      client = OAuth2::Client.new(server.client_id, server.client_secret, options)
+      auth_pw = Base64.encode64("#{server.client_id}:#{server.client_secret}")
+      token = client.auth_code.get_token(server.oauth_code, :redirect_uri => 'http://localhost:3000/redirect', :headers => { 'Authorization' => "Basic #{auth_pw}" })
+      binding.pry
+      redirect_to server_path(server)
+    else
+      render status: 500, text: 'State not found'
+    end
+  end
 end

@@ -24,16 +24,16 @@
       <input type='hidden' name='redirect_uri' id='redirect_uri' value='http://localhost:3000/redirect' />
       <input type='hidden' name='scope' id='scope' value='user/*.read' />
       <input type='hidden' name='aud' id='aud' value='<%= @server.url %>' />
-      <input type='hidden' name='state' id='state' value='<%= SecureRandom.base64(24) %>' />
+      <input type='hidden' name='state' id='state' value='<%= @server.generate_state %>' />
       <div class="form-group">
         <label for="client_id">Client ID</label>
-        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" disabled='disabled' value='254d6cf9-cb82-4367-9a54-963a8af13dad' />
+        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" value='254d6cf9-cb82-4367-9a54-963a8af13dad' />
       </div>
       <div class="form-group">
         <label for="client_secret">Client Secret</label>
-        <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element" disabled='disabled' value='X8lVaYM8-em2G74C55QZ9PB0uFmYH__vIxJ1hNUWM3szACkWAQf6s90GE-hYoh8hPS-3Q-ZbesThKsL14sjJ7Q' />
+        <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element" value='X8lVaYM8-em2G74C55QZ9PB0uFmYH__vIxJ1hNUWM3szACkWAQf6s90GE-hYoh8hPS-3Q-ZbesThKsL14sjJ7Q' />
       </div>
-      <button type="submit" class="btn btn-primary authorize_form_element" id="authorize_app" disabled='disabled'>Authorize App</button>
+      <button type="submit" class="btn btn-primary authorize_form_element" id="authorize_app">Authorize App</button>
     </form>
   </div>
 </div>

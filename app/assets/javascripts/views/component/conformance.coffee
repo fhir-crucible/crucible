@@ -29,7 +29,7 @@ class Crucible.Conformance
 
   updateConformance: (data)=>
     @conformance = data.conformance
-    html = @template({conformance: data.conformance, testedResources: @testedResources(), operations: Crucible.Conformance.operations, supportedStatus: @supportedStatus, authorizeUrl: @oauthUrl("authorize"), tokenUrl: @oauthUrl("token") })
+    html = @template({conformance: data.conformance, testedResources: @testedResources(), operations: Crucible.Conformance.operations, supportedStatus: @supportedStatus, authType: @authType(), authorizeUrl: @oauthUrl("authorize"), tokenUrl: @oauthUrl("token") })
     @element.children().replaceWith(html)
     @element.trigger('conformanceLoaded')
 
@@ -45,10 +45,18 @@ class Crucible.Conformance
     resources
 
   oauthUrl: (url) =>
-    auth = @conformance.rest[0].security.extension[0].extension.find((elem, ind, arr)->
-      elem.url == url
-    )
-    auth.value.value
+    if @authType() == "OAuth2"
+      auth = @conformance.rest[0].security.extension[0].extension.find((elem, ind, arr)->
+        elem.url == url
+      )
+      auth.value.value
+
+  authType: =>
+      if @conformance.rest[0].security
+        switch @conformance.rest[0].security.extension[0].url
+          when "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris" then "OAuth2"
+      else
+        "none"
 
   ensureArray = (array) ->
     array || []
