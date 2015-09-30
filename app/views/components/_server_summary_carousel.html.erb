@@ -1,7 +1,7 @@
 <div>
   <div id="ember630" class="ember-view carousel slide server-summaries">
     <ol class="carousel-indicators">
-      <% (0..servers.count/6).each do |i| %>
+      <% (0..(servers.count/6-1)).each do |i| %>
         <li data-target="#ember630" data-slide-to="<%=i%>" <%if i==0%>class="active"<%end%>></li>
       <% end %>
     </ol>
