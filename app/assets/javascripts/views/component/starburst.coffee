@@ -1,30 +1,12 @@
 
 # -------------------------- PRIVATE FUNCTIONS ------------------------------ #
 
-# returns true if all child tests pass and false if not
-allSuccessful = (data) ->
-  successful = true
-  for child in data
-    if child.children
-      successful &&= allSuccessful(child.children)
-    else
-      successful &&= child.failed == 0
-  successful
-
 # returns appropriate color of section (recursive)
 color = (data, threshold) ->
-  success = false
-  if data.children
-    success = allSuccessful(data.children)
-  else
-    success = data.failed == 0
-
-  if data.failed == 0 && data.passed == 0
+  if data.total == 0
     '#bbb'      # gray
   else if data.passed / data.total >= threshold
     '#417505'   # green
-  else if !data.name # data is being fetched
-    '#eee'   # gray
   else
     '#800010'   # red
 
@@ -32,7 +14,7 @@ color = (data, threshold) ->
 opacity = (data) ->
   d3.scale.linear()
     .domain([.5,1])
-    .range([.4,1])(Math.max(data.passed, data.failed) / data.total)
+    .range([.4,1])(Math.max(data.passed, (data.total - data.passed)) / data.total)
 
 # returns percent passing of a section
 percentMe = (data) ->
