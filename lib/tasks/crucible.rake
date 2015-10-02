@@ -21,7 +21,6 @@ namespace :crucible do
     test_count = Test.count
     i = 0
     length = Server.all.count
-    binding.pry
     Server.all.each do |s|
       i+=1
       puts  "#{s.name}(#{s.url})"
