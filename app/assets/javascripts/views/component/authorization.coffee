@@ -4,7 +4,7 @@ $(window).on('load', ->
 
 class Crucible.Authorization
   constructor: ->
-    @element = $('#authorization-tab')
+    @element = $('#authorize-modal')
     return unless @element.length
     @registerHandlers()
 
