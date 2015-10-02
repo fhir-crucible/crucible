@@ -8,6 +8,12 @@ class Server
   has_one :aggregate_run
   field :percent_passing, type: Float
   field :conformance, type: String
+  field :state, type: String
+  field :oauth_code, type: String
+  field :client_id, type: String
+  field :client_secret, type: String
+  field :authorize_url, type: String
+  field :token_url, type: String
 
   def load_conformance(refresh=false)
     if (self.conformance.nil? || refresh)
@@ -24,6 +30,10 @@ class Server
       end
     end
     value
+  end
+
+  def generate_state
+    SecureRandom.urlsafe_base64(24)
   end
 
 end

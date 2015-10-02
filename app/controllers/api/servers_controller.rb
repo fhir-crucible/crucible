@@ -64,6 +64,20 @@ module Api
       render json: {summary: summary}
     end
 
+    def oauth_params
+      server = Server.find(params[:id])
+      if server
+        server.client_id = params[:client_id]
+        server.client_secret = params[:client_secret]
+        server.state = params[:state]
+        server.authorize_url = params[:authorize_url]
+        server.token_url = params[:token_url]
+        server.save
+        render json: { success: true }
+        # render status: 500, text: 'Error'
+      end
+    end
+
     private
 
     def server_params
