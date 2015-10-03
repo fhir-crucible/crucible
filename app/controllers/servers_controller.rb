@@ -26,7 +26,7 @@ class ServersController < ApplicationController
       }
       client = OAuth2::Client.new(server.client_id, server.client_secret, options)
       auth_pw = Base64.encode64("#{server.client_id}:#{server.client_secret}")
-      token = client.auth_code.get_token(params[:code], :redirect_uri => 'http://localhost:3000/redirect', :headers => { 'Authorization' => "Basic #{auth_pw}" })
+      token = client.auth_code.get_token(params[:code], :redirect_uri => "http://#{env['HTTP_HOST']}/redirect", :headers => { 'Authorization' => "Basic #{auth_pw}" })
       server.oauth_token_opts = token.to_hash
       server.save!
       flash.notice = "Server successfully authorized"
