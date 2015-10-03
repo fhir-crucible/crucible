@@ -14,6 +14,7 @@ class Server
   field :client_secret, type: String
   field :authorize_url, type: String
   field :token_url, type: String
+  field :oauth_token_opts, type: Hash
 
   def load_conformance(refresh=false)
     if (self.conformance.nil? || refresh)
@@ -34,6 +35,17 @@ class Server
 
   def generate_state
     SecureRandom.urlsafe_base64(24)
+  end
+
+  def get_oauth2_client
+    options = {
+      authorize_url: self.authorize_url,
+      token_url: self.token_url,
+      raise_errors: false
+    }
+    client = OAuth2::Client.new(self.client_id, self.client_secret, options)
+    token = OAuth2::AccessToken.from_hash(client, self.oauth_token_opts)
+    return token
   end
 
 end

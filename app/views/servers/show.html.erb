@@ -2,6 +2,12 @@
   <div class="row content">
     <div class="col-md-12">
       <div class="palette report">
+          <% if flash[:notice] %>
+            <div class="alert alert-success alert-dismissible" role="alert">
+              <%= flash[:notice] %>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+          <% end %>
         <div class="row">
           <div class="col-md-9">
             <h1>Select Tests</h1>
@@ -98,11 +104,6 @@
             <div class="tab-pane" id="test-run-summary-data">
               <div class="col-md-12">
                 <%= render partial: 'test_run_report', locals: {server: @server}%>
-              </div>
-            </div>
-            <div class="tab-pane" id="authorization-tab">
-              <div class="col-md-12 tab-content-holder">
-                <%= render partial: "authorization" %>
               </div>
             </div>
           </div>
