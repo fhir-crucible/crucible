@@ -18,6 +18,7 @@ class Crucible.ServerDetails
     @element.find('.edit-panel').toggleClass('hide')
     @element.find('.server-name-panel').toggleClass('hide')
     @element.find('.server-url-panel').toggleClass('hide')
+    @element.find('.server-icon').toggleClass('hide')
 
   editServerName: (newName) =>
     newName = @element.find('#edit-server-name-dialogue').val()
@@ -35,5 +36,6 @@ class Crucible.ServerDetails
         @element.find('.edit-panel').show()
         @element.find('.server-name-panel').hide()
         @element.find('.server-url-panel').hide()
+        @element.find('.server-icon').hide()
       )
     });

@@ -113,3 +113,10 @@ p{
     }
   }
 }
+
+@mixin truncate($pixels: 250px){
+  width: $pixels;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

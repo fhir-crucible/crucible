@@ -63,18 +63,19 @@
       font-size: 16px;
       margin-left: 10px;
     }
-
-    .server-url {
-      a {
-        color: $brand-primary;
-      }
-    }
   }
 }
 
 .server-test-details,
 .server-show-details {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.server-url-panel {
+  /*@include truncate(200px);*/
+  a {
+    color: $brand-primary;
+  }
 }
 
 // ------------------------- FHIR SPECIFICATION STARBURST ------------------ //
@@ -325,14 +326,28 @@
 
 
 .server-name-panel{
-  .server-name-label{display: inline}
+  /*@include truncate(200px);*/
   .edit-server-name-icon{display: inline}
+}
+.server-name-label{}
+
+.server-name-label{
+  display: inline;
+}
+
+.server-url-label{
 }
 
 .edit-panel{
-  #edit-server-name-dialogue{display: inline}
+  #edit-server-name-dialogue{
+    width: 100%;
+    margin-bottom: 5px;
+  };
+  #edit-server-url-dialogue{width: 100%;};
   button{width: 100px; display: inline}
 }
+
+.server-test-details{}
 
 // ------------------------- TEST RUN SUMMARY TAB ----------------------------------- // 
 .test-run-report{
