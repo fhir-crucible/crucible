@@ -1,6 +1,6 @@
   <div class="failures-title row">
     <div class="pull-right">
-      <!--<button class="btn secondary" data-ember-action="1146"><i class="fa fa-cog"></i> Tag Filters</button>-->
+      <!--<button class="btn secondary"><i class="fa fa-cog"></i> Tag Filters</button>-->
     </div>
     Failures
     <span class="failures-count">({{total}})</span>
@@ -11,7 +11,6 @@
   <div class="failure-messages row">
     <div class="col-md-8">
       {{#each failuresByMessage as |failureGroup|}}
-      <div class="ember-view">
         <div class="test-compliance-fail">
           <div class="failures-nav">
             <div class="metadata toggleable panel-heading">
@@ -30,7 +29,7 @@
                   <div class="failed-test" id="failed_test_{{failure.id}}">
                     <div class="test-id">
                       {{failure.key}} {{failure.description}}
-                       <!--<span class="tag" data-ember-action="2456">read</span>-->
+                       <!--<span class="tag">read</span>-->
                     </div>
                     <div class="row test-stats">
                       {{#if failure.suite}}
@@ -93,12 +92,11 @@
             </div>
           </div>
         </div>
-      </div>
       {{/each}}
     </div>
     <div class="col-md-4">
-      <div id="ember2260-sticky-wrapper" class="sticky-wrapper" style="height: 356px;">
-        <div id="ember2260" class="ember-view" style="width: 320px;">
+      <div class="sticky-wrapper" style="height: 356px;">
+        <div style="width: 320px;">
           <div class="failure-inspector">
             <div class="failure-inspector-message">
               <!-- message -->
