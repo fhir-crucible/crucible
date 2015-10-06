@@ -72,7 +72,6 @@
 }
 
 .server-url-panel {
-  /*@include truncate(200px);*/
   a {
     color: $brand-primary;
   }
@@ -324,18 +323,19 @@
   margin-left: 10px;
 }
 
-
 .server-name-panel{
-  /*@include truncate(200px);*/
   .edit-server-name-icon{display: inline}
 }
-.server-name-label{}
 
 .server-name-label{
   display: inline;
 }
 
 .server-url-label{
+}
+
+.truncate-server-data{
+  @include truncate(275px);
 }
 
 .edit-panel{

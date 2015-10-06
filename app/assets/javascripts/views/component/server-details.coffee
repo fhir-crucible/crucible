@@ -13,12 +13,11 @@ class Crucible.ServerDetails
   registerHandlers: =>
     @element.find('.edit-server-name-icon').click(@toggleEditDialogue)
     @element.find('.submit-server-name').click(@editServerName)
+    @element.find('.server-name-panel').tooltip()
+    @element.find('.server-url-panel').tooltip()
 
   toggleEditDialogue: =>
-    @element.find('.edit-panel').toggleClass('hide')
-    @element.find('.server-name-panel').toggleClass('hide')
-    @element.find('.server-url-panel').toggleClass('hide')
-    @element.find('.server-icon').toggleClass('hide')
+    @element.find('.editToggle').toggleClass('hide')
 
   editServerName: (newName) =>
     newName = @element.find('#edit-server-name-dialogue').val()
@@ -33,9 +32,7 @@ class Crucible.ServerDetails
         @toggleEditDialogue()
       )
       fail: ((data) =>
+        @toggleEditDialogue()
         @element.find('.edit-panel').show()
-        @element.find('.server-name-panel').hide()
-        @element.find('.server-url-panel').hide()
-        @element.find('.server-icon').hide()
       )
     });
