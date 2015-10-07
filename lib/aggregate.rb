@@ -36,26 +36,26 @@ module Aggregate
     build_compliance_node_map(compliance, node_map)
     server.aggregate_run.results.each do |result|
       result['validates'].each do |validation|
-        if validation['resource']
-          update_node(node_map, validation['resource'].titleize.downcase, result)
+        if validation[:resource]
+          update_node(node_map, validation[:resource].titleize.downcase, result)
         end
-        if validation['methods']
-          validation['methods'].each do |method|
+        if validation[:methods]
+          validation[:methods].each do |method|
             update_node(node_map, method, result)
           end
         end
-        if validation['formats']
-          validation['formats'].each do |format|
+        if validation[:formats]
+          validation[:formats].each do |format|
             update_node(node_map, format, result)
           end
         end
-        if validation['extensions']
-          validation['extensions'].each do |extension|
+        if validation[:extensions]
+          validation[:extensions].each do |extension|
             update_node(node_map, extension, result)
           end
         end
-        if validation['profiles']
-          validation['profiles'].each do |profile|
+        if validation[:profiles]
+          validation[:profiles].each do |profile|
             update_node(node_map, profile, result)
           end
         end
