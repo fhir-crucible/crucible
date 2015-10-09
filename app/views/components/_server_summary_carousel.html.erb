@@ -1,8 +1,8 @@
 <div>
-  <div id="ember630" class="ember-view carousel slide server-summaries">
+  <div id="homepageCarousel" class="carousel slide server-summaries">
     <ol class="carousel-indicators">
       <% servers.each_slice(6).each_with_index do |x, i| %>
-        <li data-target="#ember630" data-slide-to="<%=i%>" <%if i==0%>class="active"<%end%>></li>
+        <li data-target="#homepageCarousel" data-slide-to="<%=i%>" <%if i==0%>class="active"<%end%>></li>
       <% end %>
     </ol>
 
@@ -25,12 +25,12 @@
   <% end %>
 </div>
 
-<a class="left carousel-control" role="button" data-slide="prev" href="#ember630">
+<a class="left carousel-control" role="button" data-slide="prev" href="#homepageCarousel">
   <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
   <span class="sr-only">Previous</span>
 </a>
 
-<a class="right carousel-control" role="button" data-slide="next" href="#ember630">
+<a class="right carousel-control" role="button" data-slide="next" href="#homepageCarousel">
   <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
   <span class="sr-only">Next</span>
 </a>
