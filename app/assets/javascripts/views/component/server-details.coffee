@@ -28,7 +28,10 @@ class Crucible.ServerDetails
       data: {server: {name: newName, url: newURL}},
       success: ((data) =>
         @element.find('.server-name-label').html(newName) 
+        @element.find('.server-name-panel').attr('title', newName).tooltip('fixTitle')
         @element.find('.server-url-label').html(newURL) 
+        @element.find('.server-url-panel').attr('title', newURL).tooltip('fixTitle')
+
         @toggleEditDialogue()
       )
       fail: ((data) =>
