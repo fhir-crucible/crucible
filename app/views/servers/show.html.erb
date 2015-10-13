@@ -20,27 +20,39 @@
         </p>
         <div class="row">
           <div class="col-md-7 col-md-offset-4 server-test-details">
+            <!-- START: server name and url -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
                 <a data-toggle="modal" data-target="#authorize-modal" class="authorization-handle authorization_handle hidden" href="#"><i class="fa fa-lock"></i></a>
               </div>
-              <div class="server-icon pull-left">
+              <div class="server-icon pull-left editToggle">
                 <a href="#"><i class="fa fa-server"></i></a>
               </div>
-              <div class="server-url-name">
-                <div class="server-name-panel emphasize">
-                  <div class="server-name-label"><%= @server.name %></div> <a class="edit-server-name-icon"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
+              <div class="row server-url-name">
+                <div class="col-md-6">
+                  <div class="server-name-panel truncate-server-data emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
+                    <div class="server-name-label"><%= @server.name %></div> 
+                  </div>
+                  <div class="server-url-panel truncate-server-data editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.url %>">
+                    <a target="_blank" class="server-url-label" href="<%= @server.url %>"><%= @server.url %></a>
+                  </div>
                 </div>
-                <div class="edit-panel hide">
-                  <input id="edit-server-name-dialogue" name="name" value='<%= @server.name %>'>
-                  <button class="btn secondary submit-server-name">Save</button>
-                </div>
-                <div class="server-url">
-                  <a target="_blank" href="<%= @server.url %>"><%= @server.url %></a>
+                <div class="col-md-3">
+                  <a class="edit-server-name-icon editToggle"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
                 </div>
               </div>
+              <div class="edit-panel row hide editToggle">
+                <div class="col-md-6">
+                  <input id="edit-server-name-dialogue" name="name" value='<%= @server.name %>'>
+                  <input id="edit-server-url-dialogue" name="url" value='<%= @server.url %>'> 
+                </div>
+                <div class="col-md-3">                 
+                  <button class="btn secondary submit-server-name">Save</button>
+                </div>
+              </div>
+
             </div>
-            <!---->
+            <!-- END: server name and url -->
           </div>
         </div>
 

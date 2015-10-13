@@ -41,6 +41,9 @@
       background-color: $brand-accent;
       color: white;
     }
+    &.submit-server-name{
+      border: 1px solid $brand-accent;
+    }
   }
 }
 
