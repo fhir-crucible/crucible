@@ -20,6 +20,7 @@
 //= require jquery-sticky/jquery.sticky
 //= require underscore/underscore
 //= require highlightjs/highlight.pack.js
+//= require jquery-validation/dist/jquery.validate.js
 
 
 //= require_tree ./views/templates

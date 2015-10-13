@@ -9,6 +9,7 @@
     "jquery": "1.11.2",
     "jquery-placeholder": "2.1.1",
     "jquery-sticky": "7136048f53d11bd2f483fb912e40fda68d99c44a",
+    "jquery-validation": "~1.14.0",
     "moment": "~2.9.0",
     "underscore": "~1.8.3",
     "handlebars": "~4.0.2",
