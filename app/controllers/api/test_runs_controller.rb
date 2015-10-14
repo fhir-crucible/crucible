@@ -19,15 +19,6 @@ module Api
       end
     end
 
-    def index
-      @runs = []
-
-      if not current_user.nil?
-        @runs = current_user.test_runs
-      end
-      render json:{test_runs: @runs}
-    end
-
     private
     def run_params
       params.require(:test_run).permit(:server_id)

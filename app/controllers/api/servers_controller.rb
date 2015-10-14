@@ -3,11 +3,6 @@ module Api
     respond_to :json
 
     def update
-      # Unauthenticated users can't update.
-      # unless current_user
-      #   head :forbidden
-      #   return
-      # end
       server = Server.find(params[:id])
       server.update(server_params)
       if server.save
@@ -15,18 +10,6 @@ module Api
       else
         respond_with server, status: 422
       end
-    end
-
-    def destroy
-      # Unauthenticated users can't delete.
-      unless current_user
-        head :forbidden
-        return
-      end
-      server = Server.find(params[:id])
-      server.destroy
-
-      respond_with server, location: api_servers_path
     end
 
     def conformance
