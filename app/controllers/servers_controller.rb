@@ -6,10 +6,11 @@ class ServersController < ApplicationController
   end
 
   def create
-    url = PostRank::URI.normalize(params['server']['url'])
+    url = PostRank::URI.normalize(params['server']['url']).to_s.chop
     server = Server.where(url: url).first
     unless server
-      server = Server.new(params.require(:server).permit(:url, :name))
+      server = Server.new(params.require(:server).permit(:name))
+      server.url = url
       server.save
     end
     redirect_to action: "show", id: server.id
@@ -18,7 +19,6 @@ class ServersController < ApplicationController
   def oauth_redirect
     server = Server.where(state: params[:state]).first
     if server
-      # server.oauth_code = params[:code]
       options = {
         authorize_url: server.authorize_url,
         token_url: server.token_url,

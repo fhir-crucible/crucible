@@ -9,7 +9,6 @@ class Server
   field :percent_passing, type: Float
   field :conformance, type: String
   field :state, type: String
-  field :oauth_code, type: String
   field :client_id, type: String
   field :client_secret, type: String
   field :authorize_url, type: String

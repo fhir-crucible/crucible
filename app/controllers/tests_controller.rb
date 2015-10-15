@@ -16,7 +16,7 @@ class TestsController < ApplicationController
   def execute
     @server = Server.find(params[:server_id])
     client1 = FHIR::Client.new(@server.url)
-    if @server.oauth_code
+    if @server.oauth_token_opts
       client1.client = @server.get_oauth2_client
       client1.use_oauth2_auth = true
     end
