@@ -51,10 +51,11 @@ class TestRun
         yield(result, i, Array(tests).length)
 
       rescue Exception => e
-        puts  "Error on #{t.title} against #{self.server.url}!"
         puts e.backtrace
       end
     end
+
+    true
 
   end
 

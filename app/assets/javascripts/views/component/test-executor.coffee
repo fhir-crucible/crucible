@@ -35,7 +35,7 @@ class Crucible.TestExecutor
     @filterBox.on('keyup', @filter)
 
   loadTests: =>
-    $.getJSON("api/tests.json").success((data) =>
+    $.getJSON("/tests.json").success((data) =>
       @suites = data['tests']
       @renderSuites()
       @element.trigger('testsLoaded')
@@ -84,9 +84,12 @@ class Crucible.TestExecutor
         suiteElement = @element.find("#test-#{suiteId}")
         suiteElement.find('.test-status').empty().append(@html.spinner)
         @element.queue("executionQueue", =>
-          $.post("/servers/#{@serverId}/tests/#{suiteId}/execute",{test_result: {test_run_id: @testRunId}}
+          $.post("/servers/#{@serverId}/testruns/#{@testRunId}/execute",{test_ids: [suiteId], finish: 0}
           ).success((result) =>
-            @processTestResult(i, suiteId, suiteIds, result, suiteElement)
+           if result.success
+             @processTestResult(i, suiteId, suiteIds, result.test_results[0], suiteElement)
+           else
+             @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
           ).error(=>
             @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
           )
@@ -109,6 +112,7 @@ class Crucible.TestExecutor
 
   handleSuiteResult: (suite, result, suiteElement) =>
     suiteStatus = 'pass'
+    result.tests = result.result
     $(result.tests).each (i, test) =>
       suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
     result.suiteStatus = suiteStatus
@@ -144,7 +148,7 @@ class Crucible.TestExecutor
     @element.find('.test-run-result.executed').show()
   
   registerTestRun: =>
-    $.post("/api/test_runs", {test_run: {server_id: @serverId}}).success((result) =>
+    $.post("/servers/#{@serverId}/testruns.json", {test_run: {server_id: @serverId}}).success((result) =>
       @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
     )
@@ -156,7 +160,7 @@ class Crucible.TestExecutor
     $(warningBanner).delay(1000).fadeOut(1500)
 
   regenerateSummary: =>
-    $.post("/api/servers/#{@serverId}/generate_summary", {test_run_id: @testRunId}).success((result) =>
+    $.post("/servers/#{@serverId}/testruns/#{@testRunId}/finish").success((result) =>
       new Crucible.Summary()
       new Crucible.TestRunReport()
       @element.dequeue("executionQueue")

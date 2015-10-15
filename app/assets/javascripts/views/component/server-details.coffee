@@ -24,7 +24,7 @@ class Crucible.ServerDetails
     newURL = @element.find('#edit-server-url-dialogue').val()
     $.ajax({
       type: 'PUT',
-      url: "/api/servers/#{@serverId}",
+      url: "/servers/#{@serverId}",
       data: {server: {name: newName, url: newURL}},
       success: ((data) =>
         @element.find('.server-name-label').html(newName) 
