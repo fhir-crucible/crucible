@@ -6,7 +6,8 @@ class ServersController < ApplicationController
   end
 
   def create
-    url = PostRank::URI.normalize(params['server']['url']).to_s.chop
+    url = PostRank::URI.normalize(params['server']['url']).to_s
+    url = url.chop if url[-1] == '/'
     server = Server.where(url: url).first
     unless server
       server = Server.new(params.require(:server).permit(:name))
