@@ -45,7 +45,7 @@ class TestsController < ApplicationController
     test_run.test_results << result
     test_run.save
 
-    render json: result.result
+    render json: { tests: result.result }
 
   end
 
