@@ -16,7 +16,7 @@ class Crucible.Authorization
         authUrl = conformance_tab.data('authorize-url')
         $('#authorize_form').attr("action", authUrl)
     )
-    @element.find("#authorize_form").on('submit', (event) =>
+    $("#authorize_form").on('submit', (event) =>
       event.preventDefault()
       $.post("/servers/#{$('#conformance-data').data('server-id')}/oauth_params",
       {
