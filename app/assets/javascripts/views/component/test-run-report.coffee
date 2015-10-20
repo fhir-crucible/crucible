@@ -49,7 +49,7 @@ class Crucible.TestRunReport
     
 
   loadAggregateRun: =>
-    $.getJSON("/api/servers/#{@serverId}/aggregate_run?only_failures=true").success((data) =>
+    $.getJSON("/servers/#{@serverId}/aggregate_run?only_failures=true").success((data) =>
       return unless data
       $('.test-run-summary-handle').removeClass('hidden')
       @failures = data['results']

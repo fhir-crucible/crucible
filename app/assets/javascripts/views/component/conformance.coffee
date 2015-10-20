@@ -14,7 +14,7 @@ class Crucible.Conformance
   loadConformance: (refresh) =>
     refreshParam = if refresh then '?refresh=true' else ''
     _.defer(=>
-      $.getJSON("/api/servers/#{@serverId}/conformance#{refreshParam}")
+      $.getJSON("/servers/#{@serverId}/conformance#{refreshParam}")
       .success ((data) =>
         @updateConformance(data)
         @removeConformanceSpinner()

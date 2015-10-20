@@ -16,7 +16,7 @@ class Crucible.Summary
       summaryElement = $(summaryElement)
       serverId = summaryElement.data('serverId')
       if serverId?
-        $.getJSON("/api/servers/#{serverId}/summary.json")
+        $.getJSON("/servers/#{serverId}/summary.json")
           .success((data) => 
             if (data.summary)
               starburstElement = summaryElement.find('.starburst')

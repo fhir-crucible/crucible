@@ -18,7 +18,7 @@ class Crucible.Authorization
     )
     @element.find("#authorize_form").on('submit', (event) =>
       event.preventDefault()
-      $.post("/api/servers/#{$('#conformance-data').data('server-id')}/oauth_params",
+      $.post("/servers/#{$('#conformance-data').data('server-id')}/oauth_params",
       {
           client_id: $('#client_id').val(),
           client_secret: $('#client_secret').val(),
