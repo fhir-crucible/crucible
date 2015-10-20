@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery/dist/jquery
+//= require jquery-ujs
 //= require bootstrap-sass-official/assets/javascripts/bootstrap-sprockets
 //= require d3/d3
 //= require d3-tip/index
