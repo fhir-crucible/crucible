@@ -5,6 +5,9 @@ class TestRun
   field :destination_conformance
   field :date, type: DateTime
   field :is_multiserver, type: Boolean, default: false
+  field :status, type: String, default: "pending"
+  field :progress, type: Float, default: 0.0
+
   belongs_to :server, :class_name => "Server"
   belongs_to :destination_server, :class_name => "Server"
   belongs_to :user
@@ -14,6 +17,7 @@ class TestRun
   # Execute a set of tests.  Tests can be a single test, or an enumeration of tests
   def execute(tests)
 
+    tests = Array(tests)
     client1 = FHIR::Client.new(self.server.url)
     if self.server.oauth_token_opts
       client1.client = self.server.get_oauth2_client
@@ -25,12 +29,19 @@ class TestRun
 
     executor = Crucible::Tests::Executor.new(client1, client2)
 
-    return false unless self.server.available?
+    unless self.server.available?
+      self.status = "unavailable"
+      self.save
 
-    Array(tests).each_with_index do |t, i|
+      return false
+    end
+
+    self.status = "running"
+
+    tests.each_with_index do |t, i|
 
       begin
-        puts  "\t #{i}/#{Array(tests).length}: #{self.server.name}(#{self.server.url})"
+        Rails.logger.debug "\t #{i}/#{tests.length}: #{self.server.name}(#{self.server.url})"
 
         test = executor.find_test(t.title)
         val = nil
@@ -45,13 +56,19 @@ class TestRun
         result.has_run = true
         result.result = val
 
+        self.progress = (i + 1.0) / tests.length
         self.test_results << result
+        self.status = "complete" if i + 1 == tests.length
         self.save
 
-        yield(result, i, Array(tests).length)
+        yield(result, i, tests.length) if block_given?
 
       rescue Exception => e
-        puts e.backtrace
+        self.status = "error"
+        self.save
+        Rails.logger.debug e.message
+        Rails.logger.debug e.backtrace
+        return false
       end
     end
 
@@ -70,6 +87,9 @@ class TestRun
     summary.save!
 
     self.server.save!
+
+    self.status = "finished"
+    self.save
 
     return summary
   end

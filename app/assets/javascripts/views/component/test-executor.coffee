@@ -16,6 +16,7 @@ class Crucible.TestExecutor
     expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
+  checkStatusTimeout: 4000
 
   constructor: ->
     @element = $('.test-executor')
@@ -79,23 +80,26 @@ class Crucible.TestExecutor
       @showOnlyExecutedSuites()
       @progress.parent().collapse('show')
       @progress.find('.progress-bar').css('width',"2%")
-      @element.queue("executionQueue", this.registerTestRun)
-      suiteIds.each (i, suiteId) =>
-        suiteElement = @element.find("#test-#{suiteId}")
-        suiteElement.find('.test-status').empty().append(@html.spinner)
-        @element.queue("executionQueue", =>
-          $.post("/servers/#{@serverId}/testruns/#{@testRunId}/execute",{test_ids: [suiteId], finish: 0}
-          ).success((result) =>
-           if result.success
-             @processTestResult(i, suiteId, suiteIds, result.test_results[0], suiteElement)
-           else
-             @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
-          ).error(=>
-            @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
-          )
-        )
-      @element.queue("executionQueue", this.regenerateSummary)
+      @element.queue("executionQueue", @registerTestRun)
+      @element.queue("executionQueue", @checkTestRunStatus)
+      @element.queue("executionQueue", @finishTestRun)
       @element.dequeue("executionQueue")
+      # suiteIds.each (i, suiteId) =>
+      #   suiteElement = @element.find("#test-#{suiteId}")
+      #   suiteElement.find('.test-status').empty().append(@html.spinner)
+      #   @element.queue("executionQueue", =>
+      #     $.post("/servers/#{@serverId}/testruns/#{@testRunId}/execute",{test_ids: [suiteId], finish: 0}
+      #     ).success((result) =>
+      #      if result.success
+      #        @processTestResult(i, suiteId, suiteIds, result.test_results[0], suiteElement)
+      #      else
+      #        @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
+      #     ).error(=>
+      #       @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
+      #     )
+      #   )
+      # @element.queue("executionQueue", this.regenerateSummary)
+      # @element.dequeue("executionQueue")
     else 
       @flashWarning('Please select at least one test suite')
 
@@ -148,9 +152,20 @@ class Crucible.TestExecutor
     @element.find('.test-run-result.executed').show()
   
   registerTestRun: =>
-    $.post("/servers/#{@serverId}/testruns.json", {test_run: {server_id: @serverId}}).success((result) =>
+    suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
+    $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
       @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
+    )
+    
+  checkTestRunStatus: =>
+    suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
+    $.get("/servers/#{@serverId}/testruns/#{@testRunId}?t=#{Date.now()}").success((result) =>
+      @progress.find('.progress-bar').css('width',"#{(Math.max(2, result.test_run.progress * 100))}%")
+      if result.test_run.status == "finished"
+        @element.dequeue("executionQueue")
+      else
+        setTimeout(@checkTestRunStatus, @checkStatusTimeout)
     )
 
   flashWarning: (message) =>
@@ -159,12 +174,13 @@ class Crucible.TestExecutor
     $(warningBanner).fadeIn()
     $(warningBanner).delay(1000).fadeOut(1500)
 
-  regenerateSummary: =>
-    $.post("/servers/#{@serverId}/testruns/#{@testRunId}/finish").success((result) =>
+  finishTestRun: =>
       new Crucible.Summary()
       new Crucible.TestRunReport()
+      @progress.parent().collapse('hide')
+      @progress.find('.progress-bar').css('width',"0%")
+      @element.find('.execute').removeClass('disabled')
       @element.dequeue("executionQueue")
-    )
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")

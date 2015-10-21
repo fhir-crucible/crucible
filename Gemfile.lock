@@ -85,8 +85,15 @@ GEM
     connection_pool (2.0.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    daemons (1.2.3)
     date_time_precision (0.8.0)
     debugger-linecache (1.2.0)
+    delayed_job (4.1.1)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_mongoid (2.2.0)
+      delayed_job (>= 3.0, < 5)
+      mongoid (>= 3.0, < 6)
+      mongoid-compatibility
     devise (3.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -155,6 +162,9 @@ GEM
       moped (~> 2.0.0)
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
+    mongoid-compatibility (0.3.1)
+      activesupport
+      mongoid (>= 2.0)
     mongoid-history (0.4.4)
       activesupport
       easy_diff
@@ -289,7 +299,9 @@ DEPENDENCIES
   autoprefixer-rails
   bcp47
   coffee-rails (~> 4.0.0)
+  daemons
   date_time_precision
+  delayed_job_mongoid
   devise
   fhir_client!
   fhir_model!
