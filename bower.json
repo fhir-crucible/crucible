@@ -13,6 +13,7 @@
     "moment": "~2.9.0",
     "underscore": "~1.8.3",
     "handlebars": "~4.0.2",
-    "highlightjs": "8.8.0"
+    "highlightjs": "8.8.0",
+    "jquery-ujs": "~1.1.0"
   }
 }
