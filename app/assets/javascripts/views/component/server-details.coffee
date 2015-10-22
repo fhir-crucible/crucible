@@ -12,7 +12,7 @@ class Crucible.ServerDetails
 
   registerHandlers: =>
     @element.find('.edit-server-name-icon').click(@toggleEditDialogue)
-    @element.find('.submit-server-name').click(@editServerName)
+    @element.find('#server_update_form').submit(@editServerName)
     @element.find('.server-name-panel').tooltip()
     @element.find('.server-url-panel').tooltip()
 
@@ -27,9 +27,9 @@ class Crucible.ServerDetails
       url: "/servers/#{@serverId}",
       data: {server: {name: newName, url: newURL}},
       success: ((data) =>
-        @element.find('.server-name-label').html(newName) 
+        @element.find('.server-name-label').html(newName)
         @element.find('.server-name-panel').attr('title', newName).tooltip('fixTitle')
-        @element.find('.server-url-label').html(newURL) 
+        @element.find('.server-url-label').html(newURL)
         @element.find('.server-url-panel').attr('title', newURL).tooltip('fixTitle')
 
         @toggleEditDialogue()
@@ -39,3 +39,4 @@ class Crucible.ServerDetails
         @element.find('.edit-panel').show()
       )
     });
+    return false
