@@ -17,6 +17,7 @@ class Crucible.TestExecutor
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
+  processedResults: {}
 
   constructor: ->
     @element = $('.test-executor')
@@ -76,6 +77,7 @@ class Crucible.TestExecutor
   execute: =>
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     if suiteIds.length > 0
+      @processedResults = {}
       @element.find('.execute').addClass('disabled')
       @showOnlyExecutedSuites()
       @progress.parent().collapse('show')
@@ -83,49 +85,14 @@ class Crucible.TestExecutor
       @element.queue("executionQueue", @registerTestRun)
       @element.queue("executionQueue", @checkTestRunStatus)
       @element.queue("executionQueue", @finishTestRun)
+      suiteIds.each (i, suiteId) =>
+        suiteElement = @element.find("#test-#{suiteId}")
+        suiteElement.find('.test-status').empty().append(@html.spinner)
+
       @element.dequeue("executionQueue")
-      # suiteIds.each (i, suiteId) =>
-      #   suiteElement = @element.find("#test-#{suiteId}")
-      #   suiteElement.find('.test-status').empty().append(@html.spinner)
-      #   @element.queue("executionQueue", =>
-      #     $.post("/servers/#{@serverId}/testruns/#{@testRunId}/execute",{test_ids: [suiteId], finish: 0}
-      #     ).success((result) =>
-      #      if result.success
-      #        @processTestResult(i, suiteId, suiteIds, result.test_results[0], suiteElement)
-      #      else
-      #        @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
-      #     ).error(=>
-      #       @processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
-      #     )
-      #   )
-      # @element.queue("executionQueue", this.regenerateSummary)
-      # @element.dequeue("executionQueue")
+
     else 
       @flashWarning('Please select at least one test suite')
-
-  processTestResult: (i, suiteId, suiteIds, result, suiteElement) ->
-    @progress.find('.progress-bar').css('width',"#{(i+1)/suiteIds.length*100}%")
-    @handleSuiteResult(@suitesById[suiteId], result, suiteElement)
-    if i < suiteIds.length-1
-      @element.dequeue("executionQueue")
-    else
-      @progress.parent().collapse('hide')
-      @progress.find('.progress-bar').css('width',"0%")
-      @element.find('.execute').removeClass('disabled')
-      @element.dequeue("executionQueue")
-
-  handleSuiteResult: (suite, result, suiteElement) =>
-    suiteStatus = 'pass'
-    result.tests = result.result
-    $(result.tests).each (i, test) =>
-      suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
-    result.suiteStatus = suiteStatus
-
-    suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
-    suiteElement = @element.find("#test-"+suite.id)
-    suiteElement.data('suite', suite)
-    $(result.tests).each (i, test) =>
-      @addClickTestHandler(test, suiteElement)
 
   filter: =>
     filterValue = @filterBox.val().toLowerCase()
@@ -160,19 +127,35 @@ class Crucible.TestExecutor
     
   checkTestRunStatus: =>
     suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
-    $.get("/servers/#{@serverId}/testruns/#{@testRunId}?t=#{Date.now()}").success((result) =>
-      @progress.find('.progress-bar').css('width',"#{(Math.max(2, result.test_run.progress * 100))}%")
-      if result.test_run.status == "finished"
+    $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
+      test_run = result.test_run
+      @progress.find('.progress-bar').css('width',"#{(Math.max(2, test_run.progress * 100))}%")
+      if Object.keys(@processedResults).length < test_run.test_results.length
+        for result in test_run.test_results
+          suiteId = result.test_id.$oid
+          suite = @suitesById[suiteId]
+          suiteElement = $("#test-#{suiteId}")
+          @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]
+          @processedResults[suiteId] = true
+
+      if test_run.status == "finished"
         @element.dequeue("executionQueue")
       else
         setTimeout(@checkTestRunStatus, @checkStatusTimeout)
     )
 
-  flashWarning: (message) =>
-    warningBanner = @element.find('.warning-message')
-    $(warningBanner).html(message)
-    $(warningBanner).fadeIn()
-    $(warningBanner).delay(1000).fadeOut(1500)
+  handleSuiteResult: (suite, result, suiteElement) =>
+    suiteStatus = 'pass'
+    result.tests = result.result
+    $(result.tests).each (i, test) =>
+      suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
+    result.suiteStatus = suiteStatus
+
+    suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
+    suiteElement = @element.find("#test-"+suite.id)
+    suiteElement.data('suite', suite)
+    $(result.tests).each (i, test) =>
+      @addClickTestHandler(test, suiteElement)
 
   finishTestRun: =>
       new Crucible.Summary()
@@ -192,7 +175,13 @@ class Crucible.TestExecutor
         $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
         hljs.highlightBlock($('#data-modal .modal-body')[0]);
 
+  flashWarning: (message) =>
+    warningBanner = @element.find('.warning-message')
+    $(warningBanner).html(message)
+    $(warningBanner).fadeIn()
+    $(warningBanner).delay(1000).fadeOut(1500)
 
+  #@processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
   createErrorSuite: (suiteId) ->
     suite = _.clone(@suitesById[suiteId])
     suite.tests = suite.methods
