@@ -7,9 +7,10 @@ class Crucible.Conformance
 
   constructor: ->
     @element = $('#conformance-data')
+    return unless @element.length
     @template = HandlebarsTemplates['views/templates/servers/conformance']
     @serverId = @element.data('server-id')
-    @loadConformance() if @serverId?
+    @loadConformance()
 
   loadConformance: (refresh) =>
     refreshParam = if refresh then '?refresh=true' else ''
