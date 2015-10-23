@@ -25,6 +25,7 @@ class Crucible.Conformance
       )
       .error ((data) =>
         @removeConformanceSpinner()
+        @element.html('<div class="alert" role="alert"><div class="alert alert-danger"><strong>Error: </strong> Conformance Statement could not be loaded</div></div>')
       )
     )
 
