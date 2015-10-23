@@ -7,6 +7,7 @@ class Crucible.Conformance
 
   constructor: ->
     @element = $('#conformance-data')
+    return unless @element.length
     @template = HandlebarsTemplates['views/templates/servers/conformance']
     @serverId = @element.data('server-id')
     @loadConformance()
@@ -24,6 +25,7 @@ class Crucible.Conformance
       )
       .error ((data) =>
         @removeConformanceSpinner()
+        @element.html('<div class="alert" role="alert"><div class="alert alert-danger"><strong>Error: </strong> Conformance Statement could not be loaded</div></div>')
       )
     )
 
