@@ -24,12 +24,13 @@ class Crucible.TestExecutor
     return unless @element.length
     @element.data('testExecutor', this)
     @serverId = @element.data('server-id')
+    @testRunId = @element.data('current-test-run-id')
     @progress = $("##{@element.data('progress')}")
     @registerHandlers()
     @loadTests()
 
   registerHandlers: =>
-    @element.find('.execute').click(@execute)
+    @element.find('.execute').click(@startTestRun)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
@@ -40,7 +41,7 @@ class Crucible.TestExecutor
     $.getJSON("/tests.json").success((data) =>
       @suites = data['tests']
       @renderSuites()
-      @element.trigger('testsLoaded')
+      @continueTestRun() if @testRunId
     )
 
   renderSuites: =>
@@ -74,23 +75,31 @@ class Crucible.TestExecutor
       $(suiteElements).collapse('hide')
       $(button).html(@html.expandAllButton)
 
-  execute: =>
+  prepareTestRun: (suiteIds) =>
+    @processedResults = {}
+    @element.find('.execute').addClass('disabled')
+    @progress.parent().collapse('show')
+    @progress.find('.progress-bar').css('width',"2%")
+    @element.queue("executionQueue", @checkTestRunStatus)
+    @element.queue("executionQueue", @finishTestRun)
+    suiteIds.each (i, suiteId) =>
+      suiteElement = @element.find("#test-#{suiteId}")
+      suiteElement.find("input[type=checkbox]").attr("checked", true)
+      suiteElement.find('.test-status').empty().append(@html.spinner)
+    @showOnlyExecutedSuites()
+
+  continueTestRun: =>
+    $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
+      @prepareTestRun($($.map((result.test_run.test_ids), (e) -> e.$oid)))
+      @element.dequeue("executionQueue")
+    )
+
+  startTestRun: =>
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     if suiteIds.length > 0
-      @processedResults = {}
-      @element.find('.execute').addClass('disabled')
-      @showOnlyExecutedSuites()
-      @progress.parent().collapse('show')
-      @progress.find('.progress-bar').css('width',"2%")
       @element.queue("executionQueue", @registerTestRun)
-      @element.queue("executionQueue", @checkTestRunStatus)
-      @element.queue("executionQueue", @finishTestRun)
-      suiteIds.each (i, suiteId) =>
-        suiteElement = @element.find("#test-#{suiteId}")
-        suiteElement.find('.test-status').empty().append(@html.spinner)
-
+      @prepareTestRun(suiteIds)
       @element.dequeue("executionQueue")
-
     else 
       @flashWarning('Please select at least one test suite')
 
@@ -129,7 +138,9 @@ class Crucible.TestExecutor
     suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
     $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
       test_run = result.test_run
-      @progress.find('.progress-bar').css('width',"#{(Math.max(2, test_run.progress * 100))}%")
+      percent_complete = test_run.test_results.length / test_run.test_ids.length
+
+      @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
       if Object.keys(@processedResults).length < test_run.test_results.length
         for result in test_run.test_results
           suiteId = result.test_id.$oid

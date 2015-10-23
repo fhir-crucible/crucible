@@ -2,7 +2,11 @@ class ServersController < ApplicationController
 
   def show
     @server = Server.find(params[:id])
-    @tests = Test.all.sort {|l,r| l.name <=> r.name}
+
+    currentTestRun = TestRun.where(server_id: @server.id).any_of([{ status: "pending" }, { status: "running" }]).first()
+    @currentTestRunId = nil
+    @currentTestRunId = currentTestRun.id unless currentTestRun.nil?
+
   end
 
   def create

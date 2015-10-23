@@ -6,18 +6,20 @@ class TestRun
   field :date, type: DateTime
   field :is_multiserver, type: Boolean, default: false
   field :status, type: String, default: "pending"
-  field :progress, type: Float, default: 0.0
 
-  belongs_to :server, :class_name => "Server"
-  belongs_to :destination_server, :class_name => "Server"
+  belongs_to :server, class_name: "Server"
+  belongs_to :destination_server, class_name:" Server"
   belongs_to :user
   field :nightly, type: Boolean, default: false
+  has_and_belongs_to_many :tests, inverse_of: nil
   has_many :test_results, autosave: true
 
-  # Execute a set of tests.  Tests can be a single test, or an enumeration of tests
-  def execute(tests)
+  def execute()
 
-    tests = Array(tests)
+    return false unless self.status == "pending"
+    self.status = "running"
+    self.save
+
     client1 = FHIR::Client.new(self.server.url)
     if self.server.oauth_token_opts
       client1.client = self.server.get_oauth2_client
@@ -36,12 +38,10 @@ class TestRun
       return false
     end
 
-    self.status = "running"
-
-    tests.each_with_index do |t, i|
+    self.tests.each_with_index do |t, i|
 
       begin
-        Rails.logger.debug "\t #{i}/#{tests.length}: #{self.server.name}(#{self.server.url})"
+        Rails.logger.debug "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
 
         test = executor.find_test(t.title)
         val = nil
@@ -56,12 +56,11 @@ class TestRun
         result.has_run = true
         result.result = val
 
-        self.progress = (i + 1.0) / tests.length
         self.test_results << result
-        self.status = "complete" if i + 1 == tests.length
+        self.status = "complete" if self.test_results.length == self.tests.length
         self.save
 
-        yield(result, i, tests.length) if block_given?
+        yield(result, i, self.tests.length) if block_given?
 
       rescue Exception => e
         self.status = "error"

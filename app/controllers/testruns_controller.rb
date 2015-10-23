@@ -9,8 +9,12 @@ class TestrunsController < ApplicationController
 
   def create
     run = TestRun.new({server_id: params[:server_id], date: Time.now})
+    tests = params[:test_ids].map {|i| Test.find(i)}
+
+    run.tests.push(*tests)
+
     run.save()
-    RunTestsJob.perform_later(run.id.to_s, params[:test_ids])
+    RunTestsJob.perform_later(run.id.to_s)
 
     render json: { test_run: run }
   end
