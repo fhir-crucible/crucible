@@ -1,0 +1,5 @@
+{
+    "_id" : { "$oid" : "560eefc34d4d326197010000"},
+    "url" : "http://example.com/fhir",
+    "name" : "tested_server"
+}

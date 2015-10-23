@@ -1,0 +1,6 @@
+{
+    "_id" : { "$oid" :"560f068c4d4d3266f8840200"},
+    "is_multiserver" : false,
+    "nightly" : false,
+    "server_id" : { "$oid" :"560eefc34d4d326197010000"}
+}
