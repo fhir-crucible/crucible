@@ -1,0 +1,19 @@
+language: ruby
+cache: bundler
+sudo: false
+rvm:
+  - 2.2.3
+services:
+  - mongodb
+branches:
+  only:
+  - master
+notifications:
+  email:
+    recipients:
+      - healthcare-ci@googlegroups.com
+    on_failure: change
+before_script:
+  - bower install
+script:
+  - ./bin/rake test
