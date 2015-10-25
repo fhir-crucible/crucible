@@ -15,6 +15,8 @@ class Crucible.TestExecutor
     collapseAllButton: '<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites'
     expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
+    unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server Unavailable</div>'
+    genericError: '<div class="alert alert-danger"><strong>Error: </strong> Tests could not be executed</div>'
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
   processedResults: {}
@@ -96,12 +98,20 @@ class Crucible.TestExecutor
 
   startTestRun: =>
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
+    @element.find(".test-result-error").empty()
     if suiteIds.length > 0
       @element.queue("executionQueue", @registerTestRun)
       @prepareTestRun(suiteIds)
       @element.dequeue("executionQueue")
     else 
       @flashWarning('Please select at least one test suite')
+
+  registerTestRun: =>
+    suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
+    $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
+      @testRunId = result.test_run.id
+      @element.dequeue("executionQueue")
+    )
 
   filter: =>
     filterValue = @filterBox.val().toLowerCase()
@@ -126,13 +136,6 @@ class Crucible.TestExecutor
     @element.find('.test-run-result').hide()
     @element.find(':checked').closest('.test-run-result').show()
     @element.find('.test-run-result.executed').show()
-  
-  registerTestRun: =>
-    suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
-    $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
-      @testRunId = result.test_run.id
-      @element.dequeue("executionQueue")
-    )
     
   checkTestRunStatus: =>
     suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
@@ -149,7 +152,11 @@ class Crucible.TestExecutor
           @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]
           @processedResults[suiteId] = true
 
-      if test_run.status == "finished"
+      if test_run.status == "unavailable"
+        @handleError(@html.unavailableError)
+      else if test_run.status == "error"
+        @handleError(@html.genericError)
+      else if test_run.status == "finished"
         @element.dequeue("executionQueue")
       else
         setTimeout(@checkTestRunStatus, @checkStatusTimeout)
@@ -168,13 +175,18 @@ class Crucible.TestExecutor
     $(result.tests).each (i, test) =>
       @addClickTestHandler(test, suiteElement)
 
+  handleError: (message) =>
+    @element.find(".test-result-error").html(message)
+    @element.find('.test-status').empty()
+    @finishTestRun()
+
   finishTestRun: =>
-      new Crucible.Summary()
-      new Crucible.TestRunReport()
-      @progress.parent().collapse('hide')
-      @progress.find('.progress-bar').css('width',"0%")
-      @element.find('.execute').removeClass('disabled')
-      @element.dequeue("executionQueue")
+    new Crucible.Summary()
+    new Crucible.TestRunReport()
+    @progress.parent().collapse('hide')
+    @progress.find('.progress-bar').css('width',"0%")
+    @element.find('.execute').removeClass('disabled')
+    @element.dequeue("executionQueue")
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")

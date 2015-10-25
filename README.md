@@ -30,7 +30,7 @@ A simple Rails app for evaluating FHIR.
 - Install Javascript dependencies with Bower: ```bower install```
 - Start MongoDB: ```mongod```
 - Launch the Rails server: ```bundle exec rails server```
-- Launch the Job Runner: ```RUBY_ENV=development bin/delayed_job start```
+- Launch the Job Runner: ```RAILS_ENV=development bin/delayed_job start```
 
 # License
 

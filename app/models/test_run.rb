@@ -14,11 +14,16 @@ class TestRun
   has_and_belongs_to_many :tests, inverse_of: nil
   has_many :test_results, autosave: true
 
+  def add_tests(tests)
+    self.tests.push(*tests)
+    self.save
+  end
+
   def execute()
 
     return false unless self.status == "pending"
     self.status = "running"
-    self.save
+    self.save()
 
     client1 = FHIR::Client.new(self.server.url)
     if self.server.oauth_token_opts
@@ -71,26 +76,19 @@ class TestRun
       end
     end
 
-    true
-
-  end
-
-  def finish()
-
     self.server.aggregate(self)
     compliance = server.get_compliance()
-
     summary = Summary.new({server_id: self.server.id, test_run: self, compliance: compliance, generated_at: Time.now})
     self.server.summary = summary
     self.server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
     summary.save!
-
     self.server.save!
 
     self.status = "finished"
     self.save
 
-    return summary
+    true
+
   end
 
   def serializable_hash(options = nil)

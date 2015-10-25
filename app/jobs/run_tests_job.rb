@@ -4,12 +4,8 @@ class RunTestsJob < ActiveJob::Base
   def perform(testrun_id)
 
     Rails.logger.debug "#{self.class.name}: I'm performing my job #{testrun_id}"
-
     testrun = TestRun.find(testrun_id)
-
     testrun.execute()
-    testrun.finish()
-
     Rails.logger.debug "finished job"
 
   end

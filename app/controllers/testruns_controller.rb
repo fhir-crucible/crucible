@@ -11,9 +11,7 @@ class TestrunsController < ApplicationController
     run = TestRun.new({server_id: params[:server_id], date: Time.now})
     tests = params[:test_ids].map {|i| Test.find(i)}
 
-    run.tests.push(*tests)
-
-    run.save()
+    run.add_tests(tests)
     RunTestsJob.perform_later(run.id.to_s)
 
     render json: { test_run: run }
