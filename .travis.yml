@@ -14,6 +14,7 @@ notifications:
       - healthcare-ci@googlegroups.com
     on_failure: change
 before_script:
+  - npm -g install bower
   - bower install
 script:
   - ./bin/rake test
