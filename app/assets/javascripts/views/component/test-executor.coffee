@@ -36,6 +36,7 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
+    @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
     @filterBox = @element.find('.test-results-filter')
     @filterBox.on('keyup', @filter)
     @element.find('.starburst').on('starburstInitialized', (event) =>
@@ -49,6 +50,7 @@ class Crucible.TestExecutor
       @suites = data['tests']
       @renderSuites()
       @continueTestRun() if @testRunId
+      @renderPastTestRunsSelector()
     )
 
   renderSuites: =>
@@ -61,6 +63,33 @@ class Crucible.TestExecutor
       suiteElement.data('suite', suite)
       $(suite.methods).each (i, test) =>
         @addClickTestHandler(test, suiteElement)
+
+  # need to build this out
+  clearTestRunData: =>
+    @renderSuites()
+
+  renderPastTestRunsSelector: =>
+    $.getJSON("/servers/#{@serverId}/past_runs").success((data) =>
+      return unless data
+      selector = @element.find('.past-test-runs-selector')
+      $(data['past_runs']).each (i, test_run) =>
+        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).fromNow()} </option>"
+        selector.append(selection)
+    )
+
+  updateCurrentTestRun: =>
+    selector = @element.find('.past-test-runs-selector')
+    testRunId = selector.val()
+    suiteIds = $($.map(selector.find('option'), (e) -> e.value))
+    $.getJSON("/testruns/#{testRunId}").success((data) =>
+      return unless data
+      @renderSuites()
+      @showOnlyExecutedSuites()
+      $(data['test_run'].test_results).each (i, result) =>
+        suiteId = result.test_id.$oid
+        suiteElement = @element.find("#test-#{suiteId}")
+        @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+    )
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :visible :checkbox')

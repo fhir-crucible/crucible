@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   end
 
   root to: "home#index"
+  get 'servers/:server_id/past_runs', to: 'servers#past_runs'
 
   get 'redirect', to: 'servers#oauth_redirect'
 
