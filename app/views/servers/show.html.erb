@@ -90,12 +90,12 @@
                     </div>
 
                     <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
-                    <div class="button-holder ">
+                    <div class="button-holder">
+                      <select class="past-test-runs-selector form-control"></select>
                       <button class="btn execute">
                         Execute
                       </button>
                       <div class="warning-message"></div>
-                      <select class="past-test-runs-selector form-control"></select>
                       <div id="current-test-run"></div>
                     </div>
                   </div>

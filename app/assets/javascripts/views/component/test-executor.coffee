@@ -64,15 +64,12 @@ class Crucible.TestExecutor
       $(suite.methods).each (i, test) =>
         @addClickTestHandler(test, suiteElement)
 
-  # need to build this out
-  clearTestRunData: =>
-    @renderSuites()
-
   renderPastTestRunsSelector: =>
     $.getJSON("/servers/#{@serverId}/past_runs").success((data) =>
       return unless data
       selector = @element.find('.past-test-runs-selector')
-      $(data['past_runs']).each (i, test_run) =>
+      selector.show()
+      $(data['past_runs'].reverse()).each (i, test_run) =>
         selection = "<option value='#{test_run.id}'> #{moment(test_run.date).fromNow()} </option>"
         selector.append(selection)
     )
@@ -176,7 +173,6 @@ class Crucible.TestExecutor
     $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
       test_run = result.test_run
       percent_complete = test_run.test_results.length / test_run.test_ids.length
-
       @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
       if Object.keys(@processedResults).length < test_run.test_results.length
         for result in test_run.test_results
