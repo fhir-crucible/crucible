@@ -49,5 +49,7 @@ end
 
 group :test do
   gem 'minitest'
-  gem 'simplecov', :require => false
+  gem 'minitest-reporters'
+  gem 'simplecov', require: false
+  gem 'webmock'
 end
