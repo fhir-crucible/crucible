@@ -5,14 +5,25 @@ class TestRun
   field :destination_conformance
   field :date, type: DateTime
   field :is_multiserver, type: Boolean, default: false
-  belongs_to :server, :class_name => "Server"
-  belongs_to :destination_server, :class_name => "Server"
+  field :status, type: String, default: "pending"
+
+  belongs_to :server, class_name: "Server"
+  belongs_to :destination_server, class_name:" Server"
   belongs_to :user
   field :nightly, type: Boolean, default: false
+  has_and_belongs_to_many :tests, inverse_of: nil
   has_many :test_results, autosave: true
 
-  # Execute a set of tests.  Tests can be a single test, or an enumeration of tests
-  def execute(tests)
+  def add_tests(tests)
+    self.tests.push(*tests)
+    self.save
+  end
+
+  def execute()
+
+    return false unless self.status == "pending"
+    self.status = "running"
+    self.save()
 
     client1 = FHIR::Client.new(self.server.url)
     if self.server.oauth_token_opts
@@ -25,12 +36,17 @@ class TestRun
 
     executor = Crucible::Tests::Executor.new(client1, client2)
 
-    return false unless self.server.available?
+    unless self.server.available?
+      self.status = "unavailable"
+      self.save
 
-    Array(tests).each_with_index do |t, i|
+      return false
+    end
+
+    self.tests.each_with_index do |t, i|
 
       begin
-        puts  "\t #{i}/#{Array(tests).length}: #{self.server.name}(#{self.server.url})"
+        Rails.logger.debug "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
 
         test = executor.find_test(t.title)
         val = nil
@@ -46,32 +62,33 @@ class TestRun
         result.result = val
 
         self.test_results << result
+        self.status = "complete" if self.test_results.length == self.tests.length
         self.save
 
-        yield(result, i, Array(tests).length)
+        yield(result, i, self.tests.length) if block_given?
 
       rescue Exception => e
-        puts e.backtrace
+        self.status = "error"
+        self.save
+        Rails.logger.debug e.message
+        Rails.logger.debug e.backtrace
+        return false
       end
     end
 
-    true
-
-  end
-
-  def finish()
-
     self.server.aggregate(self)
     compliance = server.get_compliance()
-
     summary = Summary.new({server_id: self.server.id, test_run: self, compliance: compliance, generated_at: Time.now})
     self.server.summary = summary
     self.server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
     summary.save!
-
     self.server.save!
 
-    return summary
+    self.status = "finished"
+    self.save
+
+    true
+
   end
 
   def serializable_hash(options = nil)

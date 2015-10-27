@@ -41,6 +41,8 @@ gem 'postrank-uri'
 gem 'oauth2'
 gem 'ruby-progressbar'
 gem "non-stupid-digest-assets"
+gem 'delayed_job_mongoid'
+gem 'daemons'
 
 group :development do
   gem 'pry-byebug'

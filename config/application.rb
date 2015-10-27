@@ -42,5 +42,7 @@ module Crucible
     #::Sass::Script::Value::Number.precision = [8, ::Sass::Script::Value::Number.precision].max
 
     config.autoload_paths << Rails.root.join('lib')
+
+    config.active_job.queue_adapter = :delayed_job
   end
 end

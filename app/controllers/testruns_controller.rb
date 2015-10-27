@@ -8,57 +8,13 @@ class TestrunsController < ApplicationController
   end
 
   def create
-    run = TestRun.new(run_params)
-    run.date = Time.now
+    run = TestRun.new({server_id: params[:server_id], date: Time.now})
+    tests = params[:test_ids].map {|i| Test.find(i)}
 
-    if run.save()
-      run = {test_run: run}
-      respond_with run, location: server_testruns_path
-    end
-  end
+    run.add_tests(tests)
+    RunTestsJob.perform_later(run.id.to_s)
 
-  def index
-    @runs = []
-
-    # if not current_user.nil?
-    #   @runs = current_user.test_runs
-    # end
-    render json:{test_runs: @runs}
-  end
-
-  def execute
-    server = Server.find(params[:server_id])
-    test_run = TestRun.find(params[:testrun_id])
-    tests = params[:test_ids].map {|t| Test.find(t) }
-    finish = params[:finish] == "1"
-
-    results = []
-
-    success =  test_run.execute(tests) do |result|
-      results << result
-    end
-
-    summary = nil
-
-    if finish
-      summary = test_run.finish()
-    end
-
-    render json: {success: success, test_results: results, summary: summary}
-
-  end
-
-  def finish
-    server = Server.find(params[:server_id])
-    test_run = TestRun.find(params[:testrun_id])
-    summary = test_run.finish()
-
-    render json: {summary: summary}
-  end
-
-  private
-  def run_params
-    params.require(:test_run).permit(:server_id)
+    render json: { test_run: run }
   end
 
 end

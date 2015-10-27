@@ -23,11 +23,10 @@ namespace :crucible do
       puts "\tStarting Server #{i+1} of #{Server.all.length}"
 
       test_run = TestRun.new({server: s})
-      test_run.execute(Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}) do |result, j, total|
+      test_run.add_tests(Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name})
+      test_run.execute() do |result, j, total|
         puts "\tCompleted test #{j+1} of #{total} on Server #{i+1} of #{Server.all.length}"
       end
-
-      test_run.finish()
 
       puts "\tCompleted Server #{i+1} of #{Server.all.length}"
 
