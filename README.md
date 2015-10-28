@@ -32,9 +32,10 @@ A simple Rails app for evaluating FHIR.
 - Launch the Rails server: ```bundle exec rails server```
 - Launch the Job Runner: ```RAILS_ENV=development bin/delayed_job start```
 
-#### Testing Crucible
+#### Testing Crucible Code
 ##### Ruby Tests
 - Execute ```bundle exec rake test```
+
 ##### Front end tests
 - Install phantomjs ```brew install phantomjs```
 - Install istanbul ```npm install -g istanbul```
