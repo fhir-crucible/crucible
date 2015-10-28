@@ -34,12 +34,12 @@ A simple Rails app for evaluating FHIR.
 
 #### Testing Crucible Code
 ##### Ruby Tests
-- Execute ```bundle exec rake test```
+- Execute: ```bundle exec rake test```
 
 ##### Front end tests
-- Install phantomjs ```brew install phantomjs```
-- Install istanbul ```npm install -g istanbul```
-- Execute ```bundle exec rake teaspoon```
+- Install phantomjs: ```brew install phantomjs```
+- Install istanbul: ```npm install -g istanbul```
+- Execute: ```bundle exec rake teaspoon```
 
 # License
 
