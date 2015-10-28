@@ -23,7 +23,7 @@
 //= require highlightjs/highlight.pack.js
 //= require jquery-validation/dist/jquery.validate.js
 
-
+//= require crucible
 //= require_tree ./views/templates
 //= require_tree ./views
 //= require_tree ./views/component

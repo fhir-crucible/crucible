@@ -4,3 +4,7 @@
 require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
+
+Rake::Task["teaspoon"].enhance do
+  system("open coverage-js/default/index.html")
+end if defined?(Teaspoon)

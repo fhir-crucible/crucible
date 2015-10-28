@@ -47,6 +47,8 @@ gem 'daemons'
 group :development do
   gem 'pry-byebug'
   gem 'guard-livereload'
+  gem "teaspoon-jasmine"
+  gem "magic_lamp"
 end
 
 group :test do
@@ -55,3 +57,4 @@ group :test do
   gem 'simplecov', require: false
   gem 'webmock'
 end
+
