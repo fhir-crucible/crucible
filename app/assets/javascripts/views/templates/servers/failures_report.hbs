@@ -40,6 +40,14 @@
                           {{title-case failure.suite.name}}
                         </div>
                       {{/if}}
+                      {{#if failure.status}}
+                        <div class="col-md-4 test-stats-label">
+                          Status
+                        </div>
+                        <div class="col-md-8 test-stats-status">
+                          {{failure.status}}
+                        </div>
+                      {{/if}}
                       {{#if failure.requires}}
                         <div class="col-md-4 test-stats-label">
                           Requires
