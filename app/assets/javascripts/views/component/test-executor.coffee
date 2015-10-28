@@ -203,13 +203,3 @@ class Crucible.TestExecutor
     $(warningBanner).html(message)
     $(warningBanner).fadeIn()
     $(warningBanner).delay(1000).fadeOut(1500)
-
-  #@processTestResult(i, suiteId, suiteIds, @createErrorSuite(suiteId), suiteElement)
-  createErrorSuite: (suiteId) ->
-    suite = _.clone(@suitesById[suiteId])
-    suite.tests = suite.methods
-    for test in suite.tests
-      test.status = 'error'
-      test.message = 'The test could not be executed'
-    suite
-
