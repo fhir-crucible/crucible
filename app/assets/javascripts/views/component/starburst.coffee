@@ -127,13 +127,12 @@ class Crucible.Starburst
         .style("opacity", opacity)
         .attr("class", (d) -> d.name?.replace(/([\s,\&])/g, "_"))
         .on("click", (d) =>
-          if d.children
-            node = d
-            path.transition()
-              .duration(@get('animationTransition'))
-              .attrTween("d", arcTweenZoom(d))
-            updateNodeName(node)
-            $(@listeners).each (i, listener) -> listener.transitionTo(node.name)
+          node = d
+          path.transition()
+            .duration(@get('animationTransition'))
+            .attrTween("d", arcTweenZoom(d))
+          updateNodeName(node)
+          $(@listeners).each (i, listener) -> listener.transitionTo(node.name)
           return
         )
         .on('mouseover', tip.show)
