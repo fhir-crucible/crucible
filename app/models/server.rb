@@ -153,7 +153,7 @@ class Server
     status_map = {'pass'=>'passed', 'fail'=>'failed','error'=>'errors', 'skip'=>'skipped'}
     node = node_map[key]
     if (node)
-      result['status'] = 'fail' if result['status'].nil?
+      result['status'] = 'error' if result['status'].nil?
       node[status_map[result['status']]] += 1
       node["#{status_map[result['status']]}Ids"] << result['id']
       node['total'] += 1
