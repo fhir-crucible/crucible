@@ -57,7 +57,7 @@ class Crucible.TestRunReport
     )
 
   renderChart: (node) ->
-    children = @convertChildren(@starburst.nodeMap[node].children)
+    children = @convertChildren(@starburst.nodeMap[node].children || [@starburst.nodeMap[node]])
     @childrenChart.html(HandlebarsTemplates[@templates.childrenChart]({children: children}))
 
   renderHeader: (node) ->

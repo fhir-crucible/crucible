@@ -38,6 +38,11 @@ class Crucible.TestExecutor
     @element.find('.filter-by-executed a').click(@showAllSuites)
     @filterBox = @element.find('.test-results-filter')
     @filterBox.on('keyup', @filter)
+    @element.find('.starburst').on('starburstInitialized', (event) =>
+      @starburst = @element.find('.starburst').data('starburst')
+      @starburst.addListener(this)
+      false
+    )
 
   loadTests: =>
     $.getJSON("/tests.json").success((data) =>
@@ -203,3 +208,23 @@ class Crucible.TestExecutor
     $(warningBanner).html(message)
     $(warningBanner).fadeIn()
     $(warningBanner).delay(1000).fadeOut(1500)
+
+  filterTestsByStarburst: (node) ->
+    starburstNode = @starburst.nodeMap[node]
+    testIds = _.union(starburstNode.failedIds, starburstNode.skippedIds, starburstNode.errorsIds, starburstNode.passedIds)
+    elements = @element.find('.test-run-result')
+    if (node == 'FHIR')
+      elements.show()
+      return
+    $(elements).each (i, suiteElement) =>
+      suiteElement = $(suiteElement)
+      suite = suiteElement.data('suite')
+      childrenIds = suite.methods.map (m) -> m.id
+      if (_.intersection(testIds, childrenIds).length > 0)
+        suiteElement.show()
+      else
+        suiteElement.hide()
+
+  transitionTo: (node) ->
+    _.defer(=>
+      @filterTestsByStarburst(node))
