@@ -12,7 +12,6 @@ Rails.application.routes.draw do
 
   root to: "home#index"
   get 'servers/:server_id/past_runs', to: 'servers#past_runs'
-  get 'testruns/:testrun_id', to: 'testruns#show'
   get 'redirect', to: 'servers#oauth_redirect'
 
 end
