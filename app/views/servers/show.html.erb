@@ -9,17 +9,7 @@
             </div>
           <% end %>
         <div class="row">
-          <div class="col-md-9">
-            <h1>Select Tests</h1>
-          </div>
-          <div class="col-md-3">
-          </div>
-        </div>
-        <p class="helper_text">
-          Each FHIR Interface will first generate a conformance statement. Based on the conformance, a given set of recommended tests will be shown to the user.
-        </p>
-        <div class="row">
-          <div class="col-md-7 col-md-offset-4 server-test-details">
+          <div class="col-md-12 server-test-details">
             <!-- START: server name and url -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
@@ -29,15 +19,15 @@
                 <a href="#"><i class="fa fa-server"></i></a>
               </div>
               <div class="row server-url-name">
-                <div class="col-md-6">
-                  <div class="server-name-panel truncate-server-data emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
+                <div class="col-md-7">
+                  <div class="server-name-panel emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
                     <div class="server-name-label"><%= @server.name %></div>
                   </div>
-                  <div class="server-url-panel truncate-server-data editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.url %>">
+                  <div class="server-url-panel editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.url %>">
                     <a target="_blank" class="server-url-label" href="<%= @server.url %>"><%= @server.url %></a>
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <a class="edit-server-name-icon editToggle"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
                 </div>
               </div>

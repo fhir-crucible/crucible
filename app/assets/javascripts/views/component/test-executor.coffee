@@ -181,7 +181,6 @@ class Crucible.TestExecutor
           suiteElement = $("#test-#{suiteId}")
           @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]
           @processedResults[suiteId] = true
-
       if test_run.status == "unavailable"
         @handleError(@html.unavailableError)
       else if test_run.status == "error"
