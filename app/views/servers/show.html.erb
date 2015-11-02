@@ -144,14 +144,27 @@
     </div>
   </div>
 
-  <!-- Modal Authorization -->
-  <div class="modal fade" id="authorize-modal" tabindex="-1" role="dialog" aria-labelledby="Authorize">
-    <div class="modal-dialog medium" role="document">
+ <!-- Modal -->
+  <div class="modal fade" id="data-modal" tabindex="-1" role="dialog" aria-labelledby="Data for test result">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="authorizeModalLabel">Authorize</h4>
+          <h4 class="modal-title" id="myModalLabel">Test Response Data</h4>
         </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Authorization -->
+  <div class="modal fade" id="authorize-modal" tabindex="-1" role="dialog" aria-labelledby="Authorize">
+    <div class="modal-dialog medium auth" role="document">
+      <div class="modal-content">
         <div class="modal-body">
           <div>
             <%= render partial: "authorization" %>
