@@ -11,10 +11,12 @@ branches:
 notifications:
   email:
     recipients:
-      - healthcare-ci@googlegroups.com
+      - fhir-testing-list@lists.mitre.org
     on_failure: change
 before_script:
   - npm -g install bower
   - bower install
+  - npm install -g istanbul
 script:
   - ./bin/rake test
+  - ./bin/teaspoon
