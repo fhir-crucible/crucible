@@ -22,8 +22,8 @@ class TestRun
   def execute()
 
     return false unless self.status == "pending"
-    self.status = "running"
-    self.save()
+    self.status = 'running'
+    self.save
 
     client1 = FHIR::Client.new(self.server.url)
     if self.server.oauth_token_opts
@@ -44,6 +44,9 @@ class TestRun
     end
 
     self.tests.each_with_index do |t, i|
+
+      current_status = TestRun.collection.find(_id: self.id).first()['status']
+      return false if current_status == 'cancelled'
 
       Rails.logger.debug "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
       test = executor.find_test(t.title)

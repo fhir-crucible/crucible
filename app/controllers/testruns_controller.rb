@@ -16,4 +16,15 @@ class TestrunsController < ApplicationController
 
     render json: { test_run: run }
   end
+
+  def cancel
+    run = TestRun.find(params[:testrun_id])
+
+    if run.status == 'pending' or run.status == 'running'
+      run.status = 'cancelled'
+      run.save
+    end
+
+    render json: { test_run: run }
+  end
 end
