@@ -130,6 +130,8 @@ class Crucible.TestExecutor
     $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
       @prepareTestRun($($.map((result.test_run.test_ids), (e) -> e.$oid)))
       @element.dequeue("executionQueue")
+      @element.find('.past-test-runs-selector').attr("disabled", true)
+      @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
     )
 
   startTestRun: =>
@@ -147,8 +149,8 @@ class Crucible.TestExecutor
     $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
       @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
-      @renderPastTestRunsSelector()
       @element.find('.past-test-runs-selector').attr("disabled", true)
+      @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
     )
 
   filter: =>
