@@ -169,6 +169,7 @@ class Crucible.TestExecutor
         
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
+    @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     @element.find('.test-run-result').show()
 
   showOnlyExecutedSuites: =>
