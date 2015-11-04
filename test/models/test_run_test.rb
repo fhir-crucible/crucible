@@ -67,21 +67,26 @@ class TestRunTest < ActiveSupport::TestCase
 
   end
 
-  def test_execute_error
+  def test_execute_errors
 
     server = Server.new ({url: 'www.example.com'})
     testrun = TestRun.new({server: server})
 
-    stub_request(:any, /www\.example\.com\/.*/).to_timeout.times(1)
+    stub_request(:any, /www\.example\.com\/.*/).to_timeout
     stub_request(:get, "www.example.com/metadata").to_return(body: @conformance_xml).times(1)
 
-    testrun.add_tests(Test.all().limit(3))
+    testrun.add_tests(Test.all().limit(10))
 
-    refute testrun.execute()
+    assert testrun.execute()
 
-    assert_equal "error", testrun.status
+    assert_equal 'finished', testrun.status
+    assert_equal 10, testrun.test_results.length
+    
+    testrun.test_results.each do |tr|
+      #todo: figure out a better way to ensure that none of these skip because seems unpredicatable
+      assert tr.result.all?{|t| t['status'] == 'error' || t['status'] == 'skip'}
+    end
 
-    assert_equal 0, testrun.test_results.length
 
   end
 

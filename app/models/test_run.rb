@@ -37,7 +37,7 @@ class TestRun
     executor = Crucible::Tests::Executor.new(client1, client2)
 
     unless self.server.available?
-      self.status = "unavailable"
+      self.status = 'unavailable'
       self.save
 
       return false
@@ -45,35 +45,39 @@ class TestRun
 
     self.tests.each_with_index do |t, i|
 
-      begin
-        Rails.logger.debug "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
+      Rails.logger.debug "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
+      test = executor.find_test(t.title)
+      val = nil
+      result = TestResult.new
+      result.test = t
+      result.server = self.server
+      result.has_run = true
 
-        test = executor.find_test(t.title)
-        val = nil
+      begin
+
         if t.resource_class?
           val = test.execute(t.resource_class.constantize)[0]["#{t.title}_#{t.resource_class.split("::")[1]}"][:tests]
         else
           val = test.execute()[0][t.title][:tests]
         end
-        result = TestResult.new
-        result.test = t
-        result.server = self.server
-        result.has_run = true
-        result.result = val
-
-        self.test_results << result
-        self.status = "complete" if self.test_results.length == self.tests.length
-        self.save
-
-        yield(result, i, self.tests.length) if block_given?
 
       rescue Exception => e
-        self.status = "error"
-        self.save
         Rails.logger.debug e.message
         Rails.logger.debug e.backtrace
-        return false
+
+        val = t.methods.clone
+        val.each do |m|
+          m['status'] = 'error'
+          m['message'] = e.message
+        end
       end
+
+      result.result = val
+      self.test_results << result
+      self.status = 'complete' if self.test_results.length == self.tests.length
+      self.save
+
+      yield(result, i, self.tests.length) if block_given?
     end
 
     self.server.aggregate(self)
@@ -84,7 +88,7 @@ class TestRun
     summary.save!
     self.server.save!
 
-    self.status = "finished"
+    self.status = 'finished'
     self.save
 
     true
