@@ -1,4 +1,4 @@
-class TestrunsController < ApplicationController
+class TestRunsController < ApplicationController
   respond_to :json
 
   def show
@@ -18,7 +18,7 @@ class TestrunsController < ApplicationController
   end
 
   def cancel
-    run = TestRun.find(params[:testrun_id])
+    run = TestRun.find(params[:test_run_id])
 
     if run.status == 'pending' or run.status == 'running'
       run.status = 'cancelled'

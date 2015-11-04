@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :tests, defaults: { format: :json }, only: [ :index ]
   resources :servers, only: [ :show, :create, :update ] do
-    resources :testruns, defaults: { format: :json }, only: [ :show, :create ] do
+    resources :test_runs, defaults: { format: :json }, only: [ :show, :create ] do
       post 'cancel', default: { format: :json }
     end
     get 'conformance', defaults: { format: :json }
