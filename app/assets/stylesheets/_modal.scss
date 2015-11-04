@@ -4,3 +4,16 @@
   -ms-transform: translate(0, 50%); /* IE 9 */
   -webkit-transform: translate(0, 50%); /* Safari and Chrome */
 }
+
+.modal-dialog.auth{
+  max-width: 700px;
+  label{
+  	font-size: 14px;
+  	&.header-label{
+  	  margin-bottom: 10px;
+  	}
+  }
+  button{
+  	font-size: 14px;
+  }
+}

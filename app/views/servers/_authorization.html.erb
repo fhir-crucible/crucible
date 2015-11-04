@@ -18,7 +18,7 @@
   </div-->
 
   <div class="well">
-    <label>OAuth2 Auth</label>
+    <label class="header-label">Please enter the client ID and client Secret for the FHIR server being tested; these are supplied by the server administrator/single-sign-on application</label>
     <form id="authorize_form" method="GET">
       <input type='hidden' name='response_type' id='response_type' value='code' />
       <input type='hidden' name='redirect_uri' id='redirect_uri' value='<%= root_url %>redirect' />
@@ -33,7 +33,11 @@
         <label for="client_secret">Client Secret</label>
         <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element" value='' />
       </div>
-      <button type="submit" class="btn btn-primary authorize_form_element" id="authorize_app">Authorize App</button>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary authorize_form_element" id="authorize_app">Authorize App</button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
