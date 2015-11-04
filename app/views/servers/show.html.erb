@@ -9,17 +9,7 @@
             </div>
           <% end %>
         <div class="row">
-          <div class="col-md-9">
-            <h1>Select Tests</h1>
-          </div>
-          <div class="col-md-3">
-          </div>
-        </div>
-        <p class="helper_text">
-          Each FHIR Interface will first generate a conformance statement. Based on the conformance, a given set of recommended tests will be shown to the user.
-        </p>
-        <div class="row">
-          <div class="col-md-7 col-md-offset-4 server-test-details">
+          <div class="col-md-12 server-test-details">
             <!-- START: server name and url -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
@@ -28,19 +18,15 @@
               <div class="server-icon pull-left editToggle">
                 <a href="#"><i class="fa fa-server"></i></a>
               </div>
-              <div class="row server-url-name">
-                <div class="col-md-6">
-                  <div class="server-name-panel truncate-server-data emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
-                    <div class="server-name-label"><%= @server.name %></div>
-                  </div>
-                  <div class="server-url-panel truncate-server-data editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.url %>">
-                    <a target="_blank" class="server-url-label" href="<%= @server.url %>"><%= @server.url %></a>
-                  </div>
+              <div class=" server-url-name pull-left">
+                <div class="server-name-panel emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
+                  <div class="server-name-label"><%= @server.name %></div>
                 </div>
-                <div class="col-md-3">
-                  <a class="edit-server-name-icon editToggle"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
+                <div class="server-url-panel editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.url %>">
+                  <a target="_blank" class="server-url-label" href="<%= @server.url %>"><%= @server.url %></a>
                 </div>
               </div>
+              <a class="edit-server-name-icon editToggle pull-left"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
               <div class="edit-panel row hide editToggle">
                 <form id="server_update_form" method="PUT" action="<%= url_for controller: 'servers', action: 'update', id: @server.id %>">
                   <div class="col-md-6">
@@ -86,15 +72,16 @@
                     <div class="button-holder">
                       <button type="button" class="btn secondary selectDeselectAll"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
                       <button type="button" class="btn secondary expandCollapseAll"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
-                      <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
                     </div>
 
                     <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
-                    <div class="button-holder ">
+                    <div class="button-holder">
+                      <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
+                      <select class="past-test-runs-selector form-control"></select>
                       <button class="btn execute">
                         Execute
                       </button>
-                      <div class="warning-message"></div>
+                      <div class="warning-message alert alert-danger" role="alert"></div>
                     </div>
                   </div>
                 </div>

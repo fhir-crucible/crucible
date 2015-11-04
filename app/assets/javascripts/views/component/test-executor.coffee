@@ -36,6 +36,7 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
+    @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
     @filterBox = @element.find('.test-results-filter')
     @filterBox.on('keyup', @filter)
     @element.find('.starburst').on('starburstInitialized', (event) =>
@@ -49,6 +50,7 @@ class Crucible.TestExecutor
       @suites = data['tests']
       @renderSuites()
       @continueTestRun() if @testRunId
+      @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     )
 
   renderSuites: =>
@@ -61,6 +63,33 @@ class Crucible.TestExecutor
       suiteElement.data('suite', suite)
       $(suite.methods).each (i, test) =>
         @addClickTestHandler(test, suiteElement)
+
+  renderPastTestRunsSelector: (elementToAdd) =>
+    $.getJSON("/servers/#{@serverId}/past_runs").success((data) =>
+      return unless data
+      selector = @element.find('.past-test-runs-selector')
+      selector.empty()
+      if elementToAdd
+        selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}''>#{elementToAdd.text}</option>")
+      selector.show()
+      $(data['past_runs'].reverse()).each (i, test_run) =>
+        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).fromNow()} </option>"
+        selector.append(selection)
+    )
+
+  updateCurrentTestRun: =>
+    selector = @element.find('.past-test-runs-selector')
+    testRunId = selector.val()
+    suiteIds = $($.map(selector.find('option'), (e) -> e.value))
+    $.getJSON("/servers/#{@serverId}/testruns/#{testRunId}").success((data) =>
+      return unless data
+      @renderSuites()
+      @showOnlyExecutedSuites()
+      $(data['test_run'].test_results).each (i, result) =>
+        suiteId = result.test_id.$oid
+        suiteElement = @element.find("#test-#{suiteId}")
+        @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+    )
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :visible :checkbox')
@@ -85,6 +114,8 @@ class Crucible.TestExecutor
   prepareTestRun: (suiteIds) =>
     @processedResults = {}
     @element.find('.execute').addClass('disabled')
+    @resetSuitePanels()
+    @showOnlyExecutingSuites()
     @progress.parent().collapse('show')
     @progress.find('.progress-bar').css('width',"2%")
     @element.queue("executionQueue", @checkTestRunStatus)
@@ -99,6 +130,8 @@ class Crucible.TestExecutor
     $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
       @prepareTestRun($($.map((result.test_run.test_ids), (e) -> e.$oid)))
       @element.dequeue("executionQueue")
+      @element.find('.past-test-runs-selector').attr("disabled", true)
+      @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
     )
 
   startTestRun: =>
@@ -116,6 +149,8 @@ class Crucible.TestExecutor
     $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
       @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
+      @element.find('.past-test-runs-selector').attr("disabled", true)
+      @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
     )
 
   filter: =>
@@ -134,6 +169,7 @@ class Crucible.TestExecutor
         
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
+    @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     @element.find('.test-run-result').show()
 
   showOnlyExecutedSuites: =>
@@ -141,13 +177,30 @@ class Crucible.TestExecutor
     @element.find('.test-run-result').hide()
     @element.find(':checked').closest('.test-run-result').show()
     @element.find('.test-run-result.executed').show()
-    
+  
+  showOnlyExecutingSuites: =>
+    @element.find('.filter-by-executed').collapse('show')
+    @element.find('.test-run-result').hide()
+    @element.find(':checked').filter('.suiteCheckbox').closest('.test-run-result').show()
+
+  resetSuitePanels: =>
+    suitesElement = @element.find('.test-suites')
+    panels = @element.find('.test-run-result.executed')
+    $(panels).each (i, panel) =>
+      suite_id = (panel.id).substr(5)
+      suite = @suitesById[suite_id]
+      newPanel = HandlebarsTemplates[@templates.suiteSelect]({suite: suite})
+      $(panel).replaceWith(newPanel)
+      newElement = suitesElement.find("#test-#{suite.id}")
+      newElement.data('suite', suite)
+      $(suite.methods).each (i, test) =>
+        @addClickTestHandler(test, newElement)
+
   checkTestRunStatus: =>
     suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
     $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
       test_run = result.test_run
       percent_complete = test_run.test_results.length / test_run.test_ids.length
-
       @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
       if Object.keys(@processedResults).length < test_run.test_results.length
         for result in test_run.test_results
@@ -156,7 +209,6 @@ class Crucible.TestExecutor
           suiteElement = $("#test-#{suiteId}")
           @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]
           @processedResults[suiteId] = true
-
       if test_run.status == "unavailable"
         @handleError(@html.unavailableError)
       else if test_run.status == "error"
@@ -169,7 +221,8 @@ class Crucible.TestExecutor
 
   handleSuiteResult: (suite, result, suiteElement) =>
     suiteStatus = 'pass'
-    result.tests = result.result
+    if result.result
+      result.tests = result.result
     $(result.tests).each (i, test) =>
       suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
     result.suiteStatus = suiteStatus
@@ -191,6 +244,8 @@ class Crucible.TestExecutor
     @progress.parent().collapse('hide')
     @progress.find('.progress-bar').css('width',"0%")
     @element.find('.execute').removeClass('disabled')
+    @element.find('.past-test-runs-selector').attr("disabled", false)
+    @renderPastTestRunsSelector()
     @element.dequeue("executionQueue")
 
   addClickTestHandler: (test, suiteElement) => 

@@ -35,7 +35,6 @@
 .server-details {
   height: 60px;
   border-radius: 10px;
-
   .server-icon {
     margin-right: 30px;
     font-size: 55px;
@@ -54,7 +53,7 @@
     text-align: left;
     line-height: 26px;
     padding: 5px 0 0 0;
-
+    display: inline-block;
     .server-name {
       color: $brand-primary;
     }

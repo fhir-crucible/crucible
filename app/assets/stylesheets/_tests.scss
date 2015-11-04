@@ -99,6 +99,7 @@
 .filter{
   margin-top: 30px;
   .button-holder{
+    text-align: left;
     margin-top: 10px;
     button{
       text-align: left;
@@ -112,9 +113,9 @@
     background-color: $brand-accent;
     border: 3px solid $brand-accent;
     color: $brand-tertiary;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 100;
     padding: 3px;
     margin: 0 0 5px 5px;
     cursor: pointer;
@@ -128,4 +129,9 @@
   .hidden{
     visibility: none;
   }
+}
+
+.past-test-runs-selector{
+  visibility: none;
+  margin-bottom: 15px;
 }

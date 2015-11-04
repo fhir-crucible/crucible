@@ -16,5 +16,4 @@ class TestrunsController < ApplicationController
 
     render json: { test_run: run }
   end
-
 end
