@@ -28,6 +28,13 @@ class Crucible.Authorization
       },
       'JSON'
       ).success((data)->
+        scope = $(event.target).find("[name='scope_vars[]']:checked").map(() ->
+          $(this).val()
+        ).get().join(" ")
+        $("#scope").val(scope)
+        $("[name='scope_vars[]'").each(() ->
+          $(this).attr('checked', false)
+        )
         event.target.submit()
       )
       return false

@@ -8,3 +8,18 @@
 .form-control:focus {
   border-color: $brand-accent;
 }
+
+.scope-types {
+
+  tbody > tr:not(:last-child) {
+    border-bottom: lightgrey 1px solid;
+  }
+
+  thead {
+    border-bottom: lightgrey 2px solid;
+  }
+
+  th, td {
+    padding: 0 5px;
+  }
+}
