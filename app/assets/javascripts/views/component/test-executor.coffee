@@ -33,6 +33,7 @@ class Crucible.TestExecutor
 
   registerHandlers: =>
     @element.find('.execute').click(@startTestRun)
+    $('#cancel-modal #cancel-confirm').click(@cancelTestRun)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
@@ -113,7 +114,8 @@ class Crucible.TestExecutor
 
   prepareTestRun: (suiteIds) =>
     @processedResults = {}
-    @element.find('.execute').addClass('disabled')
+    @element.find('.execute').hide()
+    @element.find('.cancel').show()
     @resetSuitePanels()
     @showOnlyExecutingSuites()
     @progress.parent().collapse('show')
@@ -138,20 +140,24 @@ class Crucible.TestExecutor
     suiteIds = $($.map(@element.find(':checked'), (e) -> e.name))
     @element.find(".test-result-error").empty()
     if suiteIds.length > 0
-      @element.queue("executionQueue", @registerTestRun)
       @prepareTestRun(suiteIds)
-      @element.dequeue("executionQueue")
+      suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
+      $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
+        @testRunId = result.test_run.id
+        @element.find('.past-test-runs-selector').attr("disabled", true)
+        @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
+        @element.dequeue("executionQueue")
+      )
     else 
       @flashWarning('Please select at least one test suite')
 
-  registerTestRun: =>
-    suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
-    $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
-      @testRunId = result.test_run.id
-      @element.dequeue("executionQueue")
-      @element.find('.past-test-runs-selector').attr("disabled", true)
-      @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
-    )
+  cancelTestRun: =>
+    if @testRunId?
+      $.post("/servers/#{@serverId}/testruns/#{@testRunId}/cancel").success( (result) =>
+        location.reload()
+      )
+    else 
+      $("#cancel-modal").hide()
 
   filter: =>
     filterValue = @filterBox.val().toLowerCase()
@@ -197,7 +203,7 @@ class Crucible.TestExecutor
         @addClickTestHandler(test, newElement)
 
   checkTestRunStatus: =>
-    suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
+    return false unless @testRunId?
     $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
       test_run = result.test_run
       percent_complete = test_run.test_results.length / test_run.test_ids.length
@@ -210,12 +216,14 @@ class Crucible.TestExecutor
           @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]
           @processedResults[suiteId] = true
       if test_run.status == "unavailable"
-        @handleError(@html.unavailableError)
+        @displayError(@html.unavailableError)
+        @element.dequeue("executionQueue")
       else if test_run.status == "error"
-        @handleError(@html.genericError)
+        @displayError(@html.genericError)
+        @element.dequeue("executionQueue")
       else if test_run.status == "finished"
         @element.dequeue("executionQueue")
-      else
+      else if test_run.status != "cancelled" and @testRunId?
         setTimeout(@checkTestRunStatus, @checkStatusTimeout)
     )
 
@@ -233,20 +241,21 @@ class Crucible.TestExecutor
     $(result.tests).each (i, test) =>
       @addClickTestHandler(test, suiteElement)
 
-  handleError: (message) =>
+  displayError: (message) =>
     @element.find(".test-result-error").html(message)
     @element.find('.test-status').empty()
-    @finishTestRun()
 
   finishTestRun: =>
     new Crucible.Summary()
     new Crucible.TestRunReport()
     @progress.parent().collapse('hide')
     @progress.find('.progress-bar').css('width',"0%")
-    @element.find('.execute').removeClass('disabled')
+    @element.find('.execute').show()
+    @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
     @renderPastTestRunsSelector()
-    @element.dequeue("executionQueue")
+    $("#cancel-modal").hide()
+    @testRunId = null
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
