@@ -1,37 +1,58 @@
 <div>
-  <!--div class="well">
-    <div class="form-group">
-      <label for="bearer_token">Bearer Token</label>
-      <input type="text" id="bearer_token" name="bearer_token" class="form-control" />
-    </div>
-  </div-->
-
-  <!--div class="well">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" class="form-control" />
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" class="form-control" />
-    </div>
-  </div-->
-
   <div class="well">
     <label class="header-label">Please enter the client ID and client Secret for the FHIR server being tested; these are supplied by the server administrator/single-sign-on application</label>
     <form id="authorize_form" method="GET">
       <input type='hidden' name='response_type' id='response_type' value='code' />
       <input type='hidden' name='redirect_uri' id='redirect_uri' value='<%= root_url %>redirect' />
-      <input type='hidden' name='scope' id='scope' value='user/*.read' />
+      <input type='hidden' name='scope' id='scope' />
       <input type='hidden' name='aud' id='aud' value='<%= @server.url %>' />
       <input type='hidden' name='state' id='state' value='<%= @server.generate_state %>' />
       <div class="form-group">
         <label for="client_id">Client ID</label>
-        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" value='' />
+        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" />
       </div>
       <div class="form-group">
         <label for="client_secret">Client Secret</label>
-        <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element" value='' />
+        <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element" />
+      </div>
+      <div class="form-group scope-types">
+        <table>
+          <thead>
+            <th></th><th>Scope</th><th>Description</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/*.read" /></td>
+              <td><code>patient/*.read</code></td>
+              <td>Permission to read any resource for the current patient</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="fhir_complete" /></td>
+              <td><code>fhir_complete</code></td>
+              <td>Access to the entire FHIR API</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="user/*.*" checked /></td>
+              <td><code>user/*.*</code></td>
+              <td>Permission to read and write all resources that the current user can access</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="openid profile" /></td>
+              <td><code>openid profile</code></td>
+              <td>Permission to retrieve information about the current logged-in user</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="offline_access" checked /></td>
+              <td><code>offline_access</code></td>
+              <td>Request a <code>refresh_token</code> that can be used to obtain a new access token to replace an expired one, even after the end-user no is longer online after the access token expires</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="online_access" /></td>
+              <td><code>online_access</code></td>
+              <td>Request a <code>refresh_token</code> that can be used to obtain a new access token to replace an expired one, and that will be usable for as long as the end-user remains online</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="row">
         <div class="col-md-4">
