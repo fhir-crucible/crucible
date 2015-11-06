@@ -137,9 +137,11 @@
                 {
                   "name": "medication"
                 },{
-                  "name": "medication dispense"
-                },{
                   "name": "medication order"
+                },{
+                  "name": "medication administration"
+                },{
+                  "name": "medication dispense"
                 },{
                   "name": "medication statement"
                 },{
@@ -203,6 +205,8 @@
                   "name": "substance"
                 },{
                   "name": "person"
+                },{
+                  "name": "contract"
                 }
               ]
             },{
