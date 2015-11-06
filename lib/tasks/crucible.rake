@@ -33,4 +33,19 @@ namespace :crucible do
     end
   end
 
+  desc "schedule a job for all servers"
+  task :nightly_run => [:environment] do
+
+    Server.all.each_with_index do |s, i|
+      puts "\tStarting Server #{i+1} of #{Server.all.length}"
+
+      test_run = TestRun.new({server: s, date: Time.now})
+      test_run.add_tests(Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name})
+      test_run.save!
+      RunTestsJob.perform_later(test_run.id.to_s)
+
+    end
+
+  end
+
 end
