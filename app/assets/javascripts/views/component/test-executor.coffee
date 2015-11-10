@@ -254,7 +254,7 @@ class Crucible.TestExecutor
     @element.find('.execute').show()
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
-    @renderPastTestRunsSelector()
+    @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     $("#cancel-modal").hide()
     @testRunId = null
 
