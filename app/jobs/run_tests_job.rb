@@ -3,10 +3,11 @@ class RunTestsJob < ActiveJob::Base
 
   def perform(test_run_id)
 
-    Rails.logger.debug "#{self.class.name}: Starting Test Run #{test_run_id}"
+    Delayed::Worker.logger.info "#{self.class.name}: Starting Test Run #{test_run_id}"
     testrun = TestRun.find(test_run_id)
+    Delayed::Worker.logger.info "Test Run #{test_run_id}: #{testrun.try(:server).try(:name)}: #{testrun.try(:server).try(:url)}" 
     testrun.execute()
-    Rails.logger.debug "#{self.class.name}: Finished Test Run #{test_run_id}"
+    Delayed::Worker.logger.info "#{self.class.name}: Finished Test Run #{test_run_id}"
 
   end
 end
