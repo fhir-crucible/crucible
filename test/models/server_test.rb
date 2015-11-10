@@ -97,15 +97,15 @@ class ServerTest < ActiveSupport::TestCase
     assert_equal 2, compliance['errors']
 
     operations = compliance['children'].select {|x| x['name'] == 'OPERATIONS'}.first
-    assert_equal 84, operations['passedIds'].count
+    assert_equal 103, operations['passedIds'].count
     assert_equal 4, (operations['passedIds'] & ["R003", "HI03", "X000_Binary", "FT02"]).count
-    assert_equal 84, operations['passed']
+    assert_equal 103, operations['passed']
     assert_equal 2, operations['skippedIds'].count
     assert_equal 2, (operations['skippedIds'] & ["X020_Account", "X050_AllergyIntolerance"]).count
     assert_equal 2, operations['skipped']
-    assert_equal 7, operations['failedIds'].count
+    assert_equal 13, operations['failedIds'].count
     assert_equal 7, (operations['failedIds'] & ["R001", "R004", "R005", "X030_AuditEvent", "HI06", "HI08", "HI11"]).count
-    assert_equal 7, operations['failed']
+    assert_equal 13, operations['failed']
 
     extensions = compliance['children'].select {|x| x['name'] == 'EXTENSIONS'}.first
     assert_equal 1, (extensions['skippedIds'] & ["X050_AllergyIntolerance"]).count
@@ -128,12 +128,12 @@ class ServerTest < ActiveSupport::TestCase
     assert_equal 0, compliance['errors']
 
     operations = compliance['children'].select {|x| x['name'] == 'OPERATIONS'}.first
-    assert_equal 1227, operations['passedIds'].count
-    assert_equal 1227, operations['passed']
+    assert_equal 1508, operations['passedIds'].count
+    assert_equal 1508, operations['passed']
     assert_equal 16, operations['skippedIds'].count
     assert_equal 16, operations['skipped']
-    assert_equal 366, operations['failedIds'].count
-    assert_equal 366, operations['failed']
+    assert_equal 371, operations['failedIds'].count
+    assert_equal 371, operations['failed']
 
   end
 
