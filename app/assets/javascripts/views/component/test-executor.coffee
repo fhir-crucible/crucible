@@ -82,7 +82,7 @@ class Crucible.TestExecutor
     selector = @element.find('.past-test-runs-selector')
     testRunId = selector.val()
     suiteIds = $($.map(selector.find('option'), (e) -> e.value))
-    $.getJSON("/servers/#{@serverId}/testruns/#{testRunId}").success((data) =>
+    $.getJSON("/servers/#{@serverId}/test_runs/#{testRunId}").success((data) =>
       return unless data
       @renderSuites()
       @showOnlyExecutedSuites()
@@ -129,7 +129,7 @@ class Crucible.TestExecutor
     @showOnlyExecutedSuites()
 
   continueTestRun: =>
-    $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
+    $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
       @prepareTestRun($($.map((result.test_run.test_ids), (e) -> e.$oid)))
       @element.dequeue("executionQueue")
       @element.find('.past-test-runs-selector').attr("disabled", true)
@@ -142,7 +142,7 @@ class Crucible.TestExecutor
     if suiteIds.length > 0
       @prepareTestRun(suiteIds)
       suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
-      $.post("/servers/#{@serverId}/testruns.json", { test_ids: suiteIds }).success((result) =>
+      $.post("/servers/#{@serverId}/test_runs.json", { test_ids: suiteIds }).success((result) =>
         @testRunId = result.test_run.id
         @element.find('.past-test-runs-selector').attr("disabled", true)
         @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
@@ -153,7 +153,7 @@ class Crucible.TestExecutor
 
   cancelTestRun: =>
     if @testRunId?
-      $.post("/servers/#{@serverId}/testruns/#{@testRunId}/cancel").success( (result) =>
+      $.post("/servers/#{@serverId}/test_runs/#{@testRunId}/cancel").success( (result) =>
         location.reload()
       )
     else 
@@ -204,7 +204,7 @@ class Crucible.TestExecutor
 
   checkTestRunStatus: =>
     return false unless @testRunId?
-    $.get("/servers/#{@serverId}/testruns/#{@testRunId}").success((result) =>
+    $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
       test_run = result.test_run
       percent_complete = test_run.test_results.length / test_run.test_ids.length
       @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
