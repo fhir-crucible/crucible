@@ -17,6 +17,10 @@ class Crucible.TestExecutor
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
     unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server Unavailable</div>'
     genericError: '<div class="alert alert-danger"><strong>Error: </strong> Tests could not be executed</div>'
+  filters:
+    search: ""
+    executed: false
+    starburstNode: null
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
   processedResults: {}
@@ -36,10 +40,10 @@ class Crucible.TestExecutor
     $('#cancel-modal #cancel-confirm').click(@cancelTestRun)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
-    @element.find('.filter-by-executed a').click(@showAllSuites)
+    @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
-    @filterBox = @element.find('.test-results-filter')
-    @filterBox.on('keyup', @filter)
+    @searchBox = @element.find('.test-results-filter')
+    @searchBox.on('keyup', @searchBoxHandler)
     @element.find('.starburst').on('starburstInitialized', (event) =>
       @starburst = @element.find('.starburst').data('starburst')
       @starburst.addListener(this)
@@ -85,11 +89,12 @@ class Crucible.TestExecutor
     $.getJSON("/servers/#{@serverId}/test_runs/#{testRunId}").success((data) =>
       return unless data
       @renderSuites()
-      @showOnlyExecutedSuites()
       $(data['test_run'].test_results).each (i, result) =>
         suiteId = result.test_id.$oid
         suiteElement = @element.find("#test-#{suiteId}")
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+      @element.find('.filter-by-executed').collapse('show')
+      @filter(executed: true)
     )
 
   selectDeselectAll: =>
@@ -117,23 +122,27 @@ class Crucible.TestExecutor
     @element.find('.execute').hide()
     @element.find('.cancel').show()
     @resetSuitePanels()
-    @showOnlyExecutingSuites()
     @progress.parent().collapse('show')
+    @element.find('.past-test-runs-selector').attr("disabled", true)
+    @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
     @progress.find('.progress-bar').css('width',"2%")
     @element.queue("executionQueue", @checkTestRunStatus)
     @element.queue("executionQueue", @finishTestRun)
+
     suiteIds.each (i, suiteId) =>
       suiteElement = @element.find("#test-#{suiteId}")
       suiteElement.find("input[type=checkbox]").attr("checked", true)
       suiteElement.find('.test-status').empty().append(@html.spinner)
-    @showOnlyExecutedSuites()
+      suiteElement.addClass("executed")
+
+    @element.find('.test-run-result').hide()
+    @element.find('.filter-by-executed').collapse('show')
+    @filter(executed: true)
 
   continueTestRun: =>
     $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
       @prepareTestRun($($.map((result.test_run.test_ids), (e) -> e.$oid)))
       @element.dequeue("executionQueue")
-      @element.find('.past-test-runs-selector').attr("disabled", true)
-      @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
     )
 
   startTestRun: =>
@@ -144,8 +153,6 @@ class Crucible.TestExecutor
       suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
       $.post("/servers/#{@serverId}/test_runs.json", { test_ids: suiteIds }).success((result) =>
         @testRunId = result.test_run.id
-        @element.find('.past-test-runs-selector').attr("disabled", true)
-        @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
         @element.dequeue("executionQueue")
       )
     else 
@@ -159,35 +166,28 @@ class Crucible.TestExecutor
     else 
       $("#cancel-modal").hide()
 
-  filter: =>
-    filterValue = @filterBox.val().toLowerCase()
+  searchBoxHandler: =>
+    @filter(search: @searchBox.val().toLowerCase().replace(/\s/g, ""))
+
+  filterByExecutedHandler: =>
+    @element.find('.filter-by-executed').collapse('hide')
+    @filter(executed: false)
+    false
+
+  filter: (filters)=>
+    if filters?
+      for f of filters
+        @filters[f] = filters[f]
     elements = @element.find('.test-run-result')
-    if (filterValue.length == 0)
-      elements.show()
-      return
+    elements.show()
+    starburstTestIds = _.union(@filters.starburstNode.failedIds, @filters.starburstNode.skippedIds, @filters.starburstNode.errorsIds, @filters.starburstNode.passedIds) if @filters.starburstNode?
     $(elements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
       suite = suiteElement.data('suite')
-      if (suite.name.toLowerCase()).indexOf(filterValue) < 0
-        suiteElement.hide()
-      else
-        suiteElement.show()
-        
-  showAllSuites: =>
-    @element.find('.filter-by-executed').collapse('hide')
-    @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
-    @element.find('.test-run-result').show()
-
-  showOnlyExecutedSuites: =>
-    @element.find('.filter-by-executed').collapse('show')
-    @element.find('.test-run-result').hide()
-    @element.find(':checked').closest('.test-run-result').show()
-    @element.find('.test-run-result.executed').show()
-  
-  showOnlyExecutingSuites: =>
-    @element.find('.filter-by-executed').collapse('show')
-    @element.find('.test-run-result').hide()
-    @element.find(':checked').filter('.suiteCheckbox').closest('.test-run-result').show()
+      childrenIds = suite.methods.map (m) -> m.id
+      suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase()).indexOf(@filters.search) < 0
+      suiteElement.hide() if @filters.executed          && !suiteElement.hasClass("executed")
+      suiteElement.hide() if @filters.starburstNode?    && !(_.intersection(starburstTestIds, childrenIds).length > 0)
 
   resetSuitePanels: =>
     suitesElement = @element.find('.test-suites')
@@ -215,6 +215,7 @@ class Crucible.TestExecutor
           suiteElement = $("#test-#{suiteId}")
           @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]
           @processedResults[suiteId] = true
+        @filter()
       if test_run.status == "unavailable"
         @displayError(@html.unavailableError)
         @element.dequeue("executionQueue")
@@ -274,20 +275,10 @@ class Crucible.TestExecutor
     $(warningBanner).delay(1000).fadeOut(1500)
 
   filterTestsByStarburst: (node) ->
-    starburstNode = @starburst.nodeMap[node]
-    testIds = _.union(starburstNode.failedIds, starburstNode.skippedIds, starburstNode.errorsIds, starburstNode.passedIds)
-    elements = @element.find('.test-run-result')
-    if (node == 'FHIR')
-      elements.show()
-      return
-    $(elements).each (i, suiteElement) =>
-      suiteElement = $(suiteElement)
-      suite = suiteElement.data('suite')
-      childrenIds = suite.methods.map (m) -> m.id
-      if (_.intersection(testIds, childrenIds).length > 0)
-        suiteElement.show()
-      else
-        suiteElement.hide()
+    if node == 'FHIR'
+      @filter(starburstNode: null)
+    else
+      @filter(starburstNode: @starburst.nodeMap[node])
 
   transitionTo: (node) ->
     _.defer(=>
