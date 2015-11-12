@@ -4,6 +4,8 @@ $(window).on('load', ->
 
 class Crucible.Conformance
   @operations: ["read", "vread", "update", "delete", "history-instance", "validate", "history-type", "create", "search-type"]
+  templates:
+    conformanceError: 'views/templates/servers/conformance_error'
 
   constructor: ->
     @element = $('#conformance-data')
@@ -19,14 +21,16 @@ class Crucible.Conformance
       .success ((data) =>
         @updateConformance(data)
         @removeConformanceSpinner()
-        @element.find('#refresh-conformance-link').click =>
-          $("#conformance_spinner").show()
-          @loadConformance(true)
       )
       .error ((data) =>
         @removeConformanceSpinner()
-        @element.html('<div class="alert" role="alert"><div class="alert alert-danger"><strong>Error: </strong> Conformance Statement could not be loaded</div></div>')
+        @element.html(HandlebarsTemplates[@templates.conformanceError]())
       )
+      .complete () =>
+        @element.find('#refresh-conformance-link').click =>
+          $("#conformance_spinner").show()
+          @loadConformance(true)
+
     )
 
   updateConformance: (data)=>
