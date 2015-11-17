@@ -79,6 +79,16 @@
   }
 }
 
-
+.response-panel{
+  border: 1px solid $structure;
+  border-radius: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+  background-color: $brand-tertiary;
+  a{
+    font-size: 14px;
+    text-decoration: none;
+  }
+}
 
 

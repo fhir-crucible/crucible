@@ -299,8 +299,12 @@ class Crucible.TestExecutor
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
       suiteElement.find(".data-link").click (e) -> 
-        $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
-        hljs.highlightBlock($('#data-modal .modal-body')[0]);
+        escapedHTML = new Handlebars.SafeString($(e.target).parent().find('.data-content').html())
+        $('#data-modal .modal-body').empty().append(escapedHTML.string)
+        hljs.highlightBlock($('#data-modal .modal-body')[0])
+        $($('#data-modal .modal-body')).find('.request-panel-header').click (h) ->
+         $($(h.currentTarget).parent().find('.response-panel-body')[0]).toggleClass('in')
+
 
   flashWarning: (message) =>
     warningBanner = @element.find('.warning-message')
