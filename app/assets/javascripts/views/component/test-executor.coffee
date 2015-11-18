@@ -17,6 +17,7 @@ class Crucible.TestExecutor
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
     unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server Unavailable</div>'
     genericError: '<div class="alert alert-danger"><strong>Error: </strong> Tests could not be executed</div>'
+    unauthorizedError: '<div class="alert alert-danger"><strong>Error: Server unauthorized or authorization expired</strong></div>'
   filters:
     search: ""
     executed: false
@@ -218,6 +219,9 @@ class Crucible.TestExecutor
         @filter()
       if test_run.status == "unavailable"
         @displayError(@html.unavailableError)
+        @element.dequeue("executionQueue")
+      else if test_run.status == "unauthorized"
+        @displayError(@html.unauthorizedError)
         @element.dequeue("executionQueue")
       else if test_run.status == "error"
         @displayError(@html.genericError)
