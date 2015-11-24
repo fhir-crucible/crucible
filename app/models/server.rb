@@ -46,6 +46,19 @@ class Server
     }
     client = OAuth2::Client.new(self.client_id, self.client_secret, options)
     token = OAuth2::AccessToken.from_hash(client, self.oauth_token_opts)
+    if token.expired?
+      if token.refresh_token
+        token = token.refresh!
+        if token
+          self.oauth_token_opts = token.to_hash
+          self.save!
+        else
+          return nil
+        end
+      else
+        return nil
+      end
+    end
     return token
   end
 
