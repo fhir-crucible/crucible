@@ -71,6 +71,27 @@ class ServersController < ApplicationController
     render json: {summary: summary}
   end
 
+  def supported_tests
+    server = Server.find(params[:server_id])
+    @@suites ||= Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}
+    @suites = @@suites
+
+    server.collect_supported_tests rescue logger.error "error collecting supported tests"
+    if server.supported_suites
+      @suites.each do |suite|
+        if server.supported_suites.include? suite.id
+          suite.supported = true 
+          suite.methods.each do |test|
+            test['supported'] = true if server.supported_tests.include? test['id']
+          end
+        end
+      end
+      has_conformance = true
+    end
+
+    render json:{tests: @suites}
+  end
+
   def past_runs
     server = Server.find(params[:server_id])
     past_runs = TestRun.where(server: server, status: 'finished')

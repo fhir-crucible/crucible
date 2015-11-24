@@ -16,20 +16,28 @@ class Server
   field :authorize_url, type: String
   field :token_url, type: String
   field :oauth_token_opts, type: Hash
+  field :supported_tests, type: Array, default: []
+  field :supported_suites, type: Array, default: []
 
   def load_conformance(refresh=false)
+    updated = false
     if (self.conformance.nil? || refresh)
       @raw_conformance ||= FHIR::Client.new(self.url).conformanceStatement
       self.conformance = @raw_conformance.to_json(except: :_id)
+      self.supported_tests = []
+      self.supported_suites = []
+      collect_supported_tests
       self.save!
+      updated = true
     end
     value = JSON.parse(self.conformance)
+    value['updated'] = updated
 
     value['rest'].each do |rest|
-      rest['operation'] = rest['operation'].reduce({}) {|memo,operation| memo[operation['name']]=true; memo}
+      rest['operation'] = rest['operation'].reduce({}) {|memo,operation| memo[operation['name']]=true; memo} if rest['operation']
       rest['resource'].each do |resource|
         resource['operation'] = resource['interaction'].reduce({}) {|memo,operation| memo[operation['code']]=true; memo}
-      end
+      end if rest['resource']
     end
     value
   end
@@ -119,21 +127,67 @@ class Server
 
   def available?
     begin
-      x = (RestClient::Request.execute(:method => :get, :url => self.url+'/metadata', :timeout => 30, :open_timeout => 30)).match /Conformance/
-      unless x
-        puts "Server Not Available"
+      available = (RestClient::Request.execute(:method => :get, :url => self.url+'/metadata', :timeout => 30, :open_timeout => 30)).match /Conformance/
+      unless available
         return false
       end
     rescue
-      puts "Server not available"
       return false
     end
     
     true
   end
 
+  def collect_supported_tests
+    # return if !self.supported_tests.empty? || !self.conformance 
+    translator = {'history-instance'=>'history', 'validate'=>'$validate', 'search-type' => 'search'}
+    self.supported_tests = []
+    self.supported_suites = []
+    value = JSON.parse(self.conformance)
+    
+    operations = []
+    resource_operations = []
+
+    rest = value['rest'].first
+    operations = rest['operation'].map {|o| "$#{o['name']}"} if rest['operation']
+    resource_operations = Hash[rest['resource'].map{ |r| [r['fhirType'], r['interaction'].map {|i| translator[i['code']] || i['code']}]}] if rest['resource']
+
+    Test.all.each do |suite|
+      at_least_one_test = false
+      suite.methods.each do |test|
+        supported = true
+        test['requires'].each do |requirement|
+          supported &&= check_restriction(requirement, resource_operations, operations)
+        end if test['requires']
+        test['validates'].each do |validation|
+          supported &&= check_restriction(validation, resource_operations, operations)
+        end if test['validates']
+        if supported
+          at_least_one_test = true
+          self.supported_tests << test['id'] 
+        end
+      end
+      self.supported_suites << suite.id if at_least_one_test
+    end
+    self.save!
+  end
 
   private
+
+  def check_restriction(restriction, resource_operations, operations)
+    resource = restriction['resource']
+    if resource
+      if resource_operations[resource].nil?
+        return false
+      else
+        if !((restriction['methods'] - resource_operations[resource]) - operations).empty?
+          return false
+        end
+      end
+    end
+    true
+  end
+
 
   def rollup(node)
     if node['children']

@@ -82,6 +82,7 @@
 
                     <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
                     <div class="button-holder">
+                      <span class="tag collapse in filter-by-supported">supported only <a href="#"><i class="fa fa-times"></i></a></span>
                       <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
                       <select class="past-test-runs-selector form-control"></select>
                       <button class="btn execute">

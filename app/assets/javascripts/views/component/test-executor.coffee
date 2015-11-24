@@ -5,6 +5,7 @@ $(window).on('load', ->
 class Crucible.TestExecutor
   suites: []
   suitesById: {}
+  testsById: {}
   templates:
     suiteSelect: 'views/templates/servers/suite_select'
     suiteResult: 'views/templates/servers/suite_result'
@@ -21,6 +22,7 @@ class Crucible.TestExecutor
     search: ""
     executed: false
     starburstNode: null
+    supported: true
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
   processedResults: {}
@@ -41,21 +43,28 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
+    @element.find('.filter-by-supported a').click(@filterBySupportedHandler)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
     @searchBox = @element.find('.test-results-filter')
     @searchBox.on('keyup', @searchBoxHandler)
-    @element.find('.starburst').on('starburstInitialized', (event) =>
+    $('#conformance-data').on('starburstInitialized', (event) =>
       @starburst = @element.find('.starburst').data('starburst')
       @starburst.addListener(this)
       false
     )
+    $('#conformance-data').on('conformanceInitialized', (event) =>
+      @loadTests()
+      false
+    )
 
   loadTests: =>
-    $.getJSON("/tests.json").success((data) =>
+    $.getJSON("/servers/#{@serverId}/supported_tests.json").success((data) =>
       @suites = data['tests']
       @renderSuites()
       @continueTestRun() if @testRunId
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
+      @filter(supported: true)
+      @element.find('.filter-by-supported').collapse('show')
     )
 
   renderSuites: =>
@@ -63,6 +72,8 @@ class Crucible.TestExecutor
     suitesElement.empty()
     $(@suites).each (i, suite) =>
       @suitesById[suite.id] = suite
+      $(suite.methods).each (j, test) =>
+        @testsById[test.id] = test
       suitesElement.append(HandlebarsTemplates[@templates.suiteSelect]({suite: suite}))
       suiteElement = suitesElement.find("#test-#{suite.id}")
       suiteElement.data('suite', suite)
@@ -90,9 +101,12 @@ class Crucible.TestExecutor
       return unless data
       @renderSuites()
       $(data['test_run'].test_results).each (i, result) =>
-        suiteId = result.test_id.$oid
+        suiteId = result.test_id
         suiteElement = @element.find("#test-#{suiteId}")
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+
+      @filter(supported: data.test_run.supported_only)
+      @element.find('.filter-by-supported').collapse(if data.test_run.supported_only then 'show' else 'hide')
       @element.find('.filter-by-executed').collapse('show')
       @filter(executed: true)
     )
@@ -141,7 +155,9 @@ class Crucible.TestExecutor
 
   continueTestRun: =>
     $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
-      @prepareTestRun($($.map((result.test_run.test_ids), (e) -> e.$oid)))
+      @filter(supported: result.test_run.supported_only)
+      @element.find('.filter-by-supported').collapse(if result.test_run.supported_only then 'show' else 'hide')
+      @prepareTestRun($(result.test_run.test_ids))
       @element.dequeue("executionQueue")
     )
 
@@ -151,7 +167,7 @@ class Crucible.TestExecutor
     if suiteIds.length > 0
       @prepareTestRun(suiteIds)
       suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
-      $.post("/servers/#{@serverId}/test_runs.json", { test_ids: suiteIds }).success((result) =>
+      $.post("/servers/#{@serverId}/test_runs.json", { test_ids: suiteIds, supported_only: @filters.supported }).success((result) =>
         @testRunId = result.test_run.id
         @element.dequeue("executionQueue")
       )
@@ -174,20 +190,34 @@ class Crucible.TestExecutor
     @filter(executed: false)
     false
 
+  filterBySupportedHandler: =>
+    @element.find('.filter-by-supported').collapse('hide')
+    @filter(supported: false)
+    false
+
   filter: (filters)=>
     if filters?
       for f of filters
         @filters[f] = filters[f]
-    elements = @element.find('.test-run-result')
-    elements.show()
+    # filter suites
+    suiteElements = @element.find('.test-run-result')
+    suiteElements.show()
     starburstTestIds = _.union(@filters.starburstNode.failedIds, @filters.starburstNode.skippedIds, @filters.starburstNode.errorsIds, @filters.starburstNode.passedIds) if @filters.starburstNode?
-    $(elements).each (i, suiteElement) =>
+    $(suiteElements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
       suite = suiteElement.data('suite')
       childrenIds = suite.methods.map (m) -> m.id
       suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase()).indexOf(@filters.search) < 0
       suiteElement.hide() if @filters.executed          && !suiteElement.hasClass("executed")
       suiteElement.hide() if @filters.starburstNode?    && !(_.intersection(starburstTestIds, childrenIds).length > 0)
+      suiteElement.hide() if @filters.supported         && !(suite.supported)
+    # filter tests in a suite
+    testElements = @element.find('.suite-handle')
+    testElements.show()
+    $(testElements).each (i, testElement) =>
+      testElement = $(testElement)
+      test = @testsById[testElement.attr('id')]
+      testElement.hide() if @filters.supported          && !(test.supported)
 
   resetSuitePanels: =>
     suitesElement = @element.find('.test-suites')
@@ -210,7 +240,7 @@ class Crucible.TestExecutor
       @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
       if Object.keys(@processedResults).length < test_run.test_results.length
         for result in test_run.test_results
-          suiteId = result.test_id.$oid
+          suiteId = result.test_id
           suite = @suitesById[suiteId]
           suiteElement = $("#test-#{suiteId}")
           @handleSuiteResult(suite, result, suiteElement) unless @processedResults[suiteId]

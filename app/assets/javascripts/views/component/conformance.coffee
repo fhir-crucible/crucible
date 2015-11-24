@@ -21,6 +21,7 @@ class Crucible.Conformance
       .success ((data) =>
         @updateConformance(data)
         @removeConformanceSpinner()
+        @element.trigger('conformanceInitialized') if data.conformance.updated
       )
       .error ((data) =>
         @removeConformanceSpinner()
@@ -55,7 +56,7 @@ class Crucible.Conformance
       auth = @conformance.rest[0].security.extension[0].extension.find((elem, ind, arr)->
         elem.url == url
       )
-      auth.value.value
+      auth.value.value if auth
 
   authType: =>
       if @conformance.rest[0].security && @conformance.rest[0].security.extension

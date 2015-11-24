@@ -39,7 +39,7 @@ class Crucible.TestRunReport
       continue if failure.hidden
       total += 1
       messageMap[failure.message] ||= {message: failure.message, failures: []}
-      failure.suite = @suitesById[failure.test_id.$oid] if @suitesById?
+      failure.suite = @suitesById[failure.test_id] if @suitesById?
       messageMap[failure.message].failures.push failure
     failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
     @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: total}))

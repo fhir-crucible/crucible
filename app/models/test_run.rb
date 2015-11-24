@@ -6,6 +6,7 @@ class TestRun
   field :date, type: DateTime
   field :is_multiserver, type: Boolean, default: false
   field :status, type: String, default: "pending"
+  field :supported_only, type: Boolean, default: false
 
   belongs_to :server, class_name: "Server"
   belongs_to :destination_server, class_name:" Server"
@@ -44,11 +45,9 @@ class TestRun
     end
 
     self.tests.each_with_index do |t, i|
+      return false if TestRun.find(self.id).status == 'cancelled'
 
-      current_status = TestRun.collection.find(_id: self.id).first()['status']
-      return false if current_status == 'cancelled'
-
-      Rails.logger.debug "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
+      Rails.logger.info "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
       test = executor.find_test(t.title)
       val = nil
       result = TestResult.new
@@ -58,15 +57,21 @@ class TestRun
 
       begin
 
+        restricted_tests = nil
+        if supported_only
+          restricted_tests = t.methods.select {|x| server.supported_tests.include? x['id']}.map {|x| x['test_method']}
+          test.tests_subset = restricted_tests
+        end
+
         if t.resource_class?
-          val = test.execute(t.resource_class.constantize)[0]["#{t.title}_#{t.resource_class.split("::")[1]}"][:tests]
+          val = test.execute(t.resource_class.constantize).values.first
         else
-          val = test.execute()[0][t.title][:tests]
+          val = test.execute().values.first
         end
 
       rescue Exception => e
-        Rails.logger.debug e.message
-        Rails.logger.debug e.backtrace
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace
 
         val = t.methods.clone
         val.each do |m|
