@@ -10,19 +10,21 @@
       <div class="request">
         {{#if call.request.headers}}
           {{#each call.request.headers}}
-            <div>{{@key}}: {{this}}</div>
+            <div><u>{{@key}}</u>: {{this}}</div>
           {{/each}}
         {{/if}}
         {{#if call.request.payload}}<pre><code>{{indent call.request.payload}}</code></pre>{{/if}}
+        <p class="read-more"><a href="#" class="button">Read More</a></p>
       </div>
       <h2>Response</h2>
       <div class="response">
         {{#if call.response.headers}}
           {{#each call.response.headers}}
-            <div>{{@key}}: {{this}}</div>
+            <div><u>{{@key}}</u>: {{this}}</div>
           {{/each}}
         {{/if}}
         {{#if call.response.body}}<pre><code>{{indent call.response.body}}</code></pre>{{/if}}
+        <p class="read-more"><a href="#" class="button">Read More</a></p>
       </div>
     </div>
   </div>

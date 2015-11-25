@@ -81,15 +81,73 @@
 
 .response-panel{
   a{
-    font-size: 14px;
+    font-size: 18px;
     text-decoration: none;
   }
   .request-panel-header{
     border: 1px solid $structure;
     border-radius: 5px;
-    padding-left: 7px;
-    padding-right: 7px;
+    padding: 7px;
+    padding-bottom: 3px;
     background-color: $brand-tertiary;
+  }
+  .response-panel-body{
+    padding: 15px;
+    background-color:$brand-tertiary;
+    border: 1px solid $structure;
+    h2{
+      font-size: 18px;
+      &:first-child{
+        margin-top: 0;
+      }
+    }
+    .request{
+      font-size: 14px;
+      padding-left: 15px;
+
+      /*START: taken from https://css-tricks.com/text-fade-read-more/*/
+      max-height: 100px;
+      position: relative;
+      overflow: hidden;
+      & .read-more{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 30px 0;
+        background-image: linear-gradient(to bottom, transparent, $brand-tertiary);
+        a{
+          font-size: 12px;
+        }
+      }
+      /*END: taken from https://css-tricks.com/text-fade-read-more/*/
+    }
+    .response{
+      font-size: 14px;
+      padding-left: 15px;
+
+      /*START: taken from https://css-tricks.com/text-fade-read-more/*/
+      max-height: 100px;
+      position: relative;
+      overflow: hidden;
+      & .read-more{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 30px 0;
+        background-image: linear-gradient(to bottom, transparent, $brand-tertiary);
+        a{
+          font-size: 12px;
+        }
+      }
+      /*END: taken from https://css-tricks.com/text-fade-read-more/*/
+
+    }
   }
 }
 
