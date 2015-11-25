@@ -104,49 +104,10 @@
     .request{
       font-size: 14px;
       padding-left: 15px;
-
-      /*START: taken from https://css-tricks.com/text-fade-read-more/*/
-      max-height: 100px;
-      position: relative;
-      overflow: hidden;
-      & .read-more{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        margin: 0;
-        padding: 30px 0;
-        background-image: linear-gradient(to bottom, transparent, $brand-tertiary);
-        a{
-          font-size: 12px;
-        }
-      }
-      /*END: taken from https://css-tricks.com/text-fade-read-more/*/
     }
     .response{
       font-size: 14px;
       padding-left: 15px;
-
-      /*START: taken from https://css-tricks.com/text-fade-read-more/*/
-      max-height: 100px;
-      position: relative;
-      overflow: hidden;
-      & .read-more{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        margin: 0;
-        padding: 30px 0;
-        background-image: linear-gradient(to bottom, transparent, $brand-tertiary);
-        a{
-          font-size: 12px;
-        }
-      }
-      /*END: taken from https://css-tricks.com/text-fade-read-more/*/
-
     }
   }
 }
