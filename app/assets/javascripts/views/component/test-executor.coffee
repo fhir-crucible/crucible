@@ -10,6 +10,7 @@ class Crucible.TestExecutor
     suiteSelect: 'views/templates/servers/suite_select'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/partials/test_result'
+    testRequests: 'views/templates/servers/partials/test_requests'
   html:
     selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
     deselectAllButton: '<i class="fa fa-check"></i>&nbsp;Select All Test Suites'
@@ -274,6 +275,9 @@ class Crucible.TestExecutor
     suiteElement = @element.find("#test-"+suite.id)
     suiteElement.data('suite', suite)
     $(result.tests).each (i, test) =>
+      if (i == 0)
+        # add click handler for default selection
+        @addClickRequestDetailsHandler(test, suiteElement)
       @addClickTestHandler(test, suiteElement)
 
   displayError: (message) =>
@@ -298,12 +302,15 @@ class Crucible.TestExecutor
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
-      suiteElement.find(".data-link").click (e) -> 
-        escapedHTML = new Handlebars.SafeString($(e.target).parent().find('.data-content').html())
-        $('#data-modal .modal-body').empty().append(escapedHTML.string)
-        hljs.highlightBlock($('#data-modal .modal-body')[0])
-        $($('#data-modal .modal-body')).find('.request-panel-header').click (h) ->
-         $($(h.currentTarget).parent().find('.response-panel-body')[0]).toggleClass('in')
+      @addClickRequestDetailsHandler(test, suiteElement)
+
+  addClickRequestDetailsHandler: (test, suiteElement) =>
+    suiteElement.find(".data-link").click (e) => 
+      html = HandlebarsTemplates[@templates.testRequests]({test: test})
+      $('#data-modal .modal-body').empty().append(html)
+      $('#data-modal .modal-body code').each (index, code) ->
+        hljs.highlightBlock(code)
+
 
 
   flashWarning: (message) =>

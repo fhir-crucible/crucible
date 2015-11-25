@@ -17,6 +17,20 @@ Handlebars.registerHelper('title-case', (value) ->
   Case.title(value)
 )
 
+Handlebars.registerHelper('upper-case', (value) ->
+  Case.upper(value)
+)
+
+Handlebars.registerHelper('indent', (value) ->
+  firstCharacter = value.charAt(0)
+  if ['{','['].indexOf(firstCharacter) >= 0
+    vkbeautify.json(value, 4)
+  else if firstCharacter == '<'
+    vkbeautify.xml(value, 4)
+  else
+    value
+)
+
 Handlebars.registerHelper('supported-status', (resource, operation) ->
   if resource.operation[operation] == true
     return "test-filled"

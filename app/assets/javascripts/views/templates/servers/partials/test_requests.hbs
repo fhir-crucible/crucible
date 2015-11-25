@@ -1,0 +1,29 @@
+{{#each test.requests as |call|}}
+  <div class="response-panel">
+    <div class="request-panel-header">
+      <a role="button" data-toggle="collapse" href="#request_{{@index}}" aria-expanded="false">
+        {{upper-case call.request.method}} {{call.request.url}} -> {{call.response.code}}
+      </a>
+    </div>
+    <div id="request_{{@index}}" class="collapse response-panel-body">
+      <h2>Request</h2>
+      <div class="request">
+        {{#if call.request.headers}}
+          {{#each call.request.headers}}
+            <div>{{@key}}: {{this}}</div>
+          {{/each}}
+        {{/if}}
+        {{#if call.request.payload}}<pre><code>{{indent call.request.payload}}</code></pre>{{/if}}
+      </div>
+      <h2>Response</h2>
+      <div class="response">
+        {{#if call.response.headers}}
+          {{#each call.response.headers}}
+            <div>{{@key}}: {{this}}</div>
+          {{/each}}
+        {{/if}}
+        {{#if call.response.body}}<pre><code>{{indent call.response.body}}</code></pre>{{/if}}
+      </div>
+    </div>
+  </div>
+{{/each}}

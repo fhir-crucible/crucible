@@ -22,6 +22,7 @@
 //= require underscore/underscore
 //= require highlightjs/highlight.pack.js
 //= require jquery-validation/dist/jquery.validate.js
+//= require vkbeautify/vkbeautify.js
 
 //= require crucible
 //= require_tree ./views/templates
