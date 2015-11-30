@@ -16,7 +16,7 @@
         <table class="table report-table nav nav-stacked">
           <tbody>
             {{#each suite.methods as |method|}}
-              <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{method.key}}">
+              <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{method.key}}" id="{{method.id}}">
                 <td>
                   {{method.key}}
                 </td>

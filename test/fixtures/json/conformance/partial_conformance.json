@@ -1,0 +1,429 @@
+{
+  "url": "https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Conformance/TxQrMBpZxIgGY6ic81DnDOQB",
+  "version": "TxQrMBpZxIgGY6ic81DnDOQB",
+  "experimental": true,
+  "date": "2015-11-12T13:41:12",
+  "copyright": "Copyright Epic 1979-2015",
+  "software": {
+    "name": "Epic 2015",
+    "version": "8.2.2"
+  },
+  "fhirVersion": "1.0.1",
+  "rest": [
+    {
+      "mode": "server",
+      "security": {
+        "cors": true,
+        "extension": [
+          {
+            "_id": {
+              "$oid": "5644971f4d4d32695f040000"
+            },
+            "xmlId": null,
+            "url": "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris",
+            "extension": [
+              {
+                "_id": {
+                  "$oid": "5644971f4d4d32695f050000"
+                },
+                "xmlId": null,
+                "url": "authorize",
+                "value": "#<FHIR::AnyType:0x0000010f0a18a0>"
+              },
+              {
+                "_id": {
+                  "$oid": "5644971f4d4d32695f060000"
+                },
+                "xmlId": null,
+                "url": "token",
+                "value": "#<FHIR::AnyType:0x0000010f0a15f8>"
+              }
+            ]
+          }
+        ]
+      },
+      "resource": [
+        {
+          "type": "AllergyIntolerance",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "_id",
+              "type": "token"
+            },
+            {
+              "name": "patient",
+              "type": "reference"
+            },
+            {
+              "name": "subject",
+              "type": "reference"
+            }
+          ]
+        },
+        {
+          "type": "Appointment",
+          "interaction": [
+            {
+              "code": "create"
+            }
+          ]
+        },
+        {
+          "type": "Condition",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "patient",
+              "type": "reference"
+            },
+            {
+              "name": "_id",
+              "type": "token"
+            },
+            {
+              "name": "clinicalStatus",
+              "type": "token"
+            },
+            {
+              "name": "category",
+              "type": "token"
+            },
+            {
+              "name": "subject",
+              "type": "reference"
+            }
+          ]
+        },
+        {
+          "type": "Conformance",
+          "interaction": [
+            {
+              "code": "metadata"
+            },
+            {
+              "code": "read"
+            }
+          ]
+        },
+        {
+          "type": "DiagnosticReport",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "subject",
+              "type": "reference"
+            },
+            {
+              "name": "serviceCategory",
+              "type": "token"
+            },
+            {
+              "name": "patient",
+              "type": "reference"
+            }
+          ]
+        },
+        {
+          "type": "FamilyMemberHistory",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            },
+            {
+              "code": "write"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "patient",
+              "type": "reference"
+            },
+            {
+              "name": "subject",
+              "type": "reference"
+            }
+          ]
+        },
+        {
+          "type": "Medication",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "_id",
+              "type": "token"
+            }
+          ]
+        },
+        {
+          "type": "MedicationOrder",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "patient",
+              "type": "reference"
+            },
+            {
+              "name": "status",
+              "type": "token"
+            },
+            {
+              "name": "_id",
+              "type": "token"
+            },
+            {
+              "name": "subject",
+              "type": "reference"
+            }
+          ]
+        },
+        {
+          "type": "Observation",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "code",
+              "type": "token"
+            },
+            {
+              "name": "_id",
+              "type": "token"
+            },
+            {
+              "name": "date",
+              "type": "date"
+            },
+            {
+              "name": "patient",
+              "type": "reference"
+            },
+            {
+              "name": "subject",
+              "type": "reference"
+            }
+          ]
+        },
+        {
+          "type": "Patient",
+          "interaction": [
+            {
+              "code": "create"
+            },
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            },
+            {
+              "code": "update"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "_id",
+              "type": "token"
+            },
+            {
+              "name": "identifier",
+              "type": "token"
+            },
+            {
+              "name": "family",
+              "type": "string"
+            },
+            {
+              "name": "given",
+              "type": "string"
+            },
+            {
+              "name": "birthdate",
+              "type": "date"
+            },
+            {
+              "name": "address",
+              "type": "string"
+            },
+            {
+              "name": "gender",
+              "type": "token"
+            },
+            {
+              "name": "telecom",
+              "type": "token"
+            },
+            {
+              "name": "deathdate",
+              "type": "date"
+            },
+            {
+              "name": "active",
+              "type": "token"
+            },
+            {
+              "name": "deceased",
+              "type": "token"
+            }
+          ]
+        },
+        {
+          "type": "Practitioner",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "_id",
+              "type": "token"
+            },
+            {
+              "name": "address",
+              "type": "string"
+            },
+            {
+              "name": "family",
+              "type": "string"
+            },
+            {
+              "name": "gender",
+              "type": "token"
+            },
+            {
+              "name": "given",
+              "type": "string"
+            },
+            {
+              "name": "identifier",
+              "type": "token"
+            },
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "organization",
+              "type": "reference"
+            },
+            {
+              "name": "phonetic",
+              "type": "string"
+            },
+            {
+              "name": "telecom",
+              "type": "token"
+            },
+            {
+              "name": "role",
+              "type": "token"
+            },
+            {
+              "name": "specialty",
+              "type": "token"
+            }
+          ]
+        },
+        {
+          "type": "Schedule",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "actor",
+              "type": "reference"
+            },
+            {
+              "name": "date",
+              "type": "date"
+            },
+            {
+              "name": "type",
+              "type": "token"
+            }
+          ]
+        },
+        {
+          "type": "Slot",
+          "interaction": [
+            {
+              "code": "read"
+            },
+            {
+              "code": "search-type"
+            }
+          ],
+          "searchParam": [
+            {
+              "name": "identifier",
+              "type": "token"
+            },
+            {
+              "name": "schedule",
+              "type": "reference"
+            },
+            {
+              "name": "start",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resourceType": "Conformance"
+}

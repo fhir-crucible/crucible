@@ -5,6 +5,7 @@ class ServerTest < ActiveSupport::TestCase
   def setup
     dump_database
     @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','conformance', 'bonfire_conformance.xml'))
+    @partial_conformance_json = File.read(Rails.root.join('test','fixtures','json','conformance','partial_conformance.json'))
   end
 
   def test_load_conformance
@@ -42,6 +43,37 @@ class ServerTest < ActiveSupport::TestCase
     stub = stub_request(:get, "www.example.com/metadata").to_return(body: '<html></html>')
     assert_not server.available?
 
+  end
+
+  def test_collect_supported_tests
+    conformance = FHIR::Conformance.from_fhir_json(@partial_conformance_json)
+    server = Server.new ({url: 'www.example.com'})
+
+    stub = stub_request(:get, "www.example.com/metadata").to_return(body: @partial_conformance_json).times(4)
+    conformance = server.load_conformance
+
+    server.collect_supported_tests
+    
+    someSuites = ["readtest", "format001", "resourcetest_allergyintolerance", "resourcetest_appointment", "searchtest_allergyintolerance",
+                  "resourcetest_condition", "resourcetest_conformance", "resourcetest_observation", "resourcetest_patient", "resourcetest_practitioner",
+                  "resourcetest_schedule", "resourcetest_slot", "searchtest_condition", "searchtest_observation", "searchtest_patient", "search001"]
+
+    someTests = ["R002", "X000_Medication", "X020_Medication", "X000_MedicationOrder", "X020_MedicationOrder", "S000_Medication", "S001P_Medication",
+                 "S003P_Medication", "SE01P_Medication", "S001G_Medication", "S003G_Medication", "SE01G_Medication"]
+
+    excludedSuties = ["connectathonfinancialtracktest", "connectathonterminologytracktest", "history001", "resourcetest_account", "resourcetest_appointmentresponse",
+                     "resourcetest_auditevent", "searchtest_procedure", "searchtest_procedurerequest", "searchtest_processrequest", "searchtest_processresponse",
+                     "searchtest_provenance"]
+
+    excludedTests = ["R001", "R003", "R004", "R005", "X010_Medication", "X030_Medication", "X040_Medication", "X050_Medication", "X055_Medication",
+                     "HI04", "HI06", "S003P_ProcedureRequest", "SE01P_ProcedureRequest"]
+
+    assert_equal someSuites.length, (server.supported_suites & someSuites).length
+    assert_equal someTests.length, (server.supported_tests & someTests).length
+
+    assert_equal 0, (server.supported_suites & excludedSuties).length
+    assert_equal 0, (server.supported_tests & excludedTests).length
+    
   end
 
   def test_aggregate
