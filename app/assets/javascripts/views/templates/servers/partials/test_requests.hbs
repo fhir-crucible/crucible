@@ -1,0 +1,49 @@
+{{#each test.requests as |call|}}
+  <div class="response-panel">
+    <div class="request-panel-header">
+      <a role="button" data-toggle="collapse" href="#request_{{@index}}" aria-expanded="false">
+        {{upper-case call.request.method}} {{call.request.url}} -> {{call.response.code}}
+      </a>
+    </div>
+    <div id="request_{{@index}}" class="collapse response-panel-body">
+      <h2>Request</h2>
+      <div class="request">
+        {{#if call.request.headers}}
+          <div class="show-hide-header">
+            <a data-toggle="collapse" href="#{{@index}}-request-headers" class="collapsed"><span class="link-show"><span class="fa fa-plus"></span> headers</span><span class="link-hide"><span class="fa fa-minus"></span> headers</span></a>
+          </div>
+          <div id="{{@index}}-request-headers" class="collapse">
+            {{#each call.request.headers}}
+              <div><u>{{@key}}</u>: {{this}}</div>
+            {{/each}}
+          </div>
+        {{/if}}
+        {{#if call.request.payload}}
+          <div class="show-hide-header">
+            <a data-toggle="collapse" href="#{{@index}}-request" class="collapsed"><span class="link-show"><span class="fa fa-plus"></span> payload</span><span class="link-hide"><span class="fa fa-minus"></span> payload</span></a>
+          </div>
+          <div id="{{@index}}-request" class="collapse"><pre><code>{{indent call.request.payload}}</code></pre></div>
+        {{/if}}
+      </div>
+      <h2>Response</h2>
+      <div class="response">
+        {{#if call.response.headers}}
+          <div class="show-hide-header">
+            <a data-toggle="collapse" href="#{{@index}}-response-headers" class="collapsed"><span class="link-show"><span class="fa fa-plus"></span> headers</span><span class="link-hide"><span class="fa fa-minus"></span> headers</span></a>
+          </div>
+          <div id="{{@index}}-response-headers" class="collapse">
+            {{#each call.response.headers}}
+              <div><u>{{@key}}</u>: {{this}}</div>
+            {{/each}}
+          </div>
+        {{/if}}
+        {{#if call.response.body}}
+          <div class="show-hide-header">
+            <a data-toggle="collapse" href="#{{@index}}-response" class="collapsed"><span class="link-show"><span class="fa fa-plus"></span> body</span><span class="link-hide"><span class="fa fa-minus"></span> body</span></a>
+          </div>
+          <div id="{{@index}}-response" class="collapse"><pre><code>{{indent call.response.body}}</code></pre></div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+{{/each}}
