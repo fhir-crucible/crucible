@@ -101,6 +101,30 @@
         margin-top: 0;
       }
     }
+    .show-hide-header{
+      a{ 
+        font-size: 14px;
+        &:focus, &:visited{
+          color: $brand-accent;
+        }
+      }
+      margin-top: 20px;
+      margin-bottom: 10px;
+      .link-show{
+        display: none;
+      } 
+      .link-hide{
+        display: block;
+      }
+      .collapsed{
+        .link-show{
+          display: block;
+        } 
+        .link-hide{
+          display: none;
+        }
+      }
+    }
     .request{
       font-size: 14px;
       padding-left: 15px;
