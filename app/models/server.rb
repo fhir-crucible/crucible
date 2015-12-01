@@ -18,6 +18,7 @@ class Server
   field :oauth_token_opts, type: Hash
   field :supported_tests, type: Array, default: []
   field :supported_suites, type: Array, default: []
+  field :is_argonaut_server, type: Boolean, default: false
 
   def load_conformance(refresh=false)
     updated = false
@@ -140,7 +141,7 @@ class Server
 
   def available?
     begin
-      available = (RestClient::Request.execute(:method => :get, :url => self.url+'/metadata', :timeout => 30, :open_timeout => 30)).match /Conformance/
+      available = (RestClient::Request.execute(:method => :get, :url => self.url+'/metadata', :timeout => 30, :open_timeout => 30, headers: {:accept => "#{FHIR::Formats::ResourceFormat::RESOURCE_JSON},#{FHIR::Formats::ResourceFormat::RESOURCE_XML}"})).match /Conformance/
       unless available
         return false
       end
