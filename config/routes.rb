@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   mount MagicLamp::Genie, at: "/magic_lamp" if defined?(MagicLamp)
 
   resources :tests, defaults: { format: :json }, only: [ :index ]
+  resources :dashboards, only: [ :index ]
   resources :servers, only: [ :show, :create, :update ] do
     resources :test_runs, defaults: { format: :json }, only: [ :show, :create ] do
       post 'cancel', default: { format: :json }
