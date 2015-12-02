@@ -101,8 +101,10 @@
     text-align: left;
 
     .starburst {
-      min-width: 300px;
-      min-height: 300px;
+      svg {
+        min-width: 300px;
+        min-height: 300px;
+      }
     }
 
   }

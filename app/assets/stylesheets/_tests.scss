@@ -64,8 +64,10 @@
   }
 
   .starburst {
-    min-width: 200px;
-    min-height: 200px;
+    svg {
+      min-width: 200px;
+      min-height: 200px;
+    }
   }
 
 
