@@ -125,12 +125,12 @@ class Server
         else
           result['test_result_id'] = test_result.id
           result['test_id'] = test_result.test_id
-          result_map[id] = result.except('code')
+          result_map[id] = result.except('code', 'requests', :requests)
         end
       end
     end
 
-    latest_results = aggregate_run.results.map {|result| (result_map.delete(result['id']) || result.except('code')) }
+    latest_results = aggregate_run.results.map {|result| (result_map.delete(result['id']) || result.except('code', 'requests', :requests)) }
     latest_results.concat(result_map.values)
     aggregate_run.results = latest_results
     aggregate_run.date = Time.now

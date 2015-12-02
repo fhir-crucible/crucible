@@ -53,7 +53,8 @@ class TestRun
       return false
     end
 
-    self.tests.each_with_index do |t, i|
+    # pull all the tests into memory with .map {} so that the cursor doesn't time out
+    self.tests.map {|n| n}.each_with_index do |t, i|
       return false if TestRun.find(self.id).status == 'cancelled'
 
       Rails.logger.info "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
