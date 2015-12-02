@@ -69,6 +69,7 @@ class Crucible.TestExecutor
       @loadTests()
       false
     )
+<<<<<<< ee26c885987eb55416a173db36b096e5c8c2037a
     @bindToolTips()
 
   bindToolTips: =>
@@ -77,6 +78,12 @@ class Crucible.TestExecutor
     @element.find('.clear-past-run-data').tooltip()
     @element.find('.change-test-run').tooltip()
     @element.find('.close-change-test-run').tooltip()
+=======
+    $('#conformance-data').on('conformanceError', (event) =>
+      @filterBySupportedHandler()
+      false
+    )
+>>>>>>> clear supported only if the conformance errors out
 
   loadTests: =>
     $.getJSON("/servers/#{@serverId}/supported_tests.json").success((data) =>
