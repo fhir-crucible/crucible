@@ -31,6 +31,7 @@ class Server
       self.supported_suites = []
       collect_supported_tests
       self.default_format = client.default_format if client.default_format
+      guess_name
       self.save!
       updated = true
     end
@@ -188,6 +189,25 @@ class Server
       self.supported_suites << suite.id if at_least_one_test
     end
     self.save!
+  end
+
+  def guess_name
+    return unless self.name.blank?
+    if self.conformance
+      value = JSON.parse(self.conformance) rescue nil
+      if value
+        candidate = value['name'] || value['publisher']
+        candidate ||= value['software']['name'] if value['software']
+      end
+    end
+    if candidate.nil? || !candidate.is_a?(String)
+      host = URI.parse(url).host
+      candidate = host.split('.').first if (host && (host =~ /\d+\.\d+\.\d+\.\d+/).nil?)
+      candidate = host if (candidate.nil? || !(candidate =~ /^fhir/i).nil?)
+      candidate ||= url
+    end
+    self.name = candidate
+    self.save
   end
 
   private

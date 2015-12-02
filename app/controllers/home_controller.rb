@@ -5,6 +5,7 @@ class HomeController < ApplicationController
   	#@servers = Server.all.order_by("percent_passing"=>:desc)
   	# show all until issue is resolved
   	@servers = Server.where({percent_passing: {"$gte" => 0}}).order_by("percent_passing"=>:desc)
+    @servers.select {|s| s.name.blank?}.each {|s| s.guess_name}
   end
 
 end
