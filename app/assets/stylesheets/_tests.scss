@@ -63,6 +63,14 @@
     border-left: 1px solid $structure;
   }
 
+  .starburst {
+    svg {
+      min-width: 200px;
+      min-height: 200px;
+    }
+  }
+
+
 }
 
 .test-run-result {
