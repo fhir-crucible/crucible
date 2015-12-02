@@ -99,6 +99,12 @@
   .spec-starburst-chart {
     padding: 30px 0px 30px 30px;
     text-align: left;
+
+    .starburst {
+      min-width: 300px;
+      min-height: 300px;
+    }
+
   }
 
   .spec-details {
@@ -168,6 +174,12 @@
     margin-bottom: 10px;
     line-height: 1em;
   }
+
+  .starburst {
+    width: 300px;
+    height: 300px;
+  }
+
 }
 
 .action-buttons{
