@@ -37,7 +37,7 @@ class Crucible.Conformance
   updateConformance: (data)=>
     @conformance = data.conformance
     html = @template({conformance: data.conformance, testedResources: @testedResources(), operations: Crucible.Conformance.operations, supportedStatus: @supportedStatus, authType: @authType(), authorizeUrl: @oauthUrl("authorize"), tokenUrl: @oauthUrl("token") })
-    @element.children().replaceWith(html)
+    @element.html(html)
     @element.trigger('conformanceLoaded')
 
   removeConformanceSpinner: =>
