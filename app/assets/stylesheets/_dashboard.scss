@@ -5,9 +5,31 @@
   a{
     font-size: 16px;
   }
+  margin-bottom: 20px;
+  .nav > li > a:focus{
+    background-color: $brand-accent;
+    color: $brand-tertiary;
+  }
+  .nav > li > a:hover{
+    background-color: $brand-accent;
+    color: $brand-tertiary;
+  }
+  .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus{
+    background-color: $brand-accent;
+  }
+
 }
 
 .dashboard-body{
   font-size: 16px;
   p{display: inline;}
+  .server-name p{
+    margin-left: 10px;
+  }
+  .nav{
+    font-size: 14px;
+    li > a.active{
+      background-color: $brand-accent;
+    }
+  }
 }
