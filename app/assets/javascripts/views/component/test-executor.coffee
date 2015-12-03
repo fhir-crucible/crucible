@@ -49,9 +49,11 @@ class Crucible.TestExecutor
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
     @searchBox = @element.find('.test-results-filter')
     @searchBox.on('keyup', @searchBoxHandler)
-    $('#conformance-data').on('starburstInitialized', (event) =>
+    @element.find('.starburst').on('starburstInitialized', (event) =>
       @starburst = @element.find('.starburst').data('starburst')
       @starburst.addListener(this)
+      if @filters.starburstNode
+        @starburst.transitionTo(@filters.starburstNode.name, 0)
       false
     )
     $('#conformance-data').on('conformanceInitialized', (event) =>
