@@ -261,9 +261,9 @@
 
         .failure-message-level-one-count {
           position: absolute;
-          height: 40px;
-          width: 40px;
-          padding: 5px;
+          height: 42px;
+          width: 42px;
+          padding: 4px 5px 5px 5px;
           top: 0;
           left: 0;
 
@@ -272,6 +272,15 @@
           color: $brand-accent;
           font-size: 1.1em;
           text-align: center;
+
+          &.small {
+            padding-top: 7px;
+            font-size: .95em;
+          }
+          &.smaller {
+            padding: 10px 5px 5px 2px;
+            font-size: .8em;
+          }
         }
 
         .failure-message-level-one-text {
