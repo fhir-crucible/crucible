@@ -38,4 +38,21 @@
       background-color: $brand-accent;
     }
   }
+
+  .pass {
+    fill: $result-pass;
+  }
+
+  .fail {
+    fill: $result-fail;
+  }
+
+  .error {
+    fill: $result-error;
+  }
+
+  .skip {
+    fill: $result-skip;
+  }
+
 }
