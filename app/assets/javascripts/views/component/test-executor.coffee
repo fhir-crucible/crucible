@@ -67,7 +67,7 @@ class Crucible.TestExecutor
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
       @filter(supported: true)
       @element.find('.filter-by-supported').collapse('show')
-    )
+    ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
     suitesElement = @element.find('.test-suites')
@@ -96,6 +96,8 @@ class Crucible.TestExecutor
     )
 
   updateCurrentTestRun: =>
+    @element.find('.test-suites').empty()
+    $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     testRunId = selector.val()
     suiteIds = $($.map(selector.find('option'), (e) -> e.value))
@@ -111,7 +113,7 @@ class Crucible.TestExecutor
       @element.find('.filter-by-supported').collapse(if data.test_run.supported_only then 'show' else 'hide')
       @element.find('.filter-by-executed').collapse('show')
       @filter(executed: true)
-    )
+    ).complete(() -> $('.test-result-loading').hide())
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :visible :checkbox')
