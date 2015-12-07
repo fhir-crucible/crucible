@@ -19,7 +19,7 @@ class Server
   field :supported_tests, type: Array, default: []
   field :supported_suites, type: Array, default: []
   field :default_format, type: String
-  field :is_argonaut_server, type: Boolean, default: false
+  field :tags, type: Array, default: []
 
   def load_conformance(refresh=false)
     updated = false

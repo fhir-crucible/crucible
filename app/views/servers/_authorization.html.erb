@@ -9,11 +9,11 @@
       <input type='hidden' name='state' id='state' value='<%= @server.generate_state %>' />
       <div class="form-group">
         <label for="client_id">Client ID</label>
-        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" <% if @server.is_argonaut_server %> value="<%= @server.client_id %>" <% end %> />
+        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" <% if @server.tags.include?('argonaut') %> value="<%= @server.client_id %>" <% end %> />
       </div>
       <div class="form-group">
         <label for="client_secret">Client Secret</label>
-        <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element"  <% if @server.is_argonaut_server %> value="<%= @server.client_secret %>" <% end %> />
+        <input type="password" id="client_secret" name="client_secret" class="form-control authorize_form_element"  <% if @server.tags.include?('argonaut') %> value="<%= "*" * @server.client_secret.length %>" <% end %> />
       </div>
       <div class="form-group scope-types">
         <table>
