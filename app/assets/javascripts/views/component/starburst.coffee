@@ -38,6 +38,7 @@ class Crucible.Starburst
   selectedNode: "FHIR"
   minSize: 10
   animationTransition: 1000
+  animationTransitionTmp: null
 
   constructor: (element, data) ->
     @element = element
@@ -129,7 +130,7 @@ class Crucible.Starburst
         .on("click", (d) =>
           node = d
           path.transition()
-            .duration(@get('animationTransition'))
+            .duration(@getTransitionSpeed())
             .attrTween("d", arcTweenZoom(d))
           updateNodeName(node)
           $(@listeners).each (i, listener) -> listener.transitionTo(node.name)
@@ -150,8 +151,16 @@ class Crucible.Starburst
   addListener: (listener) ->
     @listeners.push(listener)
 
-  transitionTo: (name) ->
+  getTransitionSpeed: ->
+    speed = @animationTransition
+    if @animationTransitionTmp?
+      speed = @animationTransitionTmp 
+      @animationTransitionTmp = null
+    speed
+
+  transitionTo: (name, speed) ->
     @selectedNode = name
+    @animationTransitionTmp = speed
     @_updatePlot()
 
   _constructNodeMap: (data) ->
