@@ -18,7 +18,7 @@ class Server
   field :oauth_token_opts, type: Hash
   field :supported_tests, type: Array, default: []
   field :supported_suites, type: Array, default: []
-  field :is_argonaut_server, type: Boolean, default: false
+  field :tags, type: Array, default: []
 
   def load_conformance(refresh=false)
     updated = false
