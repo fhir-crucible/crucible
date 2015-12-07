@@ -61,19 +61,18 @@ class ServerTest < ActiveSupport::TestCase
     someTests = ["R002", "X000_Medication", "X020_Medication", "X000_MedicationOrder", "X020_MedicationOrder", "S000_Medication", "S001P_Medication",
                  "S003P_Medication", "SE01P_Medication", "S001G_Medication", "S003G_Medication", "SE01G_Medication"]
 
-    excludedSuties = ["connectathonfinancialtracktest", "connectathonterminologytracktest", "history001", "resourcetest_account", "resourcetest_appointmentresponse",
+    excludedSuites = ["connectathonfinancialtracktest", "connectathonterminologytracktest", "history001", "resourcetest_account", "resourcetest_appointmentresponse",
                      "resourcetest_auditevent", "searchtest_procedure", "searchtest_procedurerequest", "searchtest_processrequest", "searchtest_processresponse",
                      "searchtest_provenance"]
 
-    excludedTests = ["R001", "R003", "R004", "R005", "X010_Medication", "X030_Medication", "X040_Medication", "X050_Medication", "X055_Medication",
+    excludedTests = ["R005", "X010_Medication", "X030_Medication", "X040_Medication", "X050_Medication", "X055_Medication",
                      "HI04", "HI06", "S003P_ProcedureRequest", "SE01P_ProcedureRequest"]
 
     assert_equal someSuites.length, (server.supported_suites & someSuites).length
     assert_equal someTests.length, (server.supported_tests & someTests).length
 
-    assert_equal 0, (server.supported_suites & excludedSuties).length
+    assert_equal 0, (server.supported_suites & excludedSuites).length
     assert_equal 0, (server.supported_tests & excludedTests).length
-    
   end
 
   def test_aggregate
