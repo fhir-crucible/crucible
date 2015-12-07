@@ -3,7 +3,8 @@
     font-size: 20px;
   }
   a{
-    font-size: 16px;
+    font-size: 14px;
+    height: 35px;
   }
   margin-bottom: 20px;
   .nav > li > a:focus{
@@ -54,5 +55,14 @@
   .skip {
     fill: $result-skip;
   }
-
+  .dash-row{
+    border: 1px solid $structure;
+    border-radius: 2px;
+    padding: 3px;
+    margin-bottom: 2px;
+    padding-top: 8px;
+    .results{
+      
+    }
+  }
 }
