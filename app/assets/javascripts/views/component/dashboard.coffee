@@ -20,16 +20,17 @@ class Crucible.Dashboard
       $('.dashboard-body > div').empty()
       $(data.servers).each (i, server) =>
         $(data.suites).each (j, suite) =>
-          debugger
           results = data.results[server._id.$oid][suite.id]
           suiteStatus = 'pass'
           $(results).each (i, result) =>
             suiteStatus = result.status if @statusWeights[suiteStatus] < @statusWeights[result.status]
           suite.status = suiteStatus
           html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, results: results})
-          resultsHTML = $(html).find('.results')
-          debugger
           $('.dashboard-body > div').append(html)
+          suiteElement = $(html).find('.dash-details')
+          newElem = HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: results})
+          suiteElement.replaceWith(newElem)
+          debugger
     )
 
 
