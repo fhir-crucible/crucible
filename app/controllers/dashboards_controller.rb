@@ -1,5 +1,9 @@
 class DashboardsController < ApplicationController
 
+  def show
+    @id = params[:dashboard_id]
+  end
+
 	def results
 
     id = params[:dashboard_id]
