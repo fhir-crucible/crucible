@@ -9,9 +9,11 @@
     <div class="col-md-6 results">
       <span> 
         {{#each result.tests as |testResult|}}
-          <svg width="18" height="18">
-            <rect x="0" y="0" rx="3" ry="3" width="18" height="18" class="{{testResult.status}}" fill=""/>
-          </svg>
+          <span class="results-rectangle" data-toggle="tooltip" data-placement="top" title="{{testResult.description}}">
+            <svg width="18" height="18">
+              <rect x="0" y="0" rx="3" ry="3" width="18" height="18" class="{{testResult.status}}" fill=""/>
+            </svg>
+          </span>
         {{/each}}
       </span>
     </div>

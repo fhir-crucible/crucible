@@ -15,6 +15,7 @@ class Crucible.Dashboard
     @element = $('.dashboard-element')
     return unless @element.length
     @renderServerResults()
+    # @bindToolTips()
 
   renderServerResults: =>
     $.getJSON("/dashboards/argonaut/results.json").success((data) =>
@@ -32,8 +33,8 @@ class Crucible.Dashboard
           suiteElement = $("#suite_results_#{suite.id}").append(html)
           $(serverResults).each (i, test) =>
             @addClickTestHandler(test, suiteElement)
+      $('.results-rectangle').tooltip()
     )
-
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
@@ -49,5 +50,3 @@ class Crucible.Dashboard
       $('#data-modal .modal-body').empty().append(html)
       $('#data-modal .modal-body code').each (index, code) ->
         hljs.highlightBlock(code)
-
-
