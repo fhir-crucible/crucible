@@ -27,6 +27,7 @@ class TestRun
     self.save
 
     client1 = FHIR::Client.new(self.server.url)
+    client1.default_format = self.server.default_format if self.server.default_format
     if self.server.oauth_token_opts
       client1.client = self.server.get_oauth2_client
       if client1.client.nil?

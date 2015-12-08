@@ -18,15 +18,18 @@ class Server
   field :oauth_token_opts, type: Hash
   field :supported_tests, type: Array, default: []
   field :supported_suites, type: Array, default: []
+  field :default_format, type: String
 
   def load_conformance(refresh=false)
     updated = false
     if (self.conformance.nil? || refresh)
-      @raw_conformance ||= FHIR::Client.new(self.url).conformanceStatement
+      client = FHIR::Client.new(self.url)
+      @raw_conformance ||= client.conformanceStatement
       self.conformance = @raw_conformance.to_json(except: :_id)
       self.supported_tests = []
       self.supported_suites = []
       collect_supported_tests
+      self.default_format = client.default_format if client.default_format
       self.save!
       updated = true
     end
