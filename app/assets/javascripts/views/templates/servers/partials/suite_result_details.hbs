@@ -1,0 +1,27 @@
+    <p class="helper_text">{{suite.description}}</p>
+    <div class="row details">
+      <div class="col-md-5">
+        <table class="table table-hover report-table nav nav-stacked">
+          <tbody>
+            {{#each result.tests as |test|}}
+            <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{test.key}}" id="{{test.id}}">
+              <td>
+                <span><i class="{{test-status test.status}}"></i></span>
+              </td>
+              <td>
+                {{#if test.warnings}}
+                  <i class="fa fa-exclamation-triangle warning"></i>
+                {{/if}}
+              </td>
+              <td>
+                {{test.description}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-7 tab-content test-results">
+        {{> test_result test=result.tests.[0]}}
+      </div>
+    </div>

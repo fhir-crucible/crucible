@@ -1,7 +1,8 @@
 class DashboardsController < ApplicationController
 
   def show
-    @id = params[:dashboard_id]
+    @id = params[:id]
+    @suites = Test.where({tags: @id}).sort! {|l,r| l.name <=> r.name}
   end
 
 	def results
@@ -20,7 +21,7 @@ class DashboardsController < ApplicationController
       end
     end
 
-    render json: {servers: servers.map {|s| s.attributes.except('conformance', 'supported_tests', 'supported_suites')}, suites: suites, results: results}
+    render json: {servers: servers.map {|s| s.attributes.except('conformance', 'supported_tests', 'supported_suites')}, suites: suites, resultsByServer: results}
 
 	end
 

@@ -9,6 +9,7 @@ class Crucible.Dashboard
   templates:
     serverResultsRow: 'views/templates/dashboards/server_result_row'
     suiteResult: 'views/templates/servers/suite_result'
+    testResult: 'views/templates/servers/partials/test_result'
 
   constructor: ->
     @element = $('.dashboard-element')
@@ -20,23 +21,32 @@ class Crucible.Dashboard
       $('.dashboard-body > div').empty()
       $(data.servers).each (i, server) =>
         $(data.suites).each (j, suite) =>
-          results = data.results[server._id.$oid][suite.id]
+          serverResults = data.resultsByServer[server._id.$oid][suite.id]
           suiteStatus = 'pass'
-          $(results).each (i, result) =>
-            suiteStatus = result.status if @statusWeights[suiteStatus] < @statusWeights[result.status]
+          $(serverResults).each (i, serverResult) =>
+            suiteStatus = serverResult.status if @statusWeights[suiteStatus] < @statusWeights[serverResult.status]
           suite.status = suiteStatus
-          html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, results: results})
-          $('.dashboard-body > div').append(html)
-          suiteElement = $(html).find('.dash-details')
-          newElem = HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: results})
-          suiteElement.replaceWith(newElem)
-          debugger
+          html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, result: {tests: serverResults}})
+          suiteElement = $('.dashboard-body > div').append(html)
+          $(serverResults).each (i, test) =>
+            @addClickTestHandler(test, suiteElement)
     )
 
 
+  addClickTestHandler: (test, suiteElement) => 
+    handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
+    handle.click =>
+      suiteElement.find(".suite-handle").removeClass('active')
+      handle.addClass('active')
+      suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
+      @addClickRequestDetailsHandler(test, suiteElement)
 
-    # dashboardBody = d3.select('.dashboard-body > div')
-    # dashboardBody.selectAll("rect").data(@rectData).enter()
+  addClickRequestDetailsHandler: (test, suiteElement) =>
+    suiteElement.find(".data-link").click (e) => 
+      html = HandlebarsTemplates[@templates.testRequests]({test: test})
+      $('#data-modal .modal-body').empty().append(html)
+      $('#data-modal .modal-body code').each (index, code) ->
+        hljs.highlightBlock(code)
 
 
   #handleSuiteResult: (suite, result, suiteElement) =>

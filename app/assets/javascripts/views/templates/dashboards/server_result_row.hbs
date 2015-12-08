@@ -8,9 +8,9 @@
     </div>
     <div class="col-md-7 results">
       <span> 
-        {{#each results as |result|}}
+        {{#each result.tests as |testResult|}}
           <svg width="18" height="18">
-            <rect x="0" y="0" rx="3" ry="3" width="18" height="18" class="{{result.status}}" fill=""/>
+            <rect x="0" y="0" rx="3" ry="3" width="18" height="18" class="{{testResult.status}}" fill=""/>
           </svg>
         {{/each}}
       </span>
@@ -18,7 +18,7 @@
   </div>
   <div class="row collapse" id="dash-{{server.oid}}">
     <div class="col-md-12 dash-details">
-      loading...
+      {{> suite_result_details suite=suite result=result}}
     </div>
   </div>
 </div>
