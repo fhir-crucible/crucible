@@ -40,6 +40,14 @@
     }
   }
 
+  rect {
+    fill: $result-none;
+  }
+
+  .none {
+    fill: $result-none;
+  }
+
   .pass {
     fill: $result-pass;
   }

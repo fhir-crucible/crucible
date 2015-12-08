@@ -19,15 +19,17 @@ class Crucible.Dashboard
   renderServerResults: =>
     $.getJSON("/dashboards/argonaut/results.json").success((data) =>
       $('.dashboard-body > div').empty()
-      $(data.servers).each (i, server) =>
-        $(data.suites).each (j, suite) =>
+      $(data.suites).each (j, suite) =>
+        $(data.servers).each (i, server) =>
           serverResults = data.resultsByServer[server._id.$oid][suite.id]
-          suiteStatus = 'pass'
+          suiteStatus = 'none'
           $(serverResults).each (i, serverResult) =>
             suiteStatus = serverResult.status if @statusWeights[suiteStatus] < @statusWeights[serverResult.status]
           suite.status = suiteStatus
+          serverResults = suite.methods if serverResults.length == 0
           html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, result: {tests: serverResults}})
-          suiteElement = $('.dashboard-body > div').append(html)
+          
+          suiteElement = $("#suite_results_#{suite.id}").append(html)
           $(serverResults).each (i, test) =>
             @addClickTestHandler(test, suiteElement)
     )
@@ -39,7 +41,7 @@ class Crucible.Dashboard
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
-      @addClickRequestDetailsHandler(test, suiteElement)
+      #@addClickRequestDetailsHandler(test, suiteElement)
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
     suiteElement.find(".data-link").click (e) => 

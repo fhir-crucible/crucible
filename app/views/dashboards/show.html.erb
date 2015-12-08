@@ -6,8 +6,8 @@
           <% @suites.each do |suite| %>
             <div class="row dashboard-header">
               <div class="col-md-12">
-                <h4><%= suite.name.titleize %> <a data-toggle="collapse" href="#dashboard-metadata">(more info)</a></h4>
-                <div class="collapse" id="dashboard-metadata">
+                <h4><%= suite.name.titleize %> <a data-toggle="collapse" href="#dashboard-metadata-<%=suite.id%>">(more info)</a></h4>
+                <div class="collapse" id="dashboard-metadata-<%=suite.id%>">
                   <div class="row">
                     <div class="col-md-12">
                       <ul class="nav nav-pills" data-tabs="tabs">
@@ -20,7 +20,7 @@
                         <div class="tab-pane active" id="overview">
                           <div class="row">
                             <div class="col-md-12">
-                              <p>Argonaut Implementation Sprint 3 focuses on the scenario where a user approves an app with limited permissions, scoped down to a a single patient record. The app will have access to patient demographics and any "documents" available about that patient.</p>
+                              <p><%= suite.description%> | Argonaut Implementation Sprint 3 focuses on the scenario where a user approves an app with limited permissions, scoped down to a a single patient record. The app will have access to patient demographics and any "documents" available about that patient.</p>
                             </div>
                           </div>
                         </div>
@@ -68,7 +68,7 @@
               </div>
             </div>
             <div class="row dashboard-body">
-              <div class="col-md-12">
+              <div class="col-md-12" id="suite_results_<%=suite.id%>">
                 <i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading
               </div>
             </div>
