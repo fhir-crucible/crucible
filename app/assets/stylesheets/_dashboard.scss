@@ -94,9 +94,13 @@
       font-size: 18px;
     }
     .execute{
-      button{
+/*      button{
         height: 25px;
         font-size: 12px;
+      }*/
+      a{
+        font-size: 14px;
+        color: $brand-secondary;
       }
     }
   }
