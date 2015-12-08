@@ -1,12 +1,12 @@
 <div class="dash-elem">
-  <div class="row dash-row" data-toggle="collapse" href="#dash-{{server._id.$oid}}-{{suite.id}}">
+  <div class="row dash-row">
     <div class="col-md-4 server-name">
       <svg width="18" height="18">
         <circle cx="9" cy="9" r="9" class="{{suite.status}}"/>
       </svg>
-      <p> {{server.name}}</p>
+      <a data-toggle="collapse" href="#dash-{{server._id.$oid}}-{{suite.id}}">{{server.name}}</a>
     </div>
-    <div class="col-md-7 results">
+    <div class="col-md-6 results">
       <span> 
         {{#each result.tests as |testResult|}}
           <svg width="18" height="18">
@@ -14,6 +14,9 @@
           </svg>
         {{/each}}
       </span>
+    </div>
+    <div class="col-md-2 execute">
+      <button class="btn">Execute</button>
     </div>
   </div>
   <div class="row collapse" id="dash-{{server._id.$oid}}-{{suite.id}}">

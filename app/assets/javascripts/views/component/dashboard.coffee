@@ -4,7 +4,7 @@ $(window).on('load', ->
 
 class Crucible.Dashboard
 
-  statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
+  statusWeights: {'none': 0, 'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
 
   templates:
     serverResultsRow: 'views/templates/dashboards/server_result_row'
@@ -50,20 +50,4 @@ class Crucible.Dashboard
       $('#data-modal .modal-body code').each (index, code) ->
         hljs.highlightBlock(code)
 
-
-  #handleSuiteResult: (suite, result, suiteElement) =>
-  #  suiteStatus = 'pass'
-  #  if result.result
-  #    result.tests = result.result
-  #  $(result.tests).each (i, test) =>
-  #    suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
-  #  result.suiteStatus = suiteStatus
-  #  suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
-  #  suiteElement = @element.find("#test-"+suite.id)
-  #  suiteElement.data('suite', suite)
-  #  $(result.tests).each (i, test) =>
-  #    if (i == 0)
-  #      # add click handler for default selection
-  #      @addClickRequestDetailsHandler(test, suiteElement)
-  #    @addClickTestHandler(test, suiteElement)
 
