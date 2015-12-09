@@ -29,8 +29,8 @@ class Crucible.Dashboard
           suite.status = suiteStatus
           serverResults = suite.methods if serverResults.length == 0
           html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, result: {tests: serverResults}})
-          
-          suiteElement = $("#suite_results_#{suite.id}").append(html)
+          $("#suite_results_#{suite.id}").append(html)
+          suiteElement = $("#dash-#{server._id.$oid}-#{suite.id}")
           $(serverResults).each (i, test) =>
             @addClickTestHandler(test, suiteElement)
       $('.results-rectangle').tooltip()

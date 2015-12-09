@@ -87,6 +87,11 @@
   .skip {
     fill: $result-skip;
   }
+
+  .warning {
+    color: $result-warning;
+  }
+ 
   .dash-row{
     padding-top: 8px;
     .server-name a{
