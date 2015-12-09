@@ -13,6 +13,8 @@ class Test
   field :methods, type: Array
   field :supported, type: Boolean, default: false
   field :load_version, type: Integer, default: 0
+  field :tags, type: Array
+  field :details, type: Hash
 
   def serializable_hash(options = nil)
     hash = super(options)

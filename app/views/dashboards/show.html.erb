@@ -1,0 +1,57 @@
+<div class="container main">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="palette dashboard dashboard-element" data-dashboard-id="<%=@id%>">
+          <% @suites.each do |suite| %>
+            <div class="dash-suite-object">
+              <div class="row dashboard-header">
+                <div class="col-md-12">
+                  <h4><%= suite.name.titleize %><%if suite.details%> <a data-toggle="collapse" href="#dashboard-metadata-<%=suite.id%>">(more info)</a><%end%></h4>
+                  <div class="collapse" id="dashboard-metadata-<%=suite.id%>">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <ul class="nav nav-pills" data-tabs="tabs">
+                          <%
+                            i=0
+                            suite.details.keys.each do |key| 
+                            i+=1
+                          %>
+                            <li role="presentation" <%if i==1%>class="active"<%end%>><a href="#<%=suite.id%>_<%=key.parameterize%>" data-toggle="tab"><%=key%></a></li>
+                          <% end if suite.details %>
+                        </ul>
+                        <div class="tab-content" id="dashboard-metadata-content">
+                          <%
+                            i=0
+                            suite.details.each do |key, value| 
+                            i+=1
+                          %>
+                            <div class="tab-pane<%if i==1%> active<%end%>" id="<%=suite.id%>_<%=key.parameterize%>">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <p><%= value %></p>
+                                </div>
+                              </div>
+                            </div>
+                          <% end if suite.details %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row dashboard-body">
+                <div class="col-md-12" id="suite_results_<%=suite.id%>">
+                  <i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+
+</div>
+
+

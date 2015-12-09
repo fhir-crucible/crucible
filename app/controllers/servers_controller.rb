@@ -80,7 +80,7 @@ class ServersController < ApplicationController
     if server.supported_suites
       @suites.each do |suite|
         if server.supported_suites.include? suite.id
-          suite.supported = true 
+          suite.supported = true
           suite.methods.each do |test|
             test['supported'] = true if server.supported_tests.include? test['id']
           end
@@ -112,7 +112,7 @@ class ServersController < ApplicationController
     server = Server.find(params[:server_id])
     if server
       server.client_id = params[:client_id]
-      server.client_secret = params[:client_secret]
+      server.client_secret = params[:client_secret] unless server.client_secret && params[:client_secret] === '*' * server.client_secret.length
       server.state = params[:state]
       server.authorize_url = params[:authorize_url]
       server.token_url = params[:token_url]

@@ -1,0 +1,29 @@
+<div class="dash-elem">
+  <div class="row dash-row">
+    <div class="col-md-4 server-name">
+      <svg width="18" height="18">
+        <circle cx="9" cy="9" r="9" class="{{suite.status}}"/>
+      </svg>
+      <a data-toggle="collapse" href="#dash-{{server._id.$oid}}-{{suite.id}}">{{server.name}}</a>
+    </div>
+    <div class="col-md-6 results">
+      <span> 
+        {{#each result.tests as |testResult|}}
+          <span class="results-rectangle" data-toggle="tooltip" data-placement="top" title="{{testResult.description}}">
+            <svg width="18" height="18">
+              <rect x="0" y="0" rx="3" ry="3" width="18" height="18" class="{{testResult.status}}" fill=""/>
+            </svg>
+          </span>
+        {{/each}}
+      </span>
+    </div>
+    <div class="col-md-2 execute">
+      <a class="update" href="/servers/{{server._id.$oid}}">Update <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="row collapse" id="dash-{{server._id.$oid}}-{{suite.id}}">
+    <div class="col-md-12 dash-details">
+      {{> suite_result_details suite=suite result=result}}
+    </div>
+  </div>
+</div>

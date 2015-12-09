@@ -9,11 +9,11 @@
       <input type='hidden' name='state' id='state' value='<%= @server.generate_state %>' />
       <div class="form-group">
         <label for="client_id">Client ID</label>
-        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" />
+        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element" <% if @server.tags.include?('argonaut') %> value="<%= @server.client_id %>" <% end %> />
       </div>
       <div class="form-group">
         <label for="client_secret">Client Secret</label>
-        <input type="text" id="client_secret" name="client_secret" class="form-control authorize_form_element" />
+        <input type="password" id="client_secret" name="client_secret" class="form-control authorize_form_element"  <% if @server.tags.include?('argonaut') %> value="<%= ("*" * @server.client_secret.length) if @server.client_secret %>" <% end %> />
       </div>
       <div class="form-group scope-types">
         <table>
@@ -22,9 +22,14 @@
           </thead>
           <tbody>
             <tr>
-              <td><input type="checkbox" name="scope_vars[]" value="patient/*.read" /></td>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/*.read" checked /></td>
               <td><code>patient/*.read</code></td>
               <td>Permission to read any resource for the current patient</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="launch/patient" checked /></td>
+              <td><code>launch/patient</code></td>
+              <td>When launching outside the EHR, ask for a patient to be selected at launch time</td>
             </tr>
             <tr>
               <td><input type="checkbox" name="scope_vars[]" value="fhir_complete" /></td>
@@ -32,7 +37,17 @@
               <td>Access to the entire FHIR API</td>
             </tr>
             <tr>
-              <td><input type="checkbox" name="scope_vars[]" value="user/*.*" checked /></td>
+              <td><input type="checkbox" name="scope_vars[]" value="user/Patient.read" /></td>
+              <td><code>user/Patient.read</code></td>
+              <td>Permission to read all Patient resources that the current user can access</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="user/*.read" /></td>
+              <td><code>user/*.read</code></td>
+              <td>Permission to read all resources that the current user can access</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="user/*.*" /></td>
               <td><code>user/*.*</code></td>
               <td>Permission to read and write all resources that the current user can access</td>
             </tr>
@@ -42,7 +57,7 @@
               <td>Permission to retrieve information about the current logged-in user</td>
             </tr>
             <tr>
-              <td><input type="checkbox" name="scope_vars[]" value="offline_access" checked /></td>
+              <td><input type="checkbox" name="scope_vars[]" value="offline_access" /></td>
               <td><code>offline_access</code></td>
               <td>Request a <code>refresh_token</code> that can be used to obtain a new access token to replace an expired one, even after the end-user no is longer online after the access token expires</td>
             </tr>

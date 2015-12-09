@@ -15,6 +15,8 @@ Crucible::Tests::Executor.list_all.each do |key,value|
     test.title = value["title"]
     test.author = value["author"]
     test.description = value["description"]
+    test.tags = value['tags']
+    test.details = value['details'] unless value['details'].blank?
 
     crucibleTest = executor.find_test(value['title'])
     if value["resource_class"]
