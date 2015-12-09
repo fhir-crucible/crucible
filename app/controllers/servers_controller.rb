@@ -46,7 +46,7 @@ class ServersController < ApplicationController
       end
       client = OAuth2::Client.new(server.client_id, server.client_secret, options)
       auth_pw = Base64.encode64("#{server.client_id}:#{server.client_secret}")
-      token = client.auth_code.get_token(params[:code], :redirect_uri => "http://#{env['HTTP_HOST']}/redirect")
+      token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
       if token.params["error"]
         flash.alert = "#{token.params['error']}: #{token.params['error_description']}"
         redirect_to server_path(server)
