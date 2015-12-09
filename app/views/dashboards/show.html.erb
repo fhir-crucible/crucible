@@ -7,61 +7,33 @@
             <div class="dash-suite-object">
               <div class="row dashboard-header">
                 <div class="col-md-12">
-                  <h4><%= suite.name.titleize %> <a data-toggle="collapse" href="#dashboard-metadata-<%=suite.id%>">(more info)</a></h4>
+                  <h4><%= suite.name.titleize %><%if suite.details%> <a data-toggle="collapse" href="#dashboard-metadata-<%=suite.id%>">(more info)</a><%end%></h4>
                   <div class="collapse" id="dashboard-metadata-<%=suite.id%>">
                     <div class="row">
                       <div class="col-md-12">
                         <ul class="nav nav-pills" data-tabs="tabs">
-                          <li role="presentation" class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-                          <li role="presentation"><a href="#instructions" data-toggle="tab">Instructions</a></li>
-                          <li role="presentation"><a href="#fhir_api-calls" data-toggle="tab">FHIR API Calls</a></li>
-                          <li role="presentation"><a href="#authorization" data-toggle="tab">Authorization</a></li>
+                          <%
+                            i=0
+                            suite.details.keys.each do |key| 
+                            i+=1
+                          %>
+                            <li role="presentation" <%if i==1%>class="active"<%end%>><a href="#<%=suite.id%>_<%=key.parameterize%>" data-toggle="tab"><%=key%></a></li>
+                          <% end if suite.details %>
                         </ul>
                         <div class="tab-content" id="dashboard-metadata-content">
-                          <div class="tab-pane active" id="overview">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <p><%= suite.description%> | Argonaut Implementation Sprint 3 focuses on the scenario where a user approves an app with limited permissions, scoped down to a a single patient record. The app will have access to patient demographics and any "documents" available about that patient.</p>
+                          <%
+                            i=0
+                            suite.details.each do |key, value| 
+                            i+=1
+                          %>
+                            <div class="tab-pane<%if i==1%> active<%end%>" id="<%=suite.id%>_<%=key.parameterize%>">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <p><%= value %></p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="tab-pane" id="instructions">
-                            <div class="row">
-                              <div class="col-md-12">
-                               <p>Please sign up!&nbsp;
-                                If you're working on a server, please complete the "servers" tab of the Sprint 3 Spreadsheet. This time around you'll need to update the status flag to indicate whether you've begun work (or completed work), so clients will know when to start testing. You'll also share details about how a developer can obtain OAuth client credentials (client_id for public apps, or a client_id and client_secret for confidential apps) as well as user login credentials. You might consider simply sharing a set of fixed credentials in this spreadsheet, or else directing users to a web page where they can complete self-service registration. If absolutely necessary, you can ask developers to e-mail you directly.
-                              &nbsp;If you're working on a client, please complete the "clients" tab of the Sprint 3 Spreadsheet. You'll also need to update the status flag to indicate whether you've begun work (or completed work).</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="tab-pane" id="fhir_api-calls">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <p>GET /Patient/{id} Retrieve a patient's basic demographics and identifiers, given a unique patient id.
-                                &nbsp;GET /Patient/{id}/DocumentReference?type={}&created={} Search for available documents about a patient, given a unique patient id. Optional search parameters can filter results on:
-                                &nbsp; - type a code describing this document (see below for details)
-                                &nbsp; - created creation date
-                                &nbsp; - Notes
-                                &nbsp;Argonaut Document Access provides background on how the DocumentReference endpoint works — but note this guide is a work in progress, and our first sprint starts with just a subset of functionality.
-                                &nbsp;The Argonaut Implementation Program now uses FHIR DSTU2.</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="tab-pane" id="authorization">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <p>This sprint builds on our introduction to the SMART on FHIR OAuth 2.0 authorization process. Recall that in Sprint 2, we authorized access at a very coarse level, delegating all of a user's read privileges to an app. This time, we add support for apps that don't need access to an entire population of patient records, but instead require just one record. We accomplish this through a set of "launch scopes". In terms of SMART's authorization guide, we'll make the following assumptions:
-                                &nbsp;Standalone launch sequence only
-                                Public clients and confidential clients are both supported
-                                Access scopes include:
-                                launch/patient (indicates to the EHR that a single patient must be selected to complete the launch process)
-                                patient/*.read (to ensure a patient-specific access token)
-                                Onecontext parameter is returned to the app upon successful authorization:
-                                &nbsp; - patient (indicates the patient currently open in the EHR)
-                                &nbsp; - No single-sign-on (OpenID Connect) is required</p>
-                              </div>
-                            </div>
-                          </div>
+                          <% end if suite.details %>
                         </div>
                       </div>
                     </div>
