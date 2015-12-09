@@ -14,11 +14,12 @@ class Crucible.Dashboard
   constructor: ->
     @element = $('.dashboard-element')
     return unless @element.length
+    @id = this.element.data('dashboard-id')
     @renderServerResults()
     # @bindToolTips()
 
   renderServerResults: =>
-    $.getJSON("/dashboards/argonaut/results.json").success((data) =>
+    $.getJSON("/dashboards/#{@id}/results.json").success((data) =>
       $('.dashboard-body > div').empty()
       $(data.suites).each (j, suite) =>
         $(data.servers).each (i, server) =>
