@@ -8,41 +8,39 @@
 <% end %>
 
 <div class="container main">
-  <div class="picture landing-page visible-lg-block">
-    <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
-  </div>
-
-  <div class="c-notification__container">
-<!--     {{#each notifications as |notification|}}
-      {{notification-message notification=notification}}
-    {{/each}}
- -->  </div>
-  <div class="banner row">
+<!--   <div class="banner row">
     <div class="col-md-12">
       <div class="alert alert-danger alert-dismissible dstu-update" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>Attention!</strong> Crucible has been updated to DSTU2 September release
       </div>
     </div>
-  </div>
+  </div> -->
 
   <form action="/servers" method="post" id="new-server-form">
-    <div class="row form">
-      <div class="col-md-10">
-        <div>
-          <input placeholder="FHIR Server URL" type="text" name="server[url]" class="form-control">
+    <div class="banner row">
+      <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissible dstu-update" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Attention!</strong> Crucible has been updated to DSTU2 September release
         </div>
       </div>
-
-      <div class="col-md-2">
-        <input type="submit" class="btn" value="Begin"></input>
-        <!--<button class="btn" {{action "submit"}} disabled={{submitBtnDisabled}}>
-          {{#if loadingServer}}
-            <span class="fa fa-lg fa-fw fa-spinner fa-pulse"></span> Loading...
-          {{else}} 
-            Begin
-          {{/if}}
-        </button> -->
+    </div>
+    <div class="row form landing-page">
+      <div class="col-md-1">
+        <div class="picture landing-page visible-lg-block">
+          <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
+        </div>
+      </div>
+      <div class="col-md-11 landing-page-form">
+        <div class="row">
+          <div class="col-md-10">
+            <input placeholder="FHIR Server URL" type="text" name="server[url]" class="form-control">
+          </div>
+          <div class="col-md-2">
+            <input type="submit" class="btn" value="Begin"></input>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -71,30 +69,4 @@
 
   <%= render partial: 'components/server_summary_carousel', locals: {servers: @servers}%>
 
-  <div class="row tri-row">
-    <div class="col-md-4">
-      <div class="palette">
-        <i class="fa fa-medkit fa-5x"></i>
-        <h2>Healthcare Data</h2>
-        <p>Electronic health data exchange will yield many benefits from reduced cost to improved patient outcomes. FHIR will help enable successful exchange of computable health data.</p>
-      </div>
-    </div>
-
-      <div class="col-md-4">
-        <div class="palette">
-          <img src="<%= image_path("fhir.png")%>"  width="75" alt="logo" />
-          <h2>FHIR</h2>
-          <p>The emerging Fast Healthcare Interoperability Resources (FHIR) standard developed by HL7 (Health Level Seven) aims to define the transport and data standards for healthcare information.</p>
-        </div>
-      </div>
-
-    <div class="col-md-4">
-      <div class="palette">
-        <img src="<%= image_path("logo.png")%>"  width="55" alt="logo" />
-        <h2>Crucible</h2>
-        <p>Crucible is a comprehensive, open source FHIR testing tool designed to help ensure accurate implementation of FHIR. Crucible provides an efficient and automated framework to succeed with FHIR.
-        </p>
-      </div>
-    </div>
-  </div>
 </div>

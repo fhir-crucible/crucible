@@ -1,5 +1,6 @@
 .container.main {
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .palette {
@@ -38,15 +39,6 @@
   }
 }
 
-.tri-row {
-  text-align: center;
-  margin: 40px 0;
-
-  .palette {
-    padding: 20px;
-    min-height: 350px;
-  }
-}
 
 // ------------------------- TABBED DATA ----------------------------------- //
 
@@ -61,12 +53,15 @@
   color: $brand-primary;
 }
 
-.picture {
-  text-align: center;
-  margin-bottom: 40px;
+.picture{
   img {
-    padding: 20px;
+    width: 50px;
   }
+}
+
+
+.landing-page-form{
+  margin-top: 15px;
 }
 
 .word-wrap {
