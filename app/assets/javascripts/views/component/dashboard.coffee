@@ -23,13 +23,15 @@ class Crucible.Dashboard
       $('.dashboard-body > div').empty()
       $(data.suites).each (j, suite) =>
         $(data.servers).each (i, server) =>
-          serverResults = data.resultsByServer[server._id.$oid][suite.id]
+          serverResults = data.resultsByServer[server._id.$oid][suite.id]['results']
+          lastUpdated = data.resultsByServer[server._id.$oid][suite.id]['last_updated']
+          lastUpdated = moment(lastUpdated).fromNow() if lastUpdated?
           suiteStatus = 'none'
           $(serverResults).each (i, serverResult) =>
             suiteStatus = serverResult.status if @statusWeights[suiteStatus] < @statusWeights[serverResult.status]
           suite.status = suiteStatus
           serverResults = suite.methods if serverResults.length == 0
-          html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, result: {tests: serverResults}})
+          html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, lastUpdated: lastUpdated, result: {tests: serverResults}})
           $("#suite_results_#{suite.id}").append(html)
           suiteElement = $("#dash-#{server._id.$oid}-#{suite.id}")
           $(serverResults).each (i, test) =>

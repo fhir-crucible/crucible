@@ -6,7 +6,7 @@
       </svg>
       <a data-toggle="collapse" href="#dash-{{server._id.$oid}}-{{suite.id}}">{{server.name}}</a>
     </div>
-    <div class="col-md-6 results">
+    <div class="col-md-4 results">
       <span> 
         {{#each result.tests as |testResult|}}
           <span class="results-rectangle" data-toggle="tooltip" data-placement="top" title="{{testResult.description}}">
@@ -16,6 +16,9 @@
           </span>
         {{/each}}
       </span>
+    </div>
+    <div class="col-md-2 last-updated">
+      {{lastUpdated}}
     </div>
     <div class="col-md-2 execute">
       <a class="update" href="/servers/{{server._id.$oid}}">Update <i class="fa fa-arrow-circle-right"></i></a>
