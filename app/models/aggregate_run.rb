@@ -1,7 +1,7 @@
 class AggregateRun
   include Mongoid::Document
   field :date, type: DateTime
-  belongs_to :server, :class_name => "Server"
+  belongs_to :server, :class_name => "Server", index: true
   field :results, type: Array
 
   def serializable_hash(options = nil)

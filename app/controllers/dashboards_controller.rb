@@ -13,6 +13,7 @@ class DashboardsController < ApplicationController
 
     results = {}
     has_results = {}
+    test_result_ids = []
     servers.each do |server|
       suites.each do |suite|
         test_ids = suite.methods.map {|m| m['id']}
@@ -22,11 +23,13 @@ class DashboardsController < ApplicationController
           test_results = server.aggregate_run.results.select {|r| test_ids.include? r['id']}
           last_updated = test_results.map {|r| r['created_at']}.min
           has_results[server.id.to_s] ||= !test_results.empty?
+          test_result_ids.concat test_results.map {|t| t["test_result_id"]}
         end
         results[server.id.to_s] ||= {}
         results[server.id.to_s][suite.id.to_s] = {results: test_results, last_updated: last_updated}
       end
     end
+    backfill_requests(test_result_ids, results)
 
     servers.sort! {|l,r| compare_servers(l, r, has_results)}
 
@@ -43,6 +46,18 @@ class DashboardsController < ApplicationController
       -1
     else
       1
+    end
+  end
+
+  def backfill_requests(test_result_ids, results)
+    test_results_by_id = {}
+    TestResult.find(test_result_ids).each {|tr| test_results_by_id[tr.id] = tr}
+    results.values.each do |by_suite| 
+      by_suite.values.each do |trs|
+        trs.each do |tr| 
+          tr['requests'] = test_results_by_id[tr['test_result_id']].result.select{|x| x['id'] == tr['id']}.first['requests']
+        end
+      end
     end
   end
 
