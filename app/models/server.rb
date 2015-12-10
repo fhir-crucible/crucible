@@ -129,7 +129,7 @@ class Server
         else
           result['test_result_id'] = test_result.id
           result['test_id'] = test_result.test_id
-          result['created_at'] = test_result.created_at
+          result['created_at'] = test_result.created_at rescue nil
           result_map[id] = result.except('code', 'requests', :requests)
         end
       end
