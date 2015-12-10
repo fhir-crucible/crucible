@@ -99,8 +99,10 @@
       font-size: 18px;
     }
     .last-updated {
-      color: $base-darken;
+      color: $base-header-small;
       text-align: right;
+      padding-top: 4px;
+      font-size: .7em;
     }
     .execute{
 /*      button{
