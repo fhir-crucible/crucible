@@ -1,5 +1,15 @@
 <div class="media">
   <h4 class="test-run-result-id">{{test.key}}: {{test.description}}</h4>
+  {{#if test.requests}}
+    <div class="media test-response-data">
+      <div class="media-body">
+        <h4 class="media-heading">Request Details</h4>
+        <div>
+          <a href="#" class="data-link" data-toggle="modal" data-target="#data-modal" data-content="">{{test.requests.length}} request(s)</a>
+        </div>
+      </div>
+    </div>
+  {{/if}}
   {{#if test.message}}
     <div class="media test-message">
       <div class="media-body">
@@ -48,15 +58,4 @@
       </div>
     </div>
   {{/if}}
-  {{#if test.requests}}
-    <div class="media test-response-data">
-      <div class="media-body">
-        <h4 class="media-heading">Request Details</h4>
-        <div>
-          <a href="#" class="data-link" data-toggle="modal" data-target="#data-modal" data-content="">{{test.requests.length}} request(s)</a>
-        </div>
-      </div>
-    </div>
-  {{/if}}
-
 </div>
