@@ -14,7 +14,7 @@
           </div>
           <div id="{{@index}}-request-headers" class="collapse">
             {{#each call.request.headers}}
-              <div><u>{{@key}}</u>: {{this}}</div>
+              <div class="header-text"><u>{{@key}}</u>: {{this}}</div>
             {{/each}}
           </div>
         {{/if}}
@@ -33,7 +33,7 @@
           </div>
           <div id="{{@index}}-response-headers" class="collapse">
             {{#each call.response.headers}}
-              <div><u>{{@key}}</u>: {{this}}</div>
+              <div class="header-text"><u>{{@key}}</u>: {{this}}</div>
             {{/each}}
           </div>
         {{/if}}
