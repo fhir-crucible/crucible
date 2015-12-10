@@ -21,7 +21,7 @@ class DashboardsController < ApplicationController
         last_updated = nil;
         if server.aggregate_run
           test_results = server.aggregate_run.results.select {|r| test_ids.include? r['id']}
-          last_updated = test_results.map {|r| r['created_at']}.min
+          last_updated = test_results.map {|r| r['created_at']}.compact.min
           has_results[server.id.to_s] ||= !test_results.empty?
           test_result_ids.concat test_results.map {|t| t["test_result_id"]}
         end
