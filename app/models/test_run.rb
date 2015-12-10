@@ -8,9 +8,8 @@ class TestRun
   field :status, type: String, default: "pending"
   field :supported_only, type: Boolean, default: false
 
-  belongs_to :server, class_name: "Server"
+  belongs_to :server, class_name: "Server", index: true
   belongs_to :destination_server, class_name:" Server"
-  belongs_to :user
   field :nightly, type: Boolean, default: false
   has_and_belongs_to_many :tests, inverse_of: nil
   has_many :test_results, autosave: true

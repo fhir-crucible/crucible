@@ -10,6 +10,7 @@ class Crucible.Dashboard
     serverResultsRow: 'views/templates/dashboards/server_result_row'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/partials/test_result'
+    testRequests: 'views/templates/servers/partials/test_requests'
 
   constructor: ->
     @element = $('.dashboard-element')
@@ -35,6 +36,9 @@ class Crucible.Dashboard
           $("#suite_results_#{suite.id}").append(html)
           suiteElement = $("#dash-#{server._id.$oid}-#{suite.id}")
           $(serverResults).each (i, test) =>
+            if (i == 0)
+              # add click handler for default selection
+              @addClickRequestDetailsHandler(test, suiteElement)
             @addClickTestHandler(test, suiteElement)
       $('.results-rectangle').tooltip()
     )
@@ -45,7 +49,7 @@ class Crucible.Dashboard
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
-      #@addClickRequestDetailsHandler(test, suiteElement)
+      @addClickRequestDetailsHandler(test, suiteElement)
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
     suiteElement.find(".data-link").click (e) => 
