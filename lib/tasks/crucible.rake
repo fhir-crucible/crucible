@@ -36,7 +36,10 @@ namespace :crucible do
   desc "schedule a job for all servers"
   task :nightly_run => [:environment] do
 
-    Server.all.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}.each_with_index do |s, i|
+    # currently we exclude servers tagged argonaut from the nightly run
+    excluded_tags = ['argonaut']
+
+    Server.all.select {|s| (s.tags & excluded_tags).empty?}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}.each_with_index do |s, i|
       puts "\tStarting Server #{i+1} of #{Server.all.length}"
 
       test_run = TestRun.new({server: s, date: Time.now})
