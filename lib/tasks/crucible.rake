@@ -10,7 +10,7 @@ namespace :crucible do
       puts "Resetting #{target_db} from #{dump_archive}"
       Mongoid.default_session.with(database: target_db) { |db| db.drop }
       system "tar xf #{dump_archive} -C tmp"
-      system "mongorestore -d #{target_db} #{dump_extract}"
+      system "mongorestore -d #{target_db} --batchSize=1 #{dump_extract}"
       FileUtils.rm_r dump_extract
     end
   end
