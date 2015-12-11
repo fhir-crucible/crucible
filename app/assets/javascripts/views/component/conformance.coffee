@@ -47,7 +47,7 @@ class Crucible.Conformance
     resources = []
     validatedResourceTypes = []
     ensureArray(@conformance.rest).forEach((mode) ->
-      resources = resources.concat(mode.resource)
+      resources = resources.concat(mode.resource) if mode.resource
     )
     resources
 
