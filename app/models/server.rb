@@ -119,13 +119,13 @@ class Server
     self.aggregate_run ||= AggregateRun.new
     aggregate_run = self.aggregate_run
     aggregate_run.results ||= []
-    
+
     result_map = {}
     test_run.test_results.each do |test_result|
       test_result.result.each do |result|
         id = result['id']
         if result_map[id]
-          puts "\tduplicate id: #{id}!!!!!!!" 
+          puts "\tduplicate id: #{id}!!!!!!!"
         else
           result['test_result_id'] = test_result.id
           result['test_id'] = test_result.test_id
@@ -152,17 +152,17 @@ class Server
     rescue
       return false
     end
-    
+
     true
   end
 
   def collect_supported_tests
-    # return if !self.supported_tests.empty? || !self.conformance 
+    # return if !self.supported_tests.empty? || !self.conformance
     translator = {'history-instance'=>'history', 'validate'=>'$validate', 'search-type' => 'search'}
     self.supported_tests = []
     self.supported_suites = []
     value = JSON.parse(self.conformance)
-    
+
     operations = []
     resource_operations = []
 
@@ -182,7 +182,7 @@ class Server
         end if test['validates']
         if supported
           at_least_one_test = true
-          self.supported_tests << test['id'] 
+          self.supported_tests << test['id']
         end
       end
       self.supported_suites << suite.id if at_least_one_test
@@ -195,9 +195,9 @@ class Server
   def check_restriction(restriction, resource_operations, operations)
     resource = restriction['resource']
     if resource
-      if resource_operations[resource].nil?
+      if !resource_operations.empty? && resource_operations[resource].nil?
         return false
-      else
+      elsif !resource_operations.empty?
         if !((restriction['methods'] - resource_operations[resource]) - operations).empty?
           return false
         end
