@@ -32,7 +32,7 @@ Handlebars.registerHelper('indent', (value) ->
 )
 
 Handlebars.registerHelper('supported-status', (resource, operation) ->
-  if resource.operation[operation] == true
+  if resource? && resource.operation[operation] == true
     return "test-filled"
   else
     return "test-empty"
