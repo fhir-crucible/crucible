@@ -31,6 +31,15 @@ Handlebars.registerHelper('indent', (value) ->
     value
 )
 
+Handlebars.registerHelper('checkCharLength', (text, oneChar, twoChar, threeChar, fourChar) ->
+  value = "#{text}".length
+  return oneChar if(value == 1)
+  return twoChar if(value == 2)
+  return threeChar if(value == 3)
+  return fourChar if(value == 4)
+  ''
+)
+
 Handlebars.registerHelper('supported-status', (resource, operation) ->
   if resource? && resource.operation[operation] == true
     return "test-filled"
