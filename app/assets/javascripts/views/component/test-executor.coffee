@@ -12,10 +12,10 @@ class Crucible.TestExecutor
     testResult: 'views/templates/servers/partials/test_result'
     testRequests: 'views/templates/servers/partials/test_requests'
   html:
-    selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
-    deselectAllButton: '<i class="fa fa-check"></i>&nbsp;Select All Test Suites'
-    collapseAllButton: '<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites'
-    expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
+    selectAllButton: '<i class="fa fa-close"></i>'
+    deselectAllButton: '<i class="fa fa-check"></i>'
+    collapseAllButton: '<i class="fa fa-compress"></i>'
+    expandAllButton: '<i class="fa fa-expand"></i>'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
     unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server Unavailable</div>'
     genericError: '<div class="alert alert-danger"><strong>Error: </strong> Tests could not be executed</div>'
@@ -44,6 +44,8 @@ class Crucible.TestExecutor
     $('#cancel-modal #cancel-confirm').click(@cancelTestRun)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
+    @element.find('.selectDeselectAll').tooltip()
+    @element.find('.expandCollapseAll').tooltip()
     @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
     @element.find('.filter-by-supported a').click(@filterBySupportedHandler)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
@@ -294,6 +296,7 @@ class Crucible.TestExecutor
     @progress.parent().collapse('hide')
     @progress.find('.progress-bar').css('width',"0%")
     @element.find('.execute').show()
+    
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
     @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})

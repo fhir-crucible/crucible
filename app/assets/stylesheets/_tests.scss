@@ -109,10 +109,20 @@
   }
 }
 
+.button-holder{
+  text-align: left;
+  a{
+    margin-right: 4px;
+  }
+}
+
+.test-results .button-holder{
+  margin-bottom: 15px;
+}
+
 .filter{
   margin-top: 30px;
   .button-holder{
-    text-align: left;
     margin-top: 10px;
     button{
       text-align: left;
