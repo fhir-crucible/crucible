@@ -74,6 +74,7 @@ class Crucible.TestExecutor
     ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
+    @element.find('.test-results .button-holder').removeClass('hide')
     suitesElement = @element.find('.test-suites')
     suitesElement.empty()
     $(@suites).each (i, suite) =>
@@ -142,6 +143,7 @@ class Crucible.TestExecutor
   prepareTestRun: (suiteIds) =>
     @processedResults = {}
     @element.find('.execute').hide()
+    @element.find('.suite-selectors').hide()
     @element.find('.cancel').show()
     @resetSuitePanels()
     @progress.parent().collapse('show')
@@ -296,7 +298,7 @@ class Crucible.TestExecutor
     @progress.parent().collapse('hide')
     @progress.find('.progress-bar').css('width',"0%")
     @element.find('.execute').show()
-    
+    @element.find('.suite-selectors').show()
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
     @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})

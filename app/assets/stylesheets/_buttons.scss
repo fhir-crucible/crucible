@@ -1,8 +1,8 @@
 .btn {
   height: 35px;
   width: 100%;
-  background-color: $brand-secondary;
-  border-color: $brand-secondary;
+  background-color: lighten($brand-secondary, 15%);
+  border-color: lighten($brand-secondary, 15%);
   color: $brand-tertiary;
   font-size: 16px;
   &:focus {
@@ -12,9 +12,11 @@
     outline: none;
   }
   &:hover{
+/*    background-color: darken($brand-secondary, 11%);
+    border-color: darken($brand-secondary, 11%);*/
+    background-color: $brand-secondary;
     color: $brand-tertiary;
-    background-color: darken($brand-secondary, 11%);
-    border-color: darken($brand-secondary, 11%);
+    border-color: $brand-secondary; 
     text-decoration: none;
   }
   &:active:focus{
@@ -44,6 +46,10 @@
     &.submit-server-name{
       border: 1px solid $brand-accent;
     }
+  }
+  &.small{
+    height: 30px;
+    font-size: 14px;
   }
 }
 
