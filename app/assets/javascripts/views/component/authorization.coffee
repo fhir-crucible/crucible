@@ -32,10 +32,7 @@ class Crucible.Authorization
           $(this).val()
         ).get().join(" ")
         $("#scope").val(scope)
-        $("[name='scope_vars[]']").each(() ->
-          $(this).attr('checked', false)
-        )
-        event.target.submit()
+        window.location.assign(event.target.action + "?" + $("input.used").serialize())
       )
       return false
     )
