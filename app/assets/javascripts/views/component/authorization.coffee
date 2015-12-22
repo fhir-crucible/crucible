@@ -32,6 +32,7 @@ class Crucible.Authorization
           $(this).val()
         ).get().join(" ")
         $("#scope").val(scope)
+
         window.location.assign(event.target.action + "?" + $("input.used").serialize())
       )
       return false

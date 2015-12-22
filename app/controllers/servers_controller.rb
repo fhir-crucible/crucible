@@ -39,14 +39,18 @@ class ServersController < ApplicationController
         token_url: server.token_url,
         raise_errors: false
       }
-      if params['error']
+      if params['error'] || params['error_description']
         flash.alert = "Authorization error: #{params['error_description']}"
         redirect_to server_path(server)
         return
       end
       client = OAuth2::Client.new(server.client_id, server.client_secret, options)
-      auth_pw = Base64.encode64("#{server.client_id}:#{server.client_secret}")
-      token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
+      if (!server.client_secret.empty?)
+        auth_pw = Base64.strict_encode64("#{server.client_id}:#{server.client_secret}")
+        token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect", :headers=> {'Authorization' => "Basic #{auth_pw}"})
+      else
+        token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
+      end
       if token.params["error"]
         flash.alert = "#{token.params['error']}: #{token.params['error_description']}"
         redirect_to server_path(server)

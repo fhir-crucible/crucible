@@ -15,6 +15,7 @@
         <label for="client_secret">Client Secret</label>
         <input type="password" id="client_secret" name="client_secret" class="form-control authorize_form_element"  <% if @server.tags.include?('argonaut') %> value="<%= ("*" * @server.client_secret.length) if @server.client_secret %>" <% end %> />
       </div>
+      
       <div class="form-group scope-types">
         <table>
           <thead>
@@ -22,14 +23,39 @@
           </thead>
           <tbody>
             <tr>
-              <td><input type="checkbox" name="scope_vars[]" value="patient/*.read" checked /></td>
-              <td><code>patient/*.read</code></td>
-              <td>Permission to read any resource for the current patient</td>
+              <td><input type="checkbox" name="scope_vars[]" value="launch" /></td>
+              <td><code>launch</code></td>
+              <td>Simulate an EHR launch profile</td>
             </tr>
             <tr>
               <td><input type="checkbox" name="scope_vars[]" value="launch/patient" checked /></td>
               <td><code>launch/patient</code></td>
               <td>When launching outside the EHR, ask for a patient to be selected at launch time</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/*.read" checked /></td>
+              <td><code>patient/*.read</code></td>
+              <td>Permission to read any resource for the current patient</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/Patient.read" /></td>
+              <td><code>patient/Patient.read</code></td>
+              <td>Permission to read the Patient resource for the current patient</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/DocumentReference.read" /></td>
+              <td><code>patient/DocumentReference.read</code></td>
+              <td>Permission to read DocumentReference resources for the current patient</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/MedicationOrder.read" /></td>
+              <td><code>patient/MedicationOrder.read</code></td>
+              <td>Permission to read MedicationOrder resources for the current patient</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="scope_vars[]" value="patient/MedicationStatement.read" /></td>
+              <td><code>patient/MedicationStatement.read</code></td>
+              <td>Permission to read MedicationStatemenet resources for the current patient</td>
             </tr>
             <tr>
               <td><input type="checkbox" name="scope_vars[]" value="fhir_complete" /></td>
