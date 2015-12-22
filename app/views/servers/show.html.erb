@@ -70,17 +70,13 @@
                 <div class="col-md-3">
                   <div class="filter">
                     <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
-                    <div class="past-test-run-data row">
-                      <div class="col-md-1"><i class="fa fa-calendar"></i></div>
-                      <div class="col-md-10"><span class="selected-run">Name&nbsp;</span><a class="pull-right" href="#"><i class="fa fa-gear"></i></a></div>
-                    </div>
                     <div>
                       <input placeholder="Enter Search" type="text" class="test-results-filter form-control">
                     </div>
                     <div class="button-holder">
+                      <div><a href="#">add a filter...</a></div>
                       <span class="tag collapse in filter-by-supported">supported only <a href="#"><i class="fa fa-times"></i></a></span>
                       <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
-                      <select class="past-test-runs-selector form-control"></select>
                     </div>
                   </div>
                 </div>
@@ -94,6 +90,13 @@
                       <div class="col-md-9 suite-selectors">
                         <a class="selectDeselectAll" data-toggle="tooltip" data-placement="top" title="Select/Deselect All Suites"><i class="fa fa-check"></i></a>
                         <a class="expandCollapseAll" data-toggle="tooltip" data-placement="top" title="Expand/Collapse All Suites"><i class="fa fa-expand"></i></a>
+                        <a class="change-test-run" data-toggle="tooltip" data-placement="top" title="Select Past Test Run"><i class="fa fa-gear"></i></a>
+                        <span class="display-data-changer" style="display: none">
+                          <select class="past-test-runs-selector form-control"></select>
+                        </span>
+                        <span class="display-data">
+                          <a class="selected-run"></a>
+                        </span>
                       </div>
                       <div class="col-md-3">
                         <!-- <a class="link-btn pull-right">Execute&nbsp;<i class="fa fa-arrow-circle-right"></i></a> -->

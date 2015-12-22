@@ -115,13 +115,34 @@
     margin-right: 4px;
   }
   button{
-    height: 30px;
+    height: 34px;
     font-size: 16px;
   }
 }
 
-.test-results .button-holder{
-  margin-bottom: 20px;
+.tab-content-holder .test-results {
+  .button-holder{
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid $structure;
+    .suite-selectors{
+      margin-top: 5px;
+    }
+  }
+  .selected-run{
+    font-size: 16px;
+
+  }
+  .past-test-runs-selector.form-control{
+    display: inline;
+    width: inherit;
+  }
+  .display-data{
+    text-align: left;
+    margin-bottom: 10px;
+    padding-left: 10px;
+  }
 }
 
 .filter{
@@ -130,6 +151,9 @@
     margin-bottom: 15px;
   }
   .button-holder{
+    & > div > a{
+      font-size: 12px;
+    }
     margin-top: 10px;
     button{
       text-align: left;
@@ -154,12 +178,6 @@
     }
   }
   .summary{
-  }
-  .past-test-run-data{
-    text-align: left;
-    .selected-run{
-      font-size: 16px;
-    }
   }
 }
 
