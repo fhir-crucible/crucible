@@ -53,9 +53,9 @@ class Crucible.Conformance
 
   oauthUrl: (url) =>
     if @authType() == "OAuth2"
-      auth = @conformance.rest[0].security.extension[0].extension.find((elem, ind, arr)->
+      auth = @conformance.rest?[0].security?.extension?[0].extension?.filter((elem)->
         elem.url == url
-      )
+      )[0]
       auth.value.value if auth
 
   authType: =>
