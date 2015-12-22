@@ -12,7 +12,6 @@ class Crucible.TestExecutor
     testResult: 'views/templates/servers/partials/test_result'
     testRequests: 'views/templates/servers/partials/test_requests'
   html:
-    clock: '<i class="fa fa-fw fa-clock-o"></i>'
     selectAllButton: '<i class="fa fa-close"></i>'
     deselectAllButton: '<i class="fa fa-check"></i>'
     collapseAllButton: '<i class="fa fa-compress"></i>'
@@ -45,13 +44,11 @@ class Crucible.TestExecutor
     $('#cancel-modal #cancel-confirm').click(@cancelTestRun)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
-    @element.find('.selectDeselectAll').tooltip()
-    @element.find('.expandCollapseAll').tooltip()
-    @element.find('.change-test-run').tooltip()
+    @element.find('.clear-past-run-data').click(@clearPastTestRunData)
     @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
     @element.find('.filter-by-supported a').click(@filterBySupportedHandler)
     @element.find('.change-test-run').click(@togglePastRunsSelector)
-    @element.find('.selected-run').click(@togglePastRunsSelector)
+    @element.find('.close-change-test-run').click(@togglePastRunsSelector)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
     @searchBox = @element.find('.test-results-filter')
     @searchBox.on('keyup', @searchBoxHandler)
@@ -66,6 +63,14 @@ class Crucible.TestExecutor
       @loadTests()
       false
     )
+    @bindToolTips()
+
+  bindToolTips: =>
+    @element.find('.selectDeselectAll').tooltip()
+    @element.find('.expandCollapseAll').tooltip()
+    @element.find('.clear-past-run-data').tooltip()
+    @element.find('.change-test-run').tooltip()
+    @element.find('.close-change-test-run').tooltip()
 
   loadTests: =>
     $.getJSON("/servers/#{@serverId}/supported_tests.json").success((data) =>
@@ -97,12 +102,17 @@ class Crucible.TestExecutor
       selector = @element.find('.past-test-runs-selector')
       selector.empty()
       if elementToAdd
-        selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}''>#{elementToAdd.text}</option>")
+        selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}'>#{elementToAdd.text}</option>")
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
         selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY')} </option>"
         selector.append(selection)
     )
+
+  clearPastTestRunData: =>
+    @element.find('.selected-run').empty()
+    @element.find('.clear-past-run-data').hide()
+    @renderSuites()
 
   updateCurrentTestRun: =>
     @element.find('.test-suites').empty()
@@ -111,11 +121,6 @@ class Crucible.TestExecutor
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     testRunId = selector.val()
-
-
-    # if testRunId == ''
-
-
     suiteIds = $($.map(selector.find('option'), (e) -> e.value))
     $.getJSON("/servers/#{@serverId}/test_runs/#{testRunId}").success((data) =>
       return unless data
@@ -133,21 +138,23 @@ class Crucible.TestExecutor
       d = date.getDate()
       y = date.getFullYear()
       @setTestRunDateDisplay(m, d, y)
+      @element.find('.clear-past-run-data').show()
       @element.find('.change-test-run').hide()
       @togglePastRunsSelector()
     ).complete(() -> 
       $('.execute').show()
       $('.suite-selectors').show()
       $('.test-result-loading').hide()
-      @renderPastTestRunsSelector({text: 'Clear past run data', value: 'clear', disabled: false})
     )
 
   setTestRunDateDisplay: (month, day, year) =>
-    @element.find('.selected-run').html(@html.clock + month + '/' + day + '/' + year )
+    @element.find('.selected-run').html(month + '/' + day + '/' + year)
 
   togglePastRunsSelector: =>
     @element.find('.display-data-changer').toggle()
     @element.find('.display-data').toggle()
+    @element.find('.close-change-test-run').toggle()
+    @element.find('.change-test-run').toggle()
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :visible :checkbox')
@@ -331,6 +338,10 @@ class Crucible.TestExecutor
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
     @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
+    run_date = @element.find('.past-test-runs-selector').children().last().html()
+    @element.find('.selected-run').empty().html(run_date)
+    @element.find('')
+    @element.find('.clear-past-run-data').show()
     $("#cancel-modal").hide()
     @testRunId = null
 
