@@ -137,11 +137,16 @@
   .past-test-runs-selector.form-control{
     display: inline;
     width: inherit;
+    border-color: $brand-accent;
+    color: $brand-accent;
   }
   .display-data{
     text-align: left;
     margin-bottom: 10px;
     padding-left: 10px;
+  }
+  .close-change-test-run{
+    font-size: 14px;
   }
 }
 
@@ -178,6 +183,25 @@
     }
   }
   .summary{
+  }
+  .add-filter{
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 5px;
+    .add-filter-selector{
+      select{
+        width: 70%;
+        display: inline;
+      }
+      a{
+        font-size: 14px;
+        display: inline;
+      }
+    }
+  }
+  .filter-selector.form-control{
+    border-color: $brand-accent;
+    color: $brand-accent;
   }
 }
 

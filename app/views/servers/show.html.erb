@@ -73,8 +73,20 @@
                     <div>
                       <input placeholder="Enter Search" type="text" class="test-results-filter form-control">
                     </div>
+                    <div class="add-filter">
+                      <div class="add-filter-link"><a><i class="fa fa-plus-circle"></i> add a filter</a></div>
+                      <div class="add-filter-selector" style="display: none">
+                        <span>
+                          <select class="filter-selector form-control">
+                            <option selected="true" disabled="true">Select a filter...</option>
+                            <option value="supported">supported only</option>
+                            <option value="executed">executed only</option>
+                          </select>
+                        </span>
+                        <a><i class="fa fa-close"></i></a>
+                      </div>
+                    </div>
                     <div class="button-holder">
-                      <div><a href="#">add a filter...</a></div>
                       <span class="tag collapse in filter-by-supported">supported only <a href="#"><i class="fa fa-times"></i></a></span>
                       <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
                     </div>

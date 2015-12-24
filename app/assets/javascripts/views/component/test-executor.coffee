@@ -50,6 +50,9 @@ class Crucible.TestExecutor
     @element.find('.change-test-run').click(@togglePastRunsSelector)
     @element.find('.close-change-test-run').click(@togglePastRunsSelector)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
+    @element.find('.add-filter-link').click(@toggleFilterSelector)
+    @element.find('.filter-selector').change(@addFilter)
+    @element.find('.add-filter-selector a').click(@toggleFilterSelector)
     @searchBox = @element.find('.test-results-filter')
     @searchBox.on('keyup', @searchBoxHandler)
     @element.find('.starburst').on('starburstInitialized', (event) =>
@@ -145,6 +148,8 @@ class Crucible.TestExecutor
       $('.execute').show()
       $('.suite-selectors').show()
       $('.test-result-loading').hide()
+      selector.children().attr('selected', false)
+      selector.children().first().attr('selected', true)
     )
 
   setTestRunDateDisplay: (month, day, year) =>
@@ -155,6 +160,10 @@ class Crucible.TestExecutor
     @element.find('.display-data').toggle()
     @element.find('.close-change-test-run').toggle()
     @element.find('.change-test-run').toggle()
+
+  toggleFilterSelector: =>
+    @element.find('.add-filter-link').toggle()
+    @element.find('.add-filter-selector').toggle()
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :visible :checkbox')
@@ -240,6 +249,16 @@ class Crucible.TestExecutor
     @element.find('.filter-by-supported').collapse('hide')
     @filter(supported: false)
     false
+
+  addFilter: =>
+    selector = @element.find('.filter-selector')
+    filter = selector.val()
+    @filters["#{filter}"] = true
+    @filter(@filters)
+    @element.find(".filter-by-#{filter}").collapse('show')
+    @toggleFilterSelector()
+    selector.children().attr('selected', false)
+    selector.children().first().attr('selected', true)
 
   filter: (filters)=>
     if filters?

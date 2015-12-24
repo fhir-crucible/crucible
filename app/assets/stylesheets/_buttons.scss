@@ -1,8 +1,8 @@
 .btn {
   height: 35px;
   width: 100%;
-  background-color: lighten($brand-secondary, 15%);
-  border-color: lighten($brand-secondary, 15%);
+  background-color: $brand-secondary;
+  border-color: $brand-secondary;
   color: $brand-tertiary;
   font-size: 16px;
   &:focus {
