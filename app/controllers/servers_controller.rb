@@ -98,7 +98,7 @@ class ServersController < ApplicationController
 
   def past_runs
     server = Server.find(params[:server_id])
-    past_runs = TestRun.where(server: server, status: 'finished')
+    past_runs = TestRun.where(server: server, status: 'finished').order_by(:date => 'desc')
     render json: {past_runs: past_runs}
   end
 

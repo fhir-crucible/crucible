@@ -92,7 +92,7 @@ class Crucible.TestExecutor
       if elementToAdd
         selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}''>#{elementToAdd.text}</option>")
       selector.show()
-      $(data['past_runs'].reverse()).each (i, test_run) =>
+      $(data['past_runs']).each (i, test_run) =>
         selection = "<option value='#{test_run.id}'> #{moment(test_run.date).fromNow()} </option>"
         selector.append(selection)
     )
