@@ -132,7 +132,6 @@
   }
   .selected-run{
     font-size: 16px;
-
   }
   .past-test-runs-selector.form-control{
     display: inline;
@@ -144,6 +143,7 @@
     text-align: left;
     margin-bottom: 10px;
     padding-left: 10px;
+    color: $brand-accent;
   }
   .close-change-test-run{
     font-size: 14px;
