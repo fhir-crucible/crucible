@@ -1,67 +1,12 @@
-<div class="col-md-12 tab-content-holder" data-authorize-url="{{authorizeUrl}}" data-token-url="{{tokenUrl}}" data-auth-type="{{authType}}">
-
-  <a id="refresh-conformance-link" href="#">
-    <i class="glyphicon glyphicon glyphicon-refresh"></i>&nbsp;Refresh Cached Conformance
-  </a>
-  <!-- RESOURCE CHART -->
-  <div class="row conformance">
-    <div id="resource-chart" class="table-responsive">
-      <table class="col-md-12 table table-mega-striped table-condensed">
-        <thead>
-          <tr>
-            <th>Resource Type</th>
-            <th>Read</th>
-            <th>VRead</th>
-            <th>Update</th>
-            <th>Delete</th>
-            <th>History</th>
-            <th>Validate</th>
-            <th>History Type</th>
-            <th>Create</th>
-            <th>Search Type</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each testedResources as |res|}}
-            <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#resource-{{@index}}">
-              <td data-title="Read" class="test-circle-holder">
-                <a>{{title-case res.fhirType}}</a>
-              </td>
-              {{#each ../operations as |operation|}}
-                <td>
-                  {{> resource_operation resource=res validatedResources=validatedResources operation=operation }}
-                </td>
-              {{/each}}
-            </tr>
-            <tr id="resource-{{@index}}" class="panel-collapse collapse" aria-expanded="false">
-              <td colspan="10">
-                <div>
-                  Conforms to
-                  <a href={{res.profile.reference}}>{{res.profile.reference}}</a>
-                  <table class="table inner-table">
-                    <tr>
-                      <th>Search Param</th>
-                      <th>Type</th>
-                      <th>Description</th>
-                    </tr>
-                    {{#each res.searchParam as |param|}}
-                      <tr>
-                        <td>{{param.name}}</td>
-                        <td>{{param.fhirType}}</td>
-                        <td>{{param.documentation}}</td>
-                      </tr>
-                    {{/each}}
-                  </table>
-                </div>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-
+<div class="col-md-12 tab-content-holder conformance" data-authorize-url="{{authorizeUrl}}" data-token-url="{{tokenUrl}}" data-auth-type="{{authType}}">
   <!-- METADATA CONTAINER -->
-  <div class="row conformance metadata">
+  <div class="row screen-changer">
+    <div class="col-md-12">
+      <span class="resources-changer active"><a>Conformance Resource Support</a></span>
+      <span class="metadata-changer"><a>Conformance Metadata</a></span>
+    </div>
+  </div>
+  <div class="row conformance metadata conformance-metadata hide">
     <div class="metadata-selector col-md-3">
       <ul class="nav nav-pills nav-stacked metadata">
         <li class="active"><a data-toggle="tab" href="#conformance_metadata">Conformance Metadata</a></li>
@@ -129,4 +74,70 @@
       </div>
     </div>
   </div>
-</div>
+
+  <div class="conformance-resources">
+    <div class="header">
+      <p>Click rows below to show additional information on elements in conformance</p>
+      <a class="pull-right" id="refresh-conformance-link" href="#">
+          <p>Refresh&nbsp;<i class="glyphicon glyphicon glyphicon-refresh"></i></p>
+          
+        </a>
+    </div>
+    <!-- RESOURCE CHART -->
+    <div class="row conformance">
+      <div id="resource-chart" class="table-responsive">
+        <table class="col-md-12 table table-mega-striped table-condensed">
+          <thead>
+            <tr>
+              <th>Resource Type</th>
+              <th>Read</th>
+              <th>VRead</th>
+              <th>Update</th>
+              <th>Delete</th>
+              <th>History</th>
+              <th>Validate</th>
+              <th>History Type</th>
+              <th>Create</th>
+              <th>Search Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each testedResources as |res|}}
+              <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#resource-{{@index}}">
+                <td data-title="Read" class="test-circle-holder">
+                  <a>{{title-case res.fhirType}}</a>
+                </td>
+                {{#each ../operations as |operation|}}
+                  <td>
+                    {{> resource_operation resource=res validatedResources=validatedResources operation=operation }}
+                  </td>
+                {{/each}}
+              </tr>
+              <tr id="resource-{{@index}}" class="panel-collapse collapse" aria-expanded="false">
+                <td colspan="10">
+                  <div>
+                    Conforms to
+                    <a href={{res.profile.reference}}>{{res.profile.reference}}</a>
+                    <table class="table inner-table">
+                      <tr>
+                        <th>Search Param</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                      </tr>
+                      {{#each res.searchParam as |param|}}
+                        <tr>
+                          <td>{{param.name}}</td>
+                          <td>{{param.fhirType}}</td>
+                          <td>{{param.documentation}}</td>
+                        </tr>
+                      {{/each}}
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
