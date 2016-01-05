@@ -85,7 +85,6 @@ class Crucible.TestExecutor
       @continueTestRun() if @testRunId
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
       @filter(supported: true)
-      #@element.find('.filter-by-supported').collapse('show')
     ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
@@ -119,7 +118,7 @@ class Crucible.TestExecutor
     @element.find('.selected-run').empty()
     @element.find('.clear-past-run-data').hide()
     @renderSuites()
-    @filter(executed: false, supported: true)
+    @filter(executed: false)
 
   updateCurrentTestRun: =>
     @element.find('.test-suites').empty()
@@ -137,9 +136,7 @@ class Crucible.TestExecutor
         suiteElement = @element.find("#test-#{suiteId}")
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
       @filter(supported: data.test_run.supported_only)
-      #@element.find('.filter-by-supported').collapse(if data.test_run.supported_only then 'show' else 'hide')
-      #@element.find('.filter-by-executed').collapse('show')
-      @filter(executed: true, supported: false)
+      @filter(executed: true, supported: (if data.test_run.supported_only then true else false))
       date = new Date(data.test_run.date)
       m = date.getMonth() + 1
       d = date.getDate()
@@ -209,7 +206,6 @@ class Crucible.TestExecutor
       suiteElement.addClass("executed")
 
     @element.find('.test-run-result').hide()
-    #@element.find('.filter-by-executed').collapse('show')
     @filter(executed: true)
 
   continueTestRun: =>
@@ -259,7 +255,6 @@ class Crucible.TestExecutor
     filter = selector.val()
     @filters["#{filter}"] = true
     @filter(@filters)
-    #@element.find(".filter-by-#{filter}").collapse('show')
     @toggleFilterSelector()
     selector.children().attr('selected', false)
     selector.children().first().attr('selected', true)
