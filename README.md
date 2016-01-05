@@ -13,6 +13,11 @@ A simple Rails app for evaluating FHIR.
 
 ## Getting Started ##
 
+### Linux ###
+
+- [Ubuntu Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-(Ubuntu-14.04))
+- [CentOS Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-(CentOS-7.1.1503))
+
 ### OSX ###
 
 #### Dependencies
