@@ -84,7 +84,7 @@ class Crucible.TestExecutor
   loadTests: =>
     $.getJSON("/servers/#{@serverId}/supported_tests.json").success((data) =>
       @suites = data['tests']
-      @renderSuites()
+      @renderSuites() if !@defaultSelection
       @continueTestRun() if @runningTestRunId && !@defaultSelection
       @filter(supported: true)
       @element.find('.filter-by-supported').collapse('show')
@@ -382,7 +382,6 @@ class Crucible.TestExecutor
     @element.find('')
     @element.find('.clear-past-run-data').show()
     $("#cancel-modal").hide()
-    # TODO: change the dropdown to the selected value
     @selectedTestRunId = @runningTestRunId
     @runningTestRunId = null
 
@@ -405,9 +404,13 @@ class Crucible.TestExecutor
   addClickPermalinkHandler: (testRunId, suiteElement, testId) =>
     permalink = suiteElement.find(".test-permalink-link")
     suiteId = suiteElement.attr("id").substring(5) #strip off "test-" prefix
-    permalink.click (e) => 
-      window.location.hash="#{testRunId}/#{suiteId}/#{testId}" #change into copy to clipboard
-      e.preventDefault()
+    hash="##{testRunId}/#{suiteId}/#{testId}"
+    path="#{window.location.protocol}//#{window.location.host}#{window.location.pathname}#{hash}"
+    permalink.attr("href",hash)
+    permalink.click (e) => e.preventDefault()
+    clipboard = new Clipboard(permalink[0], text: () => path)
+    clipboard.on('success', () => suiteElement.find(".permalink-copied").fadeIn('slow'))
+    clipboard.on('error', () => window.location.hash=hash)
 
   flashWarning: (message) =>
     warningBanner = @element.find('.warning-message')
