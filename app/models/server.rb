@@ -5,6 +5,7 @@ class Server
 
   include Mongoid::Document
   field :name, type: String
+  field :name_guessed, type: Boolean, default: false
   field :url, type: String
   belongs_to :summary
   has_one :aggregate_run
@@ -31,8 +32,8 @@ class Server
       self.supported_suites = []
       collect_supported_tests
       self.default_format = client.default_format if client.default_format
-      guess_name
       self.save!
+      guess_name(true)
       updated = true
     end
     value = JSON.parse(self.conformance)
@@ -191,8 +192,8 @@ class Server
     self.save!
   end
 
-  def guess_name
-    return unless self.name.blank?
+  def guess_name(force=false)
+    return unless (self.name.blank? || force)
     if self.conformance
       value = JSON.parse(self.conformance) rescue nil
       if value
@@ -201,11 +202,12 @@ class Server
       end
     end
     if candidate.nil? || !candidate.is_a?(String)
-      host = URI.parse(url).host
+      host = URI.parse(url).host rescue nil
       candidate = host.split('.').first if (host && (host =~ /\d+\.\d+\.\d+\.\d+/).nil?)
       candidate = host if (candidate.nil? || !(candidate =~ /^fhir/i).nil?)
       candidate ||= url
     end
+    self.name_guessed = true
     self.name = candidate
     self.save
   end
