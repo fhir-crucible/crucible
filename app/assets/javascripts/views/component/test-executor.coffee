@@ -47,6 +47,9 @@ class Crucible.TestExecutor
     @element.find('.clear-past-run-data').click(@clearPastTestRunData)
     @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
     @element.find('.filter-by-supported a').click(@filterBySupportedHandler)
+    # turn off toggling for tags
+    @element.find('.filter-by-executed').collapse({toggle: false})
+    @element.find('.filter-by-supported').collapse({toggle: false})
     @element.find('.change-test-run').click(@togglePastRunsSelector)
     @element.find('.close-change-test-run').click(@togglePastRunsSelector)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
@@ -82,7 +85,7 @@ class Crucible.TestExecutor
       @continueTestRun() if @testRunId
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
       @filter(supported: true)
-      @element.find('.filter-by-supported').collapse('show')
+      #@element.find('.filter-by-supported').collapse('show')
     ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
@@ -116,6 +119,7 @@ class Crucible.TestExecutor
     @element.find('.selected-run').empty()
     @element.find('.clear-past-run-data').hide()
     @renderSuites()
+    @filter(executed: false, supported: true)
 
   updateCurrentTestRun: =>
     @element.find('.test-suites').empty()
@@ -133,9 +137,9 @@ class Crucible.TestExecutor
         suiteElement = @element.find("#test-#{suiteId}")
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
       @filter(supported: data.test_run.supported_only)
-      @element.find('.filter-by-supported').collapse(if data.test_run.supported_only then 'show' else 'hide')
-      @element.find('.filter-by-executed').collapse('show')
-      @filter(executed: true)
+      #@element.find('.filter-by-supported').collapse(if data.test_run.supported_only then 'show' else 'hide')
+      #@element.find('.filter-by-executed').collapse('show')
+      @filter(executed: true, supported: false)
       date = new Date(data.test_run.date)
       m = date.getMonth() + 1
       d = date.getDate()
@@ -205,13 +209,13 @@ class Crucible.TestExecutor
       suiteElement.addClass("executed")
 
     @element.find('.test-run-result').hide()
-    @element.find('.filter-by-executed').collapse('show')
+    #@element.find('.filter-by-executed').collapse('show')
     @filter(executed: true)
 
   continueTestRun: =>
     $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
       @filter(supported: result.test_run.supported_only)
-      @element.find('.filter-by-supported').collapse(if result.test_run.supported_only then 'show' else 'hide')
+      #@element.find('.filter-by-supported').collapse(if result.test_run.supported_only then 'show' else 'hide')
       @prepareTestRun($(result.test_run.test_ids))
       @element.dequeue("executionQueue")
     )
@@ -241,12 +245,12 @@ class Crucible.TestExecutor
     @filter(search: @searchBox.val().toLowerCase().replace(/\s/g, ""))
 
   filterByExecutedHandler: =>
-    @element.find('.filter-by-executed').collapse('hide')
+    #@element.find('.filter-by-executed').collapse('hide')
     @filter(executed: false)
     false
 
   filterBySupportedHandler: =>
-    @element.find('.filter-by-supported').collapse('hide')
+    #@element.find('.filter-by-supported').collapse('hide')
     @filter(supported: false)
     false
 
@@ -255,7 +259,7 @@ class Crucible.TestExecutor
     filter = selector.val()
     @filters["#{filter}"] = true
     @filter(@filters)
-    @element.find(".filter-by-#{filter}").collapse('show')
+    #@element.find(".filter-by-#{filter}").collapse('show')
     @toggleFilterSelector()
     selector.children().attr('selected', false)
     selector.children().first().attr('selected', true)
@@ -267,6 +271,10 @@ class Crucible.TestExecutor
     # filter suites
     suiteElements = @element.find('.test-run-result')
     suiteElements.show()
+
+    @element.find('.filter-by-executed').collapse((if @filters.executed then 'show' else 'hide'))
+    @element.find('.filter-by-supported').collapse((if @filters.supported then 'show' else 'hide'))
+
     starburstTestIds = _.union(@filters.starburstNode.failedIds, @filters.starburstNode.skippedIds, @filters.starburstNode.errorsIds, @filters.starburstNode.passedIds) if @filters.starburstNode?
     $(suiteElements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
