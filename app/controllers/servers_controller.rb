@@ -26,6 +26,7 @@ class ServersController < ApplicationController
     server = Server.find(params[:id])
     server.update(server_params)
     server.name_guessed = false if server_params[:name]
+    guess_name # will only change if blank
     if server.save
       render json: {server: server}
     else

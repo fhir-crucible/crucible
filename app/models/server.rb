@@ -193,7 +193,7 @@ class Server
   end
 
   def guess_name(force=false)
-    return unless (self.name.blank? || force)
+    return unless (self.name.blank? || (force && self.name_guessed))
     if self.conformance
       value = JSON.parse(self.conformance) rescue nil
       if value
