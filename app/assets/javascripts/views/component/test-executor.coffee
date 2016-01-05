@@ -12,10 +12,10 @@ class Crucible.TestExecutor
     testResult: 'views/templates/servers/partials/test_result'
     testRequests: 'views/templates/servers/partials/test_requests'
   html:
-    selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
-    deselectAllButton: '<i class="fa fa-check"></i>&nbsp;Select All Test Suites'
-    collapseAllButton: '<i class="fa fa-expand"></i>&nbsp;Collapse All Test Suites'
-    expandAllButton: '<i class="fa fa-expand"></i>&nbsp;Expand All Test Suites'
+    selectAllButton: '<i class="fa fa-close"></i>'
+    deselectAllButton: '<i class="fa fa-check"></i>'
+    collapseAllButton: '<i class="fa fa-compress"></i>'
+    expandAllButton: '<i class="fa fa-expand"></i>'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
     unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server Unavailable</div>'
     genericError: '<div class="alert alert-danger"><strong>Error: </strong> Tests could not be executed</div>'
@@ -44,9 +44,18 @@ class Crucible.TestExecutor
     $('#cancel-modal #cancel-confirm').click(@cancelTestRun)
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
+    @element.find('.clear-past-run-data').click(@clearPastTestRunData)
     @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
     @element.find('.filter-by-supported a').click(@filterBySupportedHandler)
+    # turn off toggling for tags
+    @element.find('.filter-by-executed').collapse({toggle: false})
+    @element.find('.filter-by-supported').collapse({toggle: false})
+    @element.find('.change-test-run').click(@togglePastRunsSelector)
+    @element.find('.close-change-test-run').click(@togglePastRunsSelector)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
+    @element.find('.add-filter-link').click(@toggleFilterSelector)
+    @element.find('.filter-selector').change(@addFilter)
+    @element.find('.add-filter-selector a').click(@toggleFilterSelector)
     @searchBox = @element.find('.test-results-filter')
     @searchBox.on('keyup', @searchBoxHandler)
     @element.find('.starburst').on('starburstInitialized', (event) =>
@@ -60,6 +69,14 @@ class Crucible.TestExecutor
       @loadTests()
       false
     )
+    @bindToolTips()
+
+  bindToolTips: =>
+    @element.find('.selectDeselectAll').tooltip()
+    @element.find('.expandCollapseAll').tooltip()
+    @element.find('.clear-past-run-data').tooltip()
+    @element.find('.change-test-run').tooltip()
+    @element.find('.close-change-test-run').tooltip()
 
   loadTests: =>
     $.getJSON("/servers/#{@serverId}/supported_tests.json").success((data) =>
@@ -68,10 +85,10 @@ class Crucible.TestExecutor
       @continueTestRun() if @testRunId
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
       @filter(supported: true)
-      @element.find('.filter-by-supported').collapse('show')
     ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
+    @element.find('.test-results .button-holder').removeClass('hide')
     suitesElement = @element.find('.test-suites')
     suitesElement.empty()
     $(@suites).each (i, suite) =>
@@ -90,15 +107,23 @@ class Crucible.TestExecutor
       selector = @element.find('.past-test-runs-selector')
       selector.empty()
       if elementToAdd
-        selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}''>#{elementToAdd.text}</option>")
+        selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}'>#{elementToAdd.text}</option>")
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
-        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).fromNow()} </option>"
+        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY')} </option>"
         selector.append(selection)
     )
 
+  clearPastTestRunData: =>
+    @element.find('.selected-run').empty()
+    @element.find('.clear-past-run-data').hide()
+    @renderSuites()
+    @filter(executed: false)
+
   updateCurrentTestRun: =>
     @element.find('.test-suites').empty()
+    @element.find('.execute').hide()
+    @element.find('.suite-selectors').hide()
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     testRunId = selector.val()
@@ -110,12 +135,36 @@ class Crucible.TestExecutor
         suiteId = result.test_id
         suiteElement = @element.find("#test-#{suiteId}")
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
-
       @filter(supported: data.test_run.supported_only)
-      @element.find('.filter-by-supported').collapse(if data.test_run.supported_only then 'show' else 'hide')
-      @element.find('.filter-by-executed').collapse('show')
-      @filter(executed: true)
-    ).complete(() -> $('.test-result-loading').hide())
+      @filter(executed: true, supported: (if data.test_run.supported_only then true else false))
+      date = new Date(data.test_run.date)
+      m = date.getMonth() + 1
+      d = date.getDate()
+      y = date.getFullYear()
+      @setTestRunDateDisplay(m, d, y)
+      @element.find('.clear-past-run-data').show()
+      @element.find('.change-test-run').hide()
+      @togglePastRunsSelector()
+    ).complete(() -> 
+      $('.execute').show()
+      $('.suite-selectors').show()
+      $('.test-result-loading').hide()
+      selector.children().attr('selected', false)
+      selector.children().first().attr('selected', true)
+    )
+
+  setTestRunDateDisplay: (month, day, year) =>
+    @element.find('.selected-run').html(month + '/' + day + '/' + year)
+
+  togglePastRunsSelector: =>
+    @element.find('.display-data-changer').toggle()
+    @element.find('.display-data').toggle()
+    @element.find('.close-change-test-run').toggle()
+    @element.find('.change-test-run').toggle()
+
+  toggleFilterSelector: =>
+    @element.find('.add-filter-link').toggle()
+    @element.find('.add-filter-selector').toggle()
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :visible :checkbox')
@@ -140,6 +189,7 @@ class Crucible.TestExecutor
   prepareTestRun: (suiteIds) =>
     @processedResults = {}
     @element.find('.execute').hide()
+    @element.find('.suite-selectors').hide()
     @element.find('.cancel').show()
     @resetSuitePanels()
     @progress.parent().collapse('show')
@@ -156,13 +206,12 @@ class Crucible.TestExecutor
       suiteElement.addClass("executed")
 
     @element.find('.test-run-result').hide()
-    @element.find('.filter-by-executed').collapse('show')
     @filter(executed: true)
 
   continueTestRun: =>
     $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
       @filter(supported: result.test_run.supported_only)
-      @element.find('.filter-by-supported').collapse(if result.test_run.supported_only then 'show' else 'hide')
+      #@element.find('.filter-by-supported').collapse(if result.test_run.supported_only then 'show' else 'hide')
       @prepareTestRun($(result.test_run.test_ids))
       @element.dequeue("executionQueue")
     )
@@ -192,14 +241,23 @@ class Crucible.TestExecutor
     @filter(search: @searchBox.val().toLowerCase().replace(/\s/g, ""))
 
   filterByExecutedHandler: =>
-    @element.find('.filter-by-executed').collapse('hide')
+    #@element.find('.filter-by-executed').collapse('hide')
     @filter(executed: false)
     false
 
   filterBySupportedHandler: =>
-    @element.find('.filter-by-supported').collapse('hide')
+    #@element.find('.filter-by-supported').collapse('hide')
     @filter(supported: false)
     false
+
+  addFilter: =>
+    selector = @element.find('.filter-selector')
+    filter = selector.val()
+    @filters["#{filter}"] = true
+    @filter(@filters)
+    @toggleFilterSelector()
+    selector.children().attr('selected', false)
+    selector.children().first().attr('selected', true)
 
   filter: (filters)=>
     if filters?
@@ -208,6 +266,10 @@ class Crucible.TestExecutor
     # filter suites
     suiteElements = @element.find('.test-run-result')
     suiteElements.show()
+
+    @element.find('.filter-by-executed').collapse((if @filters.executed then 'show' else 'hide'))
+    @element.find('.filter-by-supported').collapse((if @filters.supported then 'show' else 'hide'))
+
     starburstTestIds = _.union(@filters.starburstNode.failedIds, @filters.starburstNode.skippedIds, @filters.starburstNode.errorsIds, @filters.starburstNode.passedIds) if @filters.starburstNode?
     $(suiteElements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
@@ -294,9 +356,14 @@ class Crucible.TestExecutor
     @progress.parent().collapse('hide')
     @progress.find('.progress-bar').css('width',"0%")
     @element.find('.execute').show()
+    @element.find('.suite-selectors').show()
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
     @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
+    run_date = @element.find('.past-test-runs-selector').children().last().html()
+    @element.find('.selected-run').empty().html(run_date)
+    @element.find('')
+    @element.find('.clear-past-run-data').show()
     $("#cancel-modal").hide()
     @testRunId = null
 
@@ -314,8 +381,6 @@ class Crucible.TestExecutor
       $('#data-modal .modal-body').empty().append(html)
       $('#data-modal .modal-body code').each (index, code) ->
         hljs.highlightBlock(code)
-
-
 
   flashWarning: (message) =>
     warningBanner = @element.find('.warning-message')

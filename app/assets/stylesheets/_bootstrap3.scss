@@ -61,6 +61,10 @@ a{
   small{
     color: $brand-accent;
   }
+  &.link-btn{
+    color: $brand-secondary;
+    font-size: 18px;
+  }
 }
 
 .helper_text{

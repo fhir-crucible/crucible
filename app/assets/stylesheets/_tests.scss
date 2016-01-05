@@ -109,10 +109,56 @@
   }
 }
 
+.button-holder{
+  text-align: left;
+  a{
+    margin-right: 4px;
+  }
+  button{
+    height: 34px;
+    font-size: 16px;
+  }
+}
+
+.tab-content-holder .test-results {
+  .button-holder{
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    /*border-bottom: 1px solid $structure;*/
+    .suite-selectors{
+      margin-top: 5px;
+    }
+  }
+  .selected-run{
+    font-size: 16px;
+  }
+  .past-test-runs-selector.form-control{
+    display: inline;
+    width: inherit;
+    border-color: $brand-accent;
+    color: $brand-accent;
+  }
+  .display-data{
+    text-align: left;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    color: $brand-accent;
+  }
+  .close-change-test-run{
+    font-size: 14px;
+  }
+}
+
 .filter{
   margin-top: 30px;
+  & > div{
+    margin-bottom: 15px;
+  }
   .button-holder{
-    text-align: left;
+    & > div > a{
+      font-size: 12px;
+    }
     margin-top: 10px;
     button{
       text-align: left;
@@ -130,11 +176,32 @@
     font-size: 12px;
     font-weight: 100;
     padding: 3px;
-    margin: 0 0 5px 5px;
+    margin-bottom: 5px;
     cursor: pointer;
     a {
         color: $brand-tertiary;
     }
+  }
+  .summary{
+  }
+  .add-filter{
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 5px;
+    .add-filter-selector{
+      select{
+        width: 70%;
+        display: inline;
+      }
+      a{
+        font-size: 14px;
+        display: inline;
+      }
+    }
+  }
+  .filter-selector.form-control{
+    border-color: $brand-accent;
+    color: $brand-accent;
   }
 }
 
@@ -146,5 +213,4 @@
 
 .past-test-runs-selector{
   visibility: none;
-  margin-bottom: 15px;
 }

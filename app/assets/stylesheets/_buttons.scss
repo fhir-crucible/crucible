@@ -12,9 +12,11 @@
     outline: none;
   }
   &:hover{
+/*    background-color: darken($brand-secondary, 11%);
+    border-color: darken($brand-secondary, 11%);*/
+    background-color: $brand-secondary;
     color: $brand-tertiary;
-    background-color: darken($brand-secondary, 11%);
-    border-color: darken($brand-secondary, 11%);
+    border-color: $brand-secondary; 
     text-decoration: none;
   }
   &:active:focus{
@@ -44,6 +46,10 @@
     &.submit-server-name{
       border: 1px solid $brand-accent;
     }
+  }
+  &.small{
+    height: 30px;
+    font-size: 14px;
   }
 }
 

@@ -21,9 +21,6 @@
               <div class="authorize-icon pull-left">
                 <a data-toggle="modal" data-target="#authorize-modal" class="authorization-handle authorization_handle hidden" href="#"><i class="fa fa-lock"></i></a>
               </div>
-              <div class="server-icon pull-left editToggle">
-                <a target="_blank" href="<%= @server.url %>"><i class="fa fa-server"></i></a>
-              </div>
               <div class=" server-url-name pull-left">
                 <div class="server-name-panel emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
                   <div class="server-name-label"><%= @server.name %></div>
@@ -72,26 +69,26 @@
                 <!-- START: Left side, with filters -->
                 <div class="col-md-3">
                   <div class="filter">
+                    <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
                     <div>
                       <input placeholder="Enter Search" type="text" class="test-results-filter form-control">
                     </div>
-                    <div class="button-holder">
-                      <button type="button" class="btn secondary selectDeselectAll"><i class="fa fa-check"></i>&nbsp;Select All Test Suites</button>
-                      <button type="button" class="btn secondary expandCollapseAll"><i class="fa fa-expand"></i>&nbsp;Expand All Test Suites</button>
+                    <div class="add-filter">
+                      <div class="add-filter-link"><a><i class="fa fa-plus-circle"></i> add a filter</a></div>
+                      <div class="add-filter-selector" style="display: none">
+                        <span>
+                          <select class="filter-selector form-control">
+                            <option selected="true" disabled="true">Select a filter...</option>
+                            <option value="supported">supported only</option>
+                            <option value="executed">executed only</option>
+                          </select>
+                        </span>
+                        <a><i class="fa fa-close"></i></a>
+                      </div>
                     </div>
-
-                    <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
                     <div class="button-holder">
                       <span class="tag collapse in filter-by-supported">supported only <a href="#"><i class="fa fa-times"></i></a></span>
-                      <span class="tag collapse filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
-                      <select class="past-test-runs-selector form-control"></select>
-                      <button class="btn execute">
-                        Execute
-                      </button>
-                      <button class="btn cancel" data-toggle="modal" data-target="#cancel-modal" style="display:none">
-                        Cancel
-                      </button>
-                      <div class="warning-message alert alert-danger" role="alert"></div>
+                      <span class="tag collapse filter-by-executed" aria-expanded="false">executed only <a href="#"><i class="fa fa-times"></i></a></span>
                     </div>
                   </div>
                 </div>
@@ -101,6 +98,33 @@
                   <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="test-result-error"></div>
                     <div class="test-result-loading"><i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading...</div>
+                    <div class="button-holder row hide">
+                      <div class="col-md-9 suite-selectors">
+                        <a class="selectDeselectAll" data-toggle="tooltip" data-placement="top" title="Select/Deselect All Suites"><i class="fa fa-check"></i></a>
+                        <a class="expandCollapseAll" data-toggle="tooltip" data-placement="top" title="Expand/Collapse All Suites"><i class="fa fa-expand"></i></a>
+                        <a class="change-test-run" data-toggle="tooltip" data-placement="top" title="Select Past Test Run"><i class="fa fa-gear"></i></a>
+                        <span class="display-data-changer" style="display: none">
+                          <select class="past-test-runs-selector form-control"></select>
+                        </span>
+                        <a class="close-change-test-run" style="display: none" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close"></i></a>
+                        <span class="display-data">
+                          <span class="selected-run"></span>
+                          <i class="fa fa-close clear-past-run-data" style="display: none" data-toggle="tooltip" data-placement="top" title="Clear Past Test Run Data"></i>
+                        </span>
+                      </div>
+                      <div class="col-md-3">
+                        <!-- <a class="link-btn pull-right">Execute&nbsp;<i class="fa fa-arrow-circle-right"></i></a> -->
+                        <button class="btn execute">
+                          Execute
+                        </button>
+                      </div>
+                      <div class="col-md-3 col-md-offset-9">
+                        <button class="btn cancel" data-toggle="modal" data-target="#cancel-modal" style="display:none">
+                            Cancel
+                        </button>
+                      </div>
+                    </div>
+                    <div class="warning-message alert alert-danger" role="alert"></div>
                     <div class="test-suites">
                     </div>
                   </div>
