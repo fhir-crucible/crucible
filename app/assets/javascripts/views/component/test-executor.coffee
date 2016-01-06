@@ -361,7 +361,9 @@ class Crucible.TestExecutor
       if (i == 0)
         # add click handler for default selection
         @addClickRequestDetailsHandler(test, suiteElement)
-        @addClickPermalinkHandler(@selectedTestRunId, suiteElement, test.id)
+        testRunId = @selectedTestRunId
+        testRunId = @runningTestRunId if @runningTestRunId
+        @addClickPermalinkHandler(testRunId, suiteElement, test.id)
       @addClickTestHandler(test, suiteElement)
 
   displayError: (message) =>
@@ -392,8 +394,10 @@ class Crucible.TestExecutor
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
+      testRunId = @selectedTestRunId
+      testRunId = @runningTestRunId if @runningTestRunId
       @addClickRequestDetailsHandler(test, suiteElement)
-      @addClickPermalinkHandler(@selectedTestRunId, suiteElement, test.id)
+      @addClickPermalinkHandler(testRunId, suiteElement, test.id)
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
     suiteElement.find(".data-link").click (e) => 
