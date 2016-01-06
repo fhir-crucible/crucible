@@ -120,6 +120,7 @@ class Crucible.TestExecutor
         selector.append(selection)
 
       if validDefaultSelection
+        @togglePastRunsSelector() # Mimic showing the date dropdown, will be toggled off later
         selector.val(@defaultSelection.testRunId)
         @updateCurrentTestRun()
       else
@@ -150,7 +151,7 @@ class Crucible.TestExecutor
       if @defaultSelection
         @element.find("#test-#{@defaultSelection.suiteId} a.collapsed").click()
         @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click()
-        @defaultSelection = null #prevent from navigating here any more
+        @defaultSelection = null #prevent from auto-navigation from default selection any more
       @filter(supported: data.test_run.supported_only)
       @filter(executed: true, supported: (if data.test_run.supported_only then true else false))
       date = new Date(data.test_run.date)
