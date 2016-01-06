@@ -408,6 +408,7 @@ class Crucible.TestExecutor
 
   addClickPermalinkHandler: (testRunId, suiteElement, testId) =>
     permalink = suiteElement.find(".test-permalink-link")
+    return unless permalink.length
     suiteId = suiteElement.attr("id").substring(5) #strip off "test-" prefix
     hash="##{testRunId}/#{suiteId}/#{testId}"
     path="#{window.location.protocol}//#{window.location.host}#{window.location.pathname}#{hash}"
@@ -415,7 +416,7 @@ class Crucible.TestExecutor
     permalink.click (e) => e.preventDefault()
     clipboard = new Clipboard(permalink[0], text: () => path)
     clipboard.on('success', () => suiteElement.find(".permalink-copied").fadeIn('slow'))
-    clipboard.on('error', () => window.location.hash=hash)
+    clipboard.on('error', () => window.location.hash=hash) #fallback mainly for safari
 
   flashWarning: (message) =>
     warningBanner = @element.find('.warning-message')
