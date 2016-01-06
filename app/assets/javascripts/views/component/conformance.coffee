@@ -38,7 +38,6 @@ class Crucible.Conformance
     @screenControls()
 
   screenControls: =>
-    debugger
     @element.find('.resources-changer').click(=> @changeScreens({controlButton: 'resources-changer', show: 'conformance-resources', hide: ['conformance-metadata']}))
     @element.find('.metadata-changer').click(=> @changeScreens({controlButton: 'metadata-changer', show: 'conformance-metadata', hide: ['conformance-resources']}))
 
