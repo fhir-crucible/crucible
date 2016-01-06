@@ -69,6 +69,10 @@ class Crucible.TestExecutor
       @loadTests()
       false
     )
+    $('#conformance-data').on('conformanceError', (event) =>
+      @filterBySupportedHandler()
+      false
+    )
     @bindToolTips()
 
   bindToolTips: =>

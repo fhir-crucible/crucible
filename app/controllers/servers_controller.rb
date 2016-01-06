@@ -16,6 +16,7 @@ class ServersController < ApplicationController
     unless server
       server = Server.new(params.require(:server).permit(:name))
       server.url = url
+      server.guess_name
       server.save
     end
     redirect_to action: "show", id: server.id
@@ -24,6 +25,8 @@ class ServersController < ApplicationController
   def update
     server = Server.find(params[:id])
     server.update(server_params)
+    server.name_guessed = false if server_params[:name]
+    server.guess_name # will only change if blank
     if server.save
       render json: {server: server}
     else

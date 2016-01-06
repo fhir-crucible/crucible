@@ -51,4 +51,9 @@ namespace :crucible do
 
   end
 
+  desc "back fill blank names"
+  task :guess_server_names => [:environment] do
+    Server.all.select {|s| s.name.blank?}.each {|s| s.guess_name}
+  end
+
 end

@@ -25,6 +25,7 @@ class Crucible.Conformance
         @registerHandlers()
       )
       .error ((data) =>
+        @element.trigger('conformanceError')
         @removeConformanceSpinner()
         @element.html(HandlebarsTemplates[@templates.conformanceError]())
       )
