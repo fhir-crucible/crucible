@@ -67,6 +67,10 @@ a{
   }
 }
 
+a[data-toggle="collapse"] {
+  cursor: pointer;
+}
+
 .helper_text{
   font-size: 14px;
   text-align: left;
@@ -79,12 +83,26 @@ a{
   }
 }
 
+.word-wrap {
+  overflow:hidden;
+  word-wrap:break-word;
+}
+
 .emphasize{
   font-size: 125%;
 }
 
 p{
   font-size: 18px;
+}
+
+label{
+  &.error{
+    font-weight: 100;
+    margin-bottom: 0;
+    color: red;
+    font-size: 14px;
+  }
 }
 
 .row{
@@ -99,6 +117,9 @@ p{
         padding-left: 100px;
       }
     }
+  }
+  &.auth{
+    margin-top:200px;
   }
   &.server-header-data{
     margin-top: 20px;

@@ -1,11 +1,5 @@
-#animation{
-  height: 450px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 
-/*START*/
-// @media only screen and (max-width: 800px) {
+// ------------------------- RESOURCE CHART -------------------------------------- //
 #resource-chart{
   margin-bottom: 50px;
 
@@ -18,10 +12,301 @@
   }
 }
 
-//.starburst{
-//  min-height: 300px;
-//}
-input[type="checkbox"]{
-  margin-right: 10px;
+// ------------------------- TABBED DATA ----------------------------------- //
+
+.tabbed-data {
+  font-size: 24px;
+  font-weight: 50;
+  display: inline-block;
+  width:33%;
 }
-/*END*/
+
+.nav-tabs > li > a {
+  color: $brand-primary;
+}
+
+.tab-content-holder{
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.tab-content {
+  &.details {
+    background-color: $base;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 4px;
+
+    .test-run-result-id {
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+  &.test-results{
+    word-break: break-word;
+  }
+}
+
+// ------------------------- SERVER LIST ----------------------------------- //
+#serverList {
+  font-size: 16px;
+  color: $brand-primary;
+  & .btn {
+    width: 100px;
+    height: 25px;
+    padding: 0px;
+    display: none;
+  }
+  & .clickable-list-item {
+    &:hover {
+      font-weight: bold;
+      font-size: 20px;
+      & .btn {
+        display: inline-block;
+      }
+    }
+    &.active {
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+}
+
+
+// ------------------------- D3 VISUALIZATION ------------------------------ //
+.axis text {
+  font: 10px sans-serif;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+.histogram-bar-label {
+  font: 10px sans-serif;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+// ------------------------- D3 TIPS --------------------------------------- //
+.d3-tip {
+  text-align: center;
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: $brand-tertiary-inverse;
+  color: $brand-tertiary;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: $brand-tertiary-inverse;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Northward tooltips */
+.d3-tip.n:after {
+  content: "\25BC";
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+  text-align: center;
+}
+
+/* Eastward tooltips */
+.d3-tip.e:after {
+  content: "\25C0";
+  margin: -4px 0 0 0;
+  top: 50%;
+  left: -8px;
+}
+
+/* Southward tooltips */
+.d3-tip.s:after {
+  content: "\25B2";
+  margin: 0 0 1px 0;
+  top: -8px;
+  left: 0;
+  text-align: center;
+}
+
+/* Westward tooltips */
+.d3-tip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -1px;
+  top: 50%;
+  left: 100%;
+}
+
+// ------------------------- CAROUSEL -------------------------------------- //
+.carousel {
+  .carousel-control {
+    color: $brand-primary;
+    width: 5%;
+    text-shadow: none;
+    opacity: 1;
+
+    &:hover {
+      color: $brand-secondary;
+    }
+
+    &.left,
+    &.right {
+      background-image: none;
+    }
+  }
+
+  .carousel-inner {
+    width: inherit;
+
+    .row {
+      padding: 0 50px;
+    }
+  }
+
+  .carousel-indicators li {
+    background-color: $brand-primary;
+
+    &.active {
+      background-color: $brand-secondary;
+    }
+  }
+}
+
+// ------------------------- STARBURST -------------------------------------- //
+.starburst-header {
+  text-align: center;
+}
+
+
+// ------------------------- FAILURES -------------------------------------- //
+.failures {
+  .failures-title {
+    text-align: left;
+    font-size: 30px;
+    border-bottom: 1px solid $structure;
+    margin-bottom: 15px;
+
+    .failures-count {
+      color: $brand-accent;
+    }
+  }
+
+  .failures-search {
+    margin: 20px 0 20px -15px;
+  }
+
+  .tag {
+    display: inline-block;
+    background-color: $brand-accent;
+    border: 3px solid $brand-accent;
+    color: $brand-tertiary;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px;
+    margin: 0 0 5px 5px;
+    cursor: pointer;
+
+    &.selected-tag {
+      background-color: $brand-accent-darken;
+    }
+  }
+
+  .tag-list {
+    display: inline-block;
+
+    a {
+      color: $brand-tertiary;
+      text-decoration: none;
+    }
+  }
+
+  .failure-messages {
+    position: relative;
+    text-align: left;
+
+    .active-test-failure {
+      .failures-nav {
+        .metadata {
+          .failure-message-level-one-count {
+            background-color: $brand-accent-darken;
+            color: $brand-tertiary;
+          }
+
+          .failure-message-level-one-text {
+            background-color: $base-darken;
+          }
+        }
+      }
+    }
+
+    .failures-nav {
+      .metadata {
+        position: relative;
+        min-height: 70px;
+        cursor: pointer;
+
+        .failure-message-level-one-count {
+          position: absolute;
+          height: 42px;
+          width: 42px;
+          padding: 4px 5px 5px 5px;
+          top: 0;
+          left: 0;
+
+          border-radius: 50%;
+          border: 2px solid $brand-accent;
+          color: $brand-accent;
+          font-size: 1.1em;
+          text-align: center;
+
+          &.small {
+            padding-top: 7px;
+            font-size: .95em;
+          }
+          &.smaller {
+            padding: 10px 5px 5px 2px;
+            font-size: .8em;
+          }
+        }
+
+        .failure-message-level-one-text {
+          margin: 10px 0 10px 65px;
+          padding: 10px;
+          font-size: 0.9em;
+          border-radius: 5px;
+        }
+
+        &:hover {
+          .failure-message-level-one-count {
+            background-color: $brand-accent;
+            color: $brand-tertiary;
+          }
+
+          .failure-message-level-one-text {
+            background-color: $base-darken;
+          }
+        }
+      }
+
+      .failed-tests {
+        margin-left: 100px;
+        font-size: 14px;
+
+        .test-id {
+          font-weight: bold;
+          font-size: 16px;
+        }
+
+        .test-stats {
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+}

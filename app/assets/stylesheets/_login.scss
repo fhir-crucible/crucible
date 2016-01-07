@@ -1,4 +1,3 @@
-
 .login{
   text-align: center;
   font-size: 60px;
@@ -7,31 +6,6 @@
   img{
     padding: 10px;
   }
-}
-
-.login-footer{
-  margin-left: 50px;
-  margin-right: 50px;
-  margin-bottom: 50px;
-
-  login-btn{
-    text-align: right;
-    button{
-      height: 100px;
-    }
-  }
-  login-options{
-    vertical-align: center;
-    position: absolute;
-  }
-}
-
-.modal-content{
-  background-color: $base;
-}
-
-.modal-body{
-  padding: 40px;
 }
 
 .login-inputs{
@@ -49,8 +23,10 @@
   margin-bottom: 10px;
 }
 
-.row.auth{
-  margin-top:200px;
+.login-alert {
+  &.alert-danger, &.alert-success {
+    text-align: center;
+  }
 }
 
 .remember-me{
@@ -62,6 +38,19 @@
   }
 }
 
+.login-footer {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
 
-
-
+  login-btn {
+    text-align: right;
+    button, input{
+      height: 100px;
+    }
+  }
+  login-options {
+    vertical-align: center;
+    position: absolute;
+  }
+}
