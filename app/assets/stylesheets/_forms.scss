@@ -1,16 +1,21 @@
 .form {
-
   &.row {
     padding: 5px 15px;
   }
 }
 
-.form-control:focus {
-  border-color: $brand-accent;
+
+.form-control{
+  &:focus {
+    border-color: $brand-accent;
+  }
+  &.error{
+    margin-right: 0;
+    color: $brand-primary;
+  }
 }
 
 .scope-types {
-
   tbody > tr:not(:last-child) {
     border-bottom: lightgrey 1px solid;
   }

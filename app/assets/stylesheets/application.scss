@@ -34,3 +34,11 @@ $fa-font-path: "font-awesome/fonts";
 @import "widgets";
 @import "footer";
 @import "application";
+
+/*standard format for scss files 
+.class{
+  style for class
+  style for &:state (i.e. &:hover)
+  style for sublements (i.e. & label{}, a{}, & > div{})
+  style for specific versions (i.e. &.landing-page, &.warning)
+}*/
