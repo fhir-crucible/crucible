@@ -32,3 +32,30 @@
 
   }
 }
+#conformance-data{
+  .tab-content-holder{
+    text-align: left;
+  }
+}
+
+.metadata-selector {
+  .nav-pills > li > a {
+    color: $brand-primary;
+    border-radius: 4px;
+    padding: 5px 10px;
+    &:hover {
+      background-color: $base-darken;
+    }
+  }
+  .nav-pills > li.active > a {
+    background-color: $base-lighten;
+    color: $brand-primary;
+    border-radius: 4px;
+    &:focus {
+      background-color: $base-lighten;
+    }
+    &:hover {
+      background-color: $base-lighten;
+    }
+  }
+}

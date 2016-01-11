@@ -1,50 +1,64 @@
 
+.modal-dialog {
+  width: 70%;
+
+  &.medium {
+    width: 50%;
+  }
+  &.auth{
+    max-width: 700px;
+    label{
+      font-size: 14px;
+      &.header-label{
+        margin-bottom: 10px;
+      }
+    }
+    button{
+      font-size: 14px;
+    }
+  }
+  &.response-data{
+    .panel-heading{
+      text-align: left;
+      padding: 5px;
+    }
+    .panel-group .panel{
+      border-bottom: none;
+      box-shadow: none;
+    }
+    .panel-body{
+      text-align: left;
+    }
+    .panel-title{
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+    .response-panel-body {
+      code {
+        max-height: 350px;
+      }
+    }
+  }
+}
+
+
+.modal-content{
+  background-color: $base;
+}
+
+.modal-body{
+  padding: 40px;
+}
+
+.modal-footer {
+  .btn {
+    width: auto;
+  }
+}
+
 #loading-modal-dialog {
   transform: translate(0, 50%);
   -ms-transform: translate(0, 50%); /* IE 9 */
   -webkit-transform: translate(0, 50%); /* Safari and Chrome */
 }
-
-.modal-dialog.auth{
-  max-width: 700px;
-  label{
-  	font-size: 14px;
-  	&.header-label{
-  	  margin-bottom: 10px;
-  	}
-  }
-  button{
-  	font-size: 14px;
-  }
-}
-
-.modal-dialog.response-data{
-
-  .panel-heading{
-    text-align: left;
-    padding: 5px;
-  }
-
-  .panel-group .panel{
-    border-bottom: none;
-    box-shadow: none;
-  }
-
-  .panel-body{
-    text-align: left;
-  }
-
-  .panel-title{
-    text-align: left;
-    font-size: 14px;
-    margin-bottom: 0;
-  }
-
-  .response-panel-body {
-    code {
-      max-height: 350px;
-    }
-  }
-
-}
-

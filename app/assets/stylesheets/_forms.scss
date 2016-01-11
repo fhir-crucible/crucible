@@ -1,29 +1,40 @@
 .form {
-
   &.row {
     padding: 5px 15px;
   }
 }
 
-.form-control:focus {
-  border-color: $brand-accent;
-}
-
-.scope-types {
-
-  tbody > tr:not(:last-child) {
-    border-bottom: lightgrey 1px solid;
+.form-control{
+  &:focus {
+    border-color: $brand-accent;
   }
-
-  thead {
-    border-bottom: lightgrey 2px solid;
+  &.error{
+    margin-right: 0;
+    color: $brand-primary;
   }
+  &.scope-types {
+    tbody > tr:not(:last-child) {
+      border-bottom: lightgrey 1px solid;
+    }
 
-  th, td {
-    padding: 0 5px;
+    thead {
+      border-bottom: lightgrey 2px solid;
+    }
+
+    th, td {
+      padding: 0 5px;
+    }
   }
 }
 
 input.error {
   margin: 0;
+}
+
+.landing-page-form{
+  margin-top: 15px;
+}
+
+input[type="checkbox"]{
+  margin-right: 10px;
 }

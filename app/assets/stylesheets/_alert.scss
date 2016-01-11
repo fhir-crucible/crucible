@@ -6,6 +6,7 @@
   margin-top: 10px;
 }
 
+/*banner class usually exists with a row class*/
 .banner{
   .alert{
   	margin-left: 15px;
@@ -21,16 +22,4 @@
       }
     }
   }	
-}
-
-.error.form-control{
-  margin-right: 0;
-  color: $brand-primary;
-}
-
-label.error{
-  font-weight: 100;
-  margin-bottom: 0;
-  color: red;
-  font-size: 14px;
 }

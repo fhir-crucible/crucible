@@ -14,23 +14,28 @@ $fa-font-path: "font-awesome/fonts";
 
 @import "tests";
 @import "server";
-@import "home";
 
-@import "accessibility";
 @import "alert";
 @import "buttons";
 @import "components";
 @import "conformance";
-@import "dialogues";
 @import "forms";
 @import "icons";
 @import "dashboard";
-@import "labels";
+@import "filter";
 @import "login";
 @import "modal";
 @import "navigation";
 @import "panels";
 @import "tables";
 @import "widgets";
-@import "footer";
 @import "application";
+
+/*standard format for scss files 
+.class{
+  style for class
+  style for &:state (i.e. &:hover)
+  style for sublements (i.e. & label{}, a{}, & > div{})
+  style for custom sub classes (i.e. &.small, &.secondary)
+  style for specific versions (i.e. &.landing-page, &.warning)
+}*/
