@@ -50,7 +50,13 @@ class ServersController < ApplicationController
       client = OAuth2::Client.new(server.client_id, server.client_secret, options)
       if (!server.client_secret.empty?)
         auth_pw = Base64.strict_encode64("#{server.client_id}:#{server.client_secret}")
-        token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect", :headers=> {'Authorization' => "Basic #{auth_pw}"})
+        token_params = {
+          redirect_uri: "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect",
+          code: params[:code],
+          grant_type: "authorization_code",
+        }
+        response = client.request(:post, server.token_url, {:params => token_params, :headers => {'Authorization' => "Basic #{auth_pw}"}})
+        token = OAuth2::AccessToken.from_hash(client, JSON.parse(response.body))
       else
         token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
       end
