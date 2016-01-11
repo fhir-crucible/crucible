@@ -28,15 +28,18 @@ class Crucible.TestExecutor
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
   processedResults: {}
+  selectedTestRunId: null
+  defaultSelection: null
 
   constructor: ->
     @element = $('.test-executor')
     return unless @element.length
     @element.data('testExecutor', this)
     @serverId = @element.data('server-id')
-    @testRunId = @element.data('current-test-run-id')
+    @runningTestRunId = @element.data('current-test-run-id')
     @progress = $("##{@element.data('progress')}")
     @registerHandlers()
+    @defaultSelection = @parseDefaultSelection(window.location.hash)
     @loadTests()
 
   registerHandlers: =>
@@ -85,10 +88,11 @@ class Crucible.TestExecutor
   loadTests: =>
     $.getJSON("/servers/#{@serverId}/supported_tests.json").success((data) =>
       @suites = data['tests']
-      @renderSuites()
-      @continueTestRun() if @testRunId
-      @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
+      @renderSuites() if !@defaultSelection
+      @continueTestRun() if @runningTestRunId && !@defaultSelection
       @filter(supported: true)
+      @element.find('.filter-by-supported').collapse('show')
+      @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
@@ -108,14 +112,23 @@ class Crucible.TestExecutor
   renderPastTestRunsSelector: (elementToAdd) =>
     $.getJSON("/servers/#{@serverId}/past_runs").success((data) =>
       return unless data
+      validDefaultSelection = false
       selector = @element.find('.past-test-runs-selector')
       selector.empty()
       if elementToAdd
         selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}'>#{elementToAdd.text}</option>")
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
+        validDefaultSelection = true if @defaultSelection && @defaultSelection.testRunId == test_run.id
         selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY')} </option>"
         selector.append(selection)
+
+      if validDefaultSelection
+        @togglePastRunsSelector() # Mimic showing the date dropdown, will be toggled off later
+        selector.val(@defaultSelection.testRunId)
+        @updateCurrentTestRun()
+      else
+        @defaultSelection = null #couldn't find the test run, so hash in url is invalid
     )
 
   clearPastTestRunData: =>
@@ -130,15 +143,19 @@ class Crucible.TestExecutor
     @element.find('.suite-selectors').hide()
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
-    testRunId = selector.val()
+    @selectedTestRunId = selector.val()
     suiteIds = $($.map(selector.find('option'), (e) -> e.value))
-    $.getJSON("/servers/#{@serverId}/test_runs/#{testRunId}").success((data) =>
+    $.getJSON("/servers/#{@serverId}/test_runs/#{@selectedTestRunId}").success((data) =>
       return unless data
       @renderSuites()
       $(data['test_run'].test_results).each (i, result) =>
         suiteId = result.test_id
         suiteElement = @element.find("#test-#{suiteId}")
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+      if @defaultSelection
+        @element.find("#test-#{@defaultSelection.suiteId} a.collapsed").click()
+        @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click()
+        @defaultSelection = null #prevent from auto-navigation from default selection any more
       @filter(supported: data.test_run.supported_only)
       @filter(executed: true, supported: (if data.test_run.supported_only then true else false))
       date = new Date(data.test_run.date)
@@ -213,7 +230,7 @@ class Crucible.TestExecutor
     @filter(executed: true)
 
   continueTestRun: =>
-    $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
+    $.get("/servers/#{@serverId}/test_runs/#{@runningTestRunId}").success((result) =>
       @filter(supported: result.test_run.supported_only)
       #@element.find('.filter-by-supported').collapse(if result.test_run.supported_only then 'show' else 'hide')
       @prepareTestRun($(result.test_run.test_ids))
@@ -227,15 +244,15 @@ class Crucible.TestExecutor
       @prepareTestRun(suiteIds)
       suiteIds = $.map(@element.find(':checked'), (e) -> e.name)
       $.post("/servers/#{@serverId}/test_runs.json", { test_ids: suiteIds, supported_only: @filters.supported }).success((result) =>
-        @testRunId = result.test_run.id
+        @runningTestRunId = result.test_run.id
         @element.dequeue("executionQueue")
       )
     else 
       @flashWarning('Please select at least one test suite')
 
   cancelTestRun: =>
-    if @testRunId?
-      $.post("/servers/#{@serverId}/test_runs/#{@testRunId}/cancel").success( (result) =>
+    if @runningTestRunId?
+      $.post("/servers/#{@serverId}/test_runs/#{@runningTestRunId}/cancel").success( (result) =>
         location.reload()
       )
     else 
@@ -305,8 +322,8 @@ class Crucible.TestExecutor
         @addClickTestHandler(test, newElement)
 
   checkTestRunStatus: =>
-    return false unless @testRunId?
-    $.get("/servers/#{@serverId}/test_runs/#{@testRunId}").success((result) =>
+    return false unless @runningTestRunId?
+    $.get("/servers/#{@serverId}/test_runs/#{@runningTestRunId}").success((result) =>
       test_run = result.test_run
       percent_complete = test_run.test_results.length / test_run.test_ids.length
       @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
@@ -329,7 +346,7 @@ class Crucible.TestExecutor
         @element.dequeue("executionQueue")
       else if test_run.status == "finished"
         @element.dequeue("executionQueue")
-      else if test_run.status != "cancelled" and @testRunId?
+      else if test_run.status != "cancelled" and @runningTestRunId?
         setTimeout(@checkTestRunStatus, @checkStatusTimeout)
     )
 
@@ -348,6 +365,9 @@ class Crucible.TestExecutor
       if (i == 0)
         # add click handler for default selection
         @addClickRequestDetailsHandler(test, suiteElement)
+        testRunId = @selectedTestRunId
+        testRunId = @runningTestRunId if @runningTestRunId
+        @addClickPermalinkHandler(testRunId, suiteElement, test.id)
       @addClickTestHandler(test, suiteElement)
 
   displayError: (message) =>
@@ -369,7 +389,8 @@ class Crucible.TestExecutor
     @element.find('')
     @element.find('.clear-past-run-data').show()
     $("#cancel-modal").hide()
-    @testRunId = null
+    @selectedTestRunId = @runningTestRunId
+    @runningTestRunId = null
 
   addClickTestHandler: (test, suiteElement) => 
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
@@ -377,7 +398,10 @@ class Crucible.TestExecutor
       suiteElement.find(".suite-handle").removeClass('active')
       handle.addClass('active')
       suiteElement.find('.test-results').empty().append(HandlebarsTemplates[@templates.testResult]({test: test}))
+      testRunId = @selectedTestRunId
+      testRunId = @runningTestRunId if @runningTestRunId
       @addClickRequestDetailsHandler(test, suiteElement)
+      @addClickPermalinkHandler(testRunId, suiteElement, test.id)
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
     suiteElement.find(".data-link").click (e) => 
@@ -385,6 +409,18 @@ class Crucible.TestExecutor
       $('#data-modal .modal-body').empty().append(html)
       $('#data-modal .modal-body code').each (index, code) ->
         hljs.highlightBlock(code)
+
+  addClickPermalinkHandler: (testRunId, suiteElement, testId) =>
+    permalink = suiteElement.find(".test-permalink-link")
+    return unless permalink.length
+    suiteId = suiteElement.attr("id").substring(5) #strip off "test-" prefix
+    hash="##{testRunId}/#{suiteId}/#{testId}"
+    path="#{window.location.protocol}//#{window.location.host}#{window.location.pathname}#{hash}"
+    permalink.attr("href",hash)
+    permalink.click (e) => e.preventDefault()
+    clipboard = new Clipboard(permalink[0], text: () => path)
+    clipboard.on('success', () => suiteElement.find(".permalink-copied").fadeIn('slow'))
+    clipboard.on('error', () => window.location.hash=hash) #fallback mainly for safari
 
   flashWarning: (message) =>
     warningBanner = @element.find('.warning-message')
@@ -397,6 +433,11 @@ class Crucible.TestExecutor
       @filter(starburstNode: null)
     else
       @filter(starburstNode: @starburst.nodeMap[node])
+
+  parseDefaultSelection: (hash) =>
+    return null if hash.split("/").length != 3
+    [testRunId, suiteId, testId] = hash.substring(1).split("/")
+    return {testRunId: testRunId, suiteId: suiteId, testId: testId}
 
   transitionTo: (node) ->
     _.defer(=>

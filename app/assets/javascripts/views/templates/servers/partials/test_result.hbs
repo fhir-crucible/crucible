@@ -58,4 +58,12 @@
       </div>
     </div>
   {{/if}}
+  {{#if test.status}}
+    <div class="media test-permalink">
+      <div class="media-body">
+        <a href="#" class="test-permalink-link"><i class="glyphicon glyphicon-link"/> Test Result Permalink</a>
+        <span class="label label-primary permalink-copied" style="display:none">Copied to Clipboard</span>
+      </div>
+    </div>
+  {{/if}}
 </div>

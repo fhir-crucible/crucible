@@ -23,6 +23,7 @@
 //= require highlightjs/highlight.pack.js
 //= require jquery-validation/dist/jquery.validate.js
 //= require vkbeautify/vkbeautify.js
+//= require clipboard/dist/clipboard.js
 
 //= require crucible
 //= require_tree ./views/templates
