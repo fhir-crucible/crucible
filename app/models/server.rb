@@ -14,6 +14,7 @@ class Server
   field :state, type: String
   field :client_id, type: String
   field :client_secret, type: String
+  field :launch_param, type: String
   field :authorize_url, type: String
   field :token_url, type: String
   field :oauth_token_opts, type: Hash

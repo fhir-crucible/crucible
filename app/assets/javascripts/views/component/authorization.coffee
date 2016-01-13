@@ -24,7 +24,8 @@ class Crucible.Authorization
           client_secret: $('#client_secret').val(),
           authorize_url: $('#conformance-data').children().data('authorize-url'),
           token_url: $('#conformance-data').children().data('token-url'),
-          state: $('#state').val()
+          state: $('#state').val(),
+          launch_param: $('#launch_param').val()
       },
       'JSON'
       ).success((data)->
