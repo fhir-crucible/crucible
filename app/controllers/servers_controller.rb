@@ -65,6 +65,11 @@ class ServersController < ApplicationController
         redirect_to server_path(server)
         return
       end
+
+      if !token.params["patient"] && server.launch_param
+        token.params["patient"] = server.launch_param
+      end
+
       server.oauth_token_opts = token.to_hash
       server.save!
       flash.notice = "Server successfully authorized"
@@ -124,11 +129,12 @@ class ServersController < ApplicationController
   def oauth_params
     server = Server.find(params[:server_id])
     if server
-      server.client_id = params[:client_id]
-      server.client_secret = params[:client_secret] unless server.client_secret && params[:client_secret] === '*' * server.client_secret.length
+      server.client_id = params[:client_id].strip
+      server.client_secret = params[:client_secret].strip unless server.client_secret && params[:client_secret] === '*' * server.client_secret.length
       server.state = params[:state]
       server.authorize_url = params[:authorize_url]
       server.token_url = params[:token_url]
+      server.launch_param = params[:launch_param].strip if params[:launch_param]
       server.save
       render json: { success: true }
     end
