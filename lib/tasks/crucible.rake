@@ -56,4 +56,49 @@ namespace :crucible do
     Server.all.select {|s| s.name.blank?}.each {|s| s.guess_name}
   end
 
+  desc "remove duplicate servers"
+  task :remove_duplicate_servers, [:delete] => :environment do |t, args|
+    servers = Server.all
+    servers_by_url = {}
+
+    servers.each do |server|
+      url = PostRank::URI.normalize(server.url).to_s
+      url = url.chop if url[-1] == '/'
+      servers_by_url[url] ||= []
+      servers_by_url[url] << server
+    end
+
+    servers_by_url.values.each do |list|
+      next if list.length <= 1
+      list.sort! do |l,r| 
+        if (l.name_guessed != r.name_guessed)
+          (l.name_guessed ? 0 : 1) <=> (r.name_guessed ? 0 : 1)
+        else
+          (l.summary.try(:generated_at)||Time.new(0)) <=> (r.summary.try(:generated_at)||Time.new(0))
+        end
+      end
+      keep = list.pop
+      puts "Keeping 1 of #{list.length+1}: #{keep.name} => #{keep.url}"
+      list.each do |server|
+        puts "\tDeleting: #{server.name} => #{server.url}"
+        server.delete() if args.delete
+      end
+    end
+
+  end
+
+  desc "cleanup bad servers"
+  task :servers_cleanup, [:delete] => :environment do |t, args|
+    print 'checking'
+    bad = Server.all.select do |s| 
+      print '.'
+      $stdout.flush
+      s.summary.nil? && s.name_guessed && s.client_id.nil? && s.tags.blank? && !s.available?
+    end
+    bad.each do |server|
+      puts "Deleting: #{server.name}: #{server.url}"
+      server.delete() if args.delete
+    end
+  end
+
 end
