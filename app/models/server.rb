@@ -198,7 +198,7 @@ class Server
     if self.conformance
       value = JSON.parse(self.conformance) rescue nil
       if value
-        candidate = value['name'] || value['publisher']
+        candidate = value['publisher'] || value['name']
         candidate ||= value['software']['name'] if value['software']
       end
     end
