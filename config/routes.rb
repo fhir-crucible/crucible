@@ -18,6 +18,10 @@ Rails.application.routes.draw do
     post 'oauth_params'
   end
 
+  resources :test_results, only: [:show] do
+    get 'reissue_request', default: {format: :json}
+  end
+
   root to: "home#index"
   get 'redirect', to: 'servers#oauth_redirect'
 

@@ -85,6 +85,11 @@
     padding: 7px;
     padding-bottom: 3px;
     background-color: $brand-tertiary;
+
+    .request-panel-refresh {
+      float: right;
+      cursor: pointer;
+    }
   }
   .response-panel-body{
     padding: 15px;
