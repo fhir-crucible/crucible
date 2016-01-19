@@ -55,7 +55,7 @@ class ServersController < ApplicationController
           code: params[:code],
           grant_type: "authorization_code",
         }
-        response = client.request(:post, server.token_url, {:params => token_params, :headers => {'Authorization' => "Basic #{auth_pw}"}})
+        response = client.request(:post, server.token_url, {:body => token_params, :headers => {'Authorization' => "Basic #{auth_pw}"}})
         token = OAuth2::AccessToken.from_hash(client, JSON.parse(response.body))
       else
         token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
