@@ -12,6 +12,7 @@ class Crucible.TestExecutor
     testResult: 'views/templates/servers/partials/test_result'
     testRequests: 'views/templates/servers/partials/test_requests'
     testRequestDetails: 'views/templates/servers/partials/test_request_details'
+    testRunSummary: 'views/templates/servers/partials/test_run_summary'
   html:
     selectAllButton: '<i class="fa fa-close"></i>'
     deselectAllButton: '<i class="fa fa-check"></i>'
@@ -26,9 +27,9 @@ class Crucible.TestExecutor
     executed: false
     starburstNode: null
     supported: true
+    failures: false
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
-  processedResults: {}
   selectedTestRunId: null
   defaultSelection: null
 
@@ -42,6 +43,8 @@ class Crucible.TestExecutor
     @registerHandlers()
     @defaultSelection = @parseDefaultSelection(window.location.hash)
     @loadTests()
+    @element.find('.filter-by-executed').css('display', 'none')
+    @element.find('.filter-by-failures').css('display', 'none')
 
   registerHandlers: =>
     @element.find('.execute').click(@startTestRun)
@@ -50,10 +53,9 @@ class Crucible.TestExecutor
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.clear-past-run-data').click(@clearPastTestRunData)
     @element.find('.filter-by-executed a').click(@filterByExecutedHandler)
+    @element.find('.filter-by-failures a').click(@filterByFailuresHandler)
     @element.find('.filter-by-supported a').click(@filterBySupportedHandler)
     # turn off toggling for tags
-    @element.find('.filter-by-executed').collapse({toggle: false})
-    @element.find('.filter-by-supported').collapse({toggle: false})
     @element.find('.change-test-run').click(@togglePastRunsSelector)
     @element.find('.close-change-test-run').click(@togglePastRunsSelector)
     @element.find('.past-test-runs-selector').change(@updateCurrentTestRun)
@@ -92,7 +94,6 @@ class Crucible.TestExecutor
       @renderSuites() if !@defaultSelection
       @continueTestRun() if @runningTestRunId && !@defaultSelection
       @filter(supported: true)
-      @element.find('.filter-by-supported').collapse('show')
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     ).complete(() -> $('.test-result-loading').hide())
 
@@ -133,6 +134,7 @@ class Crucible.TestExecutor
     )
 
   clearPastTestRunData: =>
+    @hideTestResultSummary()
     @element.find('.selected-run').empty()
     @element.find('.clear-past-run-data').hide()
     @renderSuites()
@@ -142,12 +144,14 @@ class Crucible.TestExecutor
     @element.find('.test-suites').empty()
     @element.find('.execute').hide()
     @element.find('.suite-selectors').hide()
+    @hideTestResultSummary()
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     @selectedTestRunId = selector.val()
     suiteIds = $($.map(selector.find('option'), (e) -> e.value))
     $.getJSON("/servers/#{@serverId}/test_runs/#{@selectedTestRunId}").success((data) =>
       return unless data
+      @showTestRunSummary(data.test_run)
       @renderSuites()
       $(data['test_run'].test_results).each (i, result) =>
         suiteId = result.test_id
@@ -217,6 +221,7 @@ class Crucible.TestExecutor
     @progress.parent().collapse('show')
     @element.find('.past-test-runs-selector').attr("disabled", true)
     @renderPastTestRunsSelector({text: 'Test in progress...', value: '', disabled: true})
+    @hideTestResultSummary()
     @progress.find('.progress-bar').css('width',"2%")
     @element.queue("executionQueue", @checkTestRunStatus)
     @element.queue("executionQueue", @finishTestRun)
@@ -263,12 +268,14 @@ class Crucible.TestExecutor
     @filter(search: @searchBox.val().toLowerCase().replace(/\s/g, ""))
 
   filterByExecutedHandler: =>
-    #@element.find('.filter-by-executed').collapse('hide')
     @filter(executed: false)
     false
 
+  filterByFailuresHandler: =>
+    @filter(failures: false)
+    false
+
   filterBySupportedHandler: =>
-    #@element.find('.filter-by-supported').collapse('hide')
     @filter(supported: false)
     false
 
@@ -289,8 +296,9 @@ class Crucible.TestExecutor
     suiteElements = @element.find('.test-run-result')
     suiteElements.show()
 
-    @element.find('.filter-by-executed').collapse((if @filters.executed then 'show' else 'hide'))
-    @element.find('.filter-by-supported').collapse((if @filters.supported then 'show' else 'hide'))
+    @element.find('.filter-by-executed').css('display', (if @filters.executed then 'inline-block' else 'none'))
+    @element.find('.filter-by-supported').css('display', (if @filters.supported then 'inline-block' else 'none'))
+    @element.find('.filter-by-failures').css('display', (if @filters.failures then 'inline-block' else 'none'))
 
     starburstTestIds = _.union(@filters.starburstNode.failedIds, @filters.starburstNode.skippedIds, @filters.starburstNode.errorsIds, @filters.starburstNode.passedIds) if @filters.starburstNode?
     $(suiteElements).each (i, suiteElement) =>
@@ -298,16 +306,17 @@ class Crucible.TestExecutor
       suite = suiteElement.data('suite')
       childrenIds = suite.methods.map (m) -> m.id
       suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase()).indexOf(@filters.search) < 0
-      suiteElement.hide() if @filters.executed          && !suiteElement.hasClass("executed")
-      suiteElement.hide() if @filters.starburstNode?    && !(_.intersection(starburstTestIds, childrenIds).length > 0)
-      suiteElement.hide() if @filters.supported         && !(suite.supported)
+      suiteElement.hide() if @filters.executed && !suiteElement.hasClass("executed")
+      suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
+      suiteElement.hide() if @filters.supported && !(suite.supported)
+      suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
     testElements.show()
     $(testElements).each (i, testElement) =>
       testElement = $(testElement)
       test = @testsById[testElement.attr('id')]
-      testElement.hide() if @filters.supported          && !(test.supported)
+      testElement.hide() if @filters.supported && !(test.supported)
 
   resetSuitePanels: =>
     suitesElement = @element.find('.test-suites')
@@ -346,10 +355,38 @@ class Crucible.TestExecutor
         @displayError(@html.genericError)
         @element.dequeue("executionQueue")
       else if test_run.status == "finished"
+        @showTestRunSummary({test_results: test_run.test_results})
         @element.dequeue("executionQueue")
       else if test_run.status != "cancelled" and @runningTestRunId?
         setTimeout(@checkTestRunStatus, @checkStatusTimeout)
     )
+
+  showTestRunSummary: (results) =>
+    summaryPanel = @element.find('.testrun-summary')
+    summaryData = {
+      suites: {total: 0},
+      tests: {total: 0}
+    }
+
+    for status, weight of @statusWeights
+      summaryData.suites[status] = 0
+      summaryData.tests[status] = 0
+
+    $(results.test_results).each (i, suite) =>
+      suiteStatus = 'pass'
+      $(suite.result).each (j, test) =>
+        suiteStatus = test.status if @statusWeights[suiteStatus] < @statusWeights[test.status]
+        summaryData.tests[test.status]++
+        summaryData.tests.total++
+      summaryData.suites[suiteStatus]++
+      summaryData.suites.total++
+
+    summaryContent = HandlebarsTemplates[@templates.testRunSummary](summaryData)
+    summaryPanel.replaceWith(summaryContent)
+    summaryPanel.show()
+
+  hideTestResultSummary: =>
+    @element.find('.testrun-summary').hide()
 
   handleSuiteResult: (suite, result, suiteElement) =>
     suiteStatus = 'pass'

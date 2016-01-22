@@ -81,14 +81,16 @@
                             <option selected="true" disabled="true">Select a filter...</option>
                             <option value="supported">supported only</option>
                             <option value="executed">executed only</option>
+                            <option value="failures">failures only</option>
                           </select>
                         </span>
                         <a><i class="fa fa-close"></i></a>
                       </div>
                     </div>
                     <div class="button-holder">
-                      <span class="tag collapse in filter-by-supported">supported only <a href="#"><i class="fa fa-times"></i></a></span>
-                      <span class="tag collapse filter-by-executed" aria-expanded="false">executed only <a href="#"><i class="fa fa-times"></i></a></span>
+                      <span class="tag filter-by-supported">supported only <a href="#"><i class="fa fa-times"></i></a></span>
+                      <span class="tag filter-by-executed">executed only <a href="#"><i class="fa fa-times"></i></a></span>
+                      <span class="tag filter-by-failures">failures only <a href="#"><i class="fa fa-times"></i></a></span>
                     </div>
                   </div>
                 </div>
@@ -125,6 +127,7 @@
                       </div>
                     </div>
                     <div class="warning-message alert alert-danger" role="alert"></div>
+                    <div class="testrun-summary" style="display:none">summary</div>
                     <div class="test-suites">
                     </div>
                   </div>
