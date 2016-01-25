@@ -83,5 +83,5 @@ class Crucible.ServerDetails
       labelContainer.append(tagElement)
 
   identifyProtectedTags: =>
-    tags = @element.find('#edit-server-tags-dialogue').val().split(',')
-    tags.filter (n) => @protectedTags.indexOf(n.toLowerCase()) != -1
+    tags = @element.find('#edit-server-tags-dialogue').val().split(',').map (e) -> e.toLowerCase()
+    tags = tags.filter (n) => @protectedTags.indexOf(n) != -1
