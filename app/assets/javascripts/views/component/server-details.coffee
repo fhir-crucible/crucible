@@ -3,19 +3,24 @@ $(window).on('load', ->
 )
 
 class Crucible.ServerDetails
-
+  protectedTags: ['argonaut','daf'] # don't let users remove these for now
   constructor: ->
     @element = $('.server-details')
     return unless @element.length
     @serverId = @element.data('server-id')
     @registerHandlers()
     @renderTags()
+    @preExistingProtectedTags = @identifyProtectedTags()
 
   registerHandlers: =>
     @element.find('.edit-server-name-icon').click(@toggleEditDialogue)
     @registerValidator()
     @element.find('.server-name-panel').tooltip()
     @element.find('.server-url-panel').tooltip()
+    @element.find('#edit-server-tags-dialogue').on('beforeItemRemove', @beforeTagRemove)
+                                               .on('beforeItemAdd', @beforeTagAdd)
+                                               .on('itemAdded', @clearTagError)
+                                               .on('itemRemoved', @clearTagError)
 
   toggleEditDialogue: =>
     @element.find('.editToggle').toggleClass('hide')
@@ -54,6 +59,19 @@ class Crucible.ServerDetails
         false
     )
 
+  clearTagError: =>
+    @element.find('#edit-server-tags-dialogue-error').hide()
+
+  beforeTagRemove: (e) =>
+    e.cancel = e.item.toLowerCase() in @preExistingProtectedTags
+    return unless e.cancel
+    text = "#{e.item} is a protected tag and cannot be removed."
+    @element.find('#edit-server-tags-dialogue-error').text(text).show()
+
+  beforeTagAdd: (e) =>
+    e.cancel = e.item.toLowerCase() in @element.find('#edit-server-tags-dialogue').val().split(",").map (e) -> e.toLowerCase()
+    @element.find('#edit-server-tags-dialogue-error').text("Duplicate tags are not permitted.").show() if e.cancel
+
   renderTags: =>
     tags = @element.find('#edit-server-tags-dialogue').val().split(',')
     tags = tags.map (element) -> element.trim()
@@ -63,3 +81,7 @@ class Crucible.ServerDetails
     for tag in tags
       tagElement = $("<span>").addClass("tag").text(tag)
       labelContainer.append(tagElement)
+
+  identifyProtectedTags: =>
+    tags = @element.find('#edit-server-tags-dialogue').val().split(',')
+    tags.filter (n) => @protectedTags.indexOf(n.toLowerCase()) != -1

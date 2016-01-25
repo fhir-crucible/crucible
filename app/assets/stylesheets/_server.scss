@@ -73,6 +73,7 @@
   .bootstrap-tagsinput {
     border: 1px solid #ccc;
     padding: 2px 0 0 2px;
+    clear: both; // If the URL has an error
     input {
       font-size: 12px;
       border: 0;
