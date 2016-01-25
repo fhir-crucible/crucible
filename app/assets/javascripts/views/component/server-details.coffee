@@ -9,6 +9,7 @@ class Crucible.ServerDetails
     return unless @element.length
     @serverId = @element.data('server-id')
     @registerHandlers()
+    @renderTags()
 
   registerHandlers: =>
     @element.find('.edit-server-name-icon').click(@toggleEditDialogue)
@@ -29,16 +30,18 @@ class Crucible.ServerDetails
         loadingIndicator = @element.find('#server_update_form .submit-server-name .fa-spinner')
         newName = @element.find('#edit-server-name-dialogue').val()
         newURL = @element.find('#edit-server-url-dialogue').val()
+        newTags = @element.find('#edit-server-tags-dialogue').val()
         loadingIndicator.toggleClass('hide')
         $.ajax({
           type: 'PUT',
           url: "/servers/#{@serverId}",
-          data: {server: {name: newName, url: newURL}},
+          data: {server: {name: newName, url: newURL, tags: newTags}},
           success: ((data) =>
             @element.find('.server-name-label').html(newName)
             @element.find('.server-name-panel').attr('title', newName).tooltip('fixTitle')
             @element.find('.server-url-label').html(newURL)
             @element.find('.server-url-panel').attr('title', newURL).tooltip('fixTitle')
+            @renderTags()
 
             @toggleEditDialogue()
           )
@@ -50,3 +53,14 @@ class Crucible.ServerDetails
         });
         false
     )
+
+  renderTags: =>
+    tags = @element.find('#edit-server-tags-dialogue').val().split(',')
+    tags = tags.map (element) -> element.trim()
+    tags = tags.filter (element) -> element.length > 0
+    labelContainer = @element.find(".server-tags-label")
+    labelContainer.empty()
+    for tag in tags
+      tagElement = $("<span>").addClass("tag").text(tag)
+      labelContainer.append(tagElement)
+      tagElement.after(" ")

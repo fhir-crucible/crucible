@@ -46,6 +46,23 @@
       margin-left: 10px;
     }
   }
+
+  .tag {
+    display: inline-block;
+    background-color: $brand-accent;
+    border: 3px solid $brand-accent;
+    color: $brand-tertiary;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 100;
+    padding: 3px;
+    margin-bottom: 5px;
+    line-height: 14px;
+    a {
+      color: $brand-tertiary;
+      cursor: pointer
+    }
+  }
 }
 
 .server-test-details{
@@ -186,9 +203,14 @@
     width: 100%;
     margin-bottom: 5px;
   };
-  #edit-server-url-dialogue{width: 100%;};
+  #edit-server-url-dialogue{
+    width: 100%;
+    margin-bottom: 5px;
+  };
+  #edit-server-tags-dialogue{width: 100%;};
   button{width: 100px; display: inline}
 }
+
 
 
 // ------------------------- TEST RUN SUMMARY TAB ----------------------------------- // 
