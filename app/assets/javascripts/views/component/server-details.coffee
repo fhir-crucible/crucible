@@ -63,4 +63,3 @@ class Crucible.ServerDetails
     for tag in tags
       tagElement = $("<span>").addClass("tag").text(tag)
       labelContainer.append(tagElement)
-      tagElement.after(" ")
