@@ -18,5 +18,8 @@
     "vkbeautify": "a08344e94d3241d30ac21b1f1935f74d504be00e",
     "clipboard": "~1.5.5",
     "bootstrap-tagsinput": "~0.7.1"
+  },
+  "resolutions": {
+    "jquery": ">= 1.9.0"
   }
 }
