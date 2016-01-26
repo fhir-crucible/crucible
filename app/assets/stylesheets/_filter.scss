@@ -26,7 +26,6 @@
     font-weight: 100;
     padding: 3px;
     margin-bottom: 5px;
-    cursor: pointer;
     a {
         color: $brand-tertiary;
     }
@@ -37,6 +36,7 @@
     text-align: left;
     font-size: 14px;
     margin-bottom: 5px;
+    .add-filter-link { cursor: pointer; }
     .add-filter-selector{
       select{
         width: 70%;
@@ -46,7 +46,9 @@
         font-size: 14px;
         display: inline;
       }
+      i{cursor: pointer;}
     }
+    
   }
   .filter-selector.form-control{
     border-color: $brand-accent;

@@ -13,6 +13,7 @@
     span{
       padding: 7px;
       border-radius: 2px;
+      cursor: pointer;
       &.active{
         background-color: $brand-accent;
         a{color: $brand-tertiary;}

@@ -64,6 +64,9 @@
     /*border-bottom: 1px solid $structure;*/
     .suite-selectors{
       margin-top: 5px;
+      i{ 
+        cursor:pointer;
+      }
     }
   }
   .selected-run{

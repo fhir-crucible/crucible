@@ -7,10 +7,14 @@
     text-align: center;
   }
 
+
+  .panel-collapse { cursor: default }
+
   .hiddenRow {
     padding: 0 !important;
   }
 }
+#resource-chart > table > tbody > tr { cursor: pointer; }
 
 // ------------------------- TABBED DATA ----------------------------------- //
 
@@ -249,7 +253,6 @@
       .metadata {
         position: relative;
         min-height: 70px;
-        cursor: pointer;
 
         .failure-message-level-one-count {
           position: absolute;
