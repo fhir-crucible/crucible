@@ -203,7 +203,7 @@ class Crucible.TestExecutor
       $(button).html(@html.deselectAllButton)
 
   expandCollapseAll: =>
-    suiteElements = @element.find('.test-run-result .collapse')
+    suiteElements = @element.find('.test-run-result').filter(':visible').find('.panel-collapse')
     button = $('.expandCollapseAll')
     if !$(suiteElements).hasClass('in')
       $(suiteElements).collapse('show')
