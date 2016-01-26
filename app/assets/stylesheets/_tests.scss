@@ -58,7 +58,7 @@
 
 .tab-content-holder .test-results {
   .button-holder{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding-bottom: 10px;
     padding-top: 10px;
     /*border-bottom: 1px solid $structure;*/
@@ -83,6 +83,12 @@
   }
   .close-change-test-run{
     font-size: 14px;
+  }
+  .testrun-summary{
+    text-align: left;
+  }
+  h3{
+    margin-top: 10px;
   }
 }
 
