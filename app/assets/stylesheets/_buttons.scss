@@ -52,7 +52,7 @@
   }
 
   /*specific classes*/
-  &.secondary.submit-server-name{
+  &.secondary.submit-server-name,&.secondary.cancel-server-name{
     border: 1px solid $brand-accent;
   }
 }
