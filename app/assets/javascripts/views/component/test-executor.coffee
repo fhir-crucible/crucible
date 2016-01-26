@@ -112,26 +112,27 @@ class Crucible.TestExecutor
         @addClickTestHandler(test, suiteElement)
 
   renderPastTestRunsSelector: (elementToAdd) =>
-    $.getJSON("/servers/#{@serverId}/past_runs").success((data) =>
+    $.getJSON("/servers/#{@serverId}/past_runs").success (data) =>
       return unless data
-      validDefaultSelection = false
+      foundDefaultSelection = false
       selector = @element.find('.past-test-runs-selector')
       selector.empty()
       if elementToAdd
         selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}'>#{elementToAdd.text}</option>")
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
-        validDefaultSelection = true if @defaultSelection && @defaultSelection.testRunId == test_run.id
+        foundDefaultSelection = true if @defaultSelection && @defaultSelection.testRunId == test_run.id
         selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY')} </option>"
         selector.append(selection)
 
-      if validDefaultSelection
+      if @defaultSelection
+        # add a temporary option to the select box if this is a cancelled run
+        selector.prepend( "<option value='#{@defaultSelection.testRunId}'>Cancelled</option>") if !foundDefaultSelection
         @togglePastRunsSelector() # Mimic showing the date dropdown, will be toggled off later
-        selector.val(@defaultSelection.testRunId)
+        selector.val(@defaultSelection.testRunId) # this is what identifies which run to show
         @updateCurrentTestRun()
-      else
-        @defaultSelection = null #couldn't find the test run, so hash in url is invalid
-    )
+        # remove the temporary option from the select box if this is a cancelled run
+        selector.find("option[value='#{@defaultSelection.testRunId}']").remove() if !foundDefaultSelection
 
   clearPastTestRunData: =>
     @hideTestResultSummary()
@@ -425,7 +426,6 @@ class Crucible.TestExecutor
     @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
     run_date = @element.find('.past-test-runs-selector').children().last().html()
     @element.find('.selected-run').empty().html(run_date)
-    @element.find('')
     @element.find('.clear-past-run-data').show()
     $("#cancel-modal").hide()
     @selectedTestRunId = @runningTestRunId
