@@ -122,7 +122,7 @@ class Crucible.TestExecutor
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
         foundDefaultSelection = true if @defaultSelection && @defaultSelection.testRunId == test_run.id
-        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY')} </option>"
+        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY, HH:mm')} </option>"
         selector.append(selection)
 
       if @defaultSelection
