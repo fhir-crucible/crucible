@@ -12,6 +12,7 @@ class Crucible.ServerDetails
 
   registerHandlers: =>
     @element.find('.edit-server-name-icon').click(@toggleEditDialogue)
+    @element.find('.cancel-server-name').click(@toggleEditDialogue)
     @registerValidator()
     @element.find('.server-name-panel').tooltip()
     @element.find('.server-url-panel').tooltip()
