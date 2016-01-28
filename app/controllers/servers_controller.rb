@@ -24,6 +24,7 @@ class ServersController < ApplicationController
 
   def update
     server = Server.find(params[:id])
+    params[:server][:tags] = params[:server][:tags].split(",").map(&:strip)
     server.update(server_params)
     server.name_guessed = false if server_params[:name]
     server.guess_name # will only change if blank
@@ -143,6 +144,6 @@ class ServersController < ApplicationController
   private
 
   def server_params
-    params.require(:server).permit(:url, :name)
+    params.require(:server).permit(:url, :name, tags: [])
   end
 end

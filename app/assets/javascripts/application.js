@@ -24,6 +24,7 @@
 //= require jquery-validation/dist/jquery.validate.js
 //= require vkbeautify/vkbeautify.js
 //= require clipboard/dist/clipboard.js
+//= require bootstrap-tagsinput/dist/bootstrap-tagsinput.js
 
 //= require crucible
 //= require_tree ./views/templates
