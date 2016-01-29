@@ -33,8 +33,14 @@
     margin-right: 15px;
     font-size: 45px;
     line-height: 60px;
-    color: $brand-accent;
+    a {
+      color: $failure;
+      &.authorize-success {
+        color: $success;
+      }
+    }
   }
+
 
   .server-url-name {
     text-align: left;
