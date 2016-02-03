@@ -122,7 +122,7 @@ class Crucible.TestExecutor
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
         foundDefaultSelection = true if @defaultSelection && @defaultSelection.testRunId == test_run.id
-        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY')} </option>"
+        selection = "<option value='#{test_run.id}'> #{moment(test_run.date).format('MM/DD/YYYY, HH:mm')} </option>"
         selector.append(selection)
 
       if @defaultSelection
@@ -164,11 +164,8 @@ class Crucible.TestExecutor
         @defaultSelection = null #prevent from auto-navigation from default selection any more
       @filter(supported: data.test_run.supported_only)
       @filter(executed: true, supported: (if data.test_run.supported_only then true else false))
-      date = new Date(data.test_run.date)
-      m = date.getMonth() + 1
-      d = date.getDate()
-      y = date.getFullYear()
-      @setTestRunDateDisplay(m, d, y)
+      # set the date/time on the selected run display
+      @element.find('.selected-run').html("#{moment(data.test_run.date).format('MM/DD/YYYY, HH:mm')}")
       @element.find('.clear-past-run-data').show()
       @element.find('.change-test-run').hide()
       @togglePastRunsSelector()
@@ -179,9 +176,6 @@ class Crucible.TestExecutor
       selector.children().attr('selected', false)
       selector.children().first().attr('selected', true)
     )
-
-  setTestRunDateDisplay: (month, day, year) =>
-    @element.find('.selected-run').html(month + '/' + day + '/' + year)
 
   togglePastRunsSelector: =>
     @element.find('.display-data-changer').toggle()
