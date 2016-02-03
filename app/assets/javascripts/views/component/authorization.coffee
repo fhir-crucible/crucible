@@ -12,9 +12,25 @@ class Crucible.Authorization
     $('#conformance-data').on('conformanceLoaded', (event) =>
       conformance_tab = $('#conformance-data').children()
       if conformance_tab.data('auth-type') != "none"
-        $(".authorization-handle").removeClass("hidden")
+        auth_element = $(".authorization-handle")
+        auth_element.removeClass("hidden")
         authUrl = conformance_tab.data('authorize-url')
         $('#authorize_form').attr("action", authUrl)
+        auth_enabled = !!auth_element.data('oauthClientId')
+        if auth_enabled
+          auth_expires_at = new Date() + 10000 # start at a future date if no expiration set
+          auth_expires_at = moment.unix(parseInt(auth_element.data('oauthExpiresAt'))).toDate() if !!auth_element.data('oauthExpiresAt')
+          auth_expired = auth_expires_at < new Date()
+          auth_token_exists = !!auth_element.data('oauthRefreshToken')
+
+          if !auth_expired || auth_token_exists
+            auth_element.addClass("authorize-success")
+            auth_element.attr('title', '').tooltip()
+          else
+            auth_element.attr('title', 'Authorization expired.').tooltip()
+        else
+          auth_element.attr('title', 'Please enter authorization information.').tooltip()
+
     )
     $("#authorize_form").on('submit', (event) =>
       event.preventDefault()

@@ -351,6 +351,8 @@ class Crucible.TestExecutor
         @element.dequeue("executionQueue")
       else if test_run.status == "unauthorized"
         @displayError(@html.unauthorizedError)
+        $(".authorization-handle").removeClass("authorize-success")
+        $(".authorization-handle").attr('title', 'Authorization failed').tooltip()
         @element.dequeue("executionQueue")
       else if test_run.status == "error"
         @displayError(@html.genericError)

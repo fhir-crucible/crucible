@@ -19,7 +19,13 @@
             <!-- START: server name and url -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
-                <a data-toggle="modal" data-target="#authorize-modal" class="authorization-handle authorization_handle hidden" href="#"><i class="fa fa-lock"></i></a>
+                  <a data-toggle="modal" 
+                      data-target="#authorize-modal" 
+                      class="authorization-handle hidden" 
+                      href="#" 
+                      data-oauth-refresh-token="<%= @server.try(:oauth_token_opts) && @server.oauth_token_opts['refresh_token'] %>"
+                      data-oauth-client-Id="<%= @server.try(:client_id) %>"
+                      data-oauth-expires-at="<%= @server.try(:oauth_token_opts) && @server.oauth_token_opts['expires_at'] %>"><i class="fa fa-lock"></i></a>
               </div>
               <div class="server-url-name pull-left">
                 <div class="server-name-panel emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
