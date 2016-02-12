@@ -93,6 +93,19 @@
   h3{
     margin-top: 10px;
   }
+  .testrun-summary-tests{
+    float: left;
+  }
+  .testrun-summary-nav{
+    float: right;
+    font-size: .9em;
+
+    span {
+      margin-right: 10px;
+      cursor: pointer;
+      color: $brand-accent;
+    }
+  }
 }
 
 .test-results{
