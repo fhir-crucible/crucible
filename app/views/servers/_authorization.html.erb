@@ -1,7 +1,7 @@
 <div>
   <div class="well">
     <label class="header-label">Please enter the client ID and client Secret for the FHIR server being tested; these are supplied by the server administrator/single-sign-on application</label>
-    <form id="authorize_form" method="GET">
+    <form id="authorize_form" method="POST" autocomplete="off">
       <input type='hidden' name='response_type' id='response_type' value='code' class="used" />
       <input type='hidden' name='redirect_uri' id='redirect_uri' class="used" value='<%= root_url %>redirect' />
       <input type='hidden' name='scope' id='scope' class="used" />
