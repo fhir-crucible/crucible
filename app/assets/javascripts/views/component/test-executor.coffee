@@ -31,6 +31,8 @@ class Crucible.TestExecutor
   statusWeights: {'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
   checkStatusTimeout: 4000
   selectedTestRunId: null
+  nextTestRunId: null
+  previousTestRunId: null
   defaultSelection: null
 
   constructor: ->
@@ -149,6 +151,11 @@ class Crucible.TestExecutor
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     @selectedTestRunId = selector.val()
+    selectedIndex = selector.find(":selected").index()
+    @nextTestRunId = null
+    @nextTestRunId = selector.find("option:eq(#{selectedIndex-1})").val() if selectedIndex > 1
+    @previousTestRunId = null
+    @previousTestRunId = selector.find("option:eq(#{selectedIndex+1})").val() if selectedIndex < selector.find("option").size()-1
     suiteIds = $($.map(selector.find('option'), (e) -> e.value))
     $.getJSON("/servers/#{@serverId}/test_runs/#{@selectedTestRunId}").success((data) =>
       return unless data
@@ -381,6 +388,19 @@ class Crucible.TestExecutor
     summaryContent = HandlebarsTemplates[@templates.testRunSummary](summaryData)
     summaryPanel.replaceWith(summaryContent)
     summaryPanel.show()
+
+    @element.find(".testrun-summary-previous").hide() if @previousTestRunId == null
+    @element.find(".testrun-summary-next").hide() if @nextTestRunId == null
+    selector = @element.find('.past-test-runs-selector')
+
+    @element.find(".testrun-summary-previous").click (e) =>
+      selector.val(@previousTestRunId)
+      @togglePastRunsSelector() # Mimic showing the date dropdown, will be toggled off later
+      @updateCurrentTestRun()
+    @element.find(".testrun-summary-next").click (e) =>
+      selector.val(@nextTestRunId)
+      @togglePastRunsSelector() # Mimic showing the date dropdown, will be toggled off later
+      @updateCurrentTestRun()
 
   hideTestResultSummary: =>
     @element.find('.testrun-summary').hide()

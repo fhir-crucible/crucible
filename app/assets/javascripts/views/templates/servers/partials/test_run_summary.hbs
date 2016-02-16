@@ -4,7 +4,12 @@
   <div>
     Suites: {{suites.pass}} of {{suites.total}} passed ({{percentage suites.pass suites.total}})
   </div>
-  <div>
+  <div class="testrun-summary-tests">
     Tests: {{tests.pass}} of {{tests.total}} passed ({{percentage tests.pass tests.total}})
   </div>
+  <div class="testrun-summary-nav">
+    <span class="testrun-summary-previous"><i class="fa fa-angle-double-left"></i> Previous</span>
+    <span class="testrun-summary-next">Next <i class="fa fa-angle-double-right"></i></span>
+  </div>
+  <div class="clearfix"></div>
 </div>
