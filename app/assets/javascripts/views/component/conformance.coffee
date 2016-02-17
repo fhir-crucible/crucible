@@ -80,6 +80,7 @@ class Crucible.Conformance
       if @conformance.rest[0].security && @conformance.rest[0].security.extension
         switch @conformance.rest[0].security.extension[0].url
           when "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris" then "OAuth2"
+          else "none"
       else
         "none"
 
