@@ -267,7 +267,7 @@ class Crucible.TestExecutor
       $("#cancel-modal").hide()
 
   searchBoxHandler: =>
-    @filter(search: @searchBox.val().toLowerCase().replace(/\s/g, ""))
+    @filter(search: @searchBox.val().toLowerCase().replace(/\W/g, ''))
 
   filterByExecutedHandler: =>
     @filter(executed: false)
@@ -307,7 +307,7 @@ class Crucible.TestExecutor
       suiteElement = $(suiteElement)
       suite = suiteElement.data('suite')
       childrenIds = suite.methods.map (m) -> m.id
-      suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase()).indexOf(@filters.search) < 0
+      suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase().replace(/\W/g,'')).indexOf(@filters.search) < 0
       suiteElement.hide() if @filters.executed && !suiteElement.hasClass("executed")
       suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
       suiteElement.hide() if @filters.supported && !(suite.supported)
