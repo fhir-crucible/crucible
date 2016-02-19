@@ -113,7 +113,7 @@ class Crucible.TestExecutor
       $(suite.methods).each (i, test) =>
         @addClickTestHandler(test, suiteElement)
 
-  renderPastTestRunsSelector: (elementToAdd) =>
+  renderPastTestRunsSelector: (elementToAdd, callback) =>
     $.getJSON("/servers/#{@serverId}/past_runs").success (data) =>
       return unless data
       foundDefaultSelection = false
@@ -135,6 +135,8 @@ class Crucible.TestExecutor
         @updateCurrentTestRun()
         # remove the temporary option from the select box if this is a cancelled run
         selector.find("option[value='#{@defaultSelection.testRunId}']").remove() if !foundDefaultSelection
+
+      callback() if callback
 
   clearPastTestRunData: =>
     @hideTestResultSummary()
@@ -226,6 +228,7 @@ class Crucible.TestExecutor
     @hideTestResultSummary()
     @progress.find('.progress-bar').css('width',"2%")
     @element.queue("executionQueue", @checkTestRunStatus)
+    @element.queue("executionQueue", @refreshPastRunsAfterTestRun)
     @element.queue("executionQueue", @finishTestRun)
 
     suiteIds.each (i, suiteId) =>
@@ -359,6 +362,9 @@ class Crucible.TestExecutor
         @displayError(@html.genericError)
         @element.dequeue("executionQueue")
       else if test_run.status == "finished"
+        @nextTestRunId = null
+        @previousTestRunId = null
+        @previousTestRunId = @element.find('.past-test-runs-selector').children().eq(1).val() if @element.find('.past-test-runs-selector').children().length > 1
         @showTestRunSummary({test_results: test_run.test_results})
         @element.dequeue("executionQueue")
       else if test_run.status != "cancelled" and @runningTestRunId?
@@ -430,6 +436,9 @@ class Crucible.TestExecutor
     @element.find(".test-result-error").html(message)
     @element.find('.test-status').empty()
 
+  refreshPastRunsAfterTestRun: =>
+    @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true},(=> @element.dequeue("executionQueue")))
+
   finishTestRun: =>
     new Crucible.Summary()
     new Crucible.TestRunReport()
@@ -439,8 +448,7 @@ class Crucible.TestExecutor
     @element.find('.suite-selectors').show()
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
-    @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
-    run_date = @element.find('.past-test-runs-selector').children().last().html()
+    run_date = @element.find('.past-test-runs-selector').children().eq(1).html()
     @element.find('.selected-run').empty().html(run_date)
     @element.find('.clear-past-run-data').show()
     $("#cancel-modal").hide()
