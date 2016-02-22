@@ -1,5 +1,5 @@
 # date based version to force tests to reload on startup
-LOAD_VERSION=20160120
+LOAD_VERSION=20160222
 
 Test.any_of({:load_version.exists => false},{:load_version.lt => LOAD_VERSION}).delete
 
@@ -16,6 +16,7 @@ Crucible::Tests::Executor.list_all.each do |key,value|
     test.author = value["author"]
     test.description = value["description"]
     test.tags = value['tags']
+    test.category = value['category']
     test.details = value['details'] unless value['details'].blank?
 
     crucibleTest = executor.find_test(value['title'])
