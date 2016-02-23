@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_dstu2_models.git
-  revision: 36923b03faa66f7583c1fcf70850ee35bf99eef7
+  revision: a1e33d89787d6c5ea467f6990f820443218d7681
   branch: master
   specs:
     fhir_model (1.0.0)
@@ -340,3 +340,6 @@ DEPENDENCIES
   teaspoon-jasmine
   uglifier (>= 1.3.0)
   webmock
+
+BUNDLED WITH
+   1.11.2
