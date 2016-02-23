@@ -8,6 +8,7 @@ class Crucible.TestExecutor
   testsById: {}
   templates:
     suiteSelect: 'views/templates/servers/suite_select'
+    suiteGroup: 'views/templates/servers/suite_group'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/partials/test_result'
     testRequests: 'views/templates/servers/partials/test_requests'
@@ -103,15 +104,35 @@ class Crucible.TestExecutor
     @element.find('.test-results .button-holder').removeClass('hide')
     suitesElement = @element.find('.test-suites')
     suitesElement.empty()
-    $(@suites).each (i, suite) =>
-      @suitesById[suite.id] = suite
-      $(suite.methods).each (j, test) =>
-        @testsById[test.id] = test
-      suitesElement.append(HandlebarsTemplates[@templates.suiteSelect]({suite: suite}))
-      suiteElement = suitesElement.find("#test-#{suite.id}")
-      suiteElement.data('suite', suite)
-      $(suite.methods).each (i, test) =>
-        @addClickTestHandler(test, suiteElement)
+    groupings = @buildGroupings(@suites)
+    $(groupings).each (i, group) =>
+      suitesElement.append(HandlebarsTemplates[@templates.suiteGroup]({group: group}))
+
+      $(group.suites).each (i, suite) =>
+        @suitesById[suite.id] = suite
+        $(suite.methods).each (j, test) =>
+          @testsById[test.id] = test
+        
+        suiteElement = suitesElement.find("#test-#{suite.id}")
+        suiteElement.data('suite', suite)
+        $(suite.methods).each (i, test) =>
+          @addClickTestHandler(test, suiteElement)
+
+  buildGroupings: (suites) =>
+    groupings = []
+    groupings.push(id: 'argonaut', title: 'Argonaut', suites: suites.slice(0,5))
+    groupings.push(id: 'connectathon', title: 'Connectathon', suites: suites.slice(5,12))
+    groupings.push(id: 'daf', title: 'Data Access Framework', suites: suites.slice(12,13))
+    groupings.push(id: 'format', title: 'Format', suites: suites.slice(13,14))
+    groupings.push(id: 'history', title: 'History', suites: suites.slice(14,15))
+    groupings.push(id: 'read', title: 'Read', suites: suites.slice(15,16))
+    groupings.push(id: 'resource', title: 'Resource', suites: suites.slice(16,109))
+    groupings.push(id: 'robust', title: 'Robust', suites: suites.slice(109,110))
+    groupings.push(id: 'search', title: 'Search', suites: suites.slice(110,203))
+    groupings.push(id: 'sprinkler', title: 'Sprinkler', suites: suites.slice(203,204))
+    groupings.push(id: 'ts', title: 'TS', suites: suites.slice(204,226))
+    groupings.push(id: 'transaction', title: 'Transaction and Batch', suites: suites.slice(226,suites.length))
+    groupings
 
   renderPastTestRunsSelector: (elementToAdd, callback) =>
     $.getJSON("/servers/#{@serverId}/past_runs").success (data) =>
@@ -309,12 +330,14 @@ class Crucible.TestExecutor
     $(suiteElements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
       suite = suiteElement.data('suite')
-      childrenIds = suite.methods.map (m) -> m.id
-      suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase().replace(/\W/g,'')).indexOf(@filters.search) < 0
-      suiteElement.hide() if @filters.executed && !suiteElement.hasClass("executed")
-      suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
-      suiteElement.hide() if @filters.supported && !(suite.supported)
-      suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
+      # TODO: DAF test is not providing a suite for some reason
+      if suite
+        childrenIds = suite.methods.map (m) -> m.id
+        suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase().replace(/\W/g,'')).indexOf(@filters.search) < 0
+        suiteElement.hide() if @filters.executed && !suiteElement.hasClass("executed")
+        suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
+        suiteElement.hide() if @filters.supported && !(suite.supported)
+        suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
     testElements.show()
