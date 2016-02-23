@@ -119,19 +119,15 @@ class Crucible.TestExecutor
           @addClickTestHandler(test, suiteElement)
 
   buildGroupings: (suites) =>
+
+    groupingMap = {}
+    for suite in suites
+      groupingMap[suite.category] ||= []
+      groupingMap[suite.category].push suite
     groupings = []
-    groupings.push(id: 'argonaut', title: 'Argonaut', suites: suites.slice(0,5))
-    groupings.push(id: 'connectathon', title: 'Connectathon', suites: suites.slice(5,12))
-    groupings.push(id: 'daf', title: 'Data Access Framework', suites: suites.slice(12,13))
-    groupings.push(id: 'format', title: 'Format', suites: suites.slice(13,14))
-    groupings.push(id: 'history', title: 'History', suites: suites.slice(14,15))
-    groupings.push(id: 'read', title: 'Read', suites: suites.slice(15,16))
-    groupings.push(id: 'resource', title: 'Resource', suites: suites.slice(16,109))
-    groupings.push(id: 'robust', title: 'Robust', suites: suites.slice(109,110))
-    groupings.push(id: 'search', title: 'Search', suites: suites.slice(110,203))
-    groupings.push(id: 'sprinkler', title: 'Sprinkler', suites: suites.slice(203,204))
-    groupings.push(id: 'ts', title: 'TS', suites: suites.slice(204,226))
-    groupings.push(id: 'transaction', title: 'Transaction and Batch', suites: suites.slice(226,suites.length))
+    for group in _.keys(groupingMap).sort()
+      children = groupingMap[group]
+      groupings.push(id: group.toLocaleLowerCase().replace(/\W/g, '_'), title: group, suites: children)
     groupings
 
   renderPastTestRunsSelector: (elementToAdd, callback) =>
@@ -330,14 +326,12 @@ class Crucible.TestExecutor
     $(suiteElements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
       suite = suiteElement.data('suite')
-      # TODO: DAF test is not providing a suite for some reason
-      if suite
-        childrenIds = suite.methods.map (m) -> m.id
-        suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase().replace(/\W/g,'')).indexOf(@filters.search) < 0
-        suiteElement.hide() if @filters.executed && !suiteElement.hasClass("executed")
-        suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
-        suiteElement.hide() if @filters.supported && !(suite.supported)
-        suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
+      childrenIds = suite.methods.map (m) -> m.id
+      suiteElement.hide() if @filters.search.length > 0 && (suite.name.toLowerCase().replace(/\W/g,'')).indexOf(@filters.search) < 0
+      suiteElement.hide() if @filters.executed && !suiteElement.hasClass("executed")
+      suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
+      suiteElement.hide() if @filters.supported && !(suite.supported)
+      suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
     testElements.show()
