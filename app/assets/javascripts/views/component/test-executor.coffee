@@ -332,6 +332,16 @@ class Crucible.TestExecutor
       suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
       suiteElement.hide() if @filters.supported && !(suite.supported)
       suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
+
+    # hide the groups when no tests underneath are visible
+    testGroups = @element.find('.test-group')
+    testGroups.show()
+    testGroups.each (i, group) =>
+      anyVisible = false
+      $(group).find(".test-run-result").each (j, result) =>
+        anyVisible ||= $(result).css('display') != 'none'
+      $(group).hide() unless anyVisible
+
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
     testElements.show()
