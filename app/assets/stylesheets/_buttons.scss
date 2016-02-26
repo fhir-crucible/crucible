@@ -52,11 +52,22 @@
   }
 
 &.execute {
-  background-color:$brand-accent-darken;
+  background-color:$brand-secondary;
+  border-color: $brand-secondary;
   color: $brand-default;
-  &:hover {background-color:$brand-default;
-  color: $brand-accent-darken;
-  border-color: $brand-accent-darken;}
+  &:hover {background-color:$brand-secondary;
+  color: $brand-secondary;
+  border-color: $brand-secondary;}
+
+}
+
+ &.begin {
+  background-color:$brand-secondary;
+  border-color: $brand-secondary;
+  color: $brand-default;
+  &:hover {background-color:$brand-secondary;
+  color: $brand-secondary;
+  border-color: $brand-secondary;}
 
 }
 
