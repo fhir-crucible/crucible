@@ -166,7 +166,7 @@ class Crucible.TestExecutor
       $(data['test_run'].test_results).each (i, result) =>
         suiteId = result.test_id
         suiteElement = @element.find("#test-#{suiteId}")
-        @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+        @handleSuiteResult(@suitesById[suiteId], {tests: result.result, setup_requests: result.setup_requests, teardown_requests: result.teardown_requests}, suiteElement)
       if @defaultSelection
         @element.find("#test-#{@defaultSelection.suiteId} a.collapsed").click()
         @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click()
@@ -178,7 +178,7 @@ class Crucible.TestExecutor
       @element.find('.clear-past-run-data').show()
       @element.find('.change-test-run').hide()
       @togglePastRunsSelector()
-    ).complete(() -> 
+    ).complete(() ->
       $('.execute').show()
       $('.suite-selectors').show()
       $('.test-result-loading').hide()
@@ -258,7 +258,7 @@ class Crucible.TestExecutor
         @runningTestRunId = result.test_run.id
         @element.dequeue("executionQueue")
       )
-    else 
+    else
       @flashWarning('Please select at least one test suite')
 
   cancelTestRun: =>
@@ -266,7 +266,7 @@ class Crucible.TestExecutor
       $.post("/servers/#{@serverId}/test_runs/#{@runningTestRunId}/cancel").success( (result) =>
         location.reload()
       )
-    else 
+    else
       $("#cancel-modal").hide()
 
   searchBoxHandler: =>
@@ -455,7 +455,7 @@ class Crucible.TestExecutor
     @selectedTestRunId = @runningTestRunId
     @runningTestRunId = null
 
-  addClickTestHandler: (test, suiteElement) => 
+  addClickTestHandler: (test, suiteElement) =>
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
     handle.click =>
       suiteElement.find(".suite-handle").removeClass('active')
@@ -467,7 +467,7 @@ class Crucible.TestExecutor
       @addClickPermalinkHandler(testRunId, suiteElement, test.id)
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
-    suiteElement.find(".data-link").click (e) => 
+    suiteElement.find(".data-link").click (e) =>
       html = HandlebarsTemplates[@templates.testRequests]({test: test})
       detailsTemplate = @templates.testRequestDetails
       $('#data-modal .modal-body').empty().append(html)
@@ -475,7 +475,7 @@ class Crucible.TestExecutor
         hljs.highlightBlock(code)
       refresh_link = $('#data-modal .request-panel-refresh')
       refresh_link.tooltip()
-      refresh_link.click (e) -> 
+      refresh_link.click (e) ->
         e.preventDefault
         test_result_id = test.test_result_id.$oid
         test_id = test.id
