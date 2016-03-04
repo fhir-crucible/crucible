@@ -1,17 +1,15 @@
+<div class="test-group">
+  <a class="btn btn-accent-inverse" role="button" data-toggle="collapse" href="#testGroup_{{group.id}}" aria-expanded="false" aria-controls="testGroup">
+    {{group.title}}
+  </a>
+  <div class="collapse" id="testGroup_{{group.id}}">
+    <div class="well">
 
+      {{#each group.suites as |suite|}}
+        {{> suite_select suite=suite}}
+      {{/each}}
 
-<div>
-<a class="btn btn-accent-inverse" role="button" data-toggle="collapse" href="#collapseExample_{{group.id}}" aria-expanded="false" aria-controls="collapseExample">
-  {{group.title}}
-</a>
-	<div class="collapse" id="collapseExample_{{group.id}}">
-  		<div class="well">
-
-  {{#each group.suites as |suite|}}
-  {{> suite_select suite=suite}}
-  {{/each}}
-
-      </div>
-	</div>
+    </div>
+  </div>
 </div>
 
