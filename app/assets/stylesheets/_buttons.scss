@@ -1,29 +1,29 @@
 .btn {
   height: 35px;
   width: 100%;
-  background-color: $brand-secondary;
-  border-color: $brand-secondary;
-  color: $brand-tertiary;
+  background-color: $brand-default;
+  border-color: $brand-accent;
+  color: $brand-accent-darken;
   font-size: 16px;
   a{
     color: $brand-tertiary;
+    
     &:hover{
-      color: $brand-tertiary;
+      color: $brand-accent-darken;
       text-decoration: none;
     }
   }
-
   /*element state*/
   &:focus {
-    background-color: $brand-secondary;
-    border-color: $brand-secondary;
+    background-color: $brand-accent-darken;
+    border-color: $brand-accent-darken;
     color: $brand-tertiary;
     outline: none;
   }
   &:hover{
-    background-color: $brand-secondary;
+    background-color: $brand-accent-darken;
     color: $brand-tertiary;
-    border-color: $brand-secondary; 
+    border-color: $brand-accent-darken; 
     text-decoration: none;
   }
   &:active:focus{
@@ -50,6 +50,26 @@
     height: 30px;
     font-size: 14px;
   }
+
+&.execute {
+  background-color:$brand-secondary;
+  border-color: $brand-secondary;
+  color: $brand-default;
+  &:hover {background-color:$brand-default;
+  color: $brand-secondary;
+  border-color: $brand-secondary;}
+
+}
+
+ &.begin {
+  background-color:$brand-secondary;
+  border-color: $brand-secondary;
+  color: $brand-default;
+  &:hover {background-color:$brand-default;
+  color: $brand-secondary;
+  border-color: $brand-secondary;}
+}
+
 
   /*specific classes*/
   &.secondary.submit-server-name,&.secondary.cancel-server-name{

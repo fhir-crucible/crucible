@@ -8,6 +8,7 @@ class Crucible.TestExecutor
   testsById: {}
   templates:
     suiteSelect: 'views/templates/servers/suite_select'
+    suiteGroup: 'views/templates/servers/suite_group'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/partials/test_result'
     testRequests: 'views/templates/servers/partials/test_requests'
@@ -103,15 +104,31 @@ class Crucible.TestExecutor
     @element.find('.test-results .button-holder').removeClass('hide')
     suitesElement = @element.find('.test-suites')
     suitesElement.empty()
-    $(@suites).each (i, suite) =>
-      @suitesById[suite.id] = suite
-      $(suite.methods).each (j, test) =>
-        @testsById[test.id] = test
-      suitesElement.append(HandlebarsTemplates[@templates.suiteSelect]({suite: suite}))
-      suiteElement = suitesElement.find("#test-#{suite.id}")
-      suiteElement.data('suite', suite)
-      $(suite.methods).each (i, test) =>
-        @addClickTestHandler(test, suiteElement)
+    groupings = @buildGroupings(@suites)
+    $(groupings).each (i, group) =>
+      suitesElement.append(HandlebarsTemplates[@templates.suiteGroup]({group: group}))
+
+      $(group.suites).each (i, suite) =>
+        @suitesById[suite.id] = suite
+        $(suite.methods).each (j, test) =>
+          @testsById[test.id] = test
+        
+        suiteElement = suitesElement.find("#test-#{suite.id}")
+        suiteElement.data('suite', suite)
+        $(suite.methods).each (i, test) =>
+          @addClickTestHandler(test, suiteElement)
+
+  buildGroupings: (suites) =>
+
+    groupingMap = {}
+    for suite in suites
+      groupingMap[suite.category] ||= []
+      groupingMap[suite.category].push suite
+    groupings = []
+    for group in _.keys(groupingMap).sort()
+      children = groupingMap[group]
+      groupings.push(id: group.toLocaleLowerCase().replace(/\W/g, '_'), title: group, suites: children)
+    groupings
 
   renderPastTestRunsSelector: (elementToAdd, callback) =>
     $.getJSON("/servers/#{@serverId}/past_runs").success (data) =>
@@ -315,6 +332,16 @@ class Crucible.TestExecutor
       suiteElement.hide() if @filters.starburstNode? && !(_.intersection(starburstTestIds, childrenIds).length > 0)
       suiteElement.hide() if @filters.supported && !(suite.supported)
       suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
+
+    # hide the groups when no tests underneath are visible
+    testGroups = @element.find('.test-group')
+    testGroups.show()
+    testGroups.each (i, group) =>
+      anyVisible = false
+      $(group).find(".test-run-result").each (j, result) =>
+        anyVisible ||= $(result).css('display') != 'none'
+      $(group).hide() unless anyVisible
+
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
     testElements.show()
