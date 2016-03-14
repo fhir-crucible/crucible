@@ -224,13 +224,14 @@ class Crucible.TestExecutor
       $(button).html(@html.deselectAllButton)
 
   expandCollapseAll: =>
-    suiteElements = @element.find('.test-run-result').filter(':visible').find('.panel-collapse')
+    suiteGroupBodies = @element.find('.suite-group-body')
+    # suiteElements = @element.find('.test-run-result').filter(':visible').find('.panel-collapse')
     button = $('.expandCollapseAll')
-    if !$(suiteElements).hasClass('in')
-      $(suiteElements).collapse('show')
+    if !$(suiteGroupBodies).hasClass('in')
+      $(suiteGroupBodies).collapse('show')
       $(button).html(@html.collapseAllButton)
     else
-      $(suiteElements).collapse('hide')
+      $(suiteGroupBodies).collapse('hide')
       $(button).html(@html.expandAllButton)
 
   prepareTestRun: (suiteIds) =>
@@ -334,12 +335,12 @@ class Crucible.TestExecutor
       suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
 
     # hide the groups when no tests underneath are visible
-    testGroups = @element.find('.test-group')
-    testGroups.show()
-    testGroups.each (i, group) =>
+    suiteGroups = @element.find('.suite-group')
+    suiteGroups.show()
+    suiteGroups.each (i, group) =>
       anyVisible = false
-      $(group).find(".test-run-result").each (j, result) =>
-        anyVisible ||= $(result).css('display') != 'none'
+      for result in $(group).find(".test-run-result")
+        anyVisible = (anyVisible || ($(result).css('display') != 'none'))
       $(group).hide() unless anyVisible
 
     # filter tests in a suite

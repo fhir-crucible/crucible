@@ -37,6 +37,16 @@
   }
 }
 
+.suite-group {
+  padding: 0 0 6px 0;
+  .btn {
+    text-align: left;
+  }
+  .well {
+    padding: 19px 19px 0px 19px;
+  }
+}
+
 .test-run-result {
   &.filteredOut{
     display: none;
