@@ -15,7 +15,7 @@ class Test
   field :load_version, type: Integer, default: 0
   field :tags, type: Array
   field :details, type: Hash
-  field :category, type: String
+  field :category, type: Hash
 
   def serializable_hash(options = nil)
     hash = super(options)

@@ -1,6 +1,9 @@
 <div class="suite-group">
   <a class="btn btn-accent-inverse" role="button" data-toggle="collapse" href="#testGroup_{{group.id}}" aria-expanded="false" aria-controls="testGroup">
-    {{group.title}}
+    <div class="row">
+      <div class="col-md-10">{{group.title}}</div>
+      <div class="col-md-2"><span class="suite-count">{{group.suites.length}}</span> suites</div>
+    </div>
   </a>
   <div class="collapse suite-group-body" id="testGroup_{{group.id}}">
     <div class="well">

@@ -94,7 +94,7 @@ table > tbody > tr > td {
 }
 
 .table.report-table > tbody > tr.active > td {
-  background-color: $base;
+  background-color: $base-darken;
 }
 
 .table.report-table > tbody > tr > td:first-child {

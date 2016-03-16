@@ -119,16 +119,11 @@ class Crucible.TestExecutor
           @addClickTestHandler(test, suiteElement)
 
   buildGroupings: (suites) =>
-
     groupingMap = {}
     for suite in suites
-      groupingMap[suite.category] ||= []
-      groupingMap[suite.category].push suite
-    groupings = []
-    for group in _.keys(groupingMap).sort()
-      children = groupingMap[group]
-      groupings.push(id: group.toLocaleLowerCase().replace(/\W/g, '_'), title: group, suites: children)
-    groupings
+      groupingMap[suite.category.id] ||= $.extend({suites: []}, suite.category)
+      groupingMap[suite.category.id].suites.push suite
+    _.values(groupingMap).sort (left, right) -> if left.id >= right.id then 1 else -1
 
   renderPastTestRunsSelector: (elementToAdd, callback) =>
     $.getJSON("/servers/#{@serverId}/past_runs").success (data) =>
@@ -338,10 +333,11 @@ class Crucible.TestExecutor
     suiteGroups = @element.find('.suite-group')
     suiteGroups.show()
     suiteGroups.each (i, group) =>
-      anyVisible = false
+      visibleCount = 0
       for result in $(group).find(".test-run-result")
-        anyVisible = (anyVisible || ($(result).css('display') != 'none'))
-      $(group).hide() unless anyVisible
+        visibleCount += 1 if $(result).css('display') != 'none'
+      $(group).hide() unless visibleCount > 0
+      $(group).find('.suite-count').html(visibleCount)
 
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
