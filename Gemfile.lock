@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 46f3a3a7909486165b1446b7a855bd81ed08302d
+  revision: 5d8430b30d5c71ee2dd7722687520ba6ef69b288
   branch: categories
   specs:
     plan_executor (1.0.0)
