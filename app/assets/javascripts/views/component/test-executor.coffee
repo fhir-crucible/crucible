@@ -119,16 +119,11 @@ class Crucible.TestExecutor
           @addClickTestHandler(test, suiteElement)
 
   buildGroupings: (suites) =>
-
     groupingMap = {}
     for suite in suites
-      groupingMap[suite.category] ||= []
-      groupingMap[suite.category].push suite
-    groupings = []
-    for group in _.keys(groupingMap).sort()
-      children = groupingMap[group]
-      groupings.push(id: group.toLocaleLowerCase().replace(/\W/g, '_'), title: group, suites: children)
-    groupings
+      groupingMap[suite.category.id] ||= $.extend({suites: []}, suite.category)
+      groupingMap[suite.category.id].suites.push suite
+    _.values(groupingMap).sort (left, right) -> if left.id >= right.id then 1 else -1
 
   renderPastTestRunsSelector: (elementToAdd, callback) =>
     $.getJSON("/servers/#{@serverId}/past_runs").success (data) =>
@@ -224,13 +219,14 @@ class Crucible.TestExecutor
       $(button).html(@html.deselectAllButton)
 
   expandCollapseAll: =>
-    suiteElements = @element.find('.test-run-result').filter(':visible').find('.panel-collapse')
+    suiteGroupBodies = @element.find('.suite-group-body')
+    # suiteElements = @element.find('.test-run-result').filter(':visible').find('.panel-collapse')
     button = $('.expandCollapseAll')
-    if !$(suiteElements).hasClass('in')
-      $(suiteElements).collapse('show')
+    if !$(suiteGroupBodies).hasClass('in')
+      $(suiteGroupBodies).collapse('show')
       $(button).html(@html.collapseAllButton)
     else
-      $(suiteElements).collapse('hide')
+      $(suiteGroupBodies).collapse('hide')
       $(button).html(@html.expandAllButton)
 
   prepareTestRun: (suiteIds) =>
@@ -334,13 +330,14 @@ class Crucible.TestExecutor
       suiteElement.hide() if @filters.failures && suiteElement.find(".test-status .passed").length
 
     # hide the groups when no tests underneath are visible
-    testGroups = @element.find('.test-group')
-    testGroups.show()
-    testGroups.each (i, group) =>
-      anyVisible = false
-      $(group).find(".test-run-result").each (j, result) =>
-        anyVisible ||= $(result).css('display') != 'none'
-      $(group).hide() unless anyVisible
+    suiteGroups = @element.find('.suite-group')
+    suiteGroups.show()
+    suiteGroups.each (i, group) =>
+      visibleCount = 0
+      for result in $(group).find(".test-run-result")
+        visibleCount += 1 if $(result).css('display') != 'none'
+      $(group).hide() unless visibleCount > 0
+      $(group).find('.suite-count').html(visibleCount)
 
     # filter tests in a suite
     testElements = @element.find('.suite-handle')

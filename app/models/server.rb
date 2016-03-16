@@ -79,8 +79,7 @@ class Server
 
   def get_compliance()
     #todo: investigate moving this elsewhere.
-    compliance_file = File.join(Rails.root, 'lib', 'compliance.json')
-    compliance = JSON.parse(File.read(compliance_file))
+    compliance = Crucible::FHIRStructure.get
 
     node_map = {}
     build_compliance_node_map(compliance, node_map)

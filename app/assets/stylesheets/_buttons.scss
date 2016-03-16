@@ -55,19 +55,22 @@
   background-color:$brand-secondary;
   border-color: $brand-secondary;
   color: $brand-default;
-  &:hover {background-color:$brand-default;
-  color: $brand-secondary;
-  border-color: $brand-secondary;}
-
+  &:hover {
+    background-color:$brand-default;
+    color: $brand-secondary;
+    border-color: $brand-secondary;
+  }
 }
 
  &.begin {
   background-color:$brand-secondary;
   border-color: $brand-secondary;
   color: $brand-default;
-  &:hover {background-color:$brand-default;
-  color: $brand-secondary;
-  border-color: $brand-secondary;}
+  &:hover {
+    background-color:$brand-default;
+    color: $brand-secondary;
+    border-color: $brand-secondary;
+  }
 }
 
 
