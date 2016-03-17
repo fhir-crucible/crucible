@@ -1,16 +1,73 @@
-{{#each test.requests as |call|}}
-  <div class="response-panel">
+<div class="well">
+  <div class="request-panel-header">
+    <a role="button" class='request-group-button' data-toggle="collapse" href="#setup_collapse" id="setup_collapse_button">Setup</a>
+  </div>
+  <div id="setup_collapse" class="request-group collapse">
+    {{#each setup_requests as |call|}}
+      <div class="response-panel" style="margin-bottom: 5px;">
+        <div class="request-panel-header">
+          <a role="button" data-toggle="collapse" href="#request_setup_{{@index}}" aria-expanded="false">
+              {{upper-case call.request.method}} {{call.request.url}}
+              <span class="label label-default request-panel-status-code" id="setup_request_{{@index}}_status">{{call.response.code}}</span>
+          </a>
+          <a href="#" class="request-panel-refresh" data-toggle="tooltip" data-index="{{@index}}" data-placement="top" title="Reissue Request" data-original-title="Reissue Request">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </div>
+        <div id="request_setup_{{@index}}" class="collapse response-panel-body">
+          {{> test_request_details test_id="setup" index=@index call=call}}
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+{{#each tests as |test|}}
+  <div class="well">
     <div class="request-panel-header">
-      <a role="button" data-toggle="collapse" href="#request_{{@index}}" aria-expanded="false">
-          {{upper-case call.request.method}} {{call.request.url}} 
-          <span class="label label-default request-panel-status-code" id="request_{{@index}}_status">{{call.response.code}}</span>
-      </a>
-      <a href="#" class="request-panel-refresh" data-toggle="tooltip" data-index="{{@index}}" data-placement="top" title="Reissue Request" data-original-title="Reissue Request">
-        <i class="fa fa-refresh"></i>
-      </a>
+      <a role="button" class="request-group-button" data-toggle="collapse" href="#{{test.id}}_collapse" id="{{test.id}}_collapse_button">{{test.id}} ({{test.description}})</a>
     </div>
-    <div id="request_{{@index}}" class="collapse response-panel-body">
-      {{> test_request_details index=@index call=call}}
+    <div id="{{test.id}}_collapse" class="request-group collapse">
+    {{#each test.requests as |call|}}
+      <div class="response-panel" style="margin-bottom: 5px;">
+        <div class="request-panel-header">
+          <a role="button" data-toggle="collapse" href="#request_{{test.id}}_{{@index}}" aria-expanded="false">
+              {{upper-case call.request.method}} {{call.request.url}}
+              <span class="label label-default request-panel-status-code" id="{{test.id}}_request_{{@index}}_status">{{call.response.code}}</span>
+          </a>
+          <a href="#" class="request-panel-refresh" data-toggle="tooltip" data-index="{{@index}}" data-placement="top" title="Reissue Request" data-original-title="Reissue Request">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </div>
+        <div id="request_{{test.id}}_{{@index}}" class="collapse response-panel-body">
+          {{> test_request_details test_id=test.id index=@index call=call}}
+        </div>
+      </div>
+    {{/each}}
     </div>
   </div>
 {{/each}}
+
+<div class="well">
+  <div class="request-panel-header">
+    <a role="button" class='request-group-button' data-toggle="collapse" href="#teardown_collapse" id="teardown_collapse_button">Teardown</a>
+  </div>
+  <div id="teardown_collapse" class="request-group collapse">
+    {{#each teardown_requests as |call|}}
+      <div class="response-panel" style="margin-bottom: 5px;">
+        <div class="request-panel-header">
+          <a role="button" data-toggle="collapse" href="#request_teardown_{{@index}}" aria-expanded="false">
+              {{upper-case call.request.method}} {{call.request.url}}
+              <span class="label label-default request-panel-status-code" id="teardown_request_{{@index}}_status">{{call.response.code}}</span>
+          </a>
+          <a href="#" class="request-panel-refresh" data-toggle="tooltip" data-index="{{@index}}" data-placement="top" title="Reissue Request" data-original-title="Reissue Request">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </div>
+        <div id="request_teardown_{{@index}}" class="collapse response-panel-body">
+          {{> test_request_details test_id="teardown" index=@index call=call}}
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
