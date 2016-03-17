@@ -422,15 +422,66 @@ class Crucible.TestExecutor
     suiteElement.replaceWith(HandlebarsTemplates[@templates.suiteResult]({suite: suite, result: result}))
     suiteElement = @element.find("#test-"+suite.id)
     suiteElement.data('suite', suite)
+
+    #render results panel
+    html = HandlebarsTemplates[@templates.testRequests]({tests: result.tests, setup_requests: result.setup_requests, teardown_requests: result.teardown_requests})
+    detailsTemplate = @templates.testRequestDetails
+    $('#data-modal .modal-body').empty().append(html)
+    $("#data-modal .response-panel-body").on('show.bs.collapse', ((e) ->
+      $(@).find("code").each (index, code) ->
+        hljs.highlightBlock(code)))
+
+    # setup & teardown request refreshing
+    $(['setup', 'teardown']).each (i, test) =>
+      refresh_link = $("##{test}_collapse .request-panel-refresh")
+      refresh_link.tooltip()
+      refresh_link.click (e) ->
+        e.preventDefault
+        test_result_id = if result._id then result._id else result.tests[0].test_result_id.$oid
+        test_id = test
+        request_index = $(@).data('index')
+        refresh_icon = $(@).find('i')
+        content_panel = $("#request_#{test_id}_#{request_index}")
+        loading_html='<div style="text-align:center"><i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading</div>'
+        refresh_icon.addClass('fa-spin')
+        content_panel.empty().append(loading_html)
+        content_panel.collapse('show')
+        $.getJSON("/test_results/#{test_result_id}/reissue_request.json?test_id=#{test_id}&request_index=#{request_index}").success((data) =>
+          refresh_icon.removeClass('fa-spin')
+          detailsHtml = HandlebarsTemplates[detailsTemplate]({test_id: test_id, index: request_index, call: data})
+          $("##{test_id}_request_#{request_index}_status").html(data.response.code)
+          content_panel.empty().append(detailsHtml)
+          content_panel.find(".request-resent-message").show())
+        return false
+
     $(result.tests).each (i, test) =>
       test.test_result_id = result._id if !test.test_result_id && result._id # id may come from different spots depending on if just run
       if (i == 0)
-        # add click handler for default selection
-        @addClickRequestDetailsHandler(test, suiteElement)
         testRunId = @selectedTestRunId
         testRunId = @runningTestRunId if @runningTestRunId
         @addClickPermalinkHandler(testRunId, suiteElement, test.id)
+        @addClickRequestDetailsHandler(test, suiteElement)
       @addClickTestHandler(test, suiteElement)
+      refresh_link = $("#{test.id}_collapse .request-panel-refresh")
+      refresh_link.tooltip()
+      refresh_link.click (e) ->
+        e.preventDefault
+        test_result_id = test.test_result_id.$oid
+        test_id = test.id
+        request_index = $(@).data('index')
+        refresh_icon = $(@).find('i')
+        content_panel = $("#request_#{test_id}_#{request_index}")
+        loading_html='<div style="text-align:center"><i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading</div>'
+        refresh_icon.addClass('fa-spin')
+        content_panel.empty().append(loading_html)
+        content_panel.collapse('show')
+        $.getJSON("/test_results/#{test_result_id}/reissue_request.json?test_id=#{test_id}&request_index=#{request_index}").success((data) =>
+          refresh_icon.removeClass('fa-spin')
+          detailsHtml = HandlebarsTemplates[detailsTemplate]({test_id: test_id, index: request_index, call: data})
+          $("##{test_id}_request_#{request_index}_status").html(data.response.code)
+          content_panel.empty().append(detailsHtml)
+          content_panel.find(".request-resent-message").show())
+        return false
 
   displayError: (message) =>
     @element.find(".test-result-error").html(message)
@@ -468,31 +519,8 @@ class Crucible.TestExecutor
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
     suiteElement.find(".data-link").click (e) =>
-      html = HandlebarsTemplates[@templates.testRequests]({test: test})
-      detailsTemplate = @templates.testRequestDetails
-      $('#data-modal .modal-body').empty().append(html)
-      $('#data-modal .modal-body code').each (index, code) ->
-        hljs.highlightBlock(code)
-      refresh_link = $('#data-modal .request-panel-refresh')
-      refresh_link.tooltip()
-      refresh_link.click (e) ->
-        e.preventDefault
-        test_result_id = test.test_result_id.$oid
-        test_id = test.id
-        request_index = $(@).data('index')
-        refresh_icon = $(@).find('i')
-        content_panel = $("#request_#{request_index}")
-        loading_html='<div style="text-align:center"><i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading</div>'
-        refresh_icon.addClass('fa-spin')
-        content_panel.empty().append(loading_html)
-        content_panel.collapse('show')
-        $.getJSON("/test_results/#{test_result_id}/reissue_request.json?test_id=#{test_id}&request_index=#{request_index}").success((data) =>
-          refresh_icon.removeClass('fa-spin')
-          detailsHtml = HandlebarsTemplates[detailsTemplate]({index: request_index, call: data})
-          $("#request_#{request_index}_status").html(data.response.code)
-          content_panel.empty().append(detailsHtml)
-          content_panel.find(".request-resent-message").show()
-        )
+      $('#data-modal .modal-body .request-group').removeClass('in')
+      $("##{test.id}_collapse_button").click()
 
   addClickPermalinkHandler: (testRunId, suiteElement, testId) =>
     permalink = suiteElement.find(".test-permalink-link")
