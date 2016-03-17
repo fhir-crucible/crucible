@@ -12,7 +12,11 @@ class TestResult
   def reissue_request(test_id, request_index)
     client = FHIR::Client.new(self.server.url)
     client.default_format = self.server.default_format if self.server.default_format
-    request = self.result.find{|t| t['id'] == test_id}['requests'][request_index]['request']
+    if test_id == "setup" || test_id == "teardown"
+      request = self["#{test_id}_requests"][request_index]['request']
+    else
+      request = self.result.find{|t| t['id'] == test_id}['requests'][request_index]['request']
+    end
 
     client.reissue_request(request)
 
