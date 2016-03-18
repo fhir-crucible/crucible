@@ -1,27 +1,84 @@
 /*****************************************************************************/
 /**         This file is for overridding the default bootstrap behavior     **/
 /*****************************************************************************/
-body {
+.half-block {background:#298BDD;
+    position: absolute;
+    top:0;
+    width:100%;
+    height:660px;
+    content: '';
+    margin:0;
+    z-index:-1;}
+
+    body {
   background-color: $base;
-  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  font-family: "Helvetica Neue", helveticaNeue, helvetica, arial, sans-serif;
   font-size: 18px;
+  font-weight:50;
 }
 
 header {
-  background-color: $brand-primary;
-  border-color: $brand-primary;
+  background: #298BDD;
+  border-color: #298BDD;
   border-radius: 0px;
+}
+
+.navbar-brand{
+  font-size:32px;
+  background: #298BDD;
+  color:#ffffff;
+  margin-left: 15px;
+  padding:15px 0 15px 15px;
 
   .nav > li > a{
     &:visited{
-      background-color: $brand-primary;
+      background: #298BDD;
     }
     &:hover{
-      background-color: $brand-primary;
+      background: #298BDD;
+      color:#337ab7;
+    }
+  }
+}
+
+  
+
+
+
+
+.navbar-header.navbar-fixed-top{
+  background:#298BDD;
+  padding-bottom: 15px;
+  padding-top:15px;
+
+  .nav > li > a{
+    &:visited{
+      background: #298BDD;
+    }
+    &:hover{
+      background: #298BDD;
+      color:#337ab7;
     }
   }
 
 }
+
+.nav.pull-right{
+  margin-right: 22px;}
+
+.spacer{
+  height:10px;
+}
+
+.headline{
+ margin-top:100px;
+ margin-left:12px;
+color:white;
+font-size:80px;
+font-weight:100;
+  
+}
+
 
 footer {
   background-color: $brand-primary;

@@ -2,20 +2,22 @@
 # -------------------------- PRIVATE FUNCTIONS ------------------------------ #
 
 # returns appropriate color of section (recursive)
-color = (data, threshold) ->
+color = (data) ->
+  colors = ['#cc0000', '#ff9900', '#e9e913', '#99cc00', '#33cc33']
+  colorRanges = [0, 50, 65, 80, 99]
+
+  currentColor = colors[0] 
+
   if data.total == 0
-    '#bbb'      # gray
-  else if data.passed / data.total >= threshold
-    '#417505'   # green
+    '#bbb'
   else
-    '#800010'   # red
-
-# returns appropriate opacity of a failed section
-opacity = (data) ->
-  d3.scale.linear()
-    .domain([.5,1])
-    .range([.4,1])(Math.max(data.passed, (data.total - data.passed)) / data.total)
-
+    for range, index in colorRanges
+      if percentMe(data) >= range
+        currentColor = colors[index]
+      else
+        break
+    currentColor
+  
 # returns percent passing of a section
 percentMe = (data) ->
   if data.total == 0
@@ -123,9 +125,8 @@ class Crucible.Starburst
       .enter()
         .append("path")
         .attr("d", arc)
-        .style("fill", (d) => color(d, @get('threshold')))
+        .style("fill", (d) => color(d))
         .style("stroke", '#fff')
-        .style("opacity", opacity)
         .attr("class", (d) -> d.name?.replace(/([\s,\&])/g, "_"))
         .on("click", (d) =>
           node = d

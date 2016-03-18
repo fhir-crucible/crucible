@@ -4,7 +4,9 @@
   .navbar-brand{
     font-weight: 500;
     font-size: 32px;
+    font-family:"Apple Gothic", appleGothic, gothic, sans-serif;
     color: $brand-tertiary;
+    background: #298BDD;
   }
 }
 
@@ -17,5 +19,8 @@ nav {
 }
 
 .nav-tabs > li > a:hover {
-  background-color: $base-darken;
+  background-color: #4ABCE2;
+  color:white;
 }
+
+.footer{padding-bottom:0}

@@ -35,6 +35,11 @@ class ServersController < ApplicationController
     end
   end
 
+  def leader
+    
+  end
+
+
   def oauth_redirect
     server = Server.where(state: params[:state]).first
     if server

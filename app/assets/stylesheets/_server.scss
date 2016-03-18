@@ -22,7 +22,7 @@
     margin-right: 30px;
     font-size: 55px;
     line-height: 60px;
-    color: $brand-accent;
+    color: $brand-accent-darken;
   }
 
   input {
@@ -105,7 +105,7 @@
 
 .server-url-panel {
   a {
-    color: $brand-primary;
+    color: $brand-accent-darken;
   }
 }
 
@@ -179,7 +179,7 @@
 .server-summaries {
   margin: 15px;
   background-color: $brand-tertiary;
-  border-radius: 10px;
+  border-radius: 0px;
   min-height: 920px;
   text-align: center;
   padding: 40px 0;

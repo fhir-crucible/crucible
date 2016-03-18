@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'past_runs', defaults: { format: :json }
     get 'supported_tests', defaults: { format: :json }
     post 'oauth_params'
+    get 'leader' 
   end
 
   resources :test_results, only: [:show] do
@@ -24,5 +25,6 @@ Rails.application.routes.draw do
 
   root to: "home#index"
   get 'redirect', to: 'servers#oauth_redirect'
+  get 'leader', to: 'servers#leader'
 
 end
