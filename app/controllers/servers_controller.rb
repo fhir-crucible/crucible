@@ -136,6 +136,13 @@ class ServersController < ApplicationController
       server.authorize_url = params[:authorize_url]
       server.token_url = params[:token_url]
       server.launch_param = params[:launch_param].strip if params[:launch_param]
+      server.patient_id = params[:patient_id].strip if params[:patient_id]
+      if params[:scopes]
+        scopes = params[:scopes].split(",")
+        server.scopes.find_all { |scope| scopes.index(scope.name) }. each do |scope|
+          scope.update_attribute(:selected, true)
+        end
+      end
       server.save
       render json: { success: true }
     end

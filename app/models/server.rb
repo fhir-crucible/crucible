@@ -1,3 +1,12 @@
+class Scope
+  include Mongoid::Document
+  field :name, type: String
+  field :description, type: String
+  field :selected, type: Boolean, default: false
+  field :elem_id, type: String
+  embedded_in :server
+end
+
 class Server
   require 'json'
 
@@ -15,6 +24,7 @@ class Server
   field :client_id, type: String
   field :client_secret, type: String
   field :launch_param, type: String
+  field :patient_id, type: String
   field :authorize_url, type: String
   field :token_url, type: String
   field :oauth_token_opts, type: Hash
@@ -22,6 +32,35 @@ class Server
   field :supported_suites, type: Array, default: []
   field :default_format, type: String
   field :tags, type: Array, default: []
+  embeds_many :scopes
+
+  def get_default_scopes
+    [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },
+     { name: 'launch/patient', description: 'When launching outside the EHR, ask for a patient to be selected at launch time', selected: true},
+     { name: 'patient/*.read', description: 'Permission to read any resource for the current patient', selected: true},
+     { name: 'patient/Patient.read', description: 'Permission to read the Patient resource for the current patient'},
+     { name: 'patient/DocumentReference.read', description: 'Permission to read DocumentReference resources for the current patient'},
+     { name: 'patient/MedicationOrder.read', description: 'patient/MedicationOrder.read	Permission to read MedicationOrder resources for the current patient'},
+     { name: 'patient/MedicationStatement.read', description: 'Permission to read MedicationStatemenet resources for the current patient'},
+     { name: 'fhir_complete', description: 'Access to the entire FHIR API'},
+     { name: 'user/Patient.read', description: 'Permission to read all Patient resources that the current user can access'},
+     { name: 'user/*.read', description: 'Permission to read all resources that the current user can access'},
+     { name: 'user/*.*', description: 'user/*.*	Permission to read and write all resources that the current user can access'},
+     { name: 'openid profile', description: 'Permission to retrieve information about the current logged-in user'},
+     { name: 'offline_access', description: 'Request a refresh_token that can be used to obtain a new access token to replace an expired one, even after the end-user no is longer online after the access token expires'},
+     { name: 'online_access', description: 'Request a refresh_token that can be used to obtain a new access token to replace an expired one, and that will be usable for as long as the end-user remains online'}
+    ]
+  end
+
+  def get_scopes
+    # Support servers that don't have scopes set yet
+    if scopes.empty?
+      get_default_scopes.each do |scope_hash|
+        scopes.create(scope_hash)
+      end
+    end
+    scopes
+  end
 
   def load_conformance(refresh=false)
     updated = false
