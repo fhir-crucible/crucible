@@ -67,8 +67,8 @@ class ServersController < ApplicationController
         return
       end
 
-      if !token.params["patient"] && server.launch_param
-        token.params["patient"] = server.launch_param
+      if !token.params["patient"] && server.patient_id
+        token.params["patient"] = server.patient_id
       end
 
       server.oauth_token_opts = token.to_hash
@@ -135,8 +135,8 @@ class ServersController < ApplicationController
       server.state = params[:state]
       server.authorize_url = params[:authorize_url]
       server.token_url = params[:token_url]
-      server.launch_param = params[:launch_param].strip if params[:launch_param]
-      server.patient_id = params[:patient_id].strip if params[:patient_id]
+      server.launch_param = params[:launch_param] ? params[:launch_param].strip : ''
+      server.patient_id = params[:patient_id] ? params[:patient_id].strip : ''
       if params[:scopes]
         scopes = params[:scopes].split(",")
         server.scopes.find_all { |scope| scopes.index(scope.name) }. each do |scope|
