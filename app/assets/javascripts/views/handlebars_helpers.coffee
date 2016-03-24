@@ -21,6 +21,13 @@ Handlebars.registerHelper('upper-case', (value) ->
   Case.upper(value)
 )
 
+Handlebars.registerHelper('pluralize?', (value) ->
+  if value != 1
+    's'
+  else
+    ''
+)
+
 Handlebars.registerHelper('indent', (value) ->
   firstCharacter = value.charAt(0)
   if ['{','['].indexOf(firstCharacter) >= 0

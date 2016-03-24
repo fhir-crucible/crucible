@@ -337,7 +337,7 @@ class Crucible.TestExecutor
       for result in $(group).find(".test-run-result")
         visibleCount += 1 if $(result).css('display') != 'none'
       $(group).hide() unless visibleCount > 0
-      $(group).find('.suite-count').html(visibleCount)
+      $(group).find('.suite-count').html("#{visibleCount} suite#{if visibleCount != 1 then 's' else ''}")
 
     # filter tests in a suite
     testElements = @element.find('.suite-handle')
