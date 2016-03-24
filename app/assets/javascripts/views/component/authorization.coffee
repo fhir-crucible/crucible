@@ -41,15 +41,20 @@ class Crucible.Authorization
           authorize_url: $('#conformance-data').children().data('authorize-url'),
           token_url: $('#conformance-data').children().data('token-url'),
           state: $('#state').val(),
-          launch_param: $('#launch_param').val()
+          launch_param: $('#launch_param').val(),
+          patient_id: $('#patient_id').val(),
+          scopes: $(event.target).find("[name='scope_vars[]']:checked").map(() ->
+                    $(this).val()
+                  ).get().join(",")
       },
       'JSON'
       ).success((data)->
+        if $("#launch_check").prop('checked')
+          $('#launch_param').addClass('used')
         scope = $(event.target).find("[name='scope_vars[]']:checked").map(() ->
           $(this).val()
         ).get().join(" ")
         $("#scope").val(scope)
-
         window.location.assign(event.target.action + "?" + $("input.used").serialize())
       )
       return false

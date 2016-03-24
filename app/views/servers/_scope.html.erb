@@ -1,0 +1,6 @@
+<tr>
+  <td><input type="checkbox" name="scope_vars[]" value="<%= scope[:name] %>" <% if scope[:selected] %>checked<% end %>
+        <% if scope[:elem_id] %>id="<%= scope[:elem_id] %>"<% end %> /></td>
+  <td><code><%= scope[:name] %></code></td>
+  <td><%= scope[:description] %></td>
+</tr>
