@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 476429046bbb3b1fb410f194bfc84858514bd995
+  revision: bceebbfa2b44c10862a1f41c986b8b34c5890e98
   branch: master
   specs:
     plan_executor (1.0.0)
@@ -340,6 +340,3 @@ DEPENDENCIES
   teaspoon-jasmine
   uglifier (>= 1.3.0)
   webmock
-
-BUNDLED WITH
-   1.11.2
