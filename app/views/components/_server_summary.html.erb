@@ -7,9 +7,9 @@ synchronized ||= false
     <%= render partial: "components/starburst" %>
   </div>
   <% unless noHeader %>
-    <a id="carouselPanel" href="/servers/<%= server.id %>">
+    <a id="carouselPanel" href="/servers/<%= server.id %>" title="<%=server.name%>">
       <div class="server-summary-details">
-        <span class="server-name"><%= server.name %> - </span>
+        <span class="server-name"><%= truncate(server.name, length: 25) %>:</span>
         <span class="percent-passed"><%= server.percent_passing.try(:round)%>%</span>
       </div>
     </a>
