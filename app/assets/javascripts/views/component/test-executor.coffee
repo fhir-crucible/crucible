@@ -178,7 +178,7 @@ class Crucible.TestExecutor
       $(data['test_run'].test_results).each (i, result) =>
         suiteId = result.test_id
         suiteElement = @element.find("#test-#{suiteId}")
-        @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement)
+        @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement) if @suitesById[suiteId]
       if @defaultSelection
         @element.find("#test-#{@defaultSelection.suiteId} a.collapsed").click()
         @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click()
@@ -345,7 +345,7 @@ class Crucible.TestExecutor
     $(testElements).each (i, testElement) =>
       testElement = $(testElement)
       test = @testsById[testElement.attr('id')]
-      testElement.hide() if @filters.supported && !(test.supported)
+      testElement.hide() if test && @filters.supported && !(test.supported)
 
   resetSuitePanels: =>
     suitesElement = @element.find('.test-suites')
