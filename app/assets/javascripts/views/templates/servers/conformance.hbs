@@ -105,7 +105,7 @@
             {{#each testedResources as |res|}}
               <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#resource-{{@index}}">
                 <td data-title="Read" class="test-circle-holder">
-                  <a>{{title-case res.fhirType}}</a>
+                  <a>{{title-case res.type}}</a>
                 </td>
                 {{#each ../operations as |operation|}}
                   <td>
@@ -127,7 +127,7 @@
                       {{#each res.searchParam as |param|}}
                         <tr>
                           <td>{{param.name}}</td>
-                          <td>{{param.fhirType}}</td>
+                          <td>{{param.type}}</td>
                           <td>{{param.documentation}}</td>
                         </tr>
                       {{/each}}
