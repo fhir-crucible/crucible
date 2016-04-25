@@ -19,9 +19,10 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-gem 'fhir_model', :git => 'https://github.com/fhir-crucible/fhir_dstu2_models.git', :branch => 'master'
-gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'master'
-gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'master'
+gem 'fhir_models', :git => 'https://github.com/fhir-crucible/fhir_models.git', :branch => 'master'
+gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'stu3'
+gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'stu3'
+#gem 'plan_executor', :path => '../plan_executor'
 gem 'mongoid'
 gem 'devise'
 gem 'autoprefixer-rails'

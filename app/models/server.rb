@@ -58,7 +58,7 @@ class Server
     if (self.conformance.nil? || refresh)
       client = FHIR::Client.new(self.url)
       @raw_conformance ||= client.conformanceStatement
-      self.conformance = @raw_conformance.to_json(except: :_id)
+      self.conformance = @raw_conformance.to_json
       self.supported_tests = []
       self.supported_suites = []
       collect_supported_tests
