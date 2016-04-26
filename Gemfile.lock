@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: c5e4d57028a2939d5079dd1e397c3b4e7e9abbfa
+  revision: cc14013db2228a9de2f4b14815a9a559034277c5
   branch: stu3
   specs:
     fhir_client (1.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_models.git
-  revision: 6faa598d5d63f295837ddad653a7623fce4252ac
+  revision: 475d9f5ad1c30b13eb67055dbbed1d872cef8c65
   branch: master
   specs:
     fhir_models (1.0.0)
@@ -340,6 +340,3 @@ DEPENDENCIES
   teaspoon-jasmine
   uglifier (>= 1.3.0)
   webmock
-
-BUNDLED WITH
-   1.11.2
