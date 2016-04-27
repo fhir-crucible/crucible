@@ -74,7 +74,7 @@ class Crucible.Conformance
       auth = @conformance.rest?[0].security?.extension?[0].extension?.filter((elem)->
         elem.url == url
       )[0]
-      auth.value.value if auth
+      auth.valueUri if auth
 
   authType: =>
       if @conformance.rest[0].security && @conformance.rest[0].security.extension
