@@ -12,7 +12,7 @@
   <div class="panel-collapse collapse" id="{{suite.id}}_details" aria-expanded="false" style="height: 0px;">
     <p class="helper_text">{{suite.description}}</p>
     <div class="row details">
-      <div class="col-md-5">
+      <div class="col-sm-5">
         <table class="table report-table nav nav-stacked">
           <tbody>
             {{#each suite.methods as |method|}}
@@ -28,7 +28,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-7 tab-content test-results">
+      <div class="col-sm-7 tab-content test-results">
         {{> test_result test=suite.methods.[0]}}
       </div>
     </div>

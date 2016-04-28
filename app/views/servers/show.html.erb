@@ -1,6 +1,6 @@
-<div class="container main">
+<div class="container main servers-show">
   <div class="row content">
-    <div class="col-md-12">
+    <div class="col-sm-12">
       <div class="palette report">
           <% if flash[:notice] %>
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -15,7 +15,7 @@
             </div>
           <% end %>
         <div class="row">
-          <div class="col-md-12 server-test-details">
+          <div class="col-sm-12 server-test-details">
             <!-- START: server name and url -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
@@ -41,13 +41,13 @@
               <a class="edit-server-name-icon editToggle pull-left"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
               <div class="edit-panel row hide editToggle">
                 <form id="server_update_form">
-                  <div class="col-md-6">
+                  <div class="col-sm-6">
                     <input id="edit-server-name-dialogue" name="name" value='<%= @server.name %>' placeholder='Server Name'>
                     <input id="edit-server-url-dialogue" name="url" value='<%= @server.url %>' placeholder='Server URL'>
                     <input id="edit-server-tags-dialogue" name="tags" value='<%= @server.tags.join(',') %>' placeholder="Add Tag" data-role="tagsinput">
                     <label id="edit-server-tags-dialogue-error" class="error" for="edit-server-tags-dialogue" style="display:none"></label>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-sm-3">
                     <!-- button submits without a type=button -->
                     <button class="btn secondary submit-server-name"><i class="fa fa-lg fa-fw fa-spinner fa-pulse hide"> </i>Save</button>
                     <button type="button" class="btn secondary cancel-server-name">Cancel</button>                    
@@ -80,7 +80,7 @@
             <div class="tab-pane test-results active" id="test-data">
               <div class="test-executor" data-server-id="<%=@server.id %>" data-current-test-run-id="<%=@currentTestRunId %>" data-progress="execution-progress">
                 <!-- START: Left side, with filters -->
-                <div class="col-md-3">
+                <div class="col-sm-3">
                   <div class="filter">
                     <%= render partial: "components/server_summary", locals: {server: @server, noHeader: true}%>
                     <div>
@@ -108,13 +108,13 @@
                   </div>
                 </div>
                 <!-- END: Left side, with filters -->
-                <div class="col-md-9 tab-content-holder">
+                <div class="col-sm-9 tab-content-holder">
                   <!-- grouping option selectors -->
                   <div class="panel-group test-results" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="test-result-error"></div>
                     <div class="test-result-loading"><i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading...</div>
                     <div class="button-holder row hide">
-                      <div class="col-md-9 suite-selectors">
+                      <div class="col-sm-9 suite-selectors">
                         <a class="selectDeselectAll" data-toggle="tooltip" data-placement="top" title="Select/Deselect All Suites"><i class="fa fa-check"></i></a>
                         <a class="expandCollapseAll" data-toggle="tooltip" data-placement="top" title="Expand/Collapse All Suites"><i class="fa fa-expand"></i></a>
                         <a class="change-test-run" data-toggle="tooltip" data-placement="top" title="Select Past Test Run"><i class="fa fa-clock-o"></i></a>
@@ -127,13 +127,13 @@
                           <i class="fa fa-close clear-past-run-data" style="display: none" data-toggle="tooltip" data-placement="top" title="Clear Past Test Run Data"></i>
                         </span>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-sm-3">
                         <!-- <a class="link-btn pull-right">Execute&nbsp;<i class="fa fa-arrow-circle-right"></i></a> -->
                         <button class="btn execute">
                           Execute
                         </button>
                       </div>
-                      <div class="col-md-3 col-md-offset-9">
+                      <div class="col-sm-3 col-sm-offset-9">
                         <button class="btn cancel" data-toggle="modal" data-target="#cancel-modal" style="display:none">
                             Cancel
                         </button>
@@ -154,7 +154,7 @@
               </div>
             </div>
             <div class="tab-pane" id="test-run-summary-data">
-              <div class="col-md-12">
+              <div class="col-sm-12">
                 <%= render partial: 'test_run_report', locals: {server: @server}%>
               </div>
             </div>
