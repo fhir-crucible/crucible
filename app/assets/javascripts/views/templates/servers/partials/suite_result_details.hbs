@@ -1,6 +1,6 @@
     <p class="helper_text">{{suite.description}}</p>
     <div class="row details">
-      <div class="col-md-5">
+      <div class="col-sm-5">
         <table class="table table-hover report-table nav nav-stacked">
           <tbody>
             {{#each result.tests as |test|}}
@@ -21,7 +21,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-7 tab-content test-results">
+      <div class="col-sm-7 tab-content test-results">
         {{> test_result test=result.tests.[0]}}
       </div>
     </div>
