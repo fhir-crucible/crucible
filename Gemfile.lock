@@ -7,14 +7,14 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_models.git
-  revision: 8ff80be80b73777892680d9a618ce50ba330b9b4
+  revision: 28bb9ac7898690ca628c9e2cce89432df6940664
   branch: master
   specs:
     fhir_models (1.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 34806be1dad8fe4d4b1d04f80132c666d6325289
+  revision: 76ea005b3862b49e62d5a4f7922c728ab68e9429
   branch: stu3
   specs:
     plan_executor (1.0.0)
