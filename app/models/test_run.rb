@@ -54,7 +54,8 @@ class TestRun
     end
 
     # pull all the tests into memory with .map {} so that the cursor doesn't time out
-    self.tests.map {|n| n}.each_with_index do |t, i|
+    # sort because mongoid does not retain order using self.tests; only retains order when using test_ids
+    self.tests.map {|n| n}.sort {|a, b| test_ids.index(a.id) <=> test_ids.index(b.id) }.each_with_index do |t, i|
       return false if TestRun.find(self.id).status == 'cancelled'
 
       Rails.logger.info "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
