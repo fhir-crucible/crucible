@@ -165,6 +165,7 @@ class Crucible.TestExecutor
     @element.find('.suite-selectors').hide()
     @hideTestResultSummary()
     $('.selectDeselectAll').html(@html.deselectAllButton)
+    $('.expandCollapseAll').html(@html.expandAllButton)
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     @selectedTestRunId = selector.val()
