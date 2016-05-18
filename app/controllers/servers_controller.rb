@@ -120,11 +120,12 @@ class ServersController < ApplicationController
   def aggregate_run
     server = Server.find(params[:server_id])
     aggregate_run = server.aggregate_run
+    render :nothing => true unless aggregate_run
     return unless aggregate_run
     if (params[:only_failures])
       aggregate_run.results.select! {|r| r if r['status'] != 'pass'}
     end
-    render json: server.aggregate_run
+    render json: aggregate_run
   end
 
   def oauth_params
