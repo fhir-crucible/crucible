@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="failure-messages row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
       {{#each failuresByMessage as |failureGroup|}}
         <div class="test-compliance-fail">
           <div class="failures-nav">
@@ -33,63 +33,63 @@
                     </div>
                     <div class="row test-stats">
                       {{#if failure.suite}}
-                        <div class="col-md-3 test-suite">
+                        <div class="col-sm-3 test-suite">
                           Suite
                         </div>
-                        <div class="col-md-9 test-stats-suite">
+                        <div class="col-sm-9 test-stats-suite">
                           {{title-case failure.suite.name}}
                         </div>
                       {{/if}}
                       {{#if failure.status}}
-                        <div class="col-md-3 test-stats-label">
+                        <div class="col-sm-3 test-stats-label">
                           Status
                         </div>
-                        <div class="col-md-9 test-stats-status">
+                        <div class="col-sm-9 test-stats-status">
                           {{failure.status}}
                         </div>
                       {{/if}}
                       {{#if failure.requires}}
-                        <div class="col-md-3 test-stats-label">
+                        <div class="col-sm-3 test-stats-label">
                           Requires
                         </div>
-                        <div class="col-md-9 test-stats-validates">
+                        <div class="col-sm-9 test-stats-validates">
                           {{#each failure.requires as |requirement|}}
                             <div>{{requirement.resource}}: {{#each requirement.methods as |method|}}{{method}}{{#unless @last}},{{/unless}}{{/each}}</div>
                           {{/each}}
                         </div>
                       {{/if}}
                       {{#if failure.validates}}
-                        <div class="col-md-3 test-stats-label">
+                        <div class="col-sm-3 test-stats-label">
                           Validates
                         </div>
-                        <div class="col-md-9 test-stats-validates">
+                        <div class="col-sm-9 test-stats-validates">
                           {{#each failure.validates as |validation|}}
                             {{> validation validation=validation}}
                           {{/each}}
                         </div>
                       {{/if}}
                       {{#if failure.links}}
-                        <div class="col-md-3 test-stats-label">
+                        <div class="col-sm-3 test-stats-label">
                           Links
                         </div>
-                        <div class="col-md-9 test-stats-links">
+                        <div class="col-sm-9 test-stats-links">
                           {{#each failure.links as |link|}}
                             <div><a target="_blank" href="{{link}}">Related FHIR Spec Location</a></div>
                           {{/each}}
                         </div>
                       {{/if}}
                       {{#if failure.data}}
-                        <div class="col-md-3 test-stats-label">
+                        <div class="col-sm-3 test-stats-label">
                           Data
                         </div>
-                        <div class="col-md-6 test-stats-data">
+                        <div class="col-sm-6 test-stats-data">
                           <div>
                             <a href="#" class="data-link" data-toggle="modal" data-target="#data-modal" data-content="">response data</a>
                             <div class="hidden data-content"><pre><code>{{failure.data}}</code></pre></div>
                           </div>
                         </div>
                       {{/if}}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                           <!-- button -->
                         </div>
                     </div>

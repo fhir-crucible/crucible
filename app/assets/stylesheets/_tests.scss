@@ -10,9 +10,7 @@
   .warning {color: $result-warning;}
   .details {
     min-height: 250px;
-    max-height: 500px;
     margin-top: 20px;
-    overflow: auto;
     h4 {
       &.heading {
         text-align: center;
@@ -60,6 +58,10 @@
     border-top: 2px solid $structure;
     border-bottom: 2px solid $structure;
     margin-bottom: 20px;
+    > div {
+        max-height: 500px;
+        overflow-y: auto;
+    }
   }
   .tab-content{
     border: 5px solid $base;

@@ -15,8 +15,8 @@ class Crucible.TestExecutor
     testRequestDetails: 'views/templates/servers/partials/test_request_details'
     testRunSummary: 'views/templates/servers/partials/test_run_summary'
   html:
-    selectAllButton: '<i class="fa fa-close"></i>'
-    deselectAllButton: '<i class="fa fa-check"></i>'
+    deselectAllButton: '<i class="fa fa-close"></i>'
+    selectAllButton: '<i class="fa fa-check"></i>'
     collapseAllButton: '<i class="fa fa-compress"></i>'
     expandAllButton: '<i class="fa fa-expand"></i>'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
@@ -156,12 +156,16 @@ class Crucible.TestExecutor
     @element.find('.clear-past-run-data').hide()
     @renderSuites()
     @filter(executed: false)
+    $('.expandCollapseAll').html(@html.expandAllButton)
+    $('.selectDeselectAll').html(@html.selectAllButton)
 
   updateCurrentTestRun: =>
     @element.find('.test-suites').empty()
     @element.find('.execute').hide()
     @element.find('.suite-selectors').hide()
     @hideTestResultSummary()
+    $('.selectDeselectAll').html(@html.deselectAllButton)
+    $('.expandCollapseAll').html(@html.expandAllButton)
     $('.test-result-loading').show()
     selector = @element.find('.past-test-runs-selector')
     @selectedTestRunId = selector.val()
@@ -209,18 +213,20 @@ class Crucible.TestExecutor
     @element.find('.add-filter-selector').toggle()
 
   selectDeselectAll: =>
-    suiteElements = @element.find('.test-run-result :visible :checkbox')
     button = $('.selectDeselectAll')
-    if !$(suiteElements).prop('checked')
-      $(suiteElements).prop('checked', true)
-      $(button).html(@html.selectAllButton)
-    else
-      $(suiteElements).prop('checked', false)
+    if button.html() == @html.selectAllButton
+      # open all categories first
+      @element.find('.suite-group-body').collapse('show')
+      $('.expandCollapseAll').html(@html.collapseAllButton)
+      @element.find('.test-run-result :visible :checkbox').prop('checked', true)
       $(button).html(@html.deselectAllButton)
+    else
+      @element.find('.test-run-result :checkbox').prop('checked', false)
+      $(button).html(@html.selectAllButton)
+
 
   expandCollapseAll: =>
     suiteGroupBodies = @element.find('.suite-group-body')
-    # suiteElements = @element.find('.test-run-result').filter(':visible').find('.panel-collapse')
     button = $('.expandCollapseAll')
     if !$(suiteGroupBodies).hasClass('in')
       $(suiteGroupBodies).collapse('show')
@@ -472,6 +478,7 @@ class Crucible.TestExecutor
     @element.find('.suite-selectors').show()
     @element.find('.cancel').hide()
     @element.find('.past-test-runs-selector').attr("disabled", false)
+    $('.selectDeselectAll').html(@html.deselectAllButton)
     run_date = @element.find('.past-test-runs-selector').children().eq(1).html()
     @element.find('.selected-run').empty().html(run_date)
     @element.find('.clear-past-run-data').show()

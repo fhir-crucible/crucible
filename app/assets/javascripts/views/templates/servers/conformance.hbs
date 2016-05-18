@@ -1,13 +1,13 @@
-<div class="col-md-12 tab-content-holder conformance" data-authorize-url="{{authorizeUrl}}" data-token-url="{{tokenUrl}}" data-auth-type="{{authType}}">
+<div class="col-sm-12 tab-content-holder conformance" data-authorize-url="{{authorizeUrl}}" data-token-url="{{tokenUrl}}" data-auth-type="{{authType}}">
   <!-- METADATA CONTAINER -->
   <div class="row screen-changer">
-    <div class="col-md-12">
+    <div class="col-sm-12">
       <span class="resources-changer active"><a>Conformance Resource Support</a></span>
       <span class="metadata-changer"><a>Conformance Metadata</a></span>
     </div>
   </div>
   <div class="row conformance metadata conformance-metadata hide">
-    <div class="metadata-selector col-md-3">
+    <div class="metadata-selector col-sm-3">
       <ul class="nav nav-pills nav-stacked metadata">
         <li class="active"><a data-toggle="tab" href="#conformance_metadata">Conformance Metadata</a></li>
         <li><a data-toggle="tab" href="#rest-metadata">REST Metadata</a></li>
@@ -17,7 +17,7 @@
     </div>
 
     <!-- METADATA EXPAND CONTAINER -->
-    <div class="metadata-expand-container col-md-9 tab-content">
+    <div class="metadata-expand-container col-sm-9 tab-content">
 
       <!-- CONFORMANCE METADATA  -->
       <div id="conformance_metadata" class="tab-pane active">
@@ -35,10 +35,10 @@
           {{> conformance_metadata title="FHIR VERSION" value=conformance.fhirVersion}}
           {{> conformance_metadata title="ACCEPT UNKNOWN" value=conformance.acceptUnknown boolean=true}}
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-4">
               <div><label>FORMATS SUPPORTED:</label></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-sm-8">
               <div>{{#each conformance.format as |f|}}{{f}} {{/each}}</div>
             </div>
           </div>
@@ -86,7 +86,7 @@
     <!-- RESOURCE CHART -->
     <div class="row conformance">
       <div id="resource-chart" class="table-responsive">
-        <table class="col-md-12 table table-mega-striped table-condensed">
+        <table class="col-sm-12 table table-mega-striped table-condensed">
           <thead>
             <tr>
               <th>Resource Type</th>
