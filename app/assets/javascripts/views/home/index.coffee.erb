@@ -8,10 +8,13 @@ class Crucible.Home
     @element = $('#new-server-form')
     return unless @element.length
     jQuery.validator.addMethod("standardPort", (value, element) -> 
-      url = $('<a/>').get(0)
-      url.href = element.value
-      port = port = url.port || (if url.protocol == 'https:' then '443' else '80');
-      ["8080", "80", "443"].indexOf(port) > 0
+      if (value)
+        url = $('<a/>').get(0)
+        url.href = element.value
+        port = port = url.port || (if url.protocol == 'https:' then '443' else '80');
+        return ["8080", "80", "443"].indexOf(port) > 0
+      else
+        return true
     , "Crucible can only test servers on standard ports (80, 8080, 443)");
     @registerHandlers()
 
@@ -22,6 +25,6 @@ class Crucible.Home
         "server[url]": 
           required: true
           url: true
-          standardPort: true
+          standardPort: <%= Rails.application.config.restrict_test_ports %>
     )
 
