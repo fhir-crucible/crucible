@@ -20,8 +20,8 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 gem 'fhir_model', :git => 'https://github.com/fhir-crucible/fhir_dstu2_models.git', :branch => 'master'
-gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'master'
-gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'master'
+gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'dstu2'
+gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'dstu2'
 gem 'mongoid'
 gem 'devise'
 gem 'autoprefixer-rails'
