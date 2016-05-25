@@ -48,7 +48,7 @@ Handlebars.registerHelper('checkCharLength', (text, oneChar, twoChar, threeChar,
 )
 
 Handlebars.registerHelper('supported-status', (resource, operation) ->
-  if resource? && resource.operation[operation] == true
+  if resource? && resource.operation? && resource.operation[operation] == true
     return "test-filled"
   else
     return "test-empty"

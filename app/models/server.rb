@@ -58,7 +58,7 @@ class Server
     if (self.conformance.nil? || refresh)
       client = FHIR::Client.new(self.url)
       @raw_conformance ||= client.conformanceStatement
-      self.conformance = @raw_conformance.to_json(except: :_id)
+      self.conformance = @raw_conformance.to_json
       self.supported_tests = []
       self.supported_suites = []
       collect_supported_tests
@@ -72,7 +72,7 @@ class Server
 
     value['rest'].each do |rest|
       rest['operation'] = rest['operation'].reduce({}) {|memo,operation| memo[operation['name']]=true; memo} if rest['operation']
-      rest['resource'].each do |resource|
+      rest['resource'].select {|r| !r['interaction'].nil?}.each do |resource|
         resource['operation'] = resource['interaction'].reduce({}) {|memo,operation| memo[operation['code']]=true; memo}
       end if rest['resource']
     end
@@ -200,7 +200,7 @@ class Server
 
     rest = value['rest'].first
     operations = rest['operation'].map {|o| "$#{o['name']}"} if rest['operation']
-    resource_operations = Hash[rest['resource'].map{ |r| [r['fhirType'], r['interaction'].map {|i| translator[i['code']] || i['code']}]}] if rest['resource']
+    resource_operations = Hash[rest['resource'].select{|r| !r['interaction'].nil?}.map{ |r| [r['type'], r['interaction'].map {|i| translator[i['code']] || i['code']}]}] if rest['resource']
 
     Test.all.each do |suite|
       at_least_one_test = false

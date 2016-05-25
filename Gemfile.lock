@@ -1,30 +1,21 @@
 GIT
   remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: 110d1df427c88a9c5568307ce62f24e17a4f9415
-  branch: master
+  revision: 63b03e0147e765c362b380708800b475761b862f
+  branch: stu3
   specs:
     fhir_client (1.0.0)
 
 GIT
-  remote: https://github.com/fhir-crucible/fhir_dstu2_models.git
-  revision: 51c1b4ba96a1b67256f7752d1ebc82d67a72fcf1
+  remote: https://github.com/fhir-crucible/fhir_models.git
+  revision: 28bb9ac7898690ca628c9e2cce89432df6940664
   branch: master
   specs:
-    fhir_model (1.0.0)
-      bcp47
-      date_time_precision
-      mongoid
-      mongoid-history
-      moped
-      nokogiri
-      pry
-      rails (>= 4.0.0)
-      tilt
+    fhir_models (1.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 50b929498bd73117d101fe402513d4c6e8d8e3e1
-  branch: master
+  revision: 4fcd32bfcd9d636059f0a5869af080812fe40dae
+  branch: stu3
   specs:
     plan_executor (1.0.0)
 
@@ -321,7 +312,7 @@ DEPENDENCIES
   delayed_job_mongoid
   devise
   fhir_client!
-  fhir_model!
+  fhir_models!
   guard-livereload
   handlebars_assets
   jbuilder (~> 2.0)
