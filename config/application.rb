@@ -44,5 +44,11 @@ module Crucible
     config.autoload_paths << Rails.root.join('lib')
 
     config.active_job.queue_adapter = :delayed_job
+
+    # Configuration to determine if Crucible restricts available ports to 443, 80, 8080
+    # false: allow requests to all FHIR server ports
+    # true: only allow requests to 443, 80, 8080
+    config.restrict_test_ports = false
+
   end
 end
