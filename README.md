@@ -15,31 +15,31 @@ A simple Rails app for evaluating FHIR.
 
 ### Linux ###
 
-- [Ubuntu Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-(Ubuntu-14.04))
-- [CentOS Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-(CentOS-7.1.1503))
+- [Ubuntu Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-%28Ubuntu-14.04%29)
+- [CentOS Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-%28CentOS-7.1.1503%29)
 
 ### OSX ###
 
 #### Dependencies
 - Install [Homebrew](http://brew.sh/)
 - Install [RVM](https://rvm.io/)
-- Install Ruby 2.0.0+ via ```rvm install 2.0.0```
-- Install [MongoDB](https://www.mongodb.org/) via ```brew install mongodb```
-- Install [Bundler](http://bundler.io/) via ```gem install bundler```
-- Install [Node](https://nodejs.org/) via ```brew install node```
-- Install [Bower](http://bower.io/) via ```npm install -g bower```
+- Install Ruby 2.0.0+ via `rvm install 2.0.0`
+- Install [MongoDB](https://www.mongodb.org/) via `brew install mongodb`
+- Install [Bundler](http://bundler.io/) via `gem install bundler`
+- Install [Node](https://nodejs.org/) via `brew install node`
+- Install [Bower](http://bower.io/) via `npm install -g bower`
 
 #### Server
-- Checkout Crucible: ```git clone https://github.com/fhir-crucible/crucible.git```
-- Install Ruby dependencies with Bundler: ```bundle install```
-- Install Javascript dependencies with Bower: ```bower install```
-- Start MongoDB: ```mongod```
-- Launch the Rails server: ```bundle exec rails server```
-- Launch the Job Runner: ```RAILS_ENV=development bin/delayed_job start```
+- Checkout Crucible: `git clone https://github.com/fhir-crucible/crucible.git`
+- Install Ruby dependencies with Bundler: `bundle install`
+- Install Javascript dependencies with Bower: `bower install`
+- Start MongoDB: `mongod`
+- Launch the Rails server: `bundle exec rails server`
+- Launch the Job Runner: `RAILS_ENV=development bin/delayed_job start`
 
 #### Testing Crucible Code
 ##### Ruby Tests
-- Execute: ```bundle exec rake test```
+- Execute: `bundle exec rake test`
 
 ##### Front end tests
 - Install phantomjs: ```brew install phantomjs```
