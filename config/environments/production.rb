@@ -75,4 +75,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   #config.active_record.dump_schema_after_migration = false
+
+  # Configuration to determine if Crucible restricts available ports to 443, 80, 8080
+  # false: allow requests to all FHIR server ports
+  # true: only allow requests to 443, 80, 8080
+  config.restrict_test_ports = true
 end
