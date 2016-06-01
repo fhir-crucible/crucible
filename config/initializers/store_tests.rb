@@ -1,5 +1,5 @@
 # date based version to force tests to reload on startup
-LOAD_VERSION=20160328
+LOAD_VERSION=20160601
 
 Test.any_of({:load_version.exists => false},{:load_version.lt => LOAD_VERSION}).delete
 
