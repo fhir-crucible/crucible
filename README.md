@@ -86,6 +86,7 @@ The server to be tested must declare their compliance with the SMART authorizati
 Once this code has been included in the conformance, visiting the server's page in Crucible should display a red "padlock" icon in the upper left hand corner.
 If the padlock doesn't show up, you may have to refresh the conformance by going to the "Conformance" tab and clicking on the "Refresh" button, then refresh the page.
 
+##### The refresh button:
 ![The refresh button on the "Conformance" tab](https://raw.githubusercontent.com/fhir-crucible/mock-ups/doc_images/docs/refresh_button.png "Located on the top right of the tab")
 
 ### Registration
@@ -94,6 +95,7 @@ In order to use the FHIR server, you must first register a client with the FHIR 
 ### Authorization process
 Clicking on the padlock icon brings up the "Authorize" popup. Here, you can add authorization details about the server being tested.
 
+##### Input fields on the authorization popup
 ![Authorization popup](https://raw.githubusercontent.com/fhir-crucible/mock-ups/doc_images/docs/authorize_popup.png "Fields in the authorization popup")
 
 #### Authorize Popup Details
@@ -103,14 +105,17 @@ Clicking on the padlock icon brings up the "Authorize" popup. Here, you can add 
 * __Launch Parameter:__ Used only in the EHR launch sequence, this parameter is issued by the EHR and given to the SMART on FHIR app.
 * __Scope:__ SMART on FHIR's authorization scheme uses OAuth scopes to communicate (and negotiate) access requirements. For more information on scopes, see http://docs.smarthealthit.org/authorization/scopes-and-launch-context/ . In general, for Crucible, `Patient/*.read` should be selected, to provide access to the requested patient and all resources associated with it. If using the EHR launch sequence, or otherwise not picking a patient through the UI, you should select adequate scopes for the resources being requested. `fhir_complete` or `user/*.read`, if available, are good choices. For Argonaut tests, Crucible only requires read permissions, as nothing is written to the FHIR server.
 
+##### Some of the scopes in the authorization popup
 ![A selection of scopes](https://raw.githubusercontent.com/fhir-crucible/mock-ups/doc_images/docs/scopes.png "The first four scopes")
 
 Once the requisite details have been entered into the popup, scroll to the bottom and click "Authorize App". This should take you to the FHIR server's authorization page, where you can complete the process on the server side.
 
+##### The authorize button, located at the bottom of the authorization popup
 ![The "authorize" button](https://raw.githubusercontent.com/fhir-crucible/mock-ups/doc_images/docs/authorize_button.png)
 
 Once authorization has been completed successfully, you will see a green notice that says "Server successfully authorized", and the lock icon will turn green, indicating a valid access token has been issued. At this point, you can run any tests requiring authorization.
 
+##### A correctly-authorized server
 ![The server details showing a green padlock](https://raw.githubusercontent.com/fhir-crucible/mock-ups/doc_images/docs/authorized_server.png)
 
 ### Renewal
