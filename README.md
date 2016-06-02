@@ -54,7 +54,7 @@ In order to authenticate a server with Crucible, the server must be capable of s
 
 The server to be tested must declare their compliance with the SMART authorization specification by including security and extension elements in the conformance.
 
-#### Example Conformance (in JSON)
+#### Abbreviated Example Conformance (in JSON)
 ```javascript
 {
 "resourceType": "Conformance",
@@ -91,6 +91,8 @@ In order to use the FHIR server, you must first register a client with the FHIR 
 
 ### Authorization process
 Clicking on the padlock icon brings up the "Authorize" popup. Here, you can add authorization details about the server being tested.
+
+![Authorization popup](https://raw.githubusercontent.com/fhir-crucible/mock-ups/doc_images/docs/authorize_popup.png)
 
 #### Authorize Popup Details
 * __Client ID:__ used to define the client accessing the server. Provided by the server.
