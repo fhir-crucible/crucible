@@ -1,22 +1,22 @@
 GIT
   remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: e5c76cdeaa8269a00dd19593eedd0b9abeb977db
+  revision: 532b704e2659bed279e83d2ae838a12f17c986a4
   branch: master
   specs:
-    fhir_client (1.0.0)
+    fhir_client (1.0.2)
       activesupport (>= 3)
       addressable (>= 2.3)
-      fhir_models (~> 0.3)
+      fhir_models (>= 0.3.1)
       oauth2 (~> 1.1)
       rest-client (~> 1.8)
       tilt (>= 1.1)
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_models.git
-  revision: a06690e917cc1736c7c6d9bfd35f284f9b3c964b
+  revision: c8c98d66d73312e9a81ed34e454d008f2cc0ba7a
   branch: master
   specs:
-    fhir_models (0.3.0)
+    fhir_models (0.3.1)
       bcp47 (>= 0.3)
       date_time_precision (>= 0.8)
       mime-types (>= 1.16, < 3)
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 8df0cd2a664f6d900e0b01812c57328a0f9bab55
+  revision: fd05949fa6073c29cf9f455d5b864f6029737bcb
   branch: master
   specs:
     plan_executor (1.0.0)
