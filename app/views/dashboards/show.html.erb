@@ -2,8 +2,16 @@
 
   <div class="banner row">
     <div class="col-sm-12">
-      <div class="alert alert-info alert-dismissible dstu-update" role="alert">
+      <div class="alert alert-info dstu-update" role="alert">
         The tests shown on this dashboard are under active development, and test runs shown may be out of date. As a result, the results displayed below do not necessarily represent the true status of a particular server with respect to tested FHIR features. To view the complete test results for the servers listed below, please visit the <a href="/">Crucible home page</a>.
+      </div>
+    </div>
+  </div>
+
+  <div class="banner row">
+    <div class="col-sm-12">
+      <div class="well">
+        <%= @dashboard.title %>: <% @dashboard.description %>
       </div>
     </div>
   </div>
@@ -22,7 +30,7 @@
                         <ul class="nav nav-pills" data-tabs="tabs">
                           <%
                             i=0
-                            suite.details.keys.each do |key| 
+                            suite.details.keys.each do |key|
                             i+=1
                           %>
                             <li role="presentation" <%if i==1%>class="active"<%end%>><a href="#<%=suite.id%>_<%=key.parameterize%>" data-toggle="tab"><%=key%></a></li>
@@ -31,7 +39,7 @@
                         <div class="tab-content" id="dashboard-metadata-content">
                           <%
                             i=0
-                            suite.details.each do |key, value| 
+                            suite.details.each do |key, value|
                             i+=1
                           %>
                             <div class="tab-pane<%if i==1%> active<%end%>" id="<%=suite.id%>_<%=key.parameterize%>">
@@ -77,5 +85,3 @@
   </div>
 
 </div>
-
-
