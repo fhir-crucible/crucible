@@ -1,4 +1,4 @@
-$(window).on('load', -> 
+$(document).ready( -> 
   new Crucible.Summary()
 )
 
@@ -17,7 +17,7 @@ class Crucible.Summary
       serverId = summaryElement.data('serverId')
       if serverId?
         $.getJSON("/servers/#{serverId}/summary.json")
-          .success((data) => 
+          .success((data) =>
             if (data.summary)
               starburstElement = summaryElement.find('.starburst')
               summaryElement.show()
