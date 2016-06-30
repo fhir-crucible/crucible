@@ -8,13 +8,15 @@
     </div>
   </div>
 
-  <div class="banner row">
-    <div class="col-sm-12">
-      <div class="well">
-        <%= @dashboard.title %>: <%= @dashboard.description %>
+  <% if @dashboard %>
+    <div class="banner row">
+      <div class="col-sm-12">
+        <div class="well">
+          <%= @dashboard.title %>: <%= @dashboard.description %>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
 
     <div class="row">
       <div class="col-sm-12">
