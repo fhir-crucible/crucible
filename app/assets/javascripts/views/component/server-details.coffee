@@ -1,4 +1,4 @@
-$(window).on('load', ->
+$(document).ready( -> 
   new Crucible.ServerDetails()
 )
 
