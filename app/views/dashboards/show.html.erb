@@ -3,7 +3,7 @@
   <div class="banner row">
     <div class="col-sm-12">
       <div class="alert alert-info dstu-update" role="alert">
-        The tests shown on this dashboard are under active development, and test runs shown may be out of date. As a result, the results displayed below do not necessarily represent the true status of a particular server with respect to tested FHIR features. To view the complete test results for the servers listed below, please visit the <a href="/">Crucible home page</a>.
+        The tests shown on this dashboard are under active development, and test runs shown may be out of date. As a result, the results displayed below do not necessarily represent the true status of a particular server with respect to tested FHIR features. To view the complete test results for the servers listed below, please visit the <%= link_to 'Crucible home page', root_url %>.
       </div>
     </div>
   </div>
@@ -11,7 +11,7 @@
   <div class="banner row">
     <div class="col-sm-12">
       <div class="well">
-        <%= @dashboard.title %>: <% @dashboard.description %>
+        <%= @dashboard.title %>: <%= @dashboard.description %>
       </div>
     </div>
   </div>
