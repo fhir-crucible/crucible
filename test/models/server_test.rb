@@ -46,10 +46,12 @@ class ServerTest < ActiveSupport::TestCase
   end
 
   def test_collect_supported_tests
-    conformance = FHIR::Conformance.from_fhir_json(@partial_conformance_json)
+    conformance = FHIR::Json.from_json(@partial_conformance_json)
     server = Server.new ({url: 'www.example.com'})
 
-    stub = stub_request(:get, "www.example.com/metadata").to_return(body: @partial_conformance_json).times(4)
+    # the server will try xml conformance first, so respond with a 404
+    stub = stub_request(:get, "www.example.com/metadata").with(headers: {'Accept'=>'application/xml+fhir'}).to_return(status: 404)
+    stub = stub_request(:get, "www.example.com/metadata").with(headers: {'Accept'=>'application/json+fhir'}).to_return(body: @partial_conformance_json).times(4)
     conformance = server.load_conformance
 
     server.collect_supported_tests
