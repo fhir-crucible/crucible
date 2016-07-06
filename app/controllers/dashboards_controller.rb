@@ -2,6 +2,7 @@ class DashboardsController < ApplicationController
 
   def show
     @id = params[:id]
+    @dashboard = Dashboard.where(tag: @id).first
     @suites = Test.where({tags: @id}).sort! {|l,r| l.name <=> r.name}
   end
 
@@ -52,9 +53,9 @@ class DashboardsController < ApplicationController
   def backfill_requests(test_result_ids, results)
     test_results_by_id = {}
     TestResult.find(test_result_ids).each {|tr| test_results_by_id[tr.id] = tr} rescue 'missing results'
-    results.values.each do |by_suite| 
+    results.values.each do |by_suite|
       by_suite.values.each do |trs|
-        trs[:results].each do |tr| 
+        trs[:results].each do |tr|
           tr['requests'] = test_results_by_id[tr['test_result_id']].result.select{|x| x['id'] == tr['id']}.first['requests'] if test_results_by_id[tr['test_result_id']]
         end
       end
