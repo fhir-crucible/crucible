@@ -22,6 +22,7 @@
 //= require underscore/underscore
 //= require highlightjs/highlight.pack.js
 //= require jquery-validation/dist/jquery.validate.js
+//= require jquery-validation/dist/additional-methods.js
 //= require vkbeautify/vkbeautify.js
 //= require clipboard/dist/clipboard.js
 //= require bootstrap-tagsinput/dist/bootstrap-tagsinput.js
