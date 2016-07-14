@@ -80,4 +80,10 @@ Rails.application.configure do
   # false: allow requests to all FHIR server ports
   # true: only allow requests to 443, 80, 8080
   config.restrict_test_ports = true
+
+  # Configuration to determine if localhost servers and servers referencing localhost IP addresses are allowed (127.0.0.1)
+  # false: allows localhost urls
+  # true: rejects localhost urls to either localhost or localhost IP addresses
+  config.restrict_localhost_urls = true
+
 end

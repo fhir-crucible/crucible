@@ -15,16 +15,15 @@ class Crucible.Home
         return ["8080", "80", "443"].indexOf(port) > 0
       else
         return true
-    , "Crucible can only test servers on standard ports (80, 8080, 443)");
+    , "Crucible can only test servers on standard ports (80, 8080, 443)")
     @registerHandlers()
-
 
   registerHandlers: =>
     @element.validate(
       rules: 
         "server[url]": 
           required: true
-          url: true
+          <%= (Rails.application.config.restrict_localhost_urls) ? "url: true" : "url2: true" %>
           standardPort: <%= Rails.application.config.restrict_test_ports %>
     )
 
