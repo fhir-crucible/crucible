@@ -90,6 +90,48 @@ class ServersController < ApplicationController
     render json: {summary: summary}
   end
 
+  def summary_history
+    summaries = Summary.where({server_id: params[:server_id]}).order_by(generated_at: 'asc')
+
+    # Generate list of sundays
+    sundays = (1.year.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
+
+    # Put sundays into a hash and use to only save one data point per week
+    index = sundays.inject({}) { |h,k| h[k] = nil; h}
+
+    sections = {} # save the sections that we care about so we can store nil values later
+
+    # loop through each summary and place in the sunday index
+    summaries.each_entry do |e|
+      e.compliance['children'].each { |e| sections[e['name'].downcase] = nil} # save the section names that we see for later use
+      value = {'date' => e.generated_at.to_date}
+      value.merge!(e.compliance['children'].inject({}){|h,k| h[k['name'].downcase] = nil; h[k['name'].downcase] = k['passed'].to_f/k['total'].to_f if k['total'].to_f > 0; h})
+      if e.generated_at < sundays.first
+        index[sundays.first] = value # if this is before our first sunday, have it register on the first sunday
+      end
+
+      index[e.generated_at.to_date + (7 - e.generated_at.wday)] = value # store this on the latest sunday
+    end
+
+    # carry forward sundays with data to those without data
+    sundays.inject(nil) {|p, k| index[k] = index[k] || p }
+
+    # put the index into an array format for consumption by d3
+    result = index.values
+
+    # fix the dates on sundays that got carried forward from previous sundays
+    # include dates and section names with null values if the date has no data
+    sundays.each_with_index do |val, index| 
+      if (result[index])
+        result[index] = result[index].merge({'date'=>val})
+      else
+        result[index] = {'date' => val}.merge(sections)
+      end
+    end
+
+    render json: result.to_json
+  end
+
   def supported_tests
     server = Server.find(params[:server_id])
     @@suites ||= Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}

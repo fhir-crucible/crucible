@@ -123,7 +123,6 @@
 }
 
 .server-fhir-specification {
-  margin-bottom: 40px;
 
   .spec-starburst-chart {
     padding: 30px 0px 30px 30px;
@@ -172,6 +171,10 @@
     }
     .spec-percent-passing{}
   }
+}
+
+.server-history {
+  margin-bottom: 20px;    
 }
 
 // ------------------------- SERVER SUMMARIES ------------------------------ //

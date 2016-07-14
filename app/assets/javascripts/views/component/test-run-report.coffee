@@ -15,7 +15,7 @@ class Crucible.TestRunReport
     @childrenChart = @element.find('.spec-details')
     @failuresReportElement = @element.find('.failures')
     @loadAggregateRun()
-
+    @loadHistory()
 
   registerHandlers: =>
     @element.find('.starburst').on('starburstInitialized', (event) =>
@@ -54,6 +54,16 @@ class Crucible.TestRunReport
       $('.test-run-summary-handle').removeClass('hidden')
       @failures = data['results']
       @renderFailures()
+    )
+
+  renderHistory: (data) =>
+    dopplerElement = @element.find('.server-history')
+    doppler = new Crucible.Doppler(dopplerElement[0], data)
+    doppler.render()
+
+  loadHistory: =>
+    $.getJSON("/servers/#{@serverId}/summary_history.json").success((data) =>
+      @renderHistory(data)
     )
 
   renderChart: (node) ->
