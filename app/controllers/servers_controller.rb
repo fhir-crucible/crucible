@@ -91,36 +91,47 @@ class ServersController < ApplicationController
   end
 
   def summary_history
-    summaries = Summary.where({server_id: params[:server_id]}).order_by(generated_at: 'asc')
+    summaries = Summary.where({server_id: params[:server_id]})
 
     # Generate list of sundays
     sundays = (1.year.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
 
     # Put sundays into a hash and use to only save one data point per week
-    index = sundays.inject({}) { |h,k| h[k] = nil; h}
+    sunday_index = sundays.inject({}) { |h,k| h[k] = nil; h}
 
-    sections = {} # save the sections that we care about so we can store nil values later
+    sections = {} # store the sections that we come across
 
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
-      e.compliance['children'].each { |e| sections[e['name'].downcase] = nil} # save the section names that we see for later use
-      value = {'date' => e.generated_at.to_date}
-      value.merge!(e.compliance['children'].inject({}){|h,k| h[k['name'].downcase] = nil; h[k['name'].downcase] = k['passed'].to_f/k['total'].to_f if k['total'].to_f > 0; h})
-      if e.generated_at < sundays.first
-        index[sundays.first] = value # if this is before our first sunday, have it register on the first sunday
+
+      #save the section names that we see for later use
+      e.compliance['children'].each { |e| sections[e['name'].downcase] = {'passed' => 0, 'total' => 0}}
+
+      # build the value for this run, which is a combination of the date and all the passed & total values for the categories
+      value = e.compliance['children'].inject({'date' => e.generated_at.to_date}) {|h,k| h[k['name'].downcase] = {'passed' => k['passed'], 'total' => k['total']}; h}
+
+      # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
+      if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
+        sunday_index[sundays.first] = value 
       end
 
-      index[e.generated_at.to_date + (7 - e.generated_at.wday)] = value # store this on the latest sunday
+      #figure out the next sunday from this date
+      next_sunday = e.generated_at.to_date + (7 - e.generated_at.wday)
+
+       # store this on the next sunday, as long as nothing from later in the week is already stored there
+      if sunday_index[next_sunday].nil? or sunday_index[next_sunday]['date'] < e.generated_at.to_date
+        sunday_index[next_sunday] = value
+      end
     end
 
     # carry forward sundays with data to those without data
-    sundays.inject(nil) {|p, k| index[k] = index[k] || p }
+    sundays.inject(nil) {|p, k| sunday_index[k] = sunday_index[k] || p }
 
-    # put the index into an array format for consumption by d3
-    result = index.values
+    # put the sunday_index into an array format for consumption by d3
+    result = sunday_index.values
 
-    # fix the dates on sundays that got carried forward from previous sundays
-    # include dates and section names with null values if the date has no data
+    # fix the dates on items to be on Sundays (since now it just stores the run date, not the date of the sunday)
+    # include dates and section names with null values if the date has no data (happens on dates before the first run)
     sundays.each_with_index do |val, index| 
       if (result[index])
         result[index] = result[index].merge({'date'=>val})
