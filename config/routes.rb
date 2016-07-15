@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
     get 'conformance', defaults: { format: :json }
     get 'summary', defaults: { format: :json }
+    get 'summary_history', defaults: { format: :json }
     get 'oauth_params', defaults: { format: :json }
     get 'aggregate_run', defaults: { format: :json }
     get 'past_runs', defaults: { format: :json }
