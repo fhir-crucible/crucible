@@ -4,23 +4,33 @@ daydiff = (first, second) ->
   Math.round((second-first)/(1000*60*60*24))
 
 weekdiff = (first, second) ->
-  52 - daydiff(first,second) / 7
+  daydiff(first,second) / 7
 
+# returns appropriate color of section (recursive)
 color = (data, threshold) ->
-  if data == null
-    '#ddd'      # gray
-  else if data >= threshold
+  if data.total == 0
+    '#bbb'      # gray
+  else if data.passed / data.total >= threshold
     '#417505'   # green
   else
     '#800010'   # red
 
 opacity = (data) ->
-  if data == null || data == 0
-    1
+  d3.scale.linear()
+    .domain([.5,1])
+    .range([.4,1])(Math.max(data.passed, (data.total - data.passed)) / data.total)
+
+percentMe = (data) ->
+  if data.total == 0
+    0
   else
-    d3.scale.linear()
-      .domain([.5,1])
-      .range([.4,1])(data)
+    Math.round(data.passed / data.total * 100)
+
+# returns appropriate tool tip for section
+tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html((d) -> "#{d.date}<br/> #{d.type}:<br>#{d.value.passed} / #{d.value.total} passed (#{percentMe(d.value)}%)")
 
 class Crucible.Doppler
 
@@ -34,7 +44,6 @@ class Crucible.Doppler
     height = 136
     cellSize = 14
     threshold = .65
-    percent = d3.format(".1%")
     format = d3.time.format("%Y-%m-%d")
     monthNames =  [(new Date()).getFullYear(),'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
@@ -58,13 +67,12 @@ class Crucible.Doppler
     # figure out where to put month names on the chart
     for row in @data
       monthName = monthNames[format.parse(row.date).getMonth()]
-      if !months.length || months[0].month != monthName
-        months.unshift({date: row.date, month: monthName})
-      else
-        months[0].date = row.date;
+
+      months.push({date: row.date, month: monthName}) if months.length == 0
+      months.push({date: row.date, month: monthName}) if months[months.length-1].month != monthName
 
     # get rid of the first month name if it is close to the second month name
-    months.shift() if daydiff(format.parse(months[months.length-1].date), format.parse(months[months.length-2].date) < 7)
+    months.shift() if daydiff(format.parse(months[0].date), format.parse(months[1].date)) < 20
 
     # category labels
     svg.selectAll("label")
@@ -84,7 +92,7 @@ class Crucible.Doppler
       .data(months)
       .enter()
       .append("text")
-      .attr("x", (d) -> margin + weekdiff(format.parse(d.date), new Date()) * (3 + cellSize) )
+      .attr("x", (d) -> margin + (52 - weekdiff(format.parse(d.date), new Date())) * (3 + cellSize) )
       .attr("y", (d) -> 10 )
       .style("text-transform", "capitalize")
       .attr("font-family", "sans-serif")
@@ -99,10 +107,14 @@ class Crucible.Doppler
       .append("rect")
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", (d) -> margin + weekdiff(format.parse(d.date), new Date()) * (3 + cellSize))
+      .attr("x", (d) -> margin + (52 - weekdiff(format.parse(d.date), new Date())) * (3 + cellSize))
       .attr("y", (d) -> d.index * cellSize)
       .style("fill", (d) -> color(d.value, threshold))
       .style("stroke", "#ccc")
       .style("opacity", (d) -> opacity(d.value))
-      .append("title")
-      .text((d) -> d.date + ' - ' + d.type + ' - ' + d.value )
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+
+    # activate tool tip
+    svg.call(tip)
+
