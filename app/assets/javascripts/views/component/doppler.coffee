@@ -4,7 +4,7 @@ daydiff = (first, second) ->
   Math.round((second-first)/(1000*60*60*24))
 
 weekdiff = (first, second) ->
-  daydiff(first,second) / 7
+  Math.floor(daydiff(first,second) / 7)
 
 # returns appropriate color of section (recursive)
 color = (data, threshold) ->
@@ -45,7 +45,9 @@ class Crucible.Doppler
     cellSize = 14
     threshold = .65
     format = d3.time.format("%Y-%m-%d")
-    monthNames =  [(new Date()).getFullYear(),'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    today = new Date()
+    next_sunday = (new Date()).setDate(today.getDate() + (7-today.getDay()))
+    monthNames =  [today.getFullYear(),'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
     svg = d3.select(@element)
       .append("svg")
@@ -92,7 +94,7 @@ class Crucible.Doppler
       .data(months)
       .enter()
       .append("text")
-      .attr("x", (d) -> margin + (52 - weekdiff(format.parse(d.date), new Date())) * (3 + cellSize) )
+      .attr("x", (d) -> margin + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize) )
       .attr("y", (d) -> 10 )
       .style("text-transform", "capitalize")
       .attr("font-family", "sans-serif")
@@ -107,7 +109,7 @@ class Crucible.Doppler
       .append("rect")
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", (d) -> margin + (52 - weekdiff(format.parse(d.date), new Date())) * (3 + cellSize))
+      .attr("x", (d) -> margin + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize))
       .attr("y", (d) -> d.index * cellSize)
       .style("fill", (d) -> color(d.value, threshold))
       .style("stroke", "#ccc")

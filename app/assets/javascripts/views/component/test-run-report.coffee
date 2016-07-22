@@ -57,7 +57,7 @@ class Crucible.TestRunReport
     )
 
   renderHistory: (data) =>
-    dopplerElement = @element.find('.server-history')
+    dopplerElement = @element.find('.server-history').empty()
     doppler = new Crucible.Doppler(dopplerElement[0], data)
     doppler.render()
 
