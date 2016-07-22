@@ -192,12 +192,13 @@
   }
 
   .server-summary-details {
-    margin: 10px;
-    margin-bottom: 0px;
+    margin-top: 4px;
+    height: 60px;
 
     .percent-passed {
       font-weight: bold;
     }
+
   }
 
   .summary-time-details {
@@ -205,6 +206,17 @@
     line-height: 1em;
   }
 
+
+}
+
+// Media queries to shrink text on front page to prevent wrapping
+
+@media (max-width: $screen-lg-min) {
+  .server-summary-details{font-size: 14px; height: 50px;}
+}
+
+@media (max-width: $screen-md-min) {
+  .server-summary-details{font-size: 12px; height: 40px;}
 }
 
 // ------------------------- SERVER TIME ----------------------------------- //
