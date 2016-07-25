@@ -11,11 +11,11 @@ synchronized ||= false
       <div class="server-summary-details">
         <span class="server-name"><%= truncate(server.name, length: 25) %>:</span>
         <span class="percent-passed"><%= server.percent_passing.try(:round)%>%</span>
+        <div class="summary-time-details">
+          <span class="server-time"><i class="fa fa-fw fa-clock-o"></i><span class="last-run"></span></span>
+        </div>
       </div>
     </a>
-    <div class="summary-time-details">
-      <span class="server-time"><i class="fa fa-fw fa-clock-o"></i><span class="last-run"></span></span>
-    </div>
   <% end %>
 
 </div>

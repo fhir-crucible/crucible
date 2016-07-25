@@ -97,7 +97,7 @@ class Crucible.TestExecutor
       @renderSuites() if !@defaultSelection
       @continueTestRun() if @runningTestRunId && !@defaultSelection
       @filter(supported: true)
-      @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true})
+      @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true, selected: true})
     ).complete(() -> $('.test-result-loading').hide())
 
   renderSuites: =>
@@ -132,7 +132,12 @@ class Crucible.TestExecutor
       selector = @element.find('.past-test-runs-selector')
       selector.empty()
       if elementToAdd
-        selector.append("<option value='#{elementToAdd.value}' disabled='#{elementToAdd.disabled}'>#{elementToAdd.text}</option>")
+        option = $("<option>#{elementToAdd.text}</option>")
+        option.attr('value', elementToAdd.value)
+        option.attr('disabled', true) if elementToAdd.disabled
+        option.attr('selected', true) if elementToAdd.selected
+        selector.append(option)
+
       selector.show()
       $(data['past_runs']).each (i, test_run) =>
         foundDefaultSelection = true if @defaultSelection && @defaultSelection.testRunId == test_run.id
