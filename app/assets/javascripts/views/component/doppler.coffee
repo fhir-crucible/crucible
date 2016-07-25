@@ -1,7 +1,7 @@
 
 # private methods
 daydiff = (first, second) ->
-  Math.round((second-first)/(1000*60*60*24))
+  Math.floor((second-first)/(1000*60*60*24))
 
 weekdiff = (first, second) ->
   Math.floor(daydiff(first,second) / 7)
