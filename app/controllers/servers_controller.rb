@@ -94,7 +94,7 @@ class ServersController < ApplicationController
     summaries = Summary.where({server_id: params[:server_id]})
 
     # Generate list of sundays
-    sundays = (1.year.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
+    sundays = (52.weeks.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
 
     # Put sundays into a hash and use to only save one data point per week
     sunday_index = sundays.inject({}) { |h,k| h[k] = nil; h}
