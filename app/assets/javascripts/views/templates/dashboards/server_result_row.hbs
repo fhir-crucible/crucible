@@ -9,7 +9,7 @@
     <div class="col-sm-4 results">
       <span> 
         {{#each result.tests as |testResult|}}
-          <span class="results-rectangle" data-toggle="tooltip" data-placement="top" title="{{testResult.description}}">
+          <span class="results-rectangle" data-toggle="tooltip" data-placement="top" title="{{testResult.description}} ({{#if testResult.status}}{{testResult.status}}{{else}}not run{{/if}})">
             <svg width="18" height="18">
               <rect x="0" y="0" rx="3" ry="3" width="18" height="18" class="{{testResult.status}}" fill=""/>
             </svg>
