@@ -2,72 +2,86 @@
 
   <div class="banner row">
     <div class="col-sm-12">
+      <% if @dashboard %>
+        <h2><%= @dashboard.title %></h2>
+      <% end %>
       <div class="alert alert-info dstu-update" role="alert">
-        The tests shown on this dashboard are under active development, and test runs shown may be out of date. As a result, the results displayed below do not necessarily represent the true status of a particular server with respect to tested FHIR features. To view the complete test results for the servers listed below, please visit the <%= link_to 'Crucible home page', root_url %>.
+        <% if @dashboard %>
+          <%= @dashboard.description %>
+        <% else %>
+          The tests shown on this dashboard are under active development, and test runs shown may be out of date. As a result, the results displayed below do not necessarily represent the true status of a particular server with respect to tested FHIR features. To view the complete test results for the servers listed below, please visit the <%= link_to 'Crucible home page', root_url %>.
+        <% end %>
       </div>
     </div>
   </div>
 
-  <% if @dashboard %>
-    <div class="banner row">
-      <div class="col-sm-12">
-        <div class="well">
-          <%= @dashboard.title %>: <%= @dashboard.description %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="palette dashboard dashboard-element" data-dashboard-id="<%=@id%>">
-          <% @suites.each do |suite| %>
-            <div class="dash-suite-object">
-              <div class="row dashboard-header">
-                <div class="col-sm-12">
-                  <h4><%= suite.name.titleize %><%if suite.details%> <a data-toggle="collapse" href="#dashboard-metadata-<%=suite.id%>">(more info)</a><%end%></h4>
-                  <div class="collapse" id="dashboard-metadata-<%=suite.id%>">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <ul class="nav nav-pills" data-tabs="tabs">
-                          <%
-                            i=0
-                            suite.details.keys.each do |key|
-                            i+=1
-                          %>
-                            <li role="presentation" <%if i==1%>class="active"<%end%>><a href="#<%=suite.id%>_<%=key.parameterize%>" data-toggle="tab"><%=key%></a></li>
-                          <% end if suite.details %>
-                        </ul>
-                        <div class="tab-content" id="dashboard-metadata-content">
-                          <%
-                            i=0
-                            suite.details.each do |key, value|
-                            i+=1
-                          %>
-                            <div class="tab-pane<%if i==1%> active<%end%>" id="<%=suite.id%>_<%=key.parameterize%>">
-                              <div class="row">
-                                <div class="col-sm-12">
-                                  <p><%= value %></p>
-                                </div>
-                              </div>
-                            </div>
-                          <% end if suite.details %>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row dashboard-body">
-                <div class="col-sm-12" id="suite_results_<%=suite.id%>">
-                  <i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading
-                </div>
-              </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="well legend">
+        <div class="container">
+          <% {'none': 'Not Run', 'pass': 'Passing', 'skip': 'Skipped', 'fail': 'Failing'}.each do |key, desc| %>
+            <div class="col-sm-3">
+              <%= desc %>: 
+              <svg width="18" height="18">
+                <rect x="0" y="3" rx="3" ry="3" width="18" height="18" class="<%= key %>" fill=""></rect>
+              </svg>
             </div>
           <% end %>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="palette dashboard dashboard-element" data-dashboard-id="<%=@id%>">
+        <% @suites.each do |suite| %>
+          <div class="dash-suite-object">
+            <div class="row dashboard-header">
+              <div class="col-sm-12">
+                <h4><%= suite.name.titleize %><%if suite.details%> <a data-toggle="collapse" href="#dashboard-metadata-<%=suite.id%>">(more info)</a><%end%></h4>
+                <div class="collapse" id="dashboard-metadata-<%=suite.id%>">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <ul class="nav nav-pills" data-tabs="tabs">
+                        <%
+                          i=0
+                          suite.details.keys.each do |key|
+                          i+=1
+                        %>
+                          <li role="presentation" <%if i==1%>class="active"<%end%>><a href="#<%=suite.id%>_<%=key.parameterize%>" data-toggle="tab"><%=key%></a></li>
+                        <% end if suite.details %>
+                      </ul>
+                      <div class="tab-content" id="dashboard-metadata-content">
+                        <%
+                          i=0
+                          suite.details.each do |key, value|
+                          i+=1
+                        %>
+                          <div class="tab-pane<%if i==1%> active<%end%>" id="<%=suite.id%>_<%=key.parameterize%>">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <p><%= value %></p>
+                              </div>
+                            </div>
+                          </div>
+                        <% end if suite.details %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row dashboard-body">
+              <div class="col-sm-12" id="suite_results_<%=suite.id%>">
+                <i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 
  <!-- Modal Response Data-->
   <div class="modal fade" id="data-modal" tabindex="-1" role="dialog" aria-labelledby="Data for test result">

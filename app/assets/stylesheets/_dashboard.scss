@@ -51,7 +51,7 @@
   margin-bottom: 30px;
 }
 
-.dashboard-body{
+.dashboard-body, .legend{
   font-size: 16px;
   p{display: inline;}
   .server-name p{
@@ -114,6 +114,12 @@
         color: $brand-secondary;
       }
     }
+  }
+}
+
+.legend {
+  svg {
+    overflow: visible;
   }
 }
 
