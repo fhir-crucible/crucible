@@ -17,7 +17,7 @@
         <% first = false %>
         <% server_page.each do |server| %>
           <div class="col-sm-4">
-            <%= render partial: "components/server_summary", locals: {server: server, synchronized: true}%>
+            <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
           </div>
         <% end %>
       </div>

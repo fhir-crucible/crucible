@@ -92,6 +92,9 @@ class ServersController < ApplicationController
 
   def summary_history
     summaries = Summary.where({server_id: params[:server_id]})
+    summary_tree = Crucible::FHIRStructure.get.deep_dup
+    
+    zeroize_summary(summary_tree)
 
     # Generate list of sundays
     sundays = (52.weeks.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
@@ -105,14 +108,24 @@ class ServersController < ApplicationController
     summaries.each_entry do |e|
 
       #save the section names that we see for later use
-      e.compliance['children'].each { |e| sections[e['name'].downcase] = {'passed' => 0, 'total' => 0}}
+      #e.compliance['children'].each { |e| sections[e['name'].downcase] = {'passed' => 0, 'total' => 0}}
 
       # build the value for this run, which is a combination of the date and all the passed & total values for the categories
-      value = e.compliance['children'].inject({'date' => e.generated_at.to_date}) {|h,k| h[k['name'].downcase] = {'passed' => k['passed'], 'total' => k['total']}; h}
+      all_nodes = all_nodes(e.compliance) # save in all_nodes hash
+
+      all_nodes.keys.each { |k| sections[k] = { 'passed' => 0, 'total' => 0} }
+      # value['date'] = e.generated_at.to_date
+
+      new_tree = summary_tree.deep_dup
+      new_tree['date'] = e.generated_at.to_date
+
+      rebuild_summary(new_tree, all_nodes)
+
+      # value = e.compliance['children'].inject({'date' => e.generated_at.to_date}) {|h,k| h[k['name'].downcase] = {'passed' => k['passed'], 'total' => k['total']}; h}
 
       # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
       if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
-        sunday_index[sundays.first] = value 
+        sunday_index[sundays.first] = new_tree 
       end
 
       #figure out the next sunday from this date
@@ -120,7 +133,7 @@ class ServersController < ApplicationController
 
        # store this on the next sunday, as long as nothing from later in the week is already stored there
       if sunday_index[next_sunday].nil? or sunday_index[next_sunday]['date'] < e.generated_at.to_date
-        sunday_index[next_sunday] = value
+        sunday_index[next_sunday] = new_tree
       end
     end
 
@@ -136,7 +149,7 @@ class ServersController < ApplicationController
       if (result[index])
         result[index] = result[index].merge({'date'=>val})
       else
-        result[index] = {'date' => val}.merge(sections)
+        result[index] = {'date' => val}.merge(summary_tree)
       end
     end
 
@@ -206,5 +219,34 @@ class ServersController < ApplicationController
 
   def server_params
     params.require(:server).permit(:url, :name, tags: [])
+  end
+
+  def zeroize_summary(hash)
+    hash['total'] = hash['passed'] = 0
+    unless hash['children'].nil?
+      hash['children'].each { |c| zeroize_summary(c) }
+    end
+  end
+
+  def all_nodes(hash, ret = {})
+
+    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total']}
+    hash['children'].each { |c| all_nodes(c, ret) } unless hash['children'].nil?
+
+    ret
+
+  end
+
+  def rebuild_summary(template, keys)
+
+    if keys[template['name'].downcase]
+      template['total'] = keys[template['name'].downcase]['total']
+      template['passed'] = keys[template['name'].downcase]['passed']
+    else
+      template['total'] = template['passed'] = 0
+    end
+
+    template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
+
   end
 end

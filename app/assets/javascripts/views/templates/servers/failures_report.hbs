@@ -1,15 +1,15 @@
-  <div class="failures-title row">
+  <div class="failures-title">
     <div class="pull-right">
+        <small>Most common {{count}} of {{total}} different failures.</small>
       <!--<button class="btn secondary"><i class="fa fa-cog"></i> Tag Filters</button>-->
     </div>
-    Failures
-    <span class="failures-count">({{total}})</span>
+    Recent Common Failures
     <div class="tag-list">
       <!---->
     </div>
   </div>
-  <div class="failure-messages row">
-    <div class="col-sm-12">
+  <div class="failure-messages">
+    <div>
       {{#each failuresByMessage as |failureGroup|}}
         <div class="test-compliance-fail">
           <div class="failures-nav">

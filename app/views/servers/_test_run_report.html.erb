@@ -10,21 +10,21 @@
     </span>
   </div>
   <div class="row server-fhir-specification section-data">
-    <div class="col-sm-5 spec-starburst-chart">
-      <div class="col-sm-11">
-        <div class="starburst-header">
-        </div>
-        <%= render partial: "components/server_summary", locals: {server: server, noHeader: true}%>
-      </div>
-    </div>
-    <div class="col-sm-7 spec-details">
-      <!-- details bars go here for children -->
-    </div>
+    <%= render partial: "components/server_summary", locals: {server: server, noHeader: true, extended: true}%>
+    <!-- <div class="col&#45;sm&#45;5 spec&#45;starburst&#45;chart"> -->
+    <!--   <div class="col&#45;sm&#45;11"> -->
+    <!--     <div class="starburst&#45;header"> -->
+    <!--     </div> -->
+    <!--   </div> -->
+    <!-- </div> -->
+    <!-- <div class="col&#45;sm&#45;7 spec&#45;details"> -->
+    <!--   <!&#45;&#45; details bars go here for children &#45;&#45;> -->
+    <!-- </div> -->
   </div>
   <div class="server-history">
   </div>
-  <!---->
-  <!---->
-  <div class="failures">
-  </div>
+  <div class="failures row">
+    <div class="common-failures col-sm-12">
+    </div>
+  </div
 </div>

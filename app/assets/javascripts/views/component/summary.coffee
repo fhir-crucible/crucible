@@ -15,6 +15,7 @@ class Crucible.Summary
     $('.summary').each (index, summaryElement) =>
       summaryElement = $(summaryElement)
       serverId = summaryElement.data('serverId')
+      extended = summaryElement.data('extended') || false
       if serverId?
         $.getJSON("/servers/#{serverId}/summary.json")
           .success((data) =>
@@ -22,7 +23,7 @@ class Crucible.Summary
               starburstElement = summaryElement.find('.starburst')
               summaryElement.show()
               # TODO: _renderChart seems messy... this could use a better interface
-              starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance)
+              starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance, extended)
               starburst._renderChart()
               if summaryElement.data('synchronized')
                 starburst.addListener(this)
@@ -40,5 +41,5 @@ class Crucible.Summary
   transitionTo: (name) ->
     $('.summary[data-synchronized=true]').find('.starburst').each (i,element) ->
       starburst = $(element).data('starburst')
-      if name != starburst.selectedNode
+      if starburst && name != starburst.selectedNode
         starburst.transitionTo(name)

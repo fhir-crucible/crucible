@@ -1,16 +1,16 @@
 <% 
 noHeader ||= false 
 synchronized ||= false 
+extended ||= false 
 %>
-<div class="summary" data-server-id="<%= server.id %>" <%if synchronized%> data-synchronized="true" <%end%>>
+<div class="summary" data-server-id="<%= server.id %>" <%if synchronized%> data-synchronized="true" <%end%> <%if extended%> data-extended="true"<%end%>>
   <div class="starburst">
     <%= render partial: "components/starburst" %>
   </div>
   <% unless noHeader %>
     <a id="carouselPanel" href="/servers/<%= server.id %>" title="<%=server.name%>">
       <div class="server-summary-details">
-        <span class="server-name"><%= truncate(server.name, length: 25) %>:</span>
-        <span class="percent-passed"><%= server.percent_passing.try(:round)%>%</span>
+        <span class="server-name"><%= truncate(server.name, length: 25) %></span>
         <div class="summary-time-details">
           <span class="server-time"><i class="fa fa-fw fa-clock-o"></i><span class="last-run"></span></span>
         </div>

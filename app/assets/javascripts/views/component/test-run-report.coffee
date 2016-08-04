@@ -13,7 +13,7 @@ class Crucible.TestRunReport
     @serverId = @element.data('server-id')
     @registerHandlers()
     @childrenChart = @element.find('.spec-details')
-    @failuresReportElement = @element.find('.failures')
+    @failuresReportElement = @element.find('.common-failures')
     @loadAggregateRun()
     @loadHistory()
 
@@ -42,7 +42,7 @@ class Crucible.TestRunReport
       failure.suite = @suitesById[failure.test_id] if @suitesById?
       messageMap[failure.message].failures.push failure
     failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
-    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: total}))
+    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage[0..24], total: failuresByMessage.length, count: failuresByMessage[0..24].length }))
     @failuresReportElement.find(".data-link").click (e) -> 
       $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
       hljs.highlightBlock($('#data-modal .modal-body')[0]);
@@ -58,7 +58,7 @@ class Crucible.TestRunReport
 
   renderHistory: (data) =>
     dopplerElement = @element.find('.server-history').empty()
-    doppler = new Crucible.Doppler(dopplerElement[0], data)
+    doppler = new Crucible.Doppler(dopplerElement[0], data, @starburst)
     doppler.render()
 
   loadHistory: =>
@@ -72,7 +72,7 @@ class Crucible.TestRunReport
 
   renderHeader: (node) ->
     starburstNode = @starburst.nodeMap[node]
-    @element.find('.starburst-header').html("#{starburstNode.name}:\n<p>#{starburstNode.passed} / #{starburstNode.total} passed (#{@_percent(starburstNode, 'passed')}%)</p>")
+    # @element.find('.starburst-header').html("#{starburstNode.name}:\n<p>#{starburstNode.passed} / #{starburstNode.total} passed (#{@_percent(starburstNode, 'passed')}%)</p>")
 
   renderServerHeader: ->
     @element.find('.percent-supported-value').html("#{@_percent(@starburst.data, 'passed')}%")

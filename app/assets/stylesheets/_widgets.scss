@@ -191,7 +191,7 @@
 .failures {
   .failures-title {
     text-align: left;
-    font-size: 30px;
+    font-size: 24px;
     border-bottom: 1px solid $structure;
     margin-bottom: 15px;
 
@@ -233,6 +233,7 @@
   .failure-messages {
     position: relative;
     text-align: left;
+    font-size: 16px;
 
     .active-test-failure {
       .failures-nav {
@@ -279,8 +280,8 @@
         }
 
         .failure-message-level-one-text {
-          margin: 10px 0 10px 65px;
-          padding: 10px;
+          margin: 0px 0 8px 50px;
+          padding: 5px;
           font-size: 0.9em;
           border-radius: 5px;
         }
@@ -311,5 +312,12 @@
         }
       }
     }
+  }
+
+  .common-failures {
+  }
+
+  .test-failures {
+    border-right: 1px solid #ddd;
   }
 }
