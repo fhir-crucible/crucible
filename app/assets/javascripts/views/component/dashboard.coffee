@@ -5,6 +5,7 @@ $(document).ready( ->
 class Crucible.Dashboard
 
   statusWeights: {'none': 0, 'pass': 1, 'skip': 2, 'fail': 3, 'error': 4}
+  statusLabels: {'none': 'Not Run', 'pass': 'Passing', 'skip': 'Skipped', 'fail': 'Failing', 'error': 'Error'}
 
   templates:
     serverResultsRow: 'views/templates/dashboards/server_result_row'
@@ -17,7 +18,6 @@ class Crucible.Dashboard
     return unless @element.length
     @id = this.element.data('dashboard-id')
     @renderServerResults()
-    # @bindToolTips()
 
   renderServerResults: =>
     $.getJSON("/dashboards/#{@id}/results.json").success((data) =>
@@ -31,6 +31,7 @@ class Crucible.Dashboard
           $(serverResults).each (i, serverResult) =>
             suiteStatus = serverResult.status if @statusWeights[suiteStatus] < @statusWeights[serverResult.status]
           suite.status = suiteStatus
+          suite.statusLabel = @statusLabels[suiteStatus]
           serverResults = suite.methods if serverResults.length == 0
           html = HandlebarsTemplates[@templates.serverResultsRow]({server: server, suite: suite, lastUpdated: lastUpdated, result: {tests: serverResults}})
           $("#suite_results_#{suite.id}").append(html)
@@ -41,6 +42,7 @@ class Crucible.Dashboard
               @addClickRequestDetailsHandler(test, suiteElement)
             @addClickTestHandler(test, suiteElement)
       $('.results-rectangle').tooltip()
+      $('.results-circle').tooltip()
     )
 
   addClickTestHandler: (test, suiteElement) => 
