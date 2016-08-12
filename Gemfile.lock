@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_models.git
-  revision: aa2b4b471ae1dc15a94c3aee333dac0dac1fc4c1
+  revision: c92ef44757733ef0c87a105b5a5c7079315ed6e3
   branch: master
   specs:
     fhir_models (0.3.1)
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 515820a80a73e5d27e1ba9f8a725fd76a8a2319c
+  revision: 61fe18cbd950e11dae0c327a7b0afbcf844c8355
   branch: master
   specs:
     plan_executor (1.0.0)
@@ -365,4 +365,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.12.4
+   1.12.5
