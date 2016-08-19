@@ -19,9 +19,9 @@
     <div class="col-sm-12">
       <div class="well legend">
         <div class="container">
-          <% {'none': 'Not Run', 'pass': 'Passing', 'skip': 'Skipped', 'fail': 'Failing'}.each do |key, desc| %>
+          <% {'none' => 'Not Run', 'pass' => 'Passing', 'skip' => 'Skipped', 'fail' => 'Failing'}.each do |key, desc| %>
             <div class="col-sm-3">
-              <%= desc %>: 
+              <%= desc %>:
               <svg width="18" height="18">
                 <rect x="0" y="3" rx="3" ry="3" width="18" height="18" class="<%= key %>" fill=""></rect>
               </svg>
