@@ -1,5 +1,5 @@
 $(document).ready( -> 
-  new Crucible.Summary()
+  new Crucible.StarburstSummary()
 )
 
 # returns percent passing of a section
@@ -10,11 +10,12 @@ percentMe = (data) ->
   else
     Math.round(data.passed / data.total * 100)
 
-class Crucible.Summary
+class Crucible.StarburstSummary
   constructor: ->
-    $('.summary').each (index, summaryElement) =>
+    $('.starburst-summary').each (index, summaryElement) =>
       summaryElement = $(summaryElement)
       serverId = summaryElement.data('serverId')
+      extended = summaryElement.data('extended') || false
       if serverId?
         $.getJSON("/servers/#{serverId}/summary.json")
           .success((data) =>
@@ -22,7 +23,7 @@ class Crucible.Summary
               starburstElement = summaryElement.find('.starburst')
               summaryElement.show()
               # TODO: _renderChart seems messy... this could use a better interface
-              starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance)
+              starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance, extended)
               starburst._renderChart()
               if summaryElement.data('synchronized')
                 starburst.addListener(this)
@@ -38,7 +39,7 @@ class Crucible.Summary
           )
 
   transitionTo: (name) ->
-    $('.summary[data-synchronized=true]').find('.starburst').each (i,element) ->
+    $('.starburst-summary[data-synchronized=true]').find('.starburst').each (i,element) ->
       starburst = $(element).data('starburst')
-      if name != starburst.selectedNode
+      if starburst && name != starburst.selectedNode
         starburst.transitionTo(name)

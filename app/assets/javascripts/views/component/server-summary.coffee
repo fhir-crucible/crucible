@@ -1,10 +1,9 @@
-$(document).ready( ->  
-  new Crucible.TestRunReport()
+$(document).ready( ->
+  new Crucible.ServerSummary()
 )
 
-class Crucible.TestRunReport
-  templates: 
-    childrenChart: 'views/templates/servers/starburst_children_chart'
+class Crucible.ServerSummary
+  templates:
     failures: 'views/templates/servers/failures_report'
 
   constructor: ->
@@ -12,23 +11,17 @@ class Crucible.TestRunReport
     return unless @element.length
     @serverId = @element.data('server-id')
     @registerHandlers()
-    @childrenChart = @element.find('.spec-details')
-    @failuresReportElement = @element.find('.failures')
+    @failuresReportElement = @element.find('.common-failures')
     @loadAggregateRun()
-    @loadHistory()
 
   registerHandlers: =>
     @element.find('.starburst').on('starburstInitialized', (event) =>
       @starburst = @element.find('.starburst').data('starburst')
       @starburst.addListener(this)
-      @renderChart(@starburst.selectedNode)
       @renderHeader(@starburst.selectedNode)
       @renderServerHeader()
+      @loadHistory()
       false
-    )
-    $('.test-executor').on('testsLoaded', (event) =>
-      @suitesById = $(event.target).data('testExecutor').suitesById
-      @renderFailures()
     )
 
   renderFailures: ->
@@ -39,10 +32,9 @@ class Crucible.TestRunReport
       continue if failure.hidden
       total += 1
       messageMap[failure.message] ||= {message: failure.message, failures: []}
-      failure.suite = @suitesById[failure.test_id] if @suitesById?
       messageMap[failure.message].failures.push failure
     failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
-    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage, total: total}))
+    @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage[0..24], total: failuresByMessage.length, count: failuresByMessage[0..24].length }))
     @failuresReportElement.find(".data-link").click (e) -> 
       $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
       hljs.highlightBlock($('#data-modal .modal-body')[0]);
@@ -58,7 +50,7 @@ class Crucible.TestRunReport
 
   renderHistory: (data) =>
     dopplerElement = @element.find('.server-history').empty()
-    doppler = new Crucible.Doppler(dopplerElement[0], data)
+    doppler = new Crucible.Doppler(dopplerElement[0], data, @starburst)
     doppler.render()
 
   loadHistory: =>
@@ -66,18 +58,13 @@ class Crucible.TestRunReport
       @renderHistory(data)
     )
 
-  renderChart: (node) ->
-    children = @convertChildren(@starburst.nodeMap[node].children || [@starburst.nodeMap[node]])
-    @childrenChart.html(HandlebarsTemplates[@templates.childrenChart]({children: children}))
-
   renderHeader: (node) ->
     starburstNode = @starburst.nodeMap[node]
-    @element.find('.starburst-header').html("#{starburstNode.name}:\n<p>#{starburstNode.passed} / #{starburstNode.total} passed (#{@_percent(starburstNode, 'passed')}%)</p>")
+    # @element.find('.starburst-header').html("#{starburstNode.name}:\n<p>#{starburstNode.passed} / #{starburstNode.total} passed (#{@_percent(starburstNode, 'passed')}%)</p>")
 
   renderServerHeader: ->
     @element.find('.percent-supported-value').html("#{@_percent(@starburst.data, 'passed')}%")
     @element.find('.last-run').html(moment(this.element.find('.summary').data('generated-at')).fromNow())
-
 
   convertChildren: (children) ->
     children.map (child) =>
@@ -102,7 +89,6 @@ class Crucible.TestRunReport
 
   transitionTo: (node) ->
     _.defer(=>
-      @renderChart(node)
       @renderHeader(node)
       @filterFailures(node))
 
