@@ -48,13 +48,10 @@ class Crucible.Doppler
 
 
   transitionTo: (nodeName) =>
-    # console.log @data[0]
     setCurrentNode = (nodeName, nodes, node_path) =>
       if nodes.name == nodeName
         @node_path = node_path
         @render()
-        # console.log "found node #{nodeName}"
-        # console.log @node_path
       else
         if nodes.children
           for c in nodes.children
@@ -82,7 +79,6 @@ class Crucible.Doppler
 
     d3.select('body')
       .on("keydown", () =>
-        # console.log @selected_index
         if d3.event.key == 'ArrowLeft'
           @selected_index++
           @selected_index = 51 if @selected_index > 51
@@ -106,12 +102,17 @@ class Crucible.Doppler
           if c.name == n
             current = c
 
-      for item, index in current.children
-        processed_data.push(date: row.date, type: item.name, index: index, value: {total: item.total, passed: item.passed})
+      if current.children
+        for item, index in current.children
+          processed_data.push(date: row.date, type: item.name, index: index, value: {total: item.total, passed: item.passed})
+
+          # for just the first row, build out the labels in a form consumable by d3
+          labels.push(key: item.name, index: index) if !row_index
+      else
+        processed_data.push(date: row.date, type: current.name, index: 0, value: {total: current.total, passed: current.passed})
 
         # for just the first row, build out the labels in a form consumable by d3
-        labels.push(key: item.name, index: index) if !row_index
-    
+        labels.push(key: current.name, index: 0) if !row_index
 
     # figure out where to put month names on the chart
     for row in @data
@@ -129,10 +130,17 @@ class Crucible.Doppler
                  {x: data_line_middle + data_line_width, y: 20},
                  {x: data_line_middle + data_line_width + 5, y:10}]
 
-    data_connector_line = [{x: data_line_middle, y:20},
-                           {x: data_line_middle, y: 40},
-                           {x: @width - 61 - (@selected_index) * (3 + cellSize), y: 40},
-                           {x: @width - 61 - (@selected_index) * (3 + cellSize), y: 80}]
+    # TEMP HACK TO MAKE WORK WHEN RUNS EXIST AFTER SUNDAY
+    if @data.length > 52
+      data_connector_line = [{x: data_line_middle, y:20},
+                             {x: data_line_middle, y: 40},
+                             {x: @width - 61 - (@selected_index-1) * (3 + cellSize), y: 40},
+                             {x: @width - 61 - (@selected_index-1) * (3 + cellSize), y: 80}]
+    else
+      data_connector_line = [{x: data_line_middle, y:20},
+                             {x: data_line_middle, y: 40},
+                             {x: @width - 61 - (@selected_index) * (3 + cellSize), y: 40},
+                             {x: @width - 61 - (@selected_index) * (3 + cellSize), y: 80}]
 
     line = d3.svg.line()
             .x((d) -> d.x)
@@ -182,15 +190,23 @@ class Crucible.Doppler
       .text( (d) -> d.month )
 
     switchDate = (index) =>
+
       d = @data[@data.length - index - 1]
-      @selected_index = index
       tip.hide()
+
+      if @data.length > 52
+        index--
+
+      @selected_index = index
+
       selected.transition()
           .duration(transition_speed)
           .attr("x", () -> margin_left + (51 - index) * (3 + cellSize)-1)
 
-      @starburst._setData(d)
-      @starburst._renderChart()
+      @starburst.transitionDate(d)
+      # @starburst._setData(d)
+      # @starburst._renderChart()
+
 
       data_connector_line[2].x = margin_left + (51 -index) * (3 + cellSize) + cellSize / 2
       data_connector_line[3].x = margin_left + (51 - index) * (3 + cellSize) + cellSize / 2
@@ -215,45 +231,36 @@ class Crucible.Doppler
       .on('mouseout', tip.hide)
       .on("click", (d) =>
         index = weekdiff(format.parse(d.date), next_sunday) - 1
+        if @data.length > 52
+          index = index + 1
         switchDate(index)
-
-        # tip.hide()
-        # selected.transition()
-        #     .duration(transition_speed)
-        #     .attr("x", () -> margin_left + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize)-1)
-        # # console.log d
-        # @starburst._setData(d.summary)
-        # @starburst._renderChart()
-
-        # data_connector_line[2].x = margin_left + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize) + cellSize / 2
-        # data_connector_line[3].x = margin_left + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize) + cellSize / 2
-        # selected_line
-        #     .datum(data_connector_line)
-        #     .transition()
-        #     .duration(transition_speed)
-        #     .attr("d", line)
-            # .attr("x", (d) -> console.log d)
-
-        # node = d
-        # path.transition()
-        #   .duration(@getTransitionSpeed())
-        #   .attrTween("d", arcTweenZoom(d))
-        # updateNodeName(node)
-        # $(@listeners).each (i, listener) -> listener.transitionTo(node.name)
         return
       )
 
     # selected date
-    selected = @svg.append("rect")
-      .attr("x", () => margin_left + (52- 1 - @selected_index) * (3 + cellSize)-1 )
-      .attr("y", () -> margin_top + cellSize- 1)
-      .attr("width", cellSize + 2)
-      .attr("height", labels.length * cellSize + 2)
-      .style("fill", (d) -> "#fff")
-      .style("fill-opacity", .0)
-      .style("opacity", .5)
-      .style("stroke", "#000")
-      .style("stroke-width", 2)
+    # NOTE THAT THIS IS A TEMP FIX FOR WHEN THERE IS A RUN AFTER LAST SUNDAY!
+    if @data.length > 52
+      selected = @svg.append("rect")
+        .attr("x", () => margin_left + (52- @selected_index) * (3 + cellSize)-1 )
+        .attr("y", () -> margin_top + cellSize- 1)
+        .attr("width", cellSize + 2)
+        .attr("height", labels.length * cellSize + 2)
+        .style("fill", (d) -> "#fff")
+        .style("fill-opacity", .0)
+        .style("opacity", .5)
+        .style("stroke", "#000")
+        .style("stroke-width", 2)
+    else
+      selected = @svg.append("rect")
+        .attr("x", () => margin_left + (52- @selected_index-1) * (3 + cellSize)-1 )
+        .attr("y", () -> margin_top + cellSize- 1)
+        .attr("width", cellSize + 2)
+        .attr("height", labels.length * cellSize + 2)
+        .style("fill", (d) -> "#fff")
+        .style("fill-opacity", .0)
+        .style("opacity", .5)
+        .style("stroke", "#000")
+        .style("stroke-width", 2)
 
 
 

@@ -4,24 +4,11 @@
 colors = ["#bd0026", "#f03b20", "#fd8d3c", "#fecc5c", "#c2e699", "#78c679", "#31a354", "#006837"]
 
 # returns appropriate color of section (recursive)
-color = (data, threshold) ->
+color = (data) ->
   if data.total == 0
     '#bbb'
   else
       colors[Math.floor((data.passed / data.total) * (colors.length-1))]
-  # if data.total == 0
-  #   '#bbb'      # gray
-  # else if data.passed / data.total >= threshold
-  #   '#417505'   # green
-  # else
-  #   '#800010'   # red
-
-# returns appropriate opacity of a failed section
-opacity = (data) ->
-  1
-  # d3.scale.linear()
-  #   .domain([.5,1])
-  #   .range([.4,1])(Math.max(data.passed, (data.total - data.passed)) / data.total)
 
 # returns percent passing of a section
 percentMe = (data) ->
@@ -40,7 +27,6 @@ class Crucible.Starburst
   nodeMap: {}
   size: 350
   padding: 5
-  threshold: 0.65
   showHeader: true
   selectedNode: "FHIR"
   minSize: 10
@@ -49,7 +35,7 @@ class Crucible.Starburst
 
   constructor: (element, data, extended = false) ->
     @element = element
-    @data = data
+    @_processData(data)
     @nodeMap = {}
     @_constructNodeMap(data)
     @listeners = []
@@ -58,27 +44,31 @@ class Crucible.Starburst
   get: (v) ->
     @[v]
 
-  _setData: (data) -> 
-    @['data'] = data
-    set_current_node = (node) =>
-      if @current_node.name == node.name
-        @current_node = node
-      else
-        set_current_node(child) for child in node.children if node.children
+  set: (v, d) ->
+    @[v] = d
 
-    set_current_node(data) if @current_node
+  _processData: (data) ->
 
-  _renderChart: (->
-    unless @get('data')
-      return
+    @set('data', data)
 
-    attachParents = (node) ->
-      return unless node.children
+    # attach parents to a given node so we can move back up the starburst
+    # also determine the depth of the whole tree
+    processNodes = (node, depth) ->
+      return depth unless node.children
+
+      new_depth = depth
       for child in node.children
         child.parent = node
-        attachParents(child)
+        new_depth = Math.max(processNodes(child, depth+1), new_depth)
 
-    attachParents(@data)
+      return new_depth
+
+    @max_depth = processNodes(data, 1)
+    @_constructNodeMap(data)
+
+  _renderChart: ()->
+    unless @get('data')
+      return
 
     # initialize width, height, radius, x, and y
     width = height = @get('size') - 2 * @get('padding')
@@ -97,8 +87,6 @@ class Crucible.Starburst
       .attr("viewBox","0 0 #{width} #{height}")
       .append("g")
 
-      # .attr("transform", "translate(#{width / 2},#{height / 2})") # center in svg
-
     # activate tool tip
     svg.call(tip)
 
@@ -106,9 +94,12 @@ class Crucible.Starburst
     logScale = d3.scale.log()
 
     # define partition layout
+    # The value used to be the following
+    # logScale(Math.max(d.total ,@get('minSize'))))
+    # but changed it to just being 1 so the starburst structure stays the same
     partition = d3.layout.partition()
       .sort(null)
-      .value((d) => 1)# logScale(Math.max(d.total ,@get('minSize'))))
+      .value((d) => 1)
 
     # define arc angles and radii
     arc = d3.svg.arc()
@@ -121,34 +112,20 @@ class Crucible.Starburst
     updateNodeName = (d) ->
       title.html("#{d.name}:<p>#{d.passed} / #{d.total} passed (#{percentMe(d)}%)</p>")
 
-    # define root, initialize node to be the root, and update node name
-    root = @get('data')
-    node = root
-    node = @current_node if @current_node
-    previous_node = root
-
-    # setup for switching data: stash the old values for transition
-    stash = (d) ->
-      d.x0 = d.x
-      d.dx0 = d.dx
-      return
-
-    max_depth = 5
-
     # when zooming: interpolate the scales
     arcTweenZoom = (c) =>
       xd = d3.interpolate(x.domain(), [c.x, c.x + c.dx])
       yd = d3.interpolate(y.domain(), [c.y, 1])
-      (d, i) ->
+      (d, i) =>
         newY = d.y
         newDy = d.dy
         if d.depth == c.depth
           newY = 0
-          newDy = 1/max_depth
+          newDy = 1/@get('max_depth')
         else
-          heights = (1 - 1/max_depth) / (max_depth - c.depth)
+          heights = (1 - 1/@get('max_depth')) / (@get('max_depth') - c.depth)
           newDy = heights
-          newY = 1/max_depth + (d.depth - c.depth - 1) * heights
+          newY = 1/@get('max_depth') + (d.depth - c.depth - 1) * heights
 
         ny = d3.interpolate(d.y, newY)
         ndy = d3.interpolate(d.dy, newDy)
@@ -162,14 +139,50 @@ class Crucible.Starburst
             x.domain(xd(t))
             arc(d)
 
-    percentage = svg.append("text")
+    # set the opacity of while zooming
+    opacityTweenZoom = (c) =>
+      if c.depth > @nodeMap[@selectedNode].depth or (c.name == @selectedNode and !@nodeMap[@selectedNode].children)
+        d3.interpolate(c.node_opacity, c.node_opacity = 1)
+      else
+        d3.interpolate(c.node_opacity, c.node_opacity = 0)
+
+    # caled when a node is selected by mouse or when it is being transitioned to from another node
+    selectNode = (new_node) =>
+
+      @selectedNode = new_node.name
+
+      @starburst_path.transition()
+        .duration(@getTransitionSpeed())
+        .attrTween("d", arcTweenZoom(new_node))
+        .styleTween("opacity", opacityTweenZoom)
+        .each("end", (d, i) -> renderLabels(new_node) if !i)
+
+      fancyLabels.selectAll("*").transition()
+         .duration(@getTransitionSpeed()/2)
+         .styleTween("opacity", (n) -> d3.interpolate(1,0))
+
+      @center_percentage.transition()
+        .duration(@getTransitionSpeed())
+        .tween("text", (n) ->
+           i = d3.interpolateRound(n.center_percentage, n.center_percentage = percentMe(new_node))
+           (t) -> @textContent = "#{i(t)}%")#"#{Math.round(i(t))}%")
+
+      if @get("extended")
+        node_name.text("#{new_node.name}")
+      
+      updateNodeName(new_node)
+
+    @center_percentage = svg.selectAll("text")
+      .data([@get('data')])
+      .enter()
+      .append("text")
       .attr("x", (d, i) -> width/2)
       .attr("y", (d, i) -> height/2+18)
       .attr("font-family", "sans-serif")
       .attr("font-size", "60px")
       .attr("fill", "#333")
       .attr("text-anchor", "middle")
-      .text( (d) => "#{percentMe(@get('data'))}%")
+      .text( (d) => "#{d.center_percentage = percentMe(d)}%")
 
     if @get("extended")
       node_name = svg.append("text")
@@ -179,11 +192,7 @@ class Crucible.Starburst
         .attr("font-size", "16px")
         .attr("fill", "#333")
         .attr("text-anchor", "middle")
-        .text( (d) =>
-          if @current_node
-            @current_node.name
-          else
-            @data.name)
+        .text(@data.name)
 
       svg.append("text")
         .attr("x", (d, i) -> width/2)
@@ -195,76 +204,33 @@ class Crucible.Starburst
         .text( 'PASSING')
     
     # draw the element paths
-    path = svg.datum(root).selectAll("path")
+    @starburst_path = svg.datum(@get('data')).selectAll("path")
       .data(partition.nodes)
       .enter()
         .append("path")
         .attr("transform","translate(#{width/2},#{height/2})")
         .attr("d", arc)
-        .style("fill", (d) => color(d, @get('threshold')))
+        .style("fill", (d) => color(d))
         .style("stroke", '#fff')
-        .style("opacity", (d) => 0 unless d.depth)
+        .style("opacity", (d) =>
+          if d.depth
+            d.node_opacity = 1
+          else
+            d.node_opacity = 0
+        )
         .attr("class", (d) -> d.name?.replace(/([\s,\&])/g, "_"))
         .on("click", (d) =>
-
-          @current_node = d
-
           return unless d.parent
-
-          previous_node = node
-          goingUp = (node.name == d.name)
-          if goingUp
-            node = node.parent
-            @current_node = node
+          if @selectedNode == d.name and d.parent
+            selectNode(d.parent)
           else
-            node = d
+            selectNode(d)
 
-          path.transition()
-            .duration(@getTransitionSpeed())
-            .attrTween("d", arcTweenZoom(node))
-            .styleTween("opacity", (n) =>
-
-              return d3.interpolate(0,0) if n.depth < node.depth and !goingUp
-              return d3.interpolate(1,0) if n.depth == node.depth and !goingUp and previous_node.name != n.name
-              return d3.interpolate(0,1) if n.depth-1 == node.depth and goingUp
-
-            )
-            .each("end", (d, i) -> renderLabels(node) if !i)
-          
-          fancyLabels.selectAll("*").transition()
-             .duration(@getTransitionSpeed()/2)
-             .styleTween("opacity", (n) -> d3.interpolate(1,0))
-
-          percentage.transition()
-            .duration(@getTransitionSpeed())
-            .tween("text", (n) -> 
-               i = d3.interpolateRound(percentMe(previous_node), percentMe(node))
-               (t) -> @textContent = "#{i(t)}%")#"#{Math.round(i(t))}%")
-
-          if @get("extended")
-            node_name.text("#{node.name}")
-          
-          updateNodeName(node)
-          $(@listeners).each (i, listener) -> listener.transitionTo(node.name) #todo clean this up
-          return
+          $(@listeners).each (i, listener) => listener.transitionTo(@selectedNode) #todo clean this up
         )
+        .on("synchronize", selectNode)
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
-        .each(stash)
-
-    if @current_node
-      path.transition()
-        .duration(0)
-        .attrTween("d", arcTweenZoom(@current_node))
-        .styleTween("opacity", (n) =>
-           return d3.interpolate(1,0) if n.depth <= @current_node.depth
-        )
-        .each('end', (d) => renderLabels(@current_node))
-
-      # percentage.transition()
-      #   .duration(.1)
-      #   .tween("text", (n) => 
-      #      (t) -> @textContent = "#{percentMe(@current_node)}")
 
     # This allows us to force a node to be selected initially
     # for el in $(@get('element')).find(".#{@get('selectedNode')?.replace(/([\s,\&])/g, "_")}")
@@ -323,13 +289,24 @@ class Crucible.Starburst
 
       fancyLabels.selectAll("*").remove()
 
+      labels = n.children
+
+      # if no children, force a label for the current
+      labels = [n] unless labels
+
       calculateX = (d) =>
-        Math.sin(x(d.x + (d.dx/2))) * 90 + width/2
+        # if no children, it must mean we are on a leaf, so have the label point to the middle of the starburst
+        if !n.children
+          width/2
+        else
+          Math.sin(x(d.x + (d.dx/2))) * 90 + width/2
 
       calculateY = (d) =>
-        height/2 - Math.cos(x(d.x + (d.dx/2))) * 90
-
-      labels = n.children
+        # if no children, it must mean we are on a leaf, so have the label point to the middle of the starburst
+        if !n.children
+          height/2
+        else
+          height/2 - Math.cos(x(d.x + (d.dx/2))) * 90
 
       leftIndex = 0
       rightIndex = 0
@@ -372,56 +349,54 @@ class Crucible.Starburst
          .attr("font-size", "18px")
          .text( (d) -> "#{d.name}")
 
-       for item in labels
-         fancyLabels.append("line")
-          .attr("x1", item.lineX)
-          .attr("y1", item.labelY - 8)
-          .attr("x2", calculateX(item))
-          .attr("y2", calculateY(item))
-          # .attr("opacity", .5)
-          .attr("stroke-width", 1)
-          .attr("stroke", "black")
+       fancyLabels.selectAll('line')
+        .data(labels)
+        .enter()
+        .append("line")
+        .attr("x1", (d) -> d.lineX)
+        .attr("y1", (d) -> d.labelY - 8)
+        .attr("x2", calculateX)
+        .attr("y2", calculateY)
+        .attr("stroke-width", 1)
+        .attr("stroke", "black")
 
-         fancyLabels.append('rect')
-          .attr("width", 50)
-          .attr("height", 20)
-          .attr("x", item.boxX)
-          .attr("y", item.labelY - 17)
-          .attr("rx", 5)
-          .attr("ry",5)
-          .style("fill", color(item))
+       @labels_background = fancyLabels.selectAll('rect')
+        .data(labels)
+        .enter()
+        .append('rect')
+        .attr("width", 50)
+        .attr("height", 20)
+        .attr("x", (d) -> d.boxX)
+        .attr("y", (d) -> d.labelY - 17)
+        .attr("rx", 5)
+        .attr("ry",5)
+        .style("fill", (d) -> d.labels_background_color = color(d))
 
-       fancyLabels.selectAll("percent")
-         .data(labels)
-         .enter()
-         .append("text")
-         .attr("x", (d, i) -> d.percentX)
-         .attr("y", (d, i) -> d.labelY-2)
-         .style("text-anchor", "middle")
-         .style("text-transform", "capitalize")
-         .attr("font-family", "sans-serif")
-         .attr("font-size", "14px")
-         .attr("fill", "#fff")
-         .text( (d) -> "#{percentMe(d)}%")
-
-
-
-       circles = fancyLabels.selectAll("circle")
+       @labels_circles = fancyLabels.selectAll("circle")
         .data(labels)
         .enter()
         .append("circle")
-        .style("fill", color)
         .style("stroke", "#000")
         .attr("cx", calculateX)
         .attr("cy", calculateY)
         .attr("r", 3)
+        .style("fill", (d) -> d.labels_circles_color = color(d))
+
+       @labels_text = fancyLabels.selectAll("percent")
+        .data(labels)
+        .enter()
+        .append("text")
+        .attr("x", (d, i) -> d.percentX)
+        .attr("y", (d, i) -> d.labelY-2)
+        .style("text-anchor", "middle")
+        .style("text-transform", "capitalize")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "14px")
+        .attr("fill", "#fff")
+        .text( (d) -> "#{d.labels_percent = percentMe(d)}%")
 
     if @get('extended')
-      renderLabels(node)
-
-
-    return
-  )#.observes('data').on('didInsertElement')
+      renderLabels(@get('data'))
 
   addListeners: (listeners) ->
     @listeners = @listeners.concat(listeners)
@@ -441,6 +416,53 @@ class Crucible.Starburst
     @animationTransitionTmp = speed
     @_updatePlot()
 
+  transitionDate: (data) =>
+
+    data_lookup = {}
+    build_data_lookup = (d) ->
+      data_lookup[d.name] = d
+      return unless d.children
+      for child in d.children
+        build_data_lookup(child)
+
+    build_data_lookup(data)
+
+    @starburst_path.transition()
+      .duration(@getTransitionSpeed())
+      .styleTween("fill", (n) =>
+        new_n = data_lookup[n.name]
+        interpolate = d3.interpolateRgb(color(n), color(new_n))
+        n.total = new_n.total
+        n.passed = new_n.passed
+        interpolate
+      )
+
+    @labels_background.transition()
+      .duration(@getTransitionSpeed())
+      .styleTween("fill", (n) =>
+        new_n = data_lookup[n.name]
+        d3.interpolateRgb(n.labels_background_color, n.labels_background_color = color(new_n))
+      )
+
+    @labels_circles.transition()
+      .duration(@getTransitionSpeed())
+      .styleTween("fill", (n) =>
+        new_n = data_lookup[n.name]
+        d3.interpolateRgb(n.labels_circles_color, n.labels_circles_color = color(new_n))
+      )
+
+    @labels_text.transition()
+      .duration(@getTransitionSpeed())
+      .tween("text", (n) ->
+        i = d3.interpolateRound(n.labels_percent, n.labels_percent = percentMe(n))
+        (t) -> @textContent = "#{i(t)}%")
+
+    @center_percentage.transition()
+      .duration(@getTransitionSpeed())
+      .tween("text", (n) ->
+        i = d3.interpolateRound(n.center_percentage, n.center_percentage = percentMe(n))
+        (t) -> @textContent = "#{i(t)}%")
+
   _constructNodeMap: (data) ->
     @nodeMap[data.name] = data
     return unless data.children
@@ -450,5 +472,5 @@ class Crucible.Starburst
   _updatePlot: (->
     # This allows the containing element to change what's selected
     for el in $(@get('element')).find(".#{@get('selectedNode')?.replace(/([\s,\&])/g, "_")}")
-      el.dispatchEvent(new MouseEvent("click"))
+      el.dispatchEvent(new Event("synchronize"))
   )#.observes('selectedNode')
