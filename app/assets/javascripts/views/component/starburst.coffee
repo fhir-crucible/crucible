@@ -431,6 +431,7 @@ class Crucible.Starburst
       .duration(@getTransitionSpeed())
       .styleTween("fill", (n) =>
         new_n = data_lookup[n.name]
+        new_n = {total: 0, passed: 0} if !new_n
         interpolate = d3.interpolateRgb(color(n), color(new_n))
         n.total = new_n.total
         n.passed = new_n.passed
