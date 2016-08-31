@@ -107,21 +107,15 @@ class ServersController < ApplicationController
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
 
-      #save the section names that we see for later use
-      #e.compliance['children'].each { |e| sections[e['name'].downcase] = {'passed' => 0, 'total' => 0}}
-
       # build the value for this run, which is a combination of the date and all the passed & total values for the categories
       all_nodes = all_nodes(e.compliance) # save in all_nodes hash
 
       all_nodes.keys.each { |k| sections[k] = { 'passed' => 0, 'total' => 0} }
-      # value['date'] = e.generated_at.to_date
 
       new_tree = summary_tree.deep_dup
       new_tree['date'] = e.generated_at.to_date
 
       rebuild_summary(new_tree, all_nodes)
-
-      # value = e.compliance['children'].inject({'date' => e.generated_at.to_date}) {|h,k| h[k['name'].downcase] = {'passed' => k['passed'], 'total' => k['total']}; h}
 
       # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
       if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
