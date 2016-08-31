@@ -239,14 +239,31 @@ class ServersController < ApplicationController
 
   def rebuild_summary(template, keys)
 
-    if keys[template['name'].downcase]
-      template['total'] = keys[template['name'].downcase]['total']
-      template['passed'] = keys[template['name'].downcase]['passed']
+    # collect the name and any aliases together then see if any of them have a matching node in the results
+    all_names = [template['name']] + (template['aka'] || [])
+    matching_node = all_names.map {|name| keys[name.downcase]}.compact.first
+    if matching_node
+      template['total'] = matching_node['total']
+      template['passed'] = matching_node['passed']
     else
       template['total'] = template['passed'] = 0
     end
 
     template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
 
+    if template['total'] == 0 && template['children']
+      # back fill the parent if we are missing data from the children. This can happen when the structure changes.
+      patch_structure_change(template)
+    end
+
+  end
+
+  def patch_structure_change(template)
+    total = template['children'].reduce(0) {|sum, x| sum += x['total']}
+    if total > 0
+      passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
+      template['total'] = total
+      template['passed'] = passed
+    end
   end
 end
