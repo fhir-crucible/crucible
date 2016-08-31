@@ -107,21 +107,15 @@ class ServersController < ApplicationController
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
 
-      #save the section names that we see for later use
-      #e.compliance['children'].each { |e| sections[e['name'].downcase] = {'passed' => 0, 'total' => 0}}
-
       # build the value for this run, which is a combination of the date and all the passed & total values for the categories
       all_nodes = all_nodes(e.compliance) # save in all_nodes hash
 
       all_nodes.keys.each { |k| sections[k] = { 'passed' => 0, 'total' => 0} }
-      # value['date'] = e.generated_at.to_date
 
       new_tree = summary_tree.deep_dup
       new_tree['date'] = e.generated_at.to_date
 
       rebuild_summary(new_tree, all_nodes)
-
-      # value = e.compliance['children'].inject({'date' => e.generated_at.to_date}) {|h,k| h[k['name'].downcase] = {'passed' => k['passed'], 'total' => k['total']}; h}
 
       # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
       if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
@@ -239,14 +233,31 @@ class ServersController < ApplicationController
 
   def rebuild_summary(template, keys)
 
-    if keys[template['name'].downcase]
-      template['total'] = keys[template['name'].downcase]['total']
-      template['passed'] = keys[template['name'].downcase]['passed']
+    # collect the name and any aliases together then see if any of them have a matching node in the results
+    all_names = [template['name']] + (template['aka'] || [])
+    matching_node = all_names.map {|name| keys[name.downcase]}.compact.first
+    if matching_node
+      template['total'] = matching_node['total']
+      template['passed'] = matching_node['passed']
     else
       template['total'] = template['passed'] = 0
     end
 
     template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
 
+    if template['total'] == 0 && template['children']
+      # back fill the parent if we are missing data from the children. This can happen when the structure changes.
+      patch_structure_change(template)
+    end
+
+  end
+
+  def patch_structure_change(template)
+    total = template['children'].reduce(0) {|sum, x| sum += x['total']}
+    if total > 0
+      passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
+      template['total'] = total
+      template['passed'] = passed
+    end
   end
 end
