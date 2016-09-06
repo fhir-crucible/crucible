@@ -74,6 +74,8 @@ class Crucible.Doppler
     transition_speed = 500
     processed_data = []
 
+    $(@element).removeClass('server-history-loading')
+
     @svg.selectAll('*')
         .remove()
 

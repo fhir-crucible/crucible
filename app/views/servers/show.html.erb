@@ -59,7 +59,6 @@
             <!-- END: server name and url -->
           </div>
         </div>
-
         <div class="row collapse">
           <div class="progress" id="execution-progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;">
@@ -69,15 +68,21 @@
         </div>
         <div class="row">
           <ul class="nav nav-tabs tabbed-data-container">
-            <li class="tabbed-data active"><a data-toggle="tab" href="#test-data" aria-expanded="true">Tests</a></li>
+              <li class="tabbed-data test-run-summary-handle<%unless @server.summary_id.nil? %> active <%end%>" <%if @server.summary_id.nil? %>style="display:none"<%end%>><a data-toggle="tab" href="#test-run-summary-data" aria-expanded="true">Server Summary</a></li>
+              <li class="tabbed-data<%if @server.summary_id.nil? %> active<%end%>"><a data-toggle="tab" href="#test-data" aria-expanded="false">Tests</a></li>
             <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false"><i class="fa fa-lg fa-fw fa-spinner fa-pulse" id="conformance_spinner"></i>Conformance</a></li>
-            <li class="tabbed-data test-run-summary-handle hidden"><a data-toggle="tab" href="#test-run-summary-data">Server Summary</a></li>
           </ul>
         </div>
         <div class="row">
           <div class="tab-content">
+            <!-- SERVER SUMMARY START -->
+            <div class="tab-pane<%unless @server.summary_id.nil? %> active<%end%>" id="test-run-summary-data">
+              <div class="col-sm-12">
+                <%= render partial: 'test_run_report', locals: {server: @server}%>
+              </div>
+            </div>
             <!-- TEST PANEL START -->
-            <div class="tab-pane test-results active" id="test-data">
+            <div class="tab-pane test-results<%if @server.summary_id.nil?%> active<%end%>" id="test-data">
               <div class="test-executor" data-server-id="<%=@server.id %>" data-current-test-run-id="<%=@currentTestRunId %>" data-progress="execution-progress">
                 <!-- START: Left side, with filters -->
                 <div class="col-sm-3">
@@ -151,11 +156,6 @@
             <div class="tab-pane" id="conformance-data" data-server-id="<%=@server.id%>">
               <div>
                 <i class="fa fa-lg fa-fw fa-spinner fa-pulse"></i> Loading
-              </div>
-            </div>
-            <div class="tab-pane" id="test-run-summary-data">
-              <div class="col-sm-12">
-                <%= render partial: 'test_run_report', locals: {server: @server}%>
               </div>
             </div>
           </div>

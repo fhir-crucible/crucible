@@ -19,7 +19,6 @@ class Crucible.ServerSummary
       @starburst = @element.find('.starburst').data('starburst')
       @starburst.addListener(this)
       @renderHeader(@starburst.selectedNode)
-      @renderServerHeader()
       @loadHistory()
       false
     )
@@ -43,7 +42,6 @@ class Crucible.ServerSummary
   loadAggregateRun: =>
     $.getJSON("/servers/#{@serverId}/aggregate_run?only_failures=true").success((data) =>
       return unless data
-      $('.test-run-summary-handle').removeClass('hidden')
       @failures = data['results']
       @renderFailures()
     )
@@ -60,11 +58,6 @@ class Crucible.ServerSummary
 
   renderHeader: (node) ->
     starburstNode = @starburst.nodeMap[node]
-    # @element.find('.starburst-header').html("#{starburstNode.name}:\n<p>#{starburstNode.passed} / #{starburstNode.total} passed (#{@_percent(starburstNode, 'passed')}%)</p>")
-
-  renderServerHeader: ->
-    @element.find('.percent-supported-value').html("#{@_percent(@starburst.data, 'passed')}%")
-    @element.find('.last-run').html(moment(this.element.find('.summary').data('generated-at')).fromNow())
 
   convertChildren: (children) ->
     children.map (child) =>
