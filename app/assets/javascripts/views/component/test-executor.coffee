@@ -475,8 +475,8 @@ class Crucible.TestExecutor
     @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true},(=> @element.dequeue("executionQueue")))
 
   finishTestRun: =>
-    new Crucible.Summary()
-    new Crucible.TestRunReport()
+    new Crucible.ServerSummary()
+    new Crucible.StarburstSummary()
     @progress.parent().collapse('hide')
     @progress.find('.progress-bar').css('width',"0%")
     @element.find('.execute').show()
