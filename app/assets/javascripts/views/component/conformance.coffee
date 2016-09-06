@@ -1,16 +1,16 @@
-$(document).ready( -> 
+$(document).ready( ->
   new Crucible.Conformance()
 )
 
 class Crucible.Conformance
   @operations: ["read", "vread", "update", "delete", "history-instance", "validate", "history-type", "create", "search-type"]
   templates:
-    conformanceError: 'views/templates/servers/conformance_error'
+    conformanceError: 'servers/conformance_error'
 
   constructor: ->
     @element = $('#conformance-data')
     return unless @element.length
-    @template = HandlebarsTemplates['views/templates/servers/conformance']
+    @template = HandlebarsTemplates['servers/conformance']
     @serverId = @element.data('server-id')
     @loadConformance()
 
@@ -34,7 +34,7 @@ class Crucible.Conformance
           $("#conformance_spinner").show()
           @loadConformance(true)
     )
- 
+
   registerHandlers: =>
     @screenControls()
 

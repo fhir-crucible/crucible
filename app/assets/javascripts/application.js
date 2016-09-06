@@ -17,7 +17,7 @@
 //= require d3-tip/index
 //= require Case/dist/Case
 //= require moment/moment
-//= require handlebars/handlebars.runtime
+//= require handlebars
 //= require jquery-sticky/jquery.sticky
 //= require underscore/underscore
 //= require highlightjs/highlight.pack.js

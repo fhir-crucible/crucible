@@ -4,7 +4,7 @@ $(document).ready( ->
 
 class Crucible.ServerSummary
   templates:
-    failures: 'views/templates/servers/failures_report'
+    failures: 'servers/failures_report'
 
   constructor: ->
     @element = $('.test-run-report')
@@ -34,10 +34,10 @@ class Crucible.ServerSummary
       messageMap[failure.message].failures.push failure
     failuresByMessage = _.sortBy(_.values(messageMap), (v) -> -v.failures.length)
     @failuresReportElement.html(HandlebarsTemplates[@templates.failures]({failuresByMessage: failuresByMessage[0..24], total: failuresByMessage.length, count: failuresByMessage[0..24].length }))
-    @failuresReportElement.find(".data-link").click (e) -> 
+    @failuresReportElement.find(".data-link").click (e) ->
       $('#data-modal .modal-body').empty().append($(e.target).parent().find('.data-content').html())
       hljs.highlightBlock($('#data-modal .modal-body')[0]);
-    
+
 
   loadAggregateRun: =>
     $.getJSON("/servers/#{@serverId}/aggregate_run?only_failures=true").success((data) =>
@@ -78,10 +78,9 @@ class Crucible.ServerSummary
     failureIds = (starburstNode.failedIds.concat starburstNode.skippedIds).concat starburstNode.errorsIds
     for failure in @failures
       failure.hidden = (failureIds.indexOf(failure.id) < 0)
-    @renderFailures() 
+    @renderFailures()
 
   transitionTo: (node) ->
     _.defer(=>
       @renderHeader(node)
       @filterFailures(node))
-
