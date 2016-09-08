@@ -3,7 +3,7 @@ noHeader ||= false
 synchronized ||= false 
 extended ||= false 
 %>
-<div class="starburst-summary" data-server-id="<%= server.id %>" <%if synchronized%> data-synchronized="true" <%end%> <%if extended%> data-extended="true"<%end%>>
+<div class="starburst-summary starburst-loading" data-server-id="<%= server.id %>" <%if synchronized%> data-synchronized="true" <%end%> <%if extended%> data-extended="true"<%end%>>
   <div class="starburst">
     <svg viewBox="0 0 350 350" width="100%" height="100%" preserveAspectRatio="xMinYMin meet"></svg>
   </div>

@@ -402,6 +402,8 @@ class Crucible.TestExecutor
         @previousTestRunId = @element.find('.past-test-runs-selector').children().eq(1).val() if @element.find('.past-test-runs-selector').children().length > 1
         @showTestRunSummary({test_results: test_run.test_results})
         @element.dequeue("executionQueue")
+        $(".test-run-summary-handle").show() #show the summary tab if it now exists
+
       else if test_run.status != "cancelled" and @runningTestRunId?
         setTimeout(@checkTestRunStatus, @checkStatusTimeout)
     )

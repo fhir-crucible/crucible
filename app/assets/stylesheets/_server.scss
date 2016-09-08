@@ -174,7 +174,13 @@
 }
 
 .server-history {
+  width: 1000px;
   margin-bottom: 20px;    
+  height: 200px;
+}
+
+.server-history-loading {
+  background-image: url("doppler_loading.png");
 }
 
 // ------------------------- SERVER SUMMARIES ------------------------------ //
@@ -261,5 +267,15 @@
   .spec-row{
     margin-top: 10px;
     margin-bottom: 10px;
+  }
+
+  .starburst-summary {
+    height: 338px;
+  }
+  .starburst-loading {
+    background-image: url("starburst_loading.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
   }
 }
