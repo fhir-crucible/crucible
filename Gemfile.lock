@@ -25,6 +25,14 @@ GIT
       rake (>= 0.8.7)
 
 GIT
+  remote: https://github.com/fhir-crucible/fhir_scorecard.git
+  revision: f9a04f22350ec48be9d03dd05d03e6009fa10f64
+  branch: master
+  specs:
+    fhir_scorecard (0.1.0)
+      fhir_models
+
+GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
   revision: b86ffd88926c02411fa645115a3c93c54e8a08e7
   branch: stu3
@@ -341,6 +349,7 @@ DEPENDENCIES
   devise
   fhir_client!
   fhir_models!
+  fhir_scorecard!
   guard-livereload
   handlebars_assets
   jbuilder (~> 2.0)

@@ -1,0 +1,159 @@
+<div class="container main servers-show">
+  <div class="row content">
+    <div class="col-sm-12">
+      <div class="palette report">
+
+        <h1>FHIR Patient Record <span style="color: #B74C18">Scorecard</span></h1>
+
+        <div class="well helper_text">
+          This FHIR Scorecard provides a scorecard for a <strong>FHIR Patient Record</strong> (as a FHIR Bundle). 
+          <br/><br/>
+          Achieving interoperability with Patient Healthcare Records within FHIR will require agreement on "best practices" beyond the base specification.
+          Those agreements could be in the form of an Implementation Guide with associated Profiles, but our scorecard provides them in the form of testable rubrics.
+          <br/><br/>
+          This scorecard borrows inspiration and rubrics from C-CDA scorecards from  
+          <a href="https://sitenv.org/ccda-smart-scorecard/#/rubricBody0-0">ONC</a> and 
+          <a href="http://ccda-scorecard.smartplatforms.org/static/ccdaScorecard/#/">SMART</a>.
+        </div>
+
+        <!-- BEGIN TABS -->
+        <div class="row">
+          <ul class="nav nav-tabs tabbed-data-container">
+            <li class="tabbed-data active"><a data-toggle="tab" href="#url-form" aria-expanded="true">Bundle URL</a></li>
+            <li class="tabbed-data"><a data-toggle="tab" href="#upload-form" aria-expanded="false">Upload Bundle</a></li>
+            <li class="tabbed-data"><a data-toggle="tab" href="#paste-form" aria-expanded="false">Copy &amp; Paste</a></li>
+          </ul>
+        </div>
+
+        <div class="tab-content">
+
+          <!-- BEGIN URL FORM -->
+          <div class="tab-pane active" id="url-form">
+            <form action="/scorecard/score_url" method="post" id="scorecard-url-form">
+                <div class="row form landing-page">
+                <div class="col-sm-1">
+                  <div class="picture landing-page visible-lg-block">
+                    <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
+                  </div>
+                </div>
+                <div class="col-sm-11 landing-page-form">
+                  <div class="row">
+                    <div class="col-sm-10">
+                      <input required placeholder="[FHIR Server URL]/Patient/[id]/$everything" type="text" name="bundle_url" class="form-control">
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="submit" class="btn begin" value="Score"></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- BEGIN UPLOAD FORM -->
+          <div class="tab-pane" id="upload-form">
+            <%= form_tag("/scorecard/score_upload", multipart: true) do %>
+              <div class="row form landing-page">
+                <div class="col-sm-1">
+                  <div class="picture landing-page visible-lg-block">
+                    <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
+                  </div>
+                </div>
+                <div class="col-sm-11 landing-page-form">
+                  <div class="row">
+                    <div class="col-sm-10">
+                      <%= file_field_tag 'bundle_contents' %>
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="submit" class="btn begin" value="Score"></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- BEGIN COPY AND PASTE FORM -->
+          <div class="tab-pane" id="paste-form">
+            <form action="/scorecard/score_paste" method="post" id="scorecard-paste-form">
+                <div class="row form landing-page">
+                <div class="col-sm-1">
+                  <div class="picture landing-page visible-lg-block">
+                    <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
+                  </div>
+                </div>
+                <div class="col-sm-11 landing-page-form">
+                  <div class="row">
+                    <div class="col-sm-10">
+                      <textarea required rows="10" placeholder="Copy &amp; Paste FHIR Patient Record (as Bundle)" name="bundle_body" class="form-control"></textarea>
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="submit" class="btn begin" value="Score"></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <% if @notice %>
+          <div class="alert alert-success alert-dismissible" role="alert">
+            Success: <%= @message %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        <% end %>
+        <% if @error %>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            Error: <%= @message %>
+            <br/>
+            <%= @error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        <% end %>
+
+        <table class="table-hover" style="border-collapse:separate; border-spacing: 1em;">
+          <tbody>
+
+            <% colors = ['#bd0026','#f03b20','#fd8d3c','#fecc5c','#c2e699','#78c679','#31a354','#006837'] %>
+
+            <% @scorecards.each do |scorecard| %>
+
+              <% index = (scorecard[:points].to_f * (colors.length.to_f / (10.0 * (scorecard.keys.length-1)).to_f) ).to_i  %>
+              <% index -= 1 if index > 0 %>
+              <% color = colors[ index ]  %>
+
+              <tr>
+                <th>TOTAL SCORE</th>
+                <td style="text-align: center; background-clip: padding-box; background-color: <%=color%>; color: white; border: 15px solid <%= color %>; border-radius: 15px;"><%= scorecard[:points] %> points</td>
+                <td><%= (10 * (scorecard.keys.length-1)) %> maximum points</td>
+              </tr>
+
+              <tr>
+                <th>Points</th>
+                <th>Rubric</th>
+                <th>Message</th>
+              </tr>
+
+              <% scorecard.each do |key,value| %>
+                <tr>
+                  <% next if key==:points %>
+                  <% max_points = 10.0 %>
+                  <% max_points = 20.0 if key==:completeness %>    
+                  <% index = (value[:points].to_f * (colors.length.to_f / max_points) ).to_i  %>
+                  <% index -= 1 if index > 0 %>
+                  <% index = (colors.length - index - 1) if key==:cvx_medications %>
+                  <% color = colors[ index ]  %>
+                  <td style="text-align: center; background-clip: padding-box; background-color: <%=color%>; color: white; border: 15px solid <%= color %>; border-radius: 15px;"><%= value[:points].to_s %></td>
+                  <td><%= key.to_s.gsub('_',' ') %></td>
+                  <td><%= value[:message] %></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>

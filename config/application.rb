@@ -11,7 +11,6 @@ require "sprockets/railtie" # Uncomment this line for Rails 3.1+
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-
 module Crucible
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -54,6 +53,8 @@ module Crucible
     # false: allows localhost urls
     # true: rejects localhost urls to either localhost or localhost IP addresses
     config.restrict_localhost_urls = false
+
+    FHIR::Terminology.set_terminology_root(Rails.root.join('terminology').to_s)
 
   end
 end

@@ -8,6 +8,20 @@
 
 /*banner class usually exists with a row class*/
 .banner{
+  //overflow: hidden;
+  .center {
+      width: 33%;
+      float: left;
+  }
+  .right {
+      float: right;
+      width: 33%;
+  }
+  .left {
+      float: left;
+      width: 33%;
+      text-align: left;
+  }
   .alert{
   	margin-left: 15px;
   	margin-right: 15px;
