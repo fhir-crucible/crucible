@@ -8,10 +8,10 @@ class Crucible.Dashboard
   statusLabels: {'none': 'Not Run', 'pass': 'Passing', 'skip': 'Skipped', 'fail': 'Failing', 'error': 'Error'}
 
   templates:
-    serverResultsRow: 'dashboards/server_result_row'
-    suiteResult: 'servers/suite_result'
-    testResult: 'servers/partials/test_result'
-    testRequests: 'servers/partials/test_requests'
+    serverResultsRow: 'views/templates/dashboards/server_result_row'
+    suiteResult: 'views/templates/servers/suite_result'
+    testResult: 'views/templates/servers/partials/test_result'
+    testRequests: 'views/templates/servers/partials/test_requests'
 
   constructor: ->
     @element = $('.dashboard-element')

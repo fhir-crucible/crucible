@@ -5,12 +5,12 @@ $(document).ready( ->
 class Crucible.Conformance
   @operations: ["read", "vread", "update", "delete", "history-instance", "validate", "history-type", "create", "search-type"]
   templates:
-    conformanceError: 'servers/conformance_error'
+    conformanceError: 'views/templates/servers/conformance_error'
 
   constructor: ->
     @element = $('#conformance-data')
     return unless @element.length
-    @template = HandlebarsTemplates['servers/conformance']
+    @template = HandlebarsTemplates['views/templates/servers/conformance']
     @serverId = @element.data('server-id')
     @loadConformance()
 

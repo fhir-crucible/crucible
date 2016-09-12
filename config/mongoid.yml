@@ -1,11 +1,11 @@
 development:
-  clients:
+  sessions:
     default:
       database: crucible_development
       hosts:
         - localhost:27017
 test:
-  clients:
+  sessions:
     default:
       database: crucible_test
       hosts:
@@ -17,7 +17,7 @@ test:
         max_retries: 1
         retry_interval: 0
 production:
-  clients:
+  sessions:
     default:
       database: crucible_production
       hosts:
