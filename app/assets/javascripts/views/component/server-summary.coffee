@@ -4,7 +4,7 @@ $(document).ready( ->
 
 class Crucible.ServerSummary
   templates:
-    failures: 'servers/failures_report'
+    failures: 'views/templates/servers/failures_report'
 
   constructor: ->
     @element = $('.test-run-report')
