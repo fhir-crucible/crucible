@@ -7,13 +7,13 @@ class Crucible.TestExecutor
   suitesById: {}
   testsById: {}
   templates:
-    suiteSelect: 'servers/suite_select'
-    suiteGroup: 'servers/suite_group'
-    suiteResult: 'servers/suite_result'
-    testResult: 'servers/partials/test_result'
-    testRequests: 'servers/partials/test_requests'
-    testRequestDetails: 'servers/partials/test_request_details'
-    testRunSummary: 'servers/partials/test_run_summary'
+    suiteSelect: 'views/templates/servers/suite_select'
+    suiteGroup: 'views/templates/servers/suite_group'
+    suiteResult: 'views/templates/servers/suite_result'
+    testResult: 'views/templates/servers/partials/test_result'
+    testRequests: 'views/templates/servers/partials/test_requests'
+    testRequestDetails: 'views/templates/servers/partials/test_request_details'
+    testRunSummary: 'views/templates/servers/partials/test_run_summary'
   html:
     deselectAllButton: '<i class="fa fa-close"></i>'
     selectAllButton: '<i class="fa fa-check"></i>'
