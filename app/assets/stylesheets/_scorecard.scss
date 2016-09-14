@@ -56,19 +56,20 @@
     padding-top: 12px;
     border-radius: 5px;
     display: inline-block;
-    margin-right: 30px;
+    margin-right: 15px;
   }
 
   .scorecard-rubric {
-    width: 150px;
+    width: 170px;
     display: inline-block;
+    vertical-align: top;
 
   }
 
   .scorecard-name {
     font-weight: bold;
     text-transform: capitalize;
-    font-size: 1.5em;
+    font-size: 1.1em;
   }
 
   .scorecard-out-of {
