@@ -1,0 +1,128 @@
+<div class="container main servers-show">
+  <div class="row content">
+    <div class="col-sm-12">
+      <div class="palette report">
+
+        <h1>Load <span style="color: #B74C18">Test Data</span></h1>
+
+        <div class="well helper_text">
+          Load a FHIR server with rich <strong>FHIR Patient Records</strong> including Patients, Conditons, Observations, Medications, AllergyIntolerances, Immunizations, and much more. 
+          <br/><br/>
+          Crucible generates and loads test data using the   
+          <a href="https://github.com/synthetichealth/synthea">Synthea Project</a>, an open source
+          community and platform with the objective of generating "realistic but not real" synthetic test data in
+          both FHIR and C-CDA.
+        </div>
+
+        <!-- BEGIN URL FORM -->
+        <div id="form">
+          <form action="/testdata" method="post" id="testdata-load-form">
+            <div class="row form landing-page">
+              <div class="col-sm-1">
+                <div class="picture landing-page visible-lg-block">
+                  <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
+                </div>
+              </div>
+              <div class="col-sm-11 landing-page-form">
+                <div class="row">
+                  <div class="col-sm-10">
+                    <input required placeholder="FHIR Server URL" type="text" name="server_url" class="form-control">
+                  </div> 
+                </div>
+                <div class="row">
+
+                </div>                
+                <div class="row" style="margin: 10px">
+                  <div class="col-sm-3">
+                    Format
+                    <select required name="format_type">
+                      <option value="json">JSON</option>
+                      <option value="xml">XML</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5">
+                    Number of Records
+                    <select required name="quantity">
+                      <option value="1">1</option>
+                      <option value="10">10</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="submit" class="btn begin" value="Load"></input>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <% if @notice %>
+          <div class="alert alert-success alert-dismissible" role="alert">
+            Success: <%= @notice %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        <% end %>
+        <% if @error %>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            Error: <%= @message %>
+            <br/>
+            <%= @error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        <% end %>
+
+        <% if @testdata && !@testdata.empty? %>
+          <h2>Generated Resources</h2>
+          <table class="table-hover" style="border-collapse:separate; border-spacing: 1em;">
+            <tbody>
+              <tr>
+                <th>Resource</th>
+                <th>Count</th>
+              </tr>
+
+              <% @resources_created.each do |resourceType,count| %>
+                <tr>
+                  <td><%= resourceType %></td>
+                  <td style="text-align: center;"><%= count %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+
+        <% if @testdata && !@testdata.empty? %>
+          <h2>Generated Patients</h2>
+          <table class="table-hover" style="border-collapse:separate; border-spacing: 1em;">
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Race</th>
+                <th>Resource ID</th>
+              </tr>
+
+              <% @testdata.each do |record| %>
+                <tr>
+                  <td><%= record[0] %>, <%= record[1] %></td>
+                  <td style="text-align: center;"><%= record[2] %></td>
+                  <td style="text-align: center;"><%= record[3] %></td>
+                  <td style="text-align: center;"><%= record[4] %></td>
+                  <td style="text-align: center;">
+                    <% if record[5]!='FAILED' %>
+                      <a href="<%= record[5] %>"><%= record[5] %></a>
+                    <% else %>
+                      <%= record[5] %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

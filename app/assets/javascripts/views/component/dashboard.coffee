@@ -1,4 +1,4 @@
-$(document).ready( -> 
+$(document).ready( ->
   new Crucible.Dashboard()
 )
 
@@ -45,7 +45,7 @@ class Crucible.Dashboard
       $('.results-circle').tooltip()
     )
 
-  addClickTestHandler: (test, suiteElement) => 
+  addClickTestHandler: (test, suiteElement) =>
     handle = suiteElement.find(".suite-handle[data-key='#{test.key}']")
     handle.click =>
       suiteElement.find(".suite-handle").removeClass('active')
@@ -54,7 +54,7 @@ class Crucible.Dashboard
       @addClickRequestDetailsHandler(test, suiteElement)
 
   addClickRequestDetailsHandler: (test, suiteElement) =>
-    suiteElement.find(".data-link").click (e) => 
+    suiteElement.find(".data-link").click (e) =>
       html = HandlebarsTemplates[@templates.testRequests]({test: test})
       $('#data-modal .modal-body').empty().append(html)
       $('#data-modal .modal-body code').each (index, code) ->

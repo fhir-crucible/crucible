@@ -19,6 +19,18 @@ Rails.application.routes.draw do
     post 'oauth_params'
   end
 
+  controller :scorecards do
+    get 'scorecard' => :index
+    post 'scorecard/score_url' => :score_url
+    post 'scorecard/score_upload' => :score_upload
+    post 'scorecard/score_paste' => :score_paste
+  end
+
+  controller :synthea do
+    get 'testdata' => :index
+    post 'testdata' => :load_data
+  end
+
   resources :test_results, only: [:show] do
     get 'reissue_request', default: {format: :json}
   end

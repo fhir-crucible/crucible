@@ -22,8 +22,12 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'fhir_models', :git => 'https://github.com/fhir-crucible/fhir_models.git', :branch => 'master'
 gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'master'
 #gem 'fhir_client', :path => '../fhir_client'
-gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'master'
+gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'stu3'
 #gem 'plan_executor', :path => '../plan_executor'
+gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git', :branch => 'master'
+#gem 'fhir_scorecard', :path => '../fhir_scorecard'
+gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'master'
+#gem 'synthea', :path => '../synthea'
 gem 'mongoid'
 gem 'devise'
 gem 'autoprefixer-rails'
@@ -58,4 +62,3 @@ group :test do
   gem 'simplecov', require: false
   gem 'webmock'
 end
-

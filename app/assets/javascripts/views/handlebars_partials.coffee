@@ -5,4 +5,3 @@ Handlebars.registerPartial('resource_operation', HandlebarsTemplates['views/temp
 Handlebars.registerPartial('validation', HandlebarsTemplates['views/templates/servers/partials/validation'])
 Handlebars.registerPartial('suite_result_details', HandlebarsTemplates['views/templates/servers/partials/suite_result_details'])
 Handlebars.registerPartial('suite_select', HandlebarsTemplates['views/templates/servers/suite_select'])
-

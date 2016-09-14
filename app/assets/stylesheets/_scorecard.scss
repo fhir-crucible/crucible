@@ -1,0 +1,85 @@
+
+// ------------------------- SCORECARD -------------------------------- //
+
+.scorecard {
+
+  svg {
+    border-radius: 4px;
+    background: linear-gradient(to top, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 53%, rgba(255,255,255,1) 100%);
+  }
+
+  .scorecard-score-another {
+    width: 200px;
+  }
+
+  .scorecard-form {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .scorecard-result {
+    margin-top: 30px;
+  }
+
+  h2 {
+    text-align: left;
+    font-size: 24px;
+    border-bottom: 3px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+
+  h2 small {
+    color: #aaa;
+
+  }
+
+  .scorecard-table {
+    align: left;
+    text-align: left;
+  }
+
+  .scorecard-row {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+    margin-top: 20px;
+  }
+
+  .scorecard-score {
+    font-size: 40px;
+    color: white;
+    width: 75px;
+    height: 75px;
+    text-align: center;
+    padding-top: 12px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 30px;
+  }
+
+  .scorecard-rubric {
+    width: 150px;
+    display: inline-block;
+
+  }
+
+  .scorecard-name {
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 1.5em;
+  }
+
+  .scorecard-out-of {
+    font-size: .8em;
+  }
+
+  .scorecard-message {
+    display:inline-block;
+    vertical-align: top;
+    padding-top: 5px;
+    width: 650px;
+  }
+
+}

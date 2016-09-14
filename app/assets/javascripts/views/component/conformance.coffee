@@ -1,4 +1,4 @@
-$(document).ready( -> 
+$(document).ready( ->
   new Crucible.Conformance()
 )
 
@@ -34,7 +34,7 @@ class Crucible.Conformance
           $("#conformance_spinner").show()
           @loadConformance(true)
     )
- 
+
   registerHandlers: =>
     @screenControls()
 
