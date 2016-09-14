@@ -23,8 +23,10 @@ class ScorecardsController < ApplicationController
       @error = "SSL Error: #{s.message}"
       logger.error @error
     rescue Exception => e 
-      @error = "Unable to parse response: #{response}"
+      @error = "Unable to parse response: #{@my_response}"
       logger.error @error
+      logger.error e.message
+      logger.error e.backtrace.join("\n    ")
     end
     render action: 'index'
   end
