@@ -52,7 +52,6 @@ class SyntheaController < ApplicationController
             redirected = true
           else
             @error = "HTTP #{reply.code} was returned." if !redirected
-            binding.pry
           end
         end
       end
@@ -110,7 +109,6 @@ class SyntheaController < ApplicationController
       # id = FHIR::ResourceAddress.pull_out_id(FHIR::Patient,url)
     rescue Exception => e
       logger.error 'Unable to extract patient id from reply'
-      binding.pry
       logger.error e.message
       logger.error e.backtrace.join("\n    ")
       nil
