@@ -72,9 +72,6 @@ class SyntheaController < ApplicationController
       #defined our own 'add to transaction' function to preserve our entry information
       add_entry_transaction(entry,client)
     end
-    f = File.open('test_bundle.json','w:UTF-8')
-    f.write(client.transaction_bundle.to_json)
-    f.close
     begin
       # return one bundle uploaded
       reply = client.end_transaction
