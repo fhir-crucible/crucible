@@ -50,8 +50,8 @@ class ServerTest < ActiveSupport::TestCase
     server = Server.new ({url: 'www.example.com'})
 
     # the server will try xml conformance first, so respond with a 404
-    stub = stub_request(:get, "www.example.com/metadata").with(headers: {'Accept'=>'application/xml+fhir'}).to_return(status: 404)
-    stub = stub_request(:get, "www.example.com/metadata").with(headers: {'Accept'=>'application/json+fhir'}).to_return(body: @partial_conformance_json).times(4)
+    stub = stub_request(:get, "www.example.com/metadata").with(headers: {'Accept'=>'application/fhir+xml'}).to_return(status: 404)
+    stub = stub_request(:get, "www.example.com/metadata").with(headers: {'Accept'=>'application/fhir+json'}).to_return(body: @partial_conformance_json).times(4)
     conformance = server.load_conformance
 
     server.collect_supported_tests
