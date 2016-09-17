@@ -1,4 +1,5 @@
 class SyntheaController < ApplicationController
+  skip_before_filter  :verify_authenticity_token
 
   # GET /testdata
   def index
@@ -18,8 +19,8 @@ class SyntheaController < ApplicationController
       redirected = false
 
       client = FHIR::Client.new(server_url)
-      client.default_format = FHIR::Formats::ResourceFormat::RESOURCE_JSON if format_type=='JSON'
-      client.default_format_bundle = FHIR::Formats::FeedFormat::FEED_JSON if format_type=='JSON'
+      client.default_format = FHIR::Formats::ResourceFormat::RESOURCE_JSON if format_type.upcase=='JSON'
+      client.default_format_bundle = FHIR::Formats::FeedFormat::FEED_JSON if format_type.upcase=='JSON'
 
       world = Synthea::World::Sequential.new
       world.population_count = 0
@@ -29,6 +30,9 @@ class SyntheaController < ApplicationController
       (1..quantity).each do |i|
         # generate a patient with synthea
         record = world.build_person(nil, rand(0..100), nil, nil, nil)
+        while( record[:is_alive]==false )
+          record = world.build_person(nil, rand(0..100), nil, nil, nil)
+        end
         record = Synthea::Output::Exporter.filter_for_export(record)
 
         # add a record of the demographics to @testdata
