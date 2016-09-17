@@ -20,7 +20,7 @@ class Crucible.TestExecutor
     collapseAllButton: '<i class="fa fa-compress"></i>'
     expandAllButton: '<i class="fa fa-expand"></i>'
     spinner: '<span class="fa fa-lg fa-fw fa-spinner fa-pulse tests"></span>'
-    unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server Unavailable</div>'
+    unavailableError: '<div class="alert alert-danger"><strong>Error: </strong> Server conformance could not be loaded</div>'
     genericError: '<div class="alert alert-danger"><strong>Error: </strong> Tests could not be executed</div>'
     unauthorizedError: '<div class="alert alert-danger"><strong>Error: Server unauthorized or authorization expired</strong></div>'
   filters:
