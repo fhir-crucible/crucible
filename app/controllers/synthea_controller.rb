@@ -20,7 +20,6 @@ class SyntheaController < ApplicationController
 
       client = FHIR::Client.new(server_url)
       client.default_format = FHIR::Formats::ResourceFormat::RESOURCE_JSON if format_type.upcase=='JSON'
-      client.default_format_bundle = FHIR::Formats::FeedFormat::FEED_JSON if format_type.upcase=='JSON'
 
       world = Synthea::World::Sequential.new
       world.population_count = 0
