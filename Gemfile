@@ -26,7 +26,7 @@ gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git
 #gem 'plan_executor', :path => '../plan_executor'
 gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git', :branch => 'master'
 #gem 'fhir_scorecard', :path => '../fhir_scorecard'
-gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'master'
+gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'master', :ref => 'fc4e0226723221cab0a3050a97066d79074da261'
 #gem 'synthea', :path => '../synthea'
 gem 'mongoid'
 gem 'devise'

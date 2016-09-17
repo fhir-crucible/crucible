@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: c51fa9c071583e86a5b3225912bc981acae0e195
+  revision: cd01ff5b3f2eecccce505cdc5f315525c9b3ae90
   branch: master
   specs:
     plan_executor (1.0.0)
@@ -42,6 +42,7 @@ GIT
 GIT
   remote: https://github.com/synthetichealth/synthea.git
   revision: fc4e0226723221cab0a3050a97066d79074da261
+  ref: fc4e0226723221cab0a3050a97066d79074da261
   branch: master
   specs:
     synthea (1.0.0)
@@ -191,7 +192,7 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.3)
-    jwt (1.5.4)
+    jwt (1.5.5)
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
