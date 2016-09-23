@@ -104,7 +104,7 @@ namespace :crucible do
   desc "cleanup orphaned test runs"
   task :test_runs_cleanup, [:age] => :environment do |t, args|
     age = args.age.nil? ? (Time.now - 1.day).to_s : DateTime.parse(args.age).to_s
-    TestRun.where(:date.lte => age, :status.in => ["pending", "running"]).delete
+    TestRun.where(:date.lte => age, :status.in => ["pending", "running"]).update_all(status: 'cancelled')
   end
 
 end
