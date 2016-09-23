@@ -14,7 +14,7 @@ namespace :crucible do
       FileUtils.rm_r dump_extract
     end
   end
-  
+
 
   desc "Execute all tests against all servers"
   task :test_all => [:environment] do
@@ -70,7 +70,7 @@ namespace :crucible do
 
     servers_by_url.values.each do |list|
       next if list.length <= 1
-      list.sort! do |l,r| 
+      list.sort! do |l,r|
         if (l.name_guessed != r.name_guessed)
           (l.name_guessed ? 0 : 1) <=> (r.name_guessed ? 0 : 1)
         else
@@ -90,7 +90,7 @@ namespace :crucible do
   desc "cleanup bad servers"
   task :servers_cleanup, [:delete] => :environment do |t, args|
     print 'checking'
-    bad = Server.all.select do |s| 
+    bad = Server.all.select do |s|
       print '.'
       $stdout.flush
       s.summary.nil? && s.name_guessed && s.client_id.nil? && s.tags.blank? && !s.available?
@@ -99,6 +99,12 @@ namespace :crucible do
       puts "Deleting: #{server.name}: #{server.url}"
       server.delete() if args.delete
     end
+  end
+
+  desc "cleanup orphaned test runs"
+  task :test_runs_cleanup, [:age] => :environment do |t, args|
+    age = args.age.nil? ? (Time.now - 1.day).to_s : DateTime.parse(args.age).to_s
+    TestRun.where(:date.lte => age, :status.in => ["pending", "running"]).update_all(status: 'cancelled')
   end
 
 end
