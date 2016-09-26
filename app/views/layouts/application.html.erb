@@ -36,19 +36,18 @@
 
     <nav class="collapse navbar-collapse">
       <ul class="nav navbar-nav pull-right">
-<!--         {{#if session.isAuthenticated}}
-          <li>{{#link-to 'users.index' classNames="navButton"}}Dashboard{{/link-to}}</li>
-          <li>{{#link-to 'servers.index' classNames="navButton"}}Servers{{/link-to}}</li>
-          <li><a href="#" class="navButton" {{action 'invalidateSession'}}>Logout</a></li>
-        {{else}}
- -->
           <li><a href="/" class="navButton">Server Test</a></li>
           <li><a href="/scorecard" class="navButton">Scorecard</a></li>
           <li><a href="/testdata" class="navButton">Test Data</a></li>
-          <li><a href="mailto:fhir-testing-list@lists.mitre.org?subject=Crucible" class="navButton">Contact Us</a></li>
-<!--           <li><a href="/users/login" class="navButton" {{action 'openLoginModal'}}>Login</a></li>
-        {{/if}}
- -->      </ul>
+          <li class="dropdown">
+            <a href="#" class="navButton" data-toggle="dropdown" id="contact-drop" role="button" aria-haspopup="true" aria-expanded="false">Contact Us<span class="caret"></span></a>
+            <ul class="dropdown-menu" aria-labelledby="contact-drop">
+              <li><a class="navButton" href="mailto:fhir-testing-list@lists.mitre.org?subject=Crucible">Email Us</a></li>
+              <li><a class="navButton" target="_blank" href="https://chat.fhir.org/#narrow/stream/crucible">FHIR Chat</a></li>
+              <li><a class="navButton" target="_blank" href="https://github.com/fhir-crucible/crucible/issues">Log an issue</a></li>
+            </ul>
+          </li>
+      </ul>
     </nav>
   </header>
 

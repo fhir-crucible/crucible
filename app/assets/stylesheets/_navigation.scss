@@ -19,3 +19,7 @@ nav {
 .nav-tabs > li > a:hover {
   background-color: $base-darken;
 }
+
+ul.dropdown-menu {
+  min-width: 148px;
+}
