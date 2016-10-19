@@ -42,7 +42,7 @@ namespace :crucible do
     Server.all.select {|s| (s.tags & excluded_tags).empty?}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}.each_with_index do |s, i|
       puts "\tStarting Server #{i+1} of #{Server.all.length}"
 
-      test_run = TestRun.new({server: s, date: Time.now})
+      test_run = TestRun.new({server: s, date: Time.now, nightly: true})
       test_run.add_tests(Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name})
       test_run.save!
       RunTestsJob.perform_later(test_run.id.to_s)
