@@ -19,6 +19,7 @@ class ScorecardsController < ApplicationController
       scorecard = FHIR::Scorecard.new
       @scorecards << scorecard.score(@my_response.body)
       @notice = 'Success'
+      log(bundle_url)
     rescue OpenSSL::SSL::SSLError => s 
       @error = "SSL Error: #{s.message}"
       logger.error @error
@@ -44,6 +45,7 @@ class ScorecardsController < ApplicationController
       @error = "Unable to parse file: #{e.message}"
       logger.error @error
     end
+    log
     render action: 'index'    
   end
 
@@ -60,8 +62,12 @@ class ScorecardsController < ApplicationController
       @error = "Unable to parse file: #{e.message}"
       logger.error @error
     end
+    log
     render action: 'index'    
   end
 
+  def log(url=nil)
+    ScorecardRun.new(url: url, result: @scorecards, date: Time.now).save
+  end
 
 end

@@ -1,30 +1,4 @@
 GIT
-  remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: 5b24cb5ca3fb9016513aa53701a74bda6d6366c7
-  branch: master
-  specs:
-    fhir_client (1.6.2)
-      activesupport (>= 3)
-      addressable (>= 2.3)
-      fhir_models (>= 1.6.1)
-      oauth2 (~> 1.1)
-      rack (~> 1.5)
-      rest-client (~> 1.8)
-      tilt (>= 1.1)
-
-GIT
-  remote: https://github.com/fhir-crucible/fhir_models.git
-  revision: ac87d31623d3300fea4c4719c9b8e742dcd0ab56
-  branch: master
-  specs:
-    fhir_models (1.6.2)
-      bcp47 (>= 0.3)
-      date_time_precision (>= 0.8)
-      mime-types (>= 1.16, < 3)
-      nokogiri (>= 1.6)
-      rake (>= 0.8.7)
-
-GIT
   remote: https://github.com/fhir-crucible/fhir_scorecard.git
   revision: 03666e9a7a171af723cf18da1f81a8ea0c5532a7
   branch: master
@@ -34,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: e8e3ab44afd54304f30e15e87f75dfdf4171c709
+  revision: 62aa606c40eae44c9e2613a7a1001672fbd77b09
   branch: master
   specs:
     plan_executor (1.0.0)
@@ -160,6 +134,20 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     ffi (1.9.10)
+    fhir_client (1.6.9)
+      activesupport (>= 3)
+      addressable (>= 2.3)
+      fhir_models (>= 1.6.8)
+      nokogiri
+      oauth2 (~> 1.1)
+      rack (>= 1.5)
+      rest-client (~> 1.8)
+      tilt (>= 1.1)
+    fhir_models (1.6.8)
+      bcp47 (>= 0.3)
+      date_time_precision (>= 0.8)
+      mime-types (>= 1.16, < 3)
+      nokogiri (>= 1.6)
     formatador (0.2.5)
     georuby (2.5.2)
     globalid (0.3.6)
@@ -377,8 +365,6 @@ DEPENDENCIES
   date_time_precision
   delayed_job_mongoid
   devise
-  fhir_client!
-  fhir_models!
   fhir_scorecard!
   guard-livereload
   handlebars_assets
@@ -410,4 +396,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
