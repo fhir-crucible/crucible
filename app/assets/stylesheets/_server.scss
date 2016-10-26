@@ -122,6 +122,14 @@
   }
 }
 
+.starburst-loading {
+  height: 100%;
+  background-image: url("starburst_loading.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+}
+
 .server-fhir-specification {
 
   .spec-starburst-chart {
@@ -185,22 +193,44 @@
 
 // ------------------------- SERVER SUMMARIES ------------------------------ //
 
+#new-server-form {
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
 .server-summaries {
-  margin: 15px;
+  margin: 40px 0;
   background-color: $brand-tertiary;
   border-radius: 10px;
-  min-height: 920px;
-  text-align: center;
-  padding: 40px 0;
+  padding: 10px;
 
+  .server-rank {
+    font-size: 26px;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: #ddd;
+  }
+
+  .server-highlight {
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+    margin: 0 20px 0 10px;
+  }
+
+  .active {
+    background-color: #eee;
+  }
   .starburst-summary {
-    padding: 5px;
+    padding: 0 6px 0 6px;
+    margin: 10px 0;
   }
 
   .server-summary-details {
-    margin-top: 4px;
-    height: 60px;
-
     .percent-passed {
       font-weight: bold;
     }
@@ -212,17 +242,34 @@
     line-height: 1em;
   }
 
+  .server-item {
+    margin: 0 7px;
+    position:relative;
+    width: 185px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 5px;
+  }
 
+}
+
+.server-stats {
+  text-align: center;
+  padding-top: 40px;
+  .server-stats-number {
+    font-size: 80px;
+    margin-bottom: -20px;
+  }
 }
 
 // Media queries to shrink text on front page to prevent wrapping
 
 @media (max-width: $screen-lg-min) {
-  .server-summary-details{font-size: 14px; height: 50px;}
+  .server-summary-details{font-size: 14px;}
 }
 
 @media (max-width: $screen-md-min) {
-  .server-summary-details{font-size: 12px; height: 40px;}
+  .server-summary-details{font-size: 12px;}
 }
 
 // ------------------------- SERVER TIME ----------------------------------- //
@@ -271,11 +318,5 @@
 
   .starburst-summary {
     height: 338px;
-  }
-  .starburst-loading {
-    background-image: url("starburst_loading.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: auto 100%;
   }
 }

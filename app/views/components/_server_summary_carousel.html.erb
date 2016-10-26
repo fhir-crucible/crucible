@@ -1,39 +1,36 @@
 <div>
-  <div id="homepageCarousel" class="carousel slide server-summaries">
-    <ol class="carousel-indicators">
-      <% servers.each_slice(6).each_with_index do |x, i| %>
-        <li data-target="#homepageCarousel" data-slide-to="<%=i%>" <%if i==0%>class="active"<%end%>></li>
-      <% end %>
-    </ol>
+  <div id="homepageCarousel" class="server-summaries">
 
-<div class="carousel-inner" role="listbox">
+    <ul class="server-sortorder pull-right">
+      <li class="sortorder-label">Sort By: </li>
+      <li><a href="#" class="selected" id="sortorder_percent_passed">Percent Passed</a></li>
+      <li><a href="#" id="sortorder_recently_tested">Recently Tested</a></li>
+    </ul>
 
-  <%
-    first = true
-    servers.each_slice(6) do |server_page|
-  %>
-    <div class="item <%if first%>active<%end%>">
-      <div class="row">
-        <% first = false %>
-        <% server_page.each do |server| %>
-          <div class="col-sm-4">
-            <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
-          </div>
-        <% end %>
-      </div>
+    <div class="carousel-title">
+      Tested FHIR Servers
     </div>
-  <% end %>
-</div>
 
-<a class="left carousel-control" role="button" data-slide="prev" href="#homepageCarousel">
-  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-  <span class="sr-only">Previous</span>
-</a>
-
-<a class="right carousel-control" role="button" data-slide="next" href="#homepageCarousel">
-  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-  <span class="sr-only">Next</span>
-</a>
-</div>
+    <div class="server-rows-container">
+      <div class="server-rows">
+        <%
+          servers.reject{|s| s.summary.nil?}.each_with_index do |server, rank|
+        %>
+        <div class="server-item" 
+          data-serverid="<%= server.id %>" 
+          data-daysold="<%= (Date.today - server.summary.generated_at.to_date).to_i %>" 
+          data-total="<%= server.summary.compliance['total'] %>" 
+          data-passed="<%= server.summary.compliance['passed'] %>">
+          <div class="server-rank">
+            <%= rank + 1 %>
+          </div>
+          <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
+        </div>
+      <% end %>
+    </div>
+    <% if servers.reject{|s| s.summary.nil?}.count > 15 %>
+      <div class="server-scroller"></div>
+    <% end %>
   </div>
-
+</div>
+</div>

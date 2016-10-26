@@ -20,7 +20,8 @@ class Crucible.StarburstSummary
         $.getJSON("/servers/#{serverId}/summary.json")
           .success((data) =>
             if (data.summary)
-              summaryElement.removeClass("starburst-loading")
+              summaryElement.find('.starburst-loading').removeClass('starburst-loading')
+              summaryElement.find('.hidden').removeClass('hidden')
               starburstElement = summaryElement.find('.starburst')
               summaryElement.show()
               # TODO: _renderChart seems messy... this could use a better interface
