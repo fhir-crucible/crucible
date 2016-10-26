@@ -4,4 +4,6 @@ class Summary
   field :server_id, type: BSON::ObjectId
   field :compliance
   field :generated_at, type: Time
+
+  index(server_id: 1)
 end

@@ -7,29 +7,48 @@
   </div>
 <% end %>
 
-<div class="container main">
-  <div class="banner row">
-    <div class="col-sm-12 left">
-      <div class="alert alert-warning alert-dismissible CFP-update" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong>Crucible STU 3:</strong> This version of Crucible aligns with the <a href="http://hl7.org/fhir/2016Sep/index.html">STU3 version of FHIR</a>.  There is also <a href="https://beta.projectcrucible.org/">a version of Crucible that aligns with the DSTU 2 version of FHIR</a>.
-      </div>
+<div class="jumbotron">
+  <div class="container">
+    <img class="pull-right" src="/assets/logo.png"/>
+    <h1>Open Source FHIR Testing</h1> 
+    <p>
+    Crucible is a set of <a href="http://github.com/fhir-crucible/crucible">open source</a> testing tools for HL7<sup>®</sup> FHIR<sup>®</sup>.
+    It it provided as a free service to the FHIR development community to help promote correct FHIR implementations.  It currently can test
+    for conformance to the FHIR standards, score your patient record for completeness, and generate synthetic patient data.
+    </p>
+
+    <p>
+    We are actively seeking contributors.  Visit our <a href="https://github.com/fhir-crucible/crucible">github page</a> for more information.
+    </p>
+
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="service-list-row row">
+    <div class="service-list-item">
+      <h2>Test FHIR Conformance</h2>
+      Crucible provides a comprehensive testing capability for STU 3 v1.6.
+      To get started, enter a publically accessible URL in the form below.
+
     </div>
-    <div class="col-sm-12 center">
-      <div class="alert alert-warning" role="alert">
-        <strong>FHIR Scorecard:</strong> Score the quality and completeness of your FHIR Patient Records (Bundles) using our <a href="/scorecard">new scorecard</a>.
-        
-      </div>
+    <div class="service-list-item">
+      <h2>FHIR Scorecard</h2>
+      Score the quality and completeness of your FHIR Patient Records (Bundles) using our <a href="/scorecard">new scorecard</a>.
+
     </div>
-    <div class="col-sm-12 right">
-      <div class="alert alert-warning" role="alert">
-        <strong>FHIR Test Data:</strong> Load <a href="/testdata">synthetic test data</a> to your server with Crucible and Synthea!
-      </div>
+    <div class="service-list-item">
+      <h2>Generate FHIR Test Data</h2>
+      Load <a href="/testdata">synthetic test data</a> to your server with Crucible and Synthea!
     </div>
   </div>
+</div>
+
+<div class="container main">
 
   <form action="/servers" method="post" id="new-server-form">
-<!--     <div class="banner row">
+    <!--     <div class="banner row">
       <div class="col-sm-12">
         <div class="alert alert-danger alert-dismissible dstu-update" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -37,7 +56,8 @@
         </div>
       </div>
     </div>
- -->    <div class="row form landing-page">
+    -->    
+    <div class="row form landing-page">
       <div class="col-sm-1">
         <div class="picture landing-page visible-lg-block">
           <img src="<%= image_path("logo_dark.png")%>" alt="Crucible">
@@ -54,26 +74,6 @@
         </div>
       </div>
     </div>
-
-    <!--
-    <div class="row form">
-      <div class="col-sm-10">
-        <div class="form-group">
-          {{#if multiServer}}
-            {{input value=server2 class="form-control" placeholder="Comparison FHIR Server URL"}}
-          {{/if}}
-        </div>
-      </div>
-
-      <div class="col-sm-2">
-        {{#if multiServer}}
-          <a {{action 'removeUrl'}} class="toggle-info" ><i class="fa fa-minus fa-fw"></i> Remove Server</a>
-        {{else}}
-          <a {{action 'addUrl'}} class="toggle-info" ><i class="fa fa-plus fa-fw"></i> Add A Server</a>
-        {{/if}}
-      </div>
-    </div>
-  -->
   </form>
 
   <!-- Summaries -->

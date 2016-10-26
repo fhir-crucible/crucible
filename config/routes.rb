@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   end
 
   root to: "home#index"
+  get 'server_scrollbar_data', to: 'home#server_scrollbar_data'
   get 'redirect', to: 'servers#oauth_redirect'
 
 end
