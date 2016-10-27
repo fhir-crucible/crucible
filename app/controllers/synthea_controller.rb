@@ -28,9 +28,9 @@ class SyntheaController < ApplicationController
 
       (1..quantity).each do |i|
         # generate a patient with synthea
-        record = world.build_person(nil, rand(0..100), nil, nil, nil)
+        record = world.build_person
         while( record[:is_alive]==false )
-          record = world.build_person(nil, rand(0..100), nil, nil, nil)
+          record = world.build_person
         end
         record = Synthea::Output::Exporter.filter_for_export(record)
 
