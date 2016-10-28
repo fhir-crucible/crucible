@@ -104,6 +104,7 @@ class TestRun
     summary = Summary.new({server_id: self.server.id, test_run: self, compliance: compliance, generated_at: Time.now})
     self.server.summary = summary
     self.server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
+    self.server.last_run_at = Time.now
     summary.save!
     self.server.save!
 

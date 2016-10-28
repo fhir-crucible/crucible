@@ -22,7 +22,7 @@ class Crucible.ServerScroller
     )
 
   color: (normalized_score) =>
-    scaled = normalized_score * (colors.length - 1)
+    scaled = normalized_score/100 * (colors.length - 1)
     floor = Math.floor(scaled)
     remainder = scaled - floor
     color = d3.interpolateRgb(colors[floor], colors[floor+1])(remainder)
@@ -42,7 +42,7 @@ class Crucible.ServerScroller
 
   renderChart: (data) =>
 
-    data = _.sortBy(data, (d) => -d.score)
+    data = _.sortBy(data, (d) => -d.percent_passing)
 
     dragstarted = (d) =>
       d3.event.sourceEvent.stopPropagation()
@@ -83,7 +83,7 @@ class Crucible.ServerScroller
       .attr("id", (d) => "scroller-element-#{d.id}")
       .attr("x", 0)
       .attr("y", (d,i) => i * @['height'] / data.length)
-      .style("fill", (d) => @color(d.score))
+      .style("fill", (d) => @color(d.percent_passing))
       .on("click", click)
 
     selected = svg.selectAll('selector')

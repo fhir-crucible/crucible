@@ -10,21 +10,15 @@ class HomeController < ApplicationController
   def server_scrollbar_data
 
     total_tests = Test.all.inject([]) { |a,i| a.concat i.methods}.count
-    servers = Server.where({percent_passing: {"$gte" => 0}}).includes(:summary).all.map do |server|
-      if server.summary and server.summary['compliance'] and server.summary['compliance']['total']
-        compliance = server.summary['compliance']
-        {
-          id: server._id.to_s,
-          name: server.name,
-          percent_run: compliance['total'].to_f / total_tests.to_f,
-          compliance: 0.8,
-          score: compliance['passed'].to_f / compliance['total'].to_f,
-          total: compliance['total'].to_f
-        }
-      end
+    servers = Server.where({percent_passing: {"$gte" => 0}}).map do |server|
+      {
+        id: server._id.to_s,
+        name: server.name,
+        percent_passing: server.percent_passing
+      }
     end
 
-    render json: {total_tests: total_tests, servers: servers.reject {|s| s.nil?}}
+    render json: {total_tests: total_tests, servers: servers}
   end
 
 

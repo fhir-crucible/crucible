@@ -107,4 +107,14 @@ namespace :crucible do
     TestRun.where(:date.lte => age, :status.in => ["pending", "running"]).update_all(status: 'cancelled')
   end
 
+  desc "upgrade db to store generated_at from summary at the server level"
+  task :copy_generated_at_to_server => [:environment] do
+
+    Server.each do |server|
+      server.last_run_at = server.summary.generated_at unless server.summary.nil?
+      server.save
+    end
+
+  end
+
 end
