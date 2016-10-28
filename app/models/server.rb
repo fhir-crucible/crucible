@@ -24,6 +24,7 @@ class Server
   field :default_format, type: String
   field :tags, type: Array, default: []
   embeds_many :scopes
+  field :last_run_at, type: Time
 
   def get_default_scopes
     [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },

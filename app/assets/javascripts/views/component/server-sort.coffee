@@ -17,17 +17,13 @@ class Crucible.ServerSort
     @element.find('#sortorder_percent_passed').on('click', () =>
       @element.find('a').removeClass('selected')
       @element.find('#sortorder_percent_passed').addClass('selected')
-      @containerElement.find('.server-item')
-        .sort( (a, b) =>
-          return 1 if $(a).data('passed')/$(a).data('total')  < $(b).data('passed')/$(b).data('total')
-          return -1 if $(a).data('passed')/$(a).data('total') > $(b).data('passed')/$(b).data('total')
-          0
-        )
-        .each( (i,e) =>
-          elem = $(e)
-          elem.remove()
-          elem.appendTo(@containerElement)
-        )
+      sortedElements = @containerElement.find('.server-item').toArray().sort (a, b) => $(b).data('percent') - $(a).data('percent')
+
+      @containerElement.empty()
+
+      $.each(sortedElements, (i,el) =>
+        @containerElement.append(el)
+      )
       @containerElement.trigger('sortchange')
       false
     )
@@ -35,17 +31,13 @@ class Crucible.ServerSort
     @element.find('#sortorder_recently_tested').on('click', () =>
       @element.find('a').removeClass('selected')
       @element.find('#sortorder_recently_tested').addClass('selected')
-      @containerElement.find('.server-item')
-        .sort( (a, b) =>
-          return 1 if $(a).data('daysold') > $(b).data('daysold')
-          return -1 if $(a).data('daysold') < $(b).data('daysold')
-          0
-        )
-        .each( (i,e) =>
-          elem = $(e)
-          elem.remove()
-          elem.appendTo(@containerElement)
-        )
+      sortedElements = @containerElement.find('.server-item').toArray().sort (a, b) => $(b).data('lastrun') - $(a).data('lastrun')
+
+      @containerElement.empty()
+
+      $.each(sortedElements, (i,el) =>
+        @containerElement.append(el)
+      )
       @containerElement.trigger('sortchange')
       false
     )

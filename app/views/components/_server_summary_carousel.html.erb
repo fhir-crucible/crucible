@@ -14,21 +14,20 @@
     <div class="server-rows-container">
       <div class="server-rows">
         <%
-          servers.reject{|s| s.summary.nil?}.each_with_index do |server, rank|
+          servers.each_with_index do |server, index|
         %>
         <div class="server-item" 
           data-serverid="<%= server.id %>" 
-          data-daysold="<%= (Date.today - server.summary.generated_at.to_date).to_i %>" 
-          data-total="<%= server.summary.compliance['total'] %>" 
-          data-passed="<%= server.summary.compliance['passed'] %>">
+          data-lastrun="<%=  (server.last_run_at.to_i || 0) + (index * 0.001) %>" 
+          data-percent="<%= server.percent_passing %>">
           <div class="server-rank">
-            <%= rank + 1 %>
+            <%= index + 1 %>
           </div>
           <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
         </div>
       <% end %>
     </div>
-    <% if servers.reject{|s| s.summary.nil?}.count > 15 %>
+    <% if servers.count > 15 %>
       <div class="server-scroller"></div>
     <% end %>
   </div>
