@@ -125,8 +125,9 @@ class ServersController < ApplicationController
       #figure out the next sunday from this date
       next_sunday = e.generated_at.to_date + (7 - e.generated_at.wday)
 
-       # store this on the next sunday, as long as nothing from later in the week is already stored there
-      if sunday_index[next_sunday].nil? or sunday_index[next_sunday]['date'] < e.generated_at.to_date
+      # store this on the next sunday, as long as nothing from later in the week is already stored there
+      # if before first sunday, don't store because we've already taken care of that
+      if next_sunday > sundays.first and (sunday_index[next_sunday].nil? or sunday_index[next_sunday]['date'] < e.generated_at.to_date)
         sunday_index[next_sunday] = new_tree
       end
     end
