@@ -39,13 +39,20 @@ namespace :crucible do
     # currently we exclude servers tagged argonaut from the nightly run
     excluded_tags = ['argonaut']
 
-    Server.all.select {|s| (s.tags & excluded_tags).empty?}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}.each_with_index do |s, i|
-      puts "\tStarting Server #{i+1} of #{Server.all.length}"
+    servers = Server.all.select {|s| (s.tags & excluded_tags).empty?}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}
 
-      test_run = TestRun.new({server: s, date: Time.now, nightly: true})
-      test_run.add_tests(Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name})
-      test_run.save!
-      RunTestsJob.perform_later(test_run.id.to_s)
+    servers.each_with_index do |s, i|
+
+      if TestRun.where(:server => s, :status.in => ['pending', 'running']).length == 0
+        puts "\tStarting Server #{i+1} of #{servers.length}"
+
+        test_run = TestRun.new({server: s, date: Time.now, nightly: true})
+        test_run.add_tests(Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name})
+        test_run.save!
+        RunTestsJob.perform_later(test_run.id.to_s)
+      else
+        puts "\tServer #{i+1} of #{servers.length} is already under test"
+      end
 
     end
 
