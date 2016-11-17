@@ -41,6 +41,12 @@ class Crucible.Starburst
     @listeners = []
     @extended = extended
 
+    # if on front page, a click to the starburst should go to the server page
+    if !extended
+      $(element).on("click", () ->
+        window.location = $(@).parent().find('a').attr('href')
+      )
+
   get: (v) ->
     @[v]
 
@@ -220,7 +226,7 @@ class Crucible.Starburst
         )
         .attr("class", (d) -> d.name?.replace(/([\s,\&])/g, "_"))
         .on("click", (d) =>
-          return unless d.parent
+          return unless d.parent and @get('extended')
           if @selectedNode == d.name and d.parent
             selectNode(d.parent)
           else
