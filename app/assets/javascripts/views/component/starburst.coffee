@@ -40,9 +40,10 @@ class Crucible.Starburst
     @_constructNodeMap(data)
     @listeners = []
     @extended = extended
+    @zoomable = extended || $(element).parent().find('a').length == 0
 
     # if on front page, a click to the starburst should go to the server page
-    if !extended
+    if !@zoomable
       $(element).on("click", () ->
         window.location = $(@).parent().find('a').attr('href')
       )
@@ -226,7 +227,7 @@ class Crucible.Starburst
         )
         .attr("class", (d) -> d.name?.replace(/([\s,\&])/g, "_"))
         .on("click", (d) =>
-          return unless d.parent and @get('extended')
+          return if !d.parent || !@get('zoomable')
           if @selectedNode == d.name and d.parent
             selectNode(d.parent)
           else
