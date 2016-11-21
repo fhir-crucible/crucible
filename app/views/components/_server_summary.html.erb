@@ -10,7 +10,7 @@ extended ||= false
   </div>
 
   <% unless noHeader %>
-    <a id="carouselPanel" href="/servers/<%= server.id %>" title="<%=server.name%>">
+    <a href="/servers/<%= server.id %>" title="<%=server.name%>">
       <div class="server-summary-details">
         <span class="server-name"><%= truncate(server.name, length: 20) %></span>
         <div class="summary-time-details">
