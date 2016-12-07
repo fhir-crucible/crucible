@@ -80,6 +80,10 @@ class TestRun
           val = test.execute().values.first
         end
 
+        # can't store results larger than approx 16MB due to limitation of mongodb.
+        val_size = val.to_bson.size
+        raise "Result size (#{val_size} bytes) exceeded maximum 16mb size for Crucible." if val_size >= 16000000
+
       rescue Exception => e
         Rails.logger.error e.message
         Rails.logger.error e.backtrace
