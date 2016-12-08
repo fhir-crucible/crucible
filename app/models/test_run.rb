@@ -1,6 +1,8 @@
 class TestRun
   include Mongoid::Document
 
+  MAX_DOCUMENT_SIZE = 16000000
+
   field :conformance
   field :destination_conformance
   field :date, type: DateTime
@@ -80,9 +82,11 @@ class TestRun
           val = test.execute().values.first
         end
 
+        crop_large_responses(val)
+
         # can't store results larger than approx 16MB due to limitation of mongodb.
         val_size = val.to_bson.size
-        raise "Result size (#{val_size} bytes) exceeded maximum 16mb size for Crucible." if val_size >= 16000000
+        raise "Result size (#{val_size} bytes) exceeded maximum #{MAX_DOCUMENT_SIZE} byte size for Crucible." if val_size >= MAX_DOCUMENT_SIZE
 
       rescue Exception => e
         Rails.logger.error e.message
@@ -123,6 +127,25 @@ class TestRun
     hash = super(options)
     hash['id'] = hash.delete('_id').to_s if(hash.has_key?('_id'))
     hash
+  end
+
+  private
+
+  def crop_large_responses(test_results)
+    error_message = "Response not saved because this test result has exceeded Crucible\'s maximum size of #{MAX_DOCUMENT_SIZE} bytes."
+
+    response_sizes = []
+    test_results.each_with_index do |result, result_index|
+      result[:requests].each_with_index do |request, request_index|
+        response_sizes << [result_index, request_index, request["response"][:body].to_bson.size]
+      end
+    end
+
+    response_sizes.sort{|a,b| b[2]<=>a[2]}.each do |item|
+      if test_results.to_bson.size >= MAX_DOCUMENT_SIZE
+        test_results[item[0]][:requests][item[1]]['response'][:body] = error_message
+      end
+    end
   end
 
 end
