@@ -6,6 +6,8 @@ class TestRun
   field :conformance
   field :destination_conformance
   field :date, type: DateTime
+  field :last_updated, type: DateTime
+  field :worker_id, type: String
   field :is_multiserver, type: Boolean, default: false
   field :status, type: String, default: "pending"
   field :supported_only, type: Boolean, default: false
@@ -23,7 +25,14 @@ class TestRun
 
   def execute()
 
-    return false unless self.status == "pending"
+    # tracks if another worker picks up this thread due to long execution time (but not crash)
+    this_worker_id = rand(1000000).to_s
+
+    return false unless ['pending', 'stalled'].include?(self.status)
+    recovered_from_stall = self.status == 'stalled'
+    first_test = true
+    self.last_updated = DateTime.now
+    self.worker_id = this_worker_id
     self.status = 'running'
     self.save
 
@@ -58,7 +67,16 @@ class TestRun
     # pull all the tests into memory with .map {} so that the cursor doesn't time out
     # sort because mongoid does not retain order using self.tests; only retains order when using test_ids
     self.tests.map {|n| n}.sort {|a, b| test_ids.index(a.id) <=> test_ids.index(b.id) }.each_with_index do |t, i|
-      return false if TestRun.find(self.id).status == 'cancelled'
+      testrun_check = TestRun.find(self.id)
+
+      # skip if this test has already been run
+      if testrun_check.test_results.count > i
+        Delayed::Worker.logger.info "Test #{i} already run by another worker (of #{testrun_check.test_results.count} already run), skipping."
+        next
+      end
+
+      # stop work if the testrun was cancelled
+      return false if testrun_check.status == 'cancelled'
 
       Rails.logger.info "\t #{i}/#{self.tests.length}: #{self.server.name}(#{self.server.url})"
       test = executor.find_test(t.title)
@@ -69,6 +87,9 @@ class TestRun
       result.has_run = true
 
       begin
+
+        # Do not attempt to rerun this test if it caused a fatal error last time
+        raise "Unrecoverable Crucibe error." if first_test and recovered_from_stall
 
         restricted_tests = nil
         if supported_only
@@ -100,9 +121,16 @@ class TestRun
       end
 
       result.result = val
+
+      # If somebody else picked up this job while I was working on this, don't save these results and leave
+      return false if TestRun.find(self.id).worker_id != this_worker_id
+
+      self.last_updated = DateTime.now
       self.test_results << result
       self.status = 'complete' if self.test_results.length == self.tests.length
       self.save
+
+      first_test = false
 
       yield(result, i, self.tests.length) if block_given?
     end

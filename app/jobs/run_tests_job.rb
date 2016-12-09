@@ -9,6 +9,7 @@ class RunTestsJob < ActiveJob::Base
     begin
       testrun.execute()
     rescue => exception
+      Delayed::Worker.logger.error 'Testrun raised a critical error.  Attempting to save testrun as an error.'
       Delayed::Worker.logger.error exception
       testrun.status = 'error'
       testrun.save

@@ -58,6 +58,20 @@ namespace :crucible do
 
   end
 
+  desc "identify stalled tasks and rerun"
+  task :restart_stalled_runs => [:environment] do
+
+    TestRun.where(:status=> 'running', :last_updated.lte => 10.minutes.ago).each do |test_run|
+
+      test_run.status = 'stalled'
+      test_run.save
+
+      RunTestsJob.perform_later(test_run.id.to_s)
+      
+    end
+
+  end
+
   desc "back fill blank names"
   task :guess_server_names => [:environment] do
     Server.all.select {|s| s.name.blank?}.each {|s| s.guess_name}
