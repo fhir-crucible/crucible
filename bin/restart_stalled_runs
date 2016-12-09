@@ -1,0 +1,3 @@
+cd /home/crucible/crucible
+. /usr/local/rvm/scripts/rvm
+RAILS_ENV=production /usr/local/rvm/gems/ruby-2.1.2/bin/bundle exec rake crucible:restart_stalled_runs
