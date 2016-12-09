@@ -26,7 +26,7 @@ class TestRun
   def execute()
 
     # tracks if another worker picks up this thread due to long execution time (but not crash)
-    this_worker_id = rand(1000000).to_s
+    this_worker_id = SecureRandom.uuid
 
     return false unless ['pending', 'stalled'].include?(self.status)
     recovered_from_stall = self.status == 'stalled'
