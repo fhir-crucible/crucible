@@ -17,7 +17,14 @@ class Crucible.ServerScroller
     @loadData()
 
   registerHandlers: =>
-    @containerElement.on('sortchange', () =>
+    @containerElement.on('sortchange', () => @updateOrder())
+    @containerElement.on('filterchange', () =>
+      newData = []
+      for item in @data
+        if @containerElement.find("#server-item-#{item.id}").css('display') != 'none'
+          newData.push(item)
+      
+      @renderChart(newData)
       @updateOrder()
     )
 
@@ -30,17 +37,28 @@ class Crucible.ServerScroller
   loadData: =>
     $.getJSON('/server_scrollbar_data')
       .success((data) =>
-        @renderChart(data.servers) if (data.servers)
+        if data.servers
+          @data = data.servers
+          @renderChart(@data)
       )
 
   updateOrder: () =>
+
+    count = 0
     @containerElement.find('.server-item').each( (index, element) =>
-      $(element).find('.server-rank').text(index + 1)
-      scroller_element = @element.find("#scroller-element-#{$(element).data('serverid')}")
-      scroller_element.attr("y", scroller_element.attr("height") * index)
+      if $(element).css('display') != 'none'
+        $(element).find('.server-rank').text(count + 1)
+        scroller_element = @element.find("#scroller-element-#{$(element).data('serverid')}")
+        scroller_element.attr("y", scroller_element.attr("height") * count)
+        count++
     )
 
   renderChart: (data) =>
+    @_move(0)
+
+    @element.empty()
+
+    return if data.length == 0
 
     data = _.sortBy(data, (d) => -d.percent_passing)
 
@@ -94,7 +112,7 @@ class Crucible.ServerScroller
       .attr("x", () => 10)
       .attr("y", (d) -> d.y)
       .attr("width", @['width']-20)
-      .attr("height", 15 * @['height'] / data.length)
+      .attr("height", Math.min(@['height']-20, 15 * @['height'] / data.length))
       .style("fill", "#fff")
       .style("opacity", .5)
       .style("rx", 10)

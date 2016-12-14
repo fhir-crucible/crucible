@@ -1,14 +1,25 @@
 <div>
   <div id="homepageCarousel" class="server-summaries">
+    <div class="server-search server-filters pull-right">
+      <input placeholder="Find Server" type="text" name="server-search-input" id="server-search-input" class="form-control">
+      <i id="filter_search" class="fa fa-search" aria-hidden="true"></i>
+    </div>
 
-    <ul class="server-sortorder pull-right">
-      <li class="sortorder-label">Sort By: </li>
+    <ul class="server-filters pull-right">
+      <li class="filters-label">Sort By: </li>
       <li><a href="#" class="selected" id="sortorder_percent_passed">Percent Passed</a></li>
       <li><a href="#" id="sortorder_recently_tested">Recently Tested</a></li>
     </ul>
 
+    <ul class="server-filters pull-right">
+      <li class="filters-label">Show: </li>
+      <li><a href="#" class="selected" id="filters_all">All Servers</a></li>
+      <li><a href="#" id="filters_active">Active Only</a></li>
+    </ul>
+
     <div class="carousel-title">
       Tested FHIR Servers
+
     </div>
 
     <div class="server-rows-container">
@@ -16,9 +27,13 @@
         <%
           servers.each_with_index do |server, index|
         %>
-        <div class="server-item" 
+        <div id="server-item-<%= server.id %>"
+          class="server-item" 
           data-serverid="<%= server.id %>" 
+          data-servername="<%= server.name %>" 
+          data-serverurl="<%= server.url %>" 
           data-lastrun="<%=  (server.last_run_at.to_i || 0) + (index * 0.001) %>" 
+          data-active="<%=  server.last_run_at > 14.days.ago %>" 
           data-percent="<%= server.percent_passing %>">
           <div class="server-rank">
             <%= index + 1 %>

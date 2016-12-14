@@ -55,26 +55,55 @@
   border-radius: 10px;
   padding: 10px;
 
-  .server-sortorder {
+  .server-filters {
     list-style: none;
     text-align: right;
     margin-top: 25px;
+    padding-left: 25px;
 
     li {
-      padding-right: 10px;
+      padding: 0 2px 0 5px;
       font-size: 14px;
       display: inline-block;
-
     }
 
-    .sortorder-label {
+    li:last-child {
+      border-left: 1px solid #999;
+    }
+
+    .filters-label {
       font-weight: bold;
+      color: #999;
+      padding-right: 0;
     }
 
     .selected {
       font-weight: bold;
       text-decoration: underline;
     }
+
+    .selected:hover {
+      text-decoration: underline;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  .server-search {
+    padding: 0px 10px 0 20px;
+
+    input {
+      margin-top: -15px;
+      width: 500px;
+      display: none;
+      margin-bottom: 6px;
+    }
+  }
+
+  .server-search i:hover {
+    cursor: pointer;
   }
 
   .server-rank {
