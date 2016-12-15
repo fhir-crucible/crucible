@@ -77,15 +77,21 @@ class Crucible.ServerFilter
       @searchVisible = !@searchVisible
     )
 
-    @element.find('#server-search-input').on('keyup', () =>
-      filter = @element.find('#server-search-input').val().toLowerCase()
-      @containerElement.find('.server-item').each (index, item) =>
-        $item = $(item)
-        searchString = ($item.data('servername') + $item.data('serverurl')).toLowerCase()
-        if searchString.indexOf(filter) >= 0
-          $item.show()
-        else
-          $item.hide()
+    @element.find('#server-search-input').on('keyup', (e) =>
+      if e.keyCode == 27 # esc key
+        @element.find('#filter_search').removeClass('fa-close').addClass('fa-search')
+        @element.find('li').show()
+        @element.find('#server-search-input').hide().val('').trigger('keyup')
+        @setActive(@active)
+      else
+        filter = @element.find('#server-search-input').val().toLowerCase()
+        @containerElement.find('.server-item').each (index, item) =>
+          $item = $(item)
+          searchString = ($item.data('servername') + $item.data('serverurl')).toLowerCase()
+          if searchString.indexOf(filter) >= 0
+            $item.show()
+          else
+            $item.hide()
 
       @containerElement.trigger('filterchange', filter)
     )
