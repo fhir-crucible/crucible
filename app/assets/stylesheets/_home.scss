@@ -58,37 +58,35 @@
   .server-filters {
     list-style: none;
     text-align: right;
-    margin-top: 25px;
-    padding-left: 25px;
+    margin-top: 15px;
+    padding-left: 10px;
 
-    li {
-      padding: 0 2px 0 5px;
-      font-size: 14px;
-      display: inline-block;
+    i {
+      font-size: 1.5em;
+      margin-left: 10px;
+      margin-top: 2px;
+      color: $brand-secondary;
     }
 
-    li:last-child {
-      border-left: 1px solid #999;
-    }
+    .btn {
+      font-size: .7em;
+      width: inherit;
 
-    .filters-label {
-      font-weight: bold;
-      color: #999;
-      padding-right: 0;
+      &.active{
+        &:hover {
+          color: $brand-accent-darken;
+        }
+        &:focus {
+          color: $brand-accent-darken;
+        }
+      }
     }
+  }
 
-    .selected {
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
-    .selected:hover {
-      text-decoration: underline;
-    }
-
-    a:hover {
-      text-decoration: none;
-    }
+  .server-filters-label {
+    margin-top: 21px;
+    font-size: .8em;
+    margin-left: 30px;
   }
 
   .server-search {

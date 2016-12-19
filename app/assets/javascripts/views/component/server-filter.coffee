@@ -17,16 +17,16 @@ class Crucible.ServerFilter
 
   registerHandlers: =>
     @element.find('#filters_active').on('click', () =>
-      @element.find('#filters_active').parent().parent().find('a').removeClass('selected')
-      @element.find('#filters_active').addClass('selected')
+      @element.find('#filters_active').parent().find('button').removeClass('active')
+      @element.find('#filters_active').addClass('active')
       @setActive(true)
       @containerElement.trigger('filterchange')
       false
     )
 
     @element.find('#filters_all').on('click', () =>
-      @element.find('#filters_all').parent().parent().find('a').removeClass('selected')
-      @element.find('#filters_all').addClass('selected')
+      @element.find('#filters_all').parent().find('button').removeClass('active')
+      @element.find('#filters_all').addClass('active')
       @setActive(false)
       @containerElement.trigger('filterchange')
       false
@@ -34,8 +34,8 @@ class Crucible.ServerFilter
     # @element.find('#filters_all').on('click', () => @setActive(false))
 
     @element.find('#sortorder_percent_passed').on('click', () =>
-      @element.find('#sortorder_percent_passed').parent().parent().find('a').removeClass('selected')
-      @element.find('#sortorder_percent_passed').addClass('selected')
+      @element.find('#sortorder_percent_passed').parent().find('button').removeClass('active')
+      @element.find('#sortorder_percent_passed').addClass('active')
       sortedElements = @containerElement.find('.server-item').toArray().sort (a, b) => $(b).data('percent') - $(a).data('percent')
 
       @containerElement.empty()
@@ -49,8 +49,8 @@ class Crucible.ServerFilter
 
 
     @element.find('#sortorder_recently_tested').on('click', () =>
-      @element.find('#sortorder_recently_tested').parent().parent().find('a').removeClass('selected')
-      @element.find('#sortorder_recently_tested').addClass('selected')
+      @element.find('#sortorder_recently_tested').parent().find('button').removeClass('active')
+      @element.find('#sortorder_recently_tested').addClass('active')
       sortedElements = @containerElement.find('.server-item').toArray().sort (a, b) => $(b).data('lastrun') - $(a).data('lastrun')
 
       @containerElement.empty()
@@ -66,11 +66,13 @@ class Crucible.ServerFilter
 
       if !@searchVisible
         @element.find('#filter_search').removeClass('fa-search').addClass('fa-close')
-        @element.find('li').hide()
+        @element.find('.btn-group').hide()
+        @element.find('.server-filters-label').hide()
         @element.find('#server-search-input').show().focus().val('')
       else
         @element.find('#filter_search').removeClass('fa-close').addClass('fa-search')
-        @element.find('li').show()
+        @element.find('.btn-group').show()
+        @element.find('.server-filters-label').show()
         @element.find('#server-search-input').hide().val('').trigger('keyup')
         @setActive(@active)
 
