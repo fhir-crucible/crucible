@@ -39,7 +39,7 @@ class Crucible.ServerScroller
       .success((data) =>
         if data.servers
           @data = data.servers
-          @renderChart(@data)
+          @containerElement.trigger('filterchange')
       )
 
   updateOrder: () =>

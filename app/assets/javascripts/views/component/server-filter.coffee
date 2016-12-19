@@ -7,7 +7,7 @@ class Crucible.ServerFilter
   width: 40
   height: 700
   searchVisible: false
-  active: false
+  active: true
 
   constructor: ->
     @element = $('.server-summaries')

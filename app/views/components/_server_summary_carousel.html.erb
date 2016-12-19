@@ -13,38 +13,43 @@
 
     <ul class="server-filters pull-right">
       <li class="filters-label">Show: </li>
-      <li><a href="#" class="selected" id="filters_all">All Servers</a></li>
-      <li><a href="#" id="filters_active">Active Only</a></li>
+      <li><a href="#" class="selected" id="filters_active">Active Only</a></li>
+      <li><a href="#" id="filters_all">All Servers</a></li>
     </ul>
 
     <div class="carousel-title">
       Tested FHIR Servers
-
     </div>
 
     <div class="server-rows-container">
       <div class="server-rows">
         <%
+          count = 0
           servers.each_with_index do |server, index|
-        %>
-        <div id="server-item-<%= server.id %>"
-          class="server-item" 
-          data-serverid="<%= server.id %>" 
-          data-servername="<%= server.name %>" 
-          data-serverurl="<%= server.url %>" 
-          data-lastrun="<%=  (server.last_run_at.to_i || 0) + (index * 0.001) %>" 
-          data-active="<%=  server.last_run_at > 14.days.ago %>" 
-          data-percent="<%= server.percent_passing %>">
-          <div class="server-rank">
-            <%= index + 1 %>
+
+            server_active = (server.last_run_at || Time.at(0)) > 2.weeks.ago
+            count+=1 if server_active
+          %>
+          <div id="server-item-<%= server.id %>"
+            class="server-item"
+            data-serverid="<%= server.id %>"
+            data-servername="<%= server.name %>"
+            data-serverurl="<%= server.url %>"
+            data-lastrun="<%= (server.last_run_at.to_i || 0) + (index * 0.001) %>"
+            data-active="<%= server_active %>"
+            data-percent="<%= server.percent_passing %>"
+            style="<%= "display:none" unless server_active %>"
+            >
+            <div class="server-rank">
+              <%= count %>
+            </div>
+            <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
           </div>
-          <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
-        </div>
+        <% end %>
+      </div>
+      <% if servers.count > 15 %>
+        <div class="server-scroller"></div>
       <% end %>
     </div>
-    <% if servers.count > 15 %>
-      <div class="server-scroller"></div>
-    <% end %>
   </div>
-</div>
 </div>
