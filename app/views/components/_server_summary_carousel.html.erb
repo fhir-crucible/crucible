@@ -1,11 +1,39 @@
 <div>
   <div id="homepageCarousel" class="server-summaries">
+    <div class="server-search server-filters pull-right">
+      <input placeholder="Find Server" type="text" name="server-search-input" id="server-search-input" class="form-control">
+      <i id="filter_search" class="fa fa-search" aria-hidden="true"></i>
+    </div>
 
-    <ul class="server-sortorder pull-right">
-      <li class="sortorder-label">Sort By: </li>
-      <li><a href="#" class="selected" id="sortorder_percent_passed">Percent Passed</a></li>
-      <li><a href="#" id="sortorder_recently_tested">Recently Tested</a></li>
-    </ul>
+    <div class="server-filters btn-group pull-right">
+      <button class="btn btn-secondary active" id="sortorder_percent_passed">Percent Passed</button>
+      <button class="btn btn-secondary" id="sortorder_recently_tested">Recently Tested</button>
+    </div>
+    <div class="server-filters-label pull-right">Sort By:</div>
+
+    <div class="server-filters btn-group pull-right">
+      <button class="btn btn-secondary active" id="filters_active">Active Only</button>
+      <button class="btn btn-secondary" id="filters_all">All Servers</button>
+    </div>
+    <div class="server-filters-label pull-right">Show:</div>
+
+    <!-- <ul class="server&#45;filters pull&#45;right"> -->
+    <!--   <li class="filters&#45;label">Sort By: </li> -->
+    <!--   <li><a href="#" class="selected" id="sortorder_percent_passed">Percent Passed</a></li> -->
+    <!--   <li><a href="#" id="sortorder_recently_tested">Recently Tested</a></li> -->
+    <!-- </ul> -->
+
+    <!-- <ul class="server&#45;filters pull&#45;right"> -->
+    <!--   <li class="filters&#45;label">Show: </li> -->
+    <!--   <li><a href="#" class="selected" id="filters_active">Active Only</a></li> -->
+    <!--   <li><a href="#" id="filters_all">All Servers</a></li> -->
+    <!-- </ul> -->
+
+    <!-- <div class="btn&#45;group pull&#45;right" role="group"> -->
+    <!--   <button type="button" class="btn btn&#45;secondary selected" autofocus="true" id="sortorder_percent_passed">Percent Passed</button> -->
+    <!--   <button type="button" class="btn btn&#45;secondary" id="sortorder_recently_tested">Recently Tested</button> -->
+    <!-- </div> -->
+
 
     <div class="carousel-title">
       Tested FHIR Servers
@@ -14,22 +42,32 @@
     <div class="server-rows-container">
       <div class="server-rows">
         <%
+          count = 0
           servers.each_with_index do |server, index|
-        %>
-        <div class="server-item" 
-          data-serverid="<%= server.id %>" 
-          data-lastrun="<%=  (server.last_run_at.to_i || 0) + (index * 0.001) %>" 
-          data-percent="<%= server.percent_passing %>">
-          <div class="server-rank">
-            <%= index + 1 %>
+
+            server_active = (server.last_run_at || Time.at(0)) > 2.weeks.ago
+            count+=1 if server_active
+          %>
+          <div id="server-item-<%= server.id %>"
+            class="server-item"
+            data-serverid="<%= server.id %>"
+            data-servername="<%= server.name %>"
+            data-serverurl="<%= server.url %>"
+            data-lastrun="<%= (server.last_run_at.to_i || 0) + (index * 0.001) %>"
+            data-active="<%= server_active %>"
+            data-percent="<%= server.percent_passing %>"
+            style="<%= "display:none" unless server_active %>"
+            >
+            <div class="server-rank">
+              <%= count %>
+            </div>
+            <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
           </div>
-          <%= render partial: "components/server_summary", locals: {server: server, synchronized: true, extended: false}%>
-        </div>
+        <% end %>
+      </div>
+      <% if servers.count > 15 %>
+        <div class="server-scroller"></div>
       <% end %>
     </div>
-    <% if servers.count > 15 %>
-      <div class="server-scroller"></div>
-    <% end %>
   </div>
-</div>
 </div>

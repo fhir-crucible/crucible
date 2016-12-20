@@ -55,26 +55,53 @@
   border-radius: 10px;
   padding: 10px;
 
-  .server-sortorder {
+  .server-filters {
     list-style: none;
     text-align: right;
-    margin-top: 25px;
+    margin-top: 15px;
+    padding-left: 10px;
 
-    li {
-      padding-right: 10px;
-      font-size: 14px;
-      display: inline-block;
-
+    i {
+      font-size: 1.5em;
+      margin-left: 10px;
+      margin-top: 2px;
+      color: $brand-secondary;
     }
 
-    .sortorder-label {
-      font-weight: bold;
-    }
+    .btn {
+      font-size: .7em;
+      width: inherit;
 
-    .selected {
-      font-weight: bold;
-      text-decoration: underline;
+      &.active{
+        &:hover {
+          color: $brand-accent-darken;
+        }
+        &:focus {
+          color: $brand-accent-darken;
+        }
+      }
     }
+  }
+
+  .server-filters-label {
+    margin-top: 21px;
+    font-size: .8em;
+    margin-left: 30px;
+  }
+
+  .server-search {
+    padding: 0px 10px 0 20px;
+
+    input {
+      margin-top: -15px;
+      width: 500px;
+      display: none;
+      margin-bottom: 6px;
+    }
+  }
+
+  .server-search i:hover {
+    cursor: pointer;
   }
 
   .server-rank {
