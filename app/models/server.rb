@@ -25,6 +25,8 @@ class Server
   field :tags, type: Array, default: []
   embeds_many :scopes
   field :last_run_at, type: Time
+  field :fhir_sequence, type: String
+  field :fhir_version, type: String
 
   def get_default_scopes
     [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },
@@ -66,6 +68,7 @@ class Server
       self.default_format = client.default_format if client.default_format
       self.save!
       guess_name(true)
+      extract_version_from_conformance
       updated = true
     end
     value = JSON.parse(self.conformance)
@@ -241,6 +244,32 @@ class Server
     self.name_guessed = true
     self.name = candidate
     self.save
+  end
+
+  def extract_version_from_conformance
+    if self.conformance
+      value = JSON.parse(self.conformance) rescue nil
+      if value
+        self.fhir_version = value['fhirVersion']
+        begin
+          version_abbreviated = self.fhir_version
+          version_abbreviated = self.fhir_version.split('-').first if self.fhir_version and self.fhir_version.include? '-'
+          version = version_abbreviated.split('.').map(&:to_i)
+          if version[0] >= 1 and version[1] >= 1
+            self.fhir_sequence = 'STU3'
+          elsif ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
+            self.fhir_sequence = 'DSTU2'
+          elsif  ['0.0.82', '0.11', '0.06', '0.05'].include? version_abbreviated
+            self.fhir_sequence = 'DSTU1'
+          else
+            self.fhir_sequence = ''
+          end
+        rescue
+          self.fhir_sequence = ''
+        end
+        self.save
+      end
+    end
   end
 
   private

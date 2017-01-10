@@ -39,7 +39,7 @@ namespace :crucible do
     # currently we exclude servers tagged argonaut from the nightly run
     excluded_tags = ['argonaut']
 
-    servers = Server.all.select {|s| (s.tags & excluded_tags).empty?}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}
+    servers = Server.all.select {|s| (s.tags & excluded_tags).empty? and Rails.application.config.fhir_sequence == s.fhir_sequence}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}
 
     servers.each_with_index do |s, i|
 
@@ -143,6 +143,16 @@ namespace :crucible do
       server.save
     end
 
+  end
+
+  desc "Update servers with version information stored in their conformance statement"
+  task :update_version_information => [:environment] do 
+    Server.each do |server|
+      # server.load_conformance
+      server.extract_version_from_conformance
+      print "#{server.name} (#{server.url}): #{server.fhir_sequence} | #{server.fhir_version}\n"
+
+    end
   end
 
 end
