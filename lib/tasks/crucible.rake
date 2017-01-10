@@ -39,7 +39,7 @@ namespace :crucible do
     # currently we exclude servers tagged argonaut from the nightly run
     excluded_tags = ['argonaut']
 
-    servers = Server.all.select {|s| (s.tags & excluded_tags).empty? and Rails.application.config.fhir_sequence == s.fhir_sequence}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}
+    servers = Server.all.select {|s| (s.tags & excluded_tags).empty? and Rails.application.config.fhir_sequence == s.fhir_sequence and !s.hidden}.sort {|l,r| (r.percent_passing||0) <=> (l.percent_passing||0)}
 
     servers.each_with_index do |s, i|
 
@@ -153,6 +153,35 @@ namespace :crucible do
       print "#{server.name} (#{server.url}): #{server.fhir_sequence} | #{server.fhir_version}\n"
 
     end
+  end
+
+  desc "List any duplicate urls in the system"
+  task :list_duplicate_urls => [:environment] do 
+    duplicate_urls = Server.all.group_by{ |e| e.url}.select {|k, v| v.size > 1}.map(&:first).sort
+
+    duplicate_urls.each do |url|
+      servers = Server.where(url: url).order_by("last_run_at" => "$desc")
+      print "\n---\t #{url}\n"
+      servers.each do |server|
+        last_run_days_ago = 999
+        last_run_days_ago = (Date.today - server.last_run_at.to_date).to_i unless server.last_run_at.nil?
+        test_runs = TestRun.where(server_id: server._id, status: "finished").order_by("date" => "asc")
+        first_run_days_ago = 999
+        first_run_days_ago = (Date.today - test_runs.first.date).to_i if test_runs.first
+        print "\t #{server._id} hid: #{server.hidden}\t #{test_runs.count} runs \t first #{first_run_days_ago}\tlast #{last_run_days_ago} days ago\n"
+      end
+    end
+
+  end
+
+  desc "Set hidden flag on server [server_id,hidden=true])"
+  task :set_server_hidden_flag, [:server_id, :hidden] => :environment do |t, args|
+
+    hidden = args.hidden.nil? ? true : args.hidden.to_s.downcase == 'true'
+
+    server = Server.find(args.server_id)
+    server.hidden = hidden
+    server.save
   end
 
 end

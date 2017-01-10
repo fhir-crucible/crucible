@@ -27,6 +27,7 @@ class Server
   field :last_run_at, type: Time
   field :fhir_sequence, type: String
   field :fhir_version, type: String
+  field :hidden, type: Boolean, default: false
 
   def get_default_scopes
     [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },
