@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<Conformance xmlns="http://hl7.org/fhir">
+<CapabilityStatement xmlns="http://hl7.org/fhir">
   <id value="base"/>
   <text>
     <status value="generated"/>
@@ -9663,4 +9663,4 @@
       </definition>
     </operation>
   </rest>
-</Conformance>
+</CapabilityStatement>

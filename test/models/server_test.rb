@@ -57,10 +57,10 @@ class ServerTest < ActiveSupport::TestCase
     server.collect_supported_tests
     
     someSuites = ["readtest", "format001", "resourcetest_allergyintolerance", "resourcetest_appointment", "searchtest_allergyintolerance",
-                  "resourcetest_condition", "resourcetest_conformance", "resourcetest_observation", "resourcetest_patient", "resourcetest_practitioner",
+                  "resourcetest_condition", "resourcetest_capabilitystatement", "resourcetest_observation", "resourcetest_patient", "resourcetest_practitioner",
                   "resourcetest_schedule", "resourcetest_slot", "searchtest_condition", "searchtest_observation", "searchtest_patient", "search001"]
 
-    someTests = ["R002", "X000_Medication", "X020_Medication", "X000_MedicationOrder", "X020_MedicationOrder", "S000_Medication", "S001P_Medication",
+    someTests = ["R002", "X000_Medication", "X020_Medication", "X000_MedicationRequest", "X020_MedicationRequest", "S000_Medication", "S001P_Medication",
                  "S003P_Medication", "SE01P_Medication", "S001G_Medication", "S003G_Medication", "SE01G_Medication"]
 
     excludedSuites = ["connectathonterminologytracktest", "history001", "resourcetest_account", "resourcetest_appointmentresponse",
