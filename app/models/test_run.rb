@@ -103,6 +103,8 @@ class TestRun
           val = test.execute().values.first
         end
 
+        val = convert_testreport_to_testresults(val) if val.is_a?(FHIR::TestReport)
+
         crop_large_responses(val)
 
         # can't store results larger than approx 16MB due to limitation of mongodb.
@@ -164,8 +166,10 @@ class TestRun
 
     response_sizes = []
     test_results.each_with_index do |result, result_index|
-      result[:requests].each_with_index do |request, request_index|
-        response_sizes << [result_index, request_index, request["response"][:body].to_bson.size]
+      unless result[:requests].nil?
+        result[:requests].each_with_index do |request, request_index|
+          response_sizes << [result_index, request_index, request["response"][:body].to_bson.size]
+        end
       end
     end
 
@@ -174,6 +178,62 @@ class TestRun
         test_results[item[0]][:requests][item[1]]['response'][:body] = error_message
       end
     end
+  end
+
+
+  def convert_testreport_to_testresults(testreport)
+    results = []
+
+    if testreport.setup
+      statuses = Hash.new(0)
+      message = nil
+      testreport.setup.action.each do |action|
+        if action.operation
+          statuses[action.operation.result] += 1
+          message = action.operation.message if ['fail','error','skip'].include?(action.operation.result) && message.nil? && action.operation.message
+        elsif action.assert
+          statuses[action.assert.result] += 1
+          message = action.assert.message if ['fail','error','skip'].include?(action.assert.result) && message.nil? && action.assert.message
+        end
+      end
+      if statuses['error'] > 0
+        status = 'error'
+      elsif statuses['fail'] > 0
+        status = 'fail'
+      elsif statuses['skip'] > 0
+        status = 'skip'
+      else
+        status = 'pass'
+      end
+      results << Crucible::Tests::TestResult.new('SETUP', 'Setup for TestScript', status, message, nil).to_hash
+      results.last[:test_method] = 'SETUP'
+    end
+
+    testreport.test.each do |test|
+      statuses = Hash.new(0)
+      message = nil
+      test.action.each do |action|
+        if action.operation
+          statuses[action.operation.result] += 1
+          message = action.operation.message if ['fail','error','skip'].include?(action.operation.result) && message.nil? && action.operation.message
+        elsif action.assert
+          statuses[action.assert.result] += 1
+          message = action.assert.message if ['fail','error','skip'].include?(action.assert.result) && message.nil? && action.assert.message
+        end
+      end
+      if statuses['error'] > 0
+        status = 'error'
+      elsif statuses['fail'] > 0
+        status = 'fail'
+      elsif statuses['skip'] > 0
+        status = 'skip'
+      else
+        status = 'pass'
+      end
+      results << Crucible::Tests::TestResult.new(test.name, test.description, status, message, nil).to_hash
+      results.last[:test_method] = test.name
+    end
+    results
   end
 
 end
