@@ -12,7 +12,7 @@
     <img class="pull-right" src="/assets/logo.png"/>
     <h1>Open Source FHIR Testing</h1> 
     <p>
-    Crucible is a set of <a href="http://github.com/fhir-crucible/crucible">open source</a> testing tools for HL7<sup>®</sup> FHIR<sup>®</sup>.
+    Crucible is a suite of <a href="http://github.com/fhir-crucible">open source</a> testing tools for HL7<sup>®</sup> FHIR<sup>®</sup>.
     It is provided as a free service to the FHIR development community to help promote correct FHIR implementations.  It currently can test
     for conformance to the FHIR standard, score patient records for completeness, and generate synthetic patient data.
     </p>
@@ -20,7 +20,6 @@
     <p>
     We are actively seeking contributors.  Visit our <a href="https://github.com/fhir-crucible/crucible">github page</a> for more information.
     </p>
-
   </div>
 </div>
 
@@ -42,10 +41,20 @@
       <h2>Generate FHIR Test Data</h2>
       Load <a href="/testdata">synthetic test data</a> to your server with Crucible and Synthea!
     </div>
+    <div class="service-list-item">
+      <h2>SMART on FHIR App</h2>
+      Test your SMART on FHIR implementation using a Crucible <a href="/smart">app</a>.
+    </div>
   </div>
 </div>
 
 <div class="container main">
+
+  <div class="alert alert-warning alert-dismissible" role="alert">
+    Crucible has been updated to FHIR STU3 v1.8.0 in preparation for the San Antonio Connectathon.  You may also now test your SMART on FHIR 
+    implementation using the <a href="/smart">Crucible SMART on FHIR app</a>.
+  </div>
+
 
   <form action="/servers" method="post" id="new-server-form">
     <!--     <div class="banner row">

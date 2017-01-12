@@ -25,18 +25,19 @@
   margin-left: 0;
   .service-list-item {
     float: left;
-    width: 32%;
+    width: 23%;
     margin-right: 20px;
     color: #666;
     background-color: #d7d5d5;
     border: 5px solid #fff;
     border-radius: 10px;
     padding: 10px 15px;
-    height: 185px;
+    height: 220px;
 
     h2 {
       color: #666;
       margin-top: 10px;
+      font-size: 1.1em;
     }
   }
   :last-child {
