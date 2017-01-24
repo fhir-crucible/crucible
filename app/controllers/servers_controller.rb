@@ -184,7 +184,8 @@ class ServersController < ApplicationController
     render :nothing => true unless aggregate_run
     return unless aggregate_run
     if (params[:only_failures])
-      aggregate_run.results.select! {|r| r if r['status'] != 'pass'}
+      tests = Test.all.map{|m| m} # force mongo to load all these into memory
+      aggregate_run.results.select! {|r| r if r['status'] == 'fail' and tests.any? {|t| t["_id"] == r['test_id']} }
     end
     render json: aggregate_run
   end
