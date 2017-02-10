@@ -62,7 +62,7 @@ namespace :crucible do
     servers_by_url = {}
 
     servers.each do |server|
-      url = PostRank::URI.normalize(server.url).to_s
+      url = Addressable::URI.parse(server.url).normalize.to_s
       url = url.chop if url[-1] == '/'
       servers_by_url[url] ||= []
       servers_by_url[url] << server
