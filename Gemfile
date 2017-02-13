@@ -36,7 +36,6 @@ gem 'bcp47'
 gem 'nokogiri-diff'
 gem 'addressable'
 gem 'handlebars_assets'
-gem 'postrank-uri'
 gem 'oauth2'
 gem 'ruby-progressbar'
 gem "non-stupid-digest-assets"
