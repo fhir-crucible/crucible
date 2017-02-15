@@ -6,7 +6,7 @@
     <div class="row" style="text-align:center;border-radius:10px;border:1px solid #ddd;background-color:#f3f3f3;padding:20px;">
 
       <div class="col-xs-12 row" style="margin-top:10px;margin-bottom:10px;">
-        <div id="calendarGraph" class="col-sm-12" style="border-radius:10px;background-color:white;padding:10px;">
+        <div class="calendarGraph" id="calendarGraph" class="col-sm-12" style="border-radius:10px;background-color:white;padding:10px;">
 
         </div>
         <div class="col-xs-12 col-sm-4">
@@ -37,12 +37,12 @@
 
       <div class="col-xs-12 col-sm-6" >
         <h4>Recent Test Runs</h4>
-        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" id="lineChart">
+        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="lineChart" id="lineChart">
         </div>
       </div>
       <div class="col-xs-12 col-sm-6">
         <h4>Popular Tests</h4>
-        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" id="barChart">
+        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="barChart" id="barChart">
         </div>
       </div>
       
@@ -85,44 +85,6 @@
   }
 
   var test_frequency = <%= raw @test_frequency %>;
-
-</script>
-
-<style>
-
-#calendarGraph {
-  font: 10px sans-serif;
-  /*shape-rendering: crispEdges;*/
-}
-
-.day {
-  fill: #fff;
-  stroke: #fff;
-}
-
-.month {
-  fill: none;
-  stroke: #444;
-  stroke-width: 2px;
-}
-
-.RdYlGn .q0-11{fill:rgb(165,0,38)}
-.RdYlGn .q1-11{fill:rgb(215,48,39)}
-.RdYlGn .q2-11{fill:rgb(244,109,67)}
-.RdYlGn .q3-11{fill:rgb(253,174,97)}
-.RdYlGn .q4-11{fill:rgb(254,224,139)}
-.RdYlGn .q5-11{fill:rgb(255,255,191)}
-.RdYlGn .q6-11{fill:rgb(217,239,139)}
-.RdYlGn .q7-11{fill:rgb(166,217,106)}
-.RdYlGn .q8-11{fill:rgb(102,189,99)}
-.RdYlGn .q9-11{fill:rgb(26,152,80)}
-.RdYlGn .q10-11{fill:rgb(0,104,55)}
-
-
-.YlOrBr .q0-9{fill:rgb(255,255,229)} .YlOrBr .q1-9{fill:rgb(255,247,188)} .YlOrBr .q2-9{fill:rgb(254,227,145)} .YlOrBr .q3-9{fill:rgb(254,196,79)} .YlOrBr .q4-9{fill:rgb(254,153,41)} .YlOrBr .q5-9{fill:rgb(236,112,20)} .YlOrBr .q6-9{fill:rgb(204,76,2)} .YlOrBr .q7-9{fill:rgb(153,52,4)} .YlOrBr .q8-9{fill:rgb(102,37,6)}
-</style>
-
-<script>
 
 var now = new Date();
 var startDate = new Date( now.getFullYear() - 1, now.getMonth()+1, 1)
@@ -246,29 +208,6 @@ function chartTitles() {
 }
 
 chartTitles();
-</script>
-
-<style> /* set the CSS */
-
-#lineChart { font: 12px Arial;}
-
-#lineChart path { 
-    stroke: rgb(0,104,55);
-    stroke-width: 2;
-    fill: none;
-}
-
-#lineChart .axis path,
-#lineChart .axis line {
-    fill: none;
-    stroke: grey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
-}
-
-</style>
-
-<script>
 
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
@@ -323,25 +262,6 @@ svg.append("g")
 svg.append("g")
     .attr("class", "y axis")
     .call(yAxis);
-
-</script>
-
-<style>
-
-  #barChart .axis {
-    font: 10px sans-serif;
-  }
-
-  #barChart .axis path,
-  #barChart .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-  }
-
-</style>
-
-<script>
 
 var margin = {top: 20, right: 20, bottom: 70, left: 40},
     width = 538 - margin.left - margin.right,
