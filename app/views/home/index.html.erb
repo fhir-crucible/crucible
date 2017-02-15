@@ -88,5 +88,4 @@
   <!-- Summaries -->
 
   <%= render partial: 'components/server_summary_carousel', locals: {servers: @servers}%>
-
-</div>
+  <%= render partial: 'components/dashboard', locals: {tests_json: @tests_json, test_frequency: @test_frequency }%>
