@@ -123,12 +123,12 @@
   }
 }
 
-#barChart .axis {
+.barChart .axis {
   font: 10px sans-serif;
 }
 
-#barChart .axis path,
-#barChart .axis line {
+.barChart .axis path,
+.barChart .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
