@@ -14,18 +14,7 @@ class HomeController < ApplicationController
       @tests_available += document[:methods].length
     end
 
-    @tests_by_date = TestRun.collection.aggregate(
-      [
-        { "$match" => { 'nightly' => false } },
-        { "$group" =>
-         {
-           :_id => { :day => { "$dayOfYear" => "$date"}, :year => { "$year" => "$date" } },
-           :count => { "$sum": 1 }
-         }
-       }
-      ] 
-    )
-    @tests_json = @tests_by_date.to_json()
+    
 
     @test_frequency = TestRun.collection.aggregate([
         { "$match" => { 'nightly' => false , 
@@ -55,5 +44,37 @@ class HomeController < ApplicationController
     render json: {total_tests: total_tests, servers: servers}
   end
 
+  def calendar_data
+    tests_by_date = TestRun.collection.aggregate(
+      [
+        { "$match" => { 'nightly' => false } },
+        { "$group" =>
+         {
+           :_id => { :day => { "$dayOfYear" => "$date"}, :year => { "$year" => "$date" } },
+           :count => { "$sum": 1 }
+         }
+       }
+      ] 
+    )
+    render json: { tests_by_date: tests_by_date.to_json() }
+  end
+
+  def bar_chart_data
+    test_frequency = TestRun.collection.aggregate([
+        { "$match" => { 'nightly' => false , 
+          :date => { "$gt" => Date.today.prev_month } }
+        },
+        { "$unwind": "$test_ids" },
+        { "$group": {
+            "_id": "$test_ids",
+            "count": { "$sum": 1 }
+        }},
+        { "$sort": { "count" => -1 }},
+        { "$limit" => 10 }
+    ]).to_json()
+
+    render json: { test_frequency: test_frequency }
+
+  end
 
 end
