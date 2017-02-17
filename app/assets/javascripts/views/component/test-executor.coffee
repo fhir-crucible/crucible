@@ -45,6 +45,7 @@ class Crucible.TestExecutor
     @progress = $("##{@element.data('progress')}")
     @registerHandlers()
     @defaultSelection = @parseDefaultSelection(window.location.hash)
+    $('#test-data-tab').trigger('click') if @defaultSelection
     @loadTests()
     @element.find('.filter-by-executed').css('display', 'none')
     @element.find('.filter-by-failures').css('display', 'none')
@@ -98,7 +99,8 @@ class Crucible.TestExecutor
       @continueTestRun() if @runningTestRunId && !@defaultSelection
       @filter(supported: true)
       @renderPastTestRunsSelector({text: 'Select past test run', value: '', disabled: true, selected: true})
-    ).complete(() -> $('.test-result-loading').hide())
+      $('.test-result-loading').hide() if !@defaultSelection
+    )
 
   renderSuites: =>
     @element.find('.test-results .button-holder').removeClass('hide')
@@ -190,7 +192,7 @@ class Crucible.TestExecutor
         @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement) if @suitesById[suiteId]
       if @defaultSelection
         @element.find("#test-#{@defaultSelection.suiteId} a.collapsed").click()
-        @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click()
+        @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click().closest(".suite-group").children('a').trigger('click')
         @defaultSelection = null #prevent from auto-navigation from default selection any more
       @filter(supported: data.test_run.supported_only)
       @filter(executed: true, supported: (if data.test_run.supported_only then true else false))
