@@ -37,12 +37,12 @@
 
       <div class="col-xs-12 col-sm-6" >
         <h4>Recent Test Runs</h4>
-        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="lineChart" id="lineChart">
+        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="line-chart" id="lineChart">
         </div>
       </div>
       <div class="col-xs-12 col-sm-6">
         <h4>Popular Tests</h4>
-        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="barChart" id="barChart">
+        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="bar-chart" id="barChart">
         </div>
       </div>
       
@@ -53,6 +53,7 @@
 </div>
 
 <script>
+/*
   // Get the data
 
   var rawData = <%= raw @tests_json %>;
@@ -322,5 +323,5 @@ svg.selectAll("bar")
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(d.count); })
     .attr("height", function(d) { return height - y(d.count); });
-
+*/
 </script>

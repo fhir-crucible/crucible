@@ -1,31 +1,30 @@
-.barChart .axis {
+.bar-chart .axis {
   font: 10px sans-serif;
 }
 
-.barChart .axis path,
-.barChart .axis line {
+.bar-chart .axis path,
+.bar-chart .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
 
-.lineChart { font: 12px Arial;}
+.line-chart { font: 12px Arial;}
 
-.lineChart path { 
+.line-chart path.line { 
   stroke: rgb(254,153,41);
   stroke-width: 2;
   fill: none;
 }
 
-.lineChart .axis path,
-.lineChart .axis line {
+.line-chart .axis path {
   fill: none;
   stroke: grey;
-  stroke-width: 1;
+  stroke-width: 1px;
   shape-rendering: crispEdges;
 }
 
-.calendarGraph {
+.calendar-chart {
   font: 10px sans-serif;
   /*shape-rendering: crispEdges;*/
 }

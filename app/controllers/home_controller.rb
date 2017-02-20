@@ -14,20 +14,6 @@ class HomeController < ApplicationController
       @tests_available += document[:methods].length
     end
 
-    
-
-    @test_frequency = TestRun.collection.aggregate([
-        { "$match" => { 'nightly' => false , 
-          :date => { "$gt" => Date.today.prev_month } }
-        },
-        { "$unwind": "$test_ids" },
-        { "$group": {
-            "_id": "$test_ids",
-            "count": { "$sum": 1 }
-        }},
-        { "$sort": { "count" => -1 }},
-        { "$limit" => 10 }
-    ]).to_json()
   end
 
   def server_scrollbar_data
@@ -56,7 +42,7 @@ class HomeController < ApplicationController
        }
       ] 
     )
-    render json: { tests_by_date: tests_by_date.to_json() }
+    render json: { tests_by_date: tests_by_date }
   end
 
   def bar_chart_data
@@ -71,7 +57,7 @@ class HomeController < ApplicationController
         }},
         { "$sort": { "count" => -1 }},
         { "$limit" => 10 }
-    ]).to_json()
+    ])
 
     render json: { test_frequency: test_frequency }
 
