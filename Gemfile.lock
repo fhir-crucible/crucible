@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: ed820a727505c1143cccc05ce1495f8219eac10a
+  revision: 35de612d7454f144bb365c67888c1cf4a46c8a0c
   branch: dstu2
   specs:
     fhir_client (1.0.0)
@@ -23,10 +23,10 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 9d4a1fcf0b498fc635ec147322a07ddab97b827a
+  revision: ef679c3f60ddba6e8a324582827afb8df357401f
   branch: dstu2
   specs:
-    plan_executor (1.0.0)
+    plan_executor (1.0.2)
 
 GEM
   remote: https://rubygems.org/
