@@ -61,7 +61,7 @@ class ServerTest < ActiveSupport::TestCase
     someTests = ["R002", "X000_Medication", "X020_Medication", "X000_MedicationOrder", "X020_MedicationOrder", "S000_Medication", "S001P_Medication",
                  "S003P_Medication", "SE01P_Medication", "S001G_Medication", "S003G_Medication", "SE01G_Medication"]
 
-    excludedSuites = ["connectathonfinancialtracktest", "connectathonterminologytracktest", "history001", "resourcetest_account", "resourcetest_appointmentresponse",
+    excludedSuites = ["connectathonterminologytracktest", "history001", "resourcetest_account", "resourcetest_appointmentresponse",
                      "resourcetest_auditevent", "searchtest_procedure", "searchtest_procedurerequest", "searchtest_processrequest", "searchtest_processresponse",
                      "searchtest_provenance"]
 
@@ -71,6 +71,7 @@ class ServerTest < ActiveSupport::TestCase
     assert_equal someSuites.length, (server.supported_suites & someSuites).length
     assert_equal someTests.length, (server.supported_tests & someTests).length
 
+    binding.pry
     assert_equal 0, (server.supported_suites & excludedSuites).length
     assert_equal 0, (server.supported_tests & excludedTests).length
   end
