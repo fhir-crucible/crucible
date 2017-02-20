@@ -76,7 +76,7 @@
         <div class="row">
           <ul class="nav nav-tabs tabbed-data-container">
               <li class="tabbed-data test-run-summary-handle<%unless @server.summary_id.nil? %> active <%end%>" <%if @server.summary_id.nil? %>style="display:none"<%end%>><a data-toggle="tab" href="#test-run-summary-data" aria-expanded="true">Server Summary</a></li>
-              <li class="tabbed-data<%if @server.summary_id.nil? %> active<%end%>"><a data-toggle="tab" href="#test-data" aria-expanded="false">Tests</a></li>
+              <li class="tabbed-data<%if @server.summary_id.nil? %> active<%end%>"><a data-toggle="tab" href="#test-data" id="test-data-tab" aria-expanded="false">Tests</a></li>
             <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false"><i class="fa fa-lg fa-fw fa-spinner fa-pulse" id="conformance_spinner"></i>Capability Statement</a></li>
           </ul>
         </div>
