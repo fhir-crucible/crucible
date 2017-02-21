@@ -127,6 +127,8 @@ class TestRun
       # If somebody else picked up this job while I was working on this, don't save these results and leave
       return false if TestRun.find(self.id).worker_id != this_worker_id
 
+      increment_test_counter(val)
+
       self.last_updated = DateTime.now
       self.test_results << result
       self.status = 'complete' if self.test_results.length == self.tests.length
@@ -234,6 +236,10 @@ class TestRun
       results.last[:test_method] = test.name
     end
     results
+  end
+
+  def increment_test_counter(tests)
+    Statistics.all.update({ "$inc": {tests_run: tests.length } })
   end
 
 end
