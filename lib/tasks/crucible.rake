@@ -184,4 +184,15 @@ namespace :crucible do
     server.save
   end
 
+  desc "Calculate the total number of tests run using the system"
+  task :calculate_total_tests => [:environment] do
+    tests = 0
+    TestResult.each do | result |
+      tests += result.result.length
+    end
+    Statistics.all.destroy
+    stats = Statistics.new({tests_run: tests})
+    stats.save
+  end
+
 end
