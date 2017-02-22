@@ -13,6 +13,7 @@ class HomeController < ApplicationController
     Test.each do |document|
       @tests_available += document[:methods].length
     end
+    @tests_count = Statistics.first.tests_run
 
   end
 
