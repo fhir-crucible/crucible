@@ -214,18 +214,20 @@ class Crucible.LineChart
   loadData: =>
     $.getJSON('/calendar_data')
       .success((data) =>
-        month_data = []
+        date_dict = {}
         data['tests_by_date'].forEach( (d) =>
-          if (new Date().getTime() - new Date(d._id.year, 0, d._id.day).getTime())/(1000*60*60*24.0) < 60
-            month_data.push({ date: new Date(d._id.year, 0, d._id.day), count: d.count })
+          date_dict[ new Date(d._id.year, 0, d._id.day)] = d.count
         )
-        month_data.sort( (a,b) =>
-          a = a.date
-          b = b.date
-          if a < b
-            return -1
-          else
-            return 1
+        month_data = []
+        now = new Date()
+        d3.time.days(new Date().setMonth(now.getMonth() - 2), now).forEach( (date) =>
+          count = 0
+          if date_dict[date]
+            count = date_dict[date]
+          month_data.push({
+            date:date,
+            count:count
+          })
         )
         @renderChart(month_data)
       )

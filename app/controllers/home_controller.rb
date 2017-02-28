@@ -9,10 +9,7 @@ class HomeController < ApplicationController
     @test_run_count = TestRun.where({ nightly: false}).count
 
     @test_suites = Test.count
-    @tests_available = 0
-    Test.each do |document|
-      @tests_available += document[:methods].length
-    end
+    @tests_available = Test.each.inject(0) { |sum, n| sum + n[:methods].length }
     @tests_count = Statistics.first.tests_run
 
   end
