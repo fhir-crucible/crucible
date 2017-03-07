@@ -45,9 +45,8 @@ class HomeController < ApplicationController
 
   def bar_chart_data
     test_frequency = TestRun.collection.aggregate([
-        { "$match" => { 'nightly' => false , 
-          :date => { "$gt" => Date.today.prev_month } }
-        },
+        { "$match" => { 'nightly' => false } },
+        #  :date => { "$gt" => Date.today.prev_month } }
         { "$unwind": "$test_ids" },
         { "$group": {
             "_id": "$test_ids",
