@@ -78,7 +78,7 @@ class Crucible.CalendarChart
 
     for d in data
       do (d) ->
-        calendar_data[d3.time.format("%Y-%m-%d")(d.date)] = Math.log(d.count)
+        calendar_data[d3.time.format("%Y-%m-%d")(d.date)] = d.count
 
     rect = svg.selectAll(".day")
       .data( (d) => return d3.time.days(@startDate, @endDate) )
@@ -87,13 +87,16 @@ class Crucible.CalendarChart
         .attr("height", @cellSize)
         .attr("x", (d) => return @getWeek(d) * @['cellSize'])
         .attr("y", (d) => return d.getDay() * @['cellSize'])
-        .attr("class", (d) => return "day " + color(calendar_data[d3.time.format("%Y-%m-%d")(d)]) )
-        .select("title")
-        .text( (d) => return d + ": " + calendar_data[d] )
+        .attr("class", (d) => 
+          val = Math.log(calendar_data[d3.time.format("%Y-%m-%d")(d)])
+          c = color(val)
+          if( c == "q0-9" and val >= 0 )
+            c = "q1-9"
+          return "day " + c
+        )
+        .append("svg:title")
+          .text( (d) => @format(d) + ": " +  calendar_data[@format(d)])
         .datum(@format)
-
-    rect.append("title")
-      .text( (d) => return d )
 
     svg.selectAll(".month")
       .data( (d) => return d3.time.months(@startDate, @endDate) )
@@ -163,7 +166,8 @@ class Crucible.BarChart
       .append("g")
       .attr("transform", "translate(" + @margin.left + "," + @margin.top + ")")
 
-    x.domain(data.map((d) => return d._id ))
+    prettyPrint = (name) => return name.replace("argonaut","Argonaut ").replace("test", "").replace("_", " ").replace("dataaccessframework","DAF ")
+    x.domain(data.map((d) => return  prettyPrint(d._id) ))
     y.domain([0, d3.max(data, (d) => return d.count )])
 
     svg.append("g")
@@ -195,7 +199,7 @@ class Crucible.BarChart
         else
           return "rgb(153,52,4)"
       )
-      .attr("x", (d) => return x(d._id))
+      .attr("x", (d) => return x( prettyPrint(d._id) ))
       .attr("width", x.rangeBand())
       .attr("y", (d) => return y(d.count))
       .attr("height", (d) => return @height - y(d.count) )
