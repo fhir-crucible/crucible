@@ -10,7 +10,7 @@ class HomeController < ApplicationController
 
     @test_suites = Test.count
     @tests_available = Test.each.inject(0) { |sum, n| sum + n[:methods].length }
-    @tests_count = Statistics.first.tests_run
+    @tests_count = Statistics.try(:first).try(:tests_run) || 0
 
   end
 

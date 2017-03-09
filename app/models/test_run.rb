@@ -239,7 +239,8 @@ class TestRun
   end
 
   def increment_test_counter(tests)
-    Statistics.all.update({ "$inc": {tests_run: tests.length } })
+    Statistics.new.save if Statistics.empty?
+    Statistics.all.inc(tests_run: tests.length)
   end
 
 end
