@@ -3,6 +3,13 @@
       <div class="col-sm-5">
         <table class="table table-hover report-table nav nav-stacked">
           <tbody>
+            <tr class="suite-handle setup-teardown" data-key="{{suite.id}}-setup" id="{{suite.id}}-setup">
+                <td>{{#if result.setup_message}}<span><i class="glyphicon glyphicon-remove-circle failed"></i></span>{{/if}}</td>
+                <td></td>
+                <td>
+                    Test Setup
+                </td>
+            </tr>
             {{#each result.tests as |test|}}
             <tr class="{{#if @first}}active {{/if}}suite-handle" data-key="{{test.key}}" id="{{test.id}}">
               <td>
@@ -18,6 +25,12 @@
               </td>
             </tr>
             {{/each}}
+            <tr class="suite-handle setup-teardown" data-key="{{suite.id}}-teardown" id="{{suite.id}}-teardown">
+                <td colspan='2'>&nbsp;</td>
+                <td>
+                    Test Teardown
+                </td>
+            </tr>
           </tbody>
         </table>
       </div>
