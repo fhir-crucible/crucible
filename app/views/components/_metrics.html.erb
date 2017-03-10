@@ -1,50 +1,54 @@
-<div class="carousel-title">Dashboard</div>
-  <div style="padding:10px;">
-    <div class="row" style="text-align:center;border-radius:10px;border:1px solid #ddd;background-color:#f3f3f3;padding:20px;">
+<div class="metrics-container text-center">
+  <div class="container">
 
-      <div class="col-xs-12 row" style="margin-top:10px;margin-bottom:10px;">
-        <div class="calendar-chart" id="calendarGraph" class="col-sm-12" style="border-radius:10px;background-color:white;padding:10px;">
+    <div class="metrics-title">Crucible Metrics </div>
 
-        </div>
-        <div class="col-xs-12 col-sm-4">
-          <h2><%= @server_count %></h2>
-          <spam class="text-muted">servers tested</spam>
-        </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="metrics-chart-title">Daily Manual Testing Activity</div>
+        <div class="calendar-chart" id="calendarGraph" class="col-sm-12"></div>
+      </div>
+    </div>
 
-        <div class="col-xs-12 col-sm-4">
-          <h2><%= @tests_count %></h2>
-          <spam class="text-muted">individual tests run</spam>
-        </div>
-
-        <div class="col-xs-12 col-sm-4">
-          <h2><%= @test_run_count %></h2>
-          <spam class="text-muted">test runs</spam>
-        </div>
-
-        <div class="col-xs-12 col-sm-4 col-sm-offset-2">
-          <h2><%= @test_suites %></h2>
-          <spam class="text-muted">test suites</spam>
-        </div>
-
-        <div class="col-xs-12 col-sm-4">
-          <h2><%= @tests_available %></h2>
-          <spam class="text-muted">total tests</spam>
-        </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@tests_available, delimiter: ',') %></div>
+        <spam class="text-muted">FHIR tests</spam>
       </div>
 
-      <div class="col-xs-12 col-sm-6" >
-        <h4>Recent Testing Activity</h4>
-        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="line-chart" id="lineChart">
-        </div>
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@server_count, delimiter: ',') %></div>
+        <spam class="text-muted">servers tested</spam>
       </div>
-      <div class="col-xs-12 col-sm-6">
-        <h4>Most Used Test Suites</h4>
-        <div style="background-color:white;height:300px;border-radius:10px;border:1px solid #ddd;" class="bar-chart" id="barChart">
-        </div>
+
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@test_run_count, delimiter: ',') %></div>
+        <spam class="text-muted">test runs</spam>
       </div>
-      
+
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@tests_count, delimiter: ',') %></div>
+        <spam class="text-muted">individual tests executed</spam>
+      </div>
+
+    </div>
+
+      <!-- <div class="col&#45;sm&#45;4"> -->
+      <!--   <div class="metrics&#45;value"><%= number_with_delimiter(@test_suites, delimiter: ',') %></div> -->
+      <!--   <spam class="text&#45;muted">grouped tests</spam> -->
+      <!-- </div> -->
+    <div class="row">
+      <div class="col-sm-6" >
+        <div class="metrics-chart-title">Recent Testing Activity</div>
+        <div class="line-chart" id="lineChart"></div>
+      </div>
+      <div class="col-sm-6">
+        <div class="metrics-chart-title">Most Popular Test Suites</div>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
     </div>
 
   </div>
 
+</div>
 </div>

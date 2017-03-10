@@ -88,4 +88,7 @@
   <!-- Summaries -->
 
   <%= render partial: 'components/server_summary_carousel', locals: {servers: @servers}%>
-  <%= render partial: 'components/metrics', locals: {tests_json: @tests_json, test_frequency: @test_frequency }%>
+
+</div>
+
+<%= render partial: 'components/metrics', locals: {tests_json: @tests_json, test_frequency: @test_frequency }%>

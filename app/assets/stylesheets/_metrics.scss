@@ -1,6 +1,39 @@
-.bar-chart .axis {
-  font: 10px sans-serif;
+.metrics-container {
+  background-color: #f3f3f3;
+  padding-top: 20px;
+
+  .row {
+    margin: 10px 0 50px;
+
+  }
 }
+
+.metrics-title {
+  font-size: 50px;
+  text-align: left;
+}
+
+.metrics-value {
+  font-size: 2.8em;
+  margin-bottom: -10px;
+}
+
+.metrics-chart-title {
+  font-size: 1.2em;
+}
+
+.bar-chart {
+  height: 300px;
+
+  .y-label {
+    font-size: 12px;
+  }
+}
+
+.bar-chart .axis {
+  font-size: 10px;
+}
+
 
 .bar-chart .axis path,
 .bar-chart .axis line {
@@ -9,7 +42,14 @@
   shape-rendering: crispEdges;
 }
 
-.line-chart { font: 12px Arial;}
+.line-chart { 
+  font: 12px Arial;
+  height: 300px;
+
+  .y-label {
+    font-size: 12px;
+  }
+}
 
 .line-chart path.line { 
   stroke: rgb(254,153,41);
@@ -21,11 +61,13 @@
   fill: none;
   stroke: grey;
   stroke-width: 1px;
-  shape-rendering: crispEdges;
+  // shape-rendering: crispEdges;
 }
 
 .calendar-chart {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
+  margin-top: -10px;
+  // padding: 20px 0;
   /*shape-rendering: crispEdges;*/
 }
 
@@ -36,11 +78,11 @@
 
 .calendar-chart .month {
   fill: none;
-  stroke: #444;
+  stroke: #999;
   stroke-width: 2px;
 }
 
-.YlOrBr .q0-9{fill:rgb(255,255,229)}
+.YlOrBr .q0-9{fill:rgb(250,250,235)}
 .YlOrBr .q1-9{fill:rgb(255,247,188)}
 .YlOrBr .q2-9{fill:rgb(254,227,145)}
 .YlOrBr .q3-9{fill:rgb(254,196,79)} 

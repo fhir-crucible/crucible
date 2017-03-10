@@ -5,9 +5,9 @@ $(document).ready( ->
 )
 
 class Crucible.CalendarChart
-  width: 960
-  height:136
-  cellSize: 17
+  width: 1150
+  height:180
+  cellSize: 20
 
   format: d3.time.format("%Y-%m-%d")
 
@@ -63,12 +63,7 @@ class Crucible.CalendarChart
       .attr("class", "YlOrBr")
         .append("g")
       .append("g")
-        .attr("transform", "translate(" + ((@['width'] - @['cellSize'] *53) / 2) + "," + (@['height'] - @['cellSize'] * 7 - 1) + ")")
-
-    svg.append("text")
-      .attr("transform", "translate(-30," + @['cellSize'] * 3.5 + ")rotate(-90)")
-      .style("text-anchor", "middle")
-      .text("Last 12 Months")
+        .attr("transform", "translate(" + ((@['width'] - @['cellSize'] *53) / 2) + "," + (@['height'] - @['cellSize'] * 7 - 25) + ")")
 
     dates = d3.time.days(@startDate, @endDate)
     calendar_data = {}
@@ -87,15 +82,16 @@ class Crucible.CalendarChart
         .attr("height", @cellSize)
         .attr("x", (d) => return @getWeek(d) * @['cellSize'])
         .attr("y", (d) => return d.getDay() * @['cellSize'])
-        .attr("class", (d) => 
+        .attr("class", (d) =>
           val = Math.log(calendar_data[d3.time.format("%Y-%m-%d")(d)])
           c = color(val)
-          if( c == "q0-9" and val >= 0 )
+          if( (c == undefined || c == "q0-9") and val >= 0 )
             c = "q1-9"
+          c = "q0-9" if !c
           return "day " + c
         )
         .append("svg:title")
-          .text( (d) => @format(d) + ": " +  calendar_data[@format(d)])
+          .text( (d) => @format(d) + ": " +  calendar_data[@format(d)] + " test runs")
         .datum(@format)
 
     svg.selectAll(".month")
@@ -111,19 +107,19 @@ class Crucible.CalendarChart
     .data(weekDays)
     .enter().append('g')
     .attr('class', 'titles-day')
-    .attr('transform', (d, i) => return 'translate(-5,' + ( 15 + (@height-15)/ 7 * i) + ')' )
+    .attr('transform', (d, i) => return 'translate(-10,' + ( 15 + (@height-35)/ 7 * i) + ')' )
     
     titlesDays.append('text')
     .attr('class', (d,i) => return weekDays[i] )
     .style('text-anchor', 'end')
     .attr('dy', '-.25em')
-    .text( (d, i) =>  return weekDays[i] ); 
+    .text( (d, i) =>  return weekDays[i] ) 
 
     titlesMonth = svg.selectAll('.titles-month')
     .data(month)
     .enter().append('g')
     .attr('class', 'titles-month')
-    .attr('transform', (d, i) => return 'translate(' + (( (  ( (i - @endDate.getMonth() + 12) % 12) + 1) * (@['cellSize'] * 53 /12) )-30) + ',-5)' )
+    .attr('transform', (d, i) => return 'translate(' + (( (  ( (i - @endDate.getMonth() + 12) % 12) + 1) * (@['cellSize'] * 53 /12) )-30) + ',' + (@height-25) + ')' )
 
     titlesMonth.append('text')
     .attr('class', (d,i) => return month[i] )
@@ -134,7 +130,7 @@ class Crucible.BarChart
   
   constructor: ->
     @element = '.bar-chart'
-    @margin = {top: 20, right: 20, bottom: 70, left: 40}
+    @margin = {top: 0, right: 20, bottom: 70, left: 70}
     @width = 538 - @margin.left - @margin.right
     @height = 300 - @margin.top - @margin.bottom
 
@@ -184,11 +180,12 @@ class Crucible.BarChart
       .attr("class", "y axis")
       .call(yAxis)
     .append("text")
+      .attr("class", "y-label")
       .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Tests")
+      .attr("y",-35)
+      .attr("x", -@height/2)
+      .style("text-anchor", "middle")
+      .text("Test Runs")
 
     svg.selectAll("bar")
       .data(data)
@@ -209,7 +206,7 @@ class Crucible.LineChart
 
   constructor: ->
     @element = '.line-chart'
-    @margin = {top: 30, right: 20, bottom: 30, left: 50}
+    @margin = {top: 0, right: 20, bottom: 72, left: 50}
     @width = 538 - @margin.left - @margin.right
     @height = 300 - @margin.top - @margin.bottom
 
@@ -244,8 +241,10 @@ class Crucible.LineChart
     xAxis = d3.svg.axis().scale(x)
     .orient("bottom").ticks(5)
 
-    yAxis = d3.svg.axis().scale(y)
-    .orient("left").ticks(5)
+    yAxis = d3.svg.axis()
+     .scale(y)
+     .orient("left")
+     .ticks(5)
 
     valueline = d3.svg.line()
     .x( (d) => return x(d.date) )
@@ -258,8 +257,8 @@ class Crucible.LineChart
     .append("g")
       .attr("transform", "translate(" + @margin.left + "," + @margin.top + ")")
 
-    x.domain(d3.extent(month_data, (d) => return d.date ));
-    y.domain([0, d3.max(month_data, (d) => return d.count )]);
+    x.domain(d3.extent(month_data, (d) => return d.date ))
+    y.domain([0, d3.max(month_data, (d) => return d.count )])
 
     svg.append("path")
     .attr("class", "line")
@@ -267,9 +266,16 @@ class Crucible.LineChart
 
     svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + @height + ")")
-    .call(xAxis);
+    .attr("transform", "translate(0," + (@height+1) + ")")
+    .call(xAxis)
 
     svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
+    .append("text")
+      .attr("class", "y-label")
+      .attr("transform", "rotate(-90)")
+      .attr("y",-35)
+      .attr("x", -@height/2)
+      .style("text-anchor", "middle")
+      .text("Test Runs Per Day")
