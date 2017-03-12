@@ -184,4 +184,30 @@ namespace :crucible do
     server.save
   end
 
+  desc "Calculate the total number of tests run using the system"
+  task :calculate_total_tests => [:environment] do
+    tests = 0
+    TestResult.each do | result |
+      tests += result.result.length
+    end
+    Statistics.all.destroy
+    stats = Statistics.new({tests_run: tests})
+    stats.save
+  end
+
+  desc "Guesses nightly tag for tests runs from before tag was added correctly"
+  task :flag_nightly => [:environment] do
+    end_date = Date.new(2016, 11, 1)
+    start_hour = 0
+    end_hour = 9
+    test_max = 5
+    # Not doing this super efficiently, but querying specific datetimes is hard through Mongo
+    TestRun.where({ :date.lte => end_date }).each do | run |
+      if run.test_ids.length >= test_max and run.date.hour < end_hour and run.date.hour >= start_hour
+        run.nightly = true
+        run.save
+      end
+    end
+  end
+
 end

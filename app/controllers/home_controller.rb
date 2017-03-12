@@ -5,6 +5,13 @@ class HomeController < ApplicationController
     #@servers = Server.all.order_by("percent_passing"=>:desc)
     # show all until issue is resolved
     @servers = Server.where({percent_passing: {"$gte" => 0}, fhir_sequence: Rails.application.config.fhir_sequence, hidden: {"$ne" => true}}).order_by("percent_passing"=>:desc)
+    @server_count = Server.count
+    @test_run_count = TestRun.where({ nightly: false}).count
+
+    @test_suites = Test.count
+    @tests_available = Test.each.inject(0) { |sum, n| sum + n[:methods].length }
+    @tests_count = Statistics.try(:first).try(:tests_run) || 0
+
   end
 
   def server_scrollbar_data
@@ -21,5 +28,36 @@ class HomeController < ApplicationController
     render json: {total_tests: total_tests, servers: servers}
   end
 
+  def calendar_data
+    tests_by_date = TestRun.collection.aggregate(
+      [
+        { "$match" => { 'nightly' => false } },
+        { "$group" =>
+         {
+           :_id => { :day => { "$dayOfYear" => "$date"}, :year => { "$year" => "$date" } },
+           :count => { "$sum": 1 }
+         }
+       }
+      ] 
+    )
+    render json: { tests_by_date: tests_by_date }
+  end
+
+  def bar_chart_data
+    test_frequency = TestRun.collection.aggregate([
+        { "$match" => { 'nightly' => false } },
+        #  :date => { "$gt" => Date.today.prev_month } }
+        { "$unwind": "$test_ids" },
+        { "$group": {
+            "_id": "$test_ids",
+            "count": { "$sum": 1 }
+        }},
+        { "$sort": { "count" => -1 }},
+        { "$limit" => 10 }
+    ])
+
+    render json: { test_frequency: test_frequency }
+
+  end
 
 end

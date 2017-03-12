@@ -1,3 +1,4 @@
+
 // Bootstrap
 $icon-font-path: "bootstrap-sass-official/assets/fonts/bootstrap/";
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap-sprockets";
@@ -27,6 +28,7 @@ $fa-font-path: "font-awesome/fonts";
 @import "home";
 @import "login";
 @import "modal";
+@import "metrics";
 @import "navigation";
 @import "panels";
 @import "tables";

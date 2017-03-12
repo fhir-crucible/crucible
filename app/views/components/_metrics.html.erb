@@ -1,0 +1,54 @@
+<div class="metrics-container text-center">
+  <div class="container">
+
+    <div class="metrics-title">Crucible Metrics </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="metrics-chart-title">Daily Manual Testing Activity</div>
+        <div class="calendar-chart" id="calendarGraph" class="col-sm-12"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@tests_available, delimiter: ',') %></div>
+        <spam class="text-muted">FHIR tests</spam>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@server_count, delimiter: ',') %></div>
+        <spam class="text-muted">servers tested</spam>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@test_run_count, delimiter: ',') %></div>
+        <spam class="text-muted">test runs</spam>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="metrics-value"><%= number_with_delimiter(@tests_count, delimiter: ',') %></div>
+        <spam class="text-muted">individual tests executed</spam>
+      </div>
+
+    </div>
+
+      <!-- <div class="col&#45;sm&#45;4"> -->
+      <!--   <div class="metrics&#45;value"><%= number_with_delimiter(@test_suites, delimiter: ',') %></div> -->
+      <!--   <spam class="text&#45;muted">grouped tests</spam> -->
+      <!-- </div> -->
+    <div class="row">
+      <div class="col-sm-6" >
+        <div class="metrics-chart-title">Recent Testing Activity</div>
+        <div class="line-chart" id="lineChart"></div>
+      </div>
+      <div class="col-sm-6">
+        <div class="metrics-chart-title">Most Popular Test Suites</div>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>

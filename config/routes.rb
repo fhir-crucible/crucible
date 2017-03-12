@@ -37,6 +37,8 @@ Rails.application.routes.draw do
 
   root to: "home#index"
   get 'server_scrollbar_data', to: 'home#server_scrollbar_data'
+  get 'bar_chart_data', to: 'home#bar_chart_data'
+  get 'calendar_data', to: 'home#calendar_data'
   get 'redirect', to: 'servers#oauth_redirect'
 
 end
