@@ -6,7 +6,7 @@ class HomeController < ApplicationController
     # show all until issue is resolved
     @servers = Server.where({percent_passing: {"$gte" => 0}, fhir_sequence: Rails.application.config.fhir_sequence, hidden: {"$ne" => true}}).order_by("percent_passing"=>:desc)
     @server_count = Server.count
-    @test_run_count = TestRun.where({ nightly: false}).count
+    @test_run_count = TestRun.count
 
     @test_suites = Test.count
     @tests_available = Test.each.inject(0) { |sum, n| sum + n[:methods].length }
