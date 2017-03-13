@@ -35,7 +35,7 @@ class HomeController < ApplicationController
         { "$group" =>
          {
            :_id => { :day => { "$dayOfYear" => "$date"}, :year => { "$year" => "$date" } },
-           :count => { "$sum": 1 }
+           :count => { "$sum" => 1 }
          }
        }
       ] 
@@ -47,12 +47,12 @@ class HomeController < ApplicationController
     test_frequency = TestRun.collection.aggregate([
         { "$match" => { 'nightly' => false } },
         #  :date => { "$gt" => Date.today.prev_month } }
-        { "$unwind": "$test_ids" },
-        { "$group": {
-            "_id": "$test_ids",
-            "count": { "$sum": 1 }
+        { "$unwind" => "$test_ids" },
+        { "$group" => {
+            "_id" => "$test_ids",
+            "count" => { "$sum" => 1 }
         }},
-        { "$sort": { "count" => -1 }},
+        { "$sort" => { "count" => -1 }},
         { "$limit" => 10 }
     ])
 
