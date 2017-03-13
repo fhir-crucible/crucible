@@ -189,6 +189,10 @@ namespace :crucible do
     tests = 0
     TestResult.each do | result |
       tests += result.result.length
+      if tests.modulo(1000).zero?
+        print '.'
+        $stdout.flush
+      end
     end
     Statistics.all.destroy
     stats = Statistics.new({tests_run: tests})
