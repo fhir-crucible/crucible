@@ -182,7 +182,7 @@ class Crucible.BarChart
     .append("text")
       .attr("class", "y-label")
       .attr("transform", "rotate(-90)")
-      .attr("y",-35)
+      .attr("y",-45)
       .attr("x", -@height/2)
       .style("text-anchor", "middle")
       .text("Test Runs")
