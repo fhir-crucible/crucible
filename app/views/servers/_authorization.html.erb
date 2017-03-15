@@ -24,18 +24,16 @@
         <input type="text" id="launch_param" name="launch" class="form-control authorize_form_element" value="<%= @server.launch_param %>" />
       </div>
       <div class="panel panel-default">
-        <div class="panel-heading" style="padding:10px">
-          <h4 class="panel-title" style="padding-bottom:0px;">
+        <div class="panel-heading">
+          <h4 class="panel-title">
             <a data-toggle="collapse" href="#scopesCollapse">Scope Options</a>
           </h4>
         </div>
         <div id="scopesCollapse" class="panel-collapse collapse">
-          <div class="panel-body" style="padding:5px;">
+          <div class="panel-body">
             <div class="form-group scope-types">
-              <table style="font-size:16px;">
-                <thead>
-                  <th></th><th>Scope</th><th>Description</th>
-                </thead>
+              <table>
+                
                 <tbody>
                     <%= render partial: "scope", collection: @server.get_scopes %>
                 </tbody>
@@ -53,7 +51,7 @@
           <button class="btn delete-auth" name="action" value="delete">Delete</button>
         </div>
         <div class="col-sm-4">
-          <button class="btn cancel-auth" data-dismiss="modal">Cancel</button>
+          <button class="btn" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </form>
