@@ -215,7 +215,8 @@ class ServersController < ApplicationController
         :scopes, 
         :authorize_url, 
         :token_url, 
-        :patient_id
+        :patient_id,
+        :scopes
       )
       server.save
       flash.notice = "Server authorization credentials deleted"
