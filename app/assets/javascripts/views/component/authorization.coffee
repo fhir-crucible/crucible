@@ -58,8 +58,5 @@ class Crucible.Authorization
         window.location.assign(event.target.action + "?" + $("input.used").serialize())
       )
 
-      $("#toggleScopes").on("click", () =>
-        $(this).closest("table").find("tbody").toggle()
-      )
       return false
     )
