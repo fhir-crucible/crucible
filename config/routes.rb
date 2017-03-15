@@ -13,10 +13,12 @@ Rails.application.routes.draw do
     get 'summary', defaults: { format: :json }
     get 'summary_history', defaults: { format: :json }
     get 'oauth_params', defaults: { format: :json }
+    get 'delete_authorization', defaults: {format: :jsom}
     get 'aggregate_run', defaults: { format: :json }
     get 'past_runs', defaults: { format: :json }
     get 'supported_tests', defaults: { format: :json }
     post 'oauth_params'
+    post 'delete_authorization'
   end
 
   resources :test_results, only: [:show] do

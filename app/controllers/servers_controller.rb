@@ -38,61 +38,44 @@ class ServersController < ApplicationController
   def oauth_redirect
     server = Server.where(state: params[:state]).first
     if server
-      if params['action'] == 'delete'
-        server.unset(
-          :token, 
-          :client_id, 
-          :client_secret, 
-          :oath_token_opts, 
-          :scopes, 
-          :authorize_url, 
-          :token_url, 
-          :patient_id
-        )
-        server.save
-        flash.notice = "Server authorization deleted"
+      options = {
+        authorize_url: server.authorize_url,
+        token_url: server.token_url,
+        raise_errors: false
+      }
+      if params['error'] || params['error_description']
+        flash.alert = "Authorization error: #{params['error_description']}"
         redirect_to server_path(server)
-      
-      else
-        options = {
-          authorize_url: server.authorize_url,
-          token_url: server.token_url,
-          raise_errors: false
-        }
-        if params['error'] || params['error_description']
-          flash.alert = "Authorization error: #{params['error_description']}"
-          redirect_to server_path(server)
-          return
-        end
-        client = OAuth2::Client.new(server.client_id, server.client_secret, options)
-        if (!server.client_secret.empty?)
-          auth_pw = Base64.strict_encode64("#{server.client_id}:#{server.client_secret}")
-          token_params = {
-            redirect_uri: "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect",
-            code: params[:code],
-            grant_type: "authorization_code",
-          }
-          response = client.request(:post, server.token_url, {:body => token_params, :headers => {'Authorization' => "Basic #{auth_pw}"}})
-          token = OAuth2::AccessToken.from_hash(client, JSON.parse(response.body))
-        else
-          token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
-        end
-        if token.params["error"]
-          flash.alert = "#{token.params['error']}: #{token.params['error_description']}"
-          redirect_to server_path(server)
-          return
-        end
-
-        if !token.params["patient"] && server.patient_id
-          token.params["patient"] = server.patient_id
-        end
-
-        server.oauth_token_opts = token.to_hash
-        server.save!
-        flash.notice = "Server successfully authorized"
-        redirect_to server_path(server)
+        return
       end
-      
+      client = OAuth2::Client.new(server.client_id, server.client_secret, options)
+      if (!server.client_secret.empty?)
+        auth_pw = Base64.strict_encode64("#{server.client_id}:#{server.client_secret}")
+        token_params = {
+          redirect_uri: "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect",
+          code: params[:code],
+          grant_type: "authorization_code",
+        }
+        response = client.request(:post, server.token_url, {:body => token_params, :headers => {'Authorization' => "Basic #{auth_pw}"}})
+        token = OAuth2::AccessToken.from_hash(client, JSON.parse(response.body))
+      else
+        token = client.auth_code.get_token(params[:code], :redirect_uri => "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/redirect")
+      end
+      if token.params["error"]
+        flash.alert = "#{token.params['error']}: #{token.params['error_description']}"
+        redirect_to server_path(server)
+        return
+      end
+
+      if !token.params["patient"] && server.patient_id
+        token.params["patient"] = server.patient_id
+      end
+
+      server.oauth_token_opts = token.to_hash
+      server.save!
+      flash.notice = "Server successfully authorized"
+      redirect_to server_path(server)
+
     else
       render status: 500, text: 'State not found'
     end
@@ -219,6 +202,25 @@ class ServersController < ApplicationController
       server.save
       render json: { success: true }
     end
+  end
+
+  def delete_authorization
+    server = Server.find(params[:server_id])
+    if server
+      server.unset(
+        :token, 
+        :client_id, 
+        :client_secret, 
+        :oath_token_opts, 
+        :scopes, 
+        :authorize_url, 
+        :token_url, 
+        :patient_id
+      )
+      server.save
+      flash.notice = "Server authorization credentials deleted"
+    end
+    render json: { success: true }
   end
 
   private

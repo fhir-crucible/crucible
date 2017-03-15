@@ -57,6 +57,18 @@ class Crucible.Authorization
         $("#scope").val(scope)
         window.location.assign(event.target.action + "?" + $("input.used").serialize())
       )
-
       return false
+    )
+
+
+    $("#delete-authorization").on('click', (event) =>
+      event.preventDefault()
+      $.post("/servers/#{$('#conformance-data').data('server-id')}/delete_authorization",
+      {
+        state: $('#state').val()
+      },
+      'JSON'
+      ).success( (data) =>
+        window.location.reload()
+      )
     )
