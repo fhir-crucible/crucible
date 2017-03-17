@@ -122,7 +122,7 @@ class TestRun
       end
 
       result.result = val
-      result.setup_message = test.setup_failed.message unless test.setup_failed.nil?
+      result.setup_message = test.setup_failure_message unless test.setup_failed.nil?
       result.setup_requests = test.setup_requests
       result.teardown_requests = test.teardown_requests
 
