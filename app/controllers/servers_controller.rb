@@ -211,7 +211,7 @@ class ServersController < ApplicationController
         :token, 
         :client_id, 
         :client_secret, 
-        :oath_token_opts, 
+        :oauth_token_opts,
         :scopes, 
         :authorize_url, 
         :token_url, 
