@@ -75,9 +75,11 @@ class ServersController < ApplicationController
       server.save!
       flash.notice = "Server successfully authorized"
       redirect_to server_path(server)
+
     else
       render status: 500, text: 'State not found'
     end
+    
   end
 
   def conformance
@@ -209,6 +211,27 @@ class ServersController < ApplicationController
       server.save
       render json: { success: true }
     end
+  end
+
+  def delete_authorization
+    server = Server.find(params[:server_id])
+    if server
+      server.unset(
+        :token, 
+        :client_id, 
+        :client_secret, 
+        :oauth_token_opts,
+        :scopes, 
+        :authorize_url, 
+        :token_url, 
+        :patient_id,
+        :scopes,
+        :launch_param
+      )
+      server.save
+      flash.notice = "Server authorization credentials deleted"
+    end
+    render json: { success: true }
   end
 
   private

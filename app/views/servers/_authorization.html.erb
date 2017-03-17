@@ -9,38 +9,49 @@
       <input type='hidden' name='state' id='state' class="used" value='<%= @server.generate_state %>' />
       <div class="form-group">
         <label for="client_id">Client ID</label>
-        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element used" <% if @server.tags.include?('argonaut') %> value="<%= @server.client_id %>" <% end %> />
+        <input type="text" id="client_id" name="client_id" class="form-control authorize_form_element used" value="<%= @server.client_id %>" />
       </div>
       <div class="form-group">
         <label for="client_secret">Client Secret</label>
-        <input type="password" id="client_secret" name="client_secret" class="form-control authorize_form_element"  <% if @server.tags.include?('argonaut') %> value="<%= ("*" * @server.client_secret.length) if @server.client_secret %>" <% end %> />
+        <input type="password" id="client_secret" name="client_secret" class="form-control authorize_form_element" value="<%= ("*" * @server.client_secret.length) if @server.client_secret %>" />
       </div>
       <div class="form-group">
         <label for="patient_id">Patient ID (Optional)</label>
-        <input type="text" id="patient_id" name="patient_id" class="form-control authorize_form_element" <% if @server.tags.include?('argonaut')%>value="<%= @server.patient_id %>"<% end %> />
+        <input type="text" id="patient_id" name="patient_id" class="form-control authorize_form_element" value="<%= @server.patient_id %>" />
       </div>
       <div class="form-group">
         <label for="launch_param">Launch Parameter (Optional. Only used if  the "launch" scope below is selected.)</label>
-        <input type="text" id="launch_param" name="launch" class="form-control authorize_form_element" <% if @server.tags.include?('argonaut')%>value="<%= @server.launch_param %>"<% end %> />
+        <input type="text" id="launch_param" name="launch" class="form-control authorize_form_element" value="<%= @server.launch_param %>" />
       </div>
-
-      <div class="form-group scope-types">
-        <table>
-          <thead>
-            <th></th><th>Scope</th><th>Description</th>
-          </thead>
-          <tbody>
-            <% if @server.tags.include?('argonaut') %>
-              <%= render partial: "scope", collection: @server.get_scopes %>
-            <% else %>
-              <%= render partial: "scope", collection: @server.get_default_scopes %>
-            <% end %>
-          </tbody>
-        </table>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#scopesCollapse">Scope Options</a>
+          </h4>
+        </div>
+        <div id="scopesCollapse" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="form-group scope-types">
+              <table>
+                
+                <tbody>
+                    <%= render partial: "scope", collection: @server.get_scopes %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
+      
       <div class="row">
         <div class="col-sm-4">
           <button type="submit" class="btn btn-primary authorize_form_element" id="authorize_app">Authorize App</button>
+        </div>
+        <div class="col-sm-4">
+          <button class="btn delete-auth" id="delete-authorization">Delete</button>
+        </div>
+        <div class="col-sm-4">
+          <button class="btn" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </form>
