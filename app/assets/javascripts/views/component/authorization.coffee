@@ -59,3 +59,16 @@ class Crucible.Authorization
       )
       return false
     )
+
+
+    $("#delete-authorization").on('click', (event) =>
+      event.preventDefault()
+      $.post("/servers/#{$('#conformance-data').data('server-id')}/delete_authorization",
+      {
+        state: $('#state').val()
+      },
+      'JSON'
+      ).success( (data) =>
+        window.location.reload()
+      )
+    )

@@ -78,6 +78,16 @@
   &.secondary.submit-server-name,&.secondary.cancel-server-name{
     border: 1px solid $brand-accent;
   }
+
+  &.delete-auth {
+    border-color: $brand-secondary;
+    color: $brand-secondary;
+    &:hover {
+      background-color:$brand-secondary;
+      color: $brand-default;
+      border-color: $brand-secondary;
+    }
+  }
 }
 
 .add_server_button {

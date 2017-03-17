@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get 'past_runs', defaults: { format: :json }
     get 'supported_tests', defaults: { format: :json }
     post 'oauth_params'
+    post 'delete_authorization'
   end
 
   controller :scorecards do
