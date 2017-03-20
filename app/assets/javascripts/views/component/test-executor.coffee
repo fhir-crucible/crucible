@@ -234,13 +234,20 @@ class Crucible.TestExecutor
 
   expandCollapseAll: =>
     suiteGroupBodies = @element.find('.suite-group-body')
-    button = $('.expandCollapseAll')
     if !$(suiteGroupBodies).hasClass('in')
       $(suiteGroupBodies).collapse('show')
-      $(button).html(@html.collapseAllButton)
     else
       $(suiteGroupBodies).collapse('hide')
+    setTimeout(@updateExpandCollapseButton, 500)
+
+  updateExpandCollapseButton: =>
+    suiteGroupBodies = @element.find('.suite-group-body')
+    button = $('.expandCollapseAll')
+    if !$(suiteGroupBodies).hasClass('in')
       $(button).html(@html.expandAllButton)
+    else
+      $(button).html(@html.collapseAllButton)
+
 
   prepareTestRun: (suiteIds) =>
     @processedResults = {}
@@ -297,6 +304,13 @@ class Crucible.TestExecutor
 
   searchBoxHandler: =>
     @filter(search: @searchBox.val().toLowerCase().replace(/\W/g, ''))
+    # open up the group filter when searching
+    suiteGroupBodies = @element.find('.suite-group-body')
+    if @searchBox.val().length > 0
+      $(suiteGroupBodies).collapse('show')
+    else
+      $(suiteGroupBodies).collapse('hide')
+    setTimeout(@updateExpandCollapseButton, 500)
 
   filterByExecutedHandler: =>
     @filter(executed: false)
