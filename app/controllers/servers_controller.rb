@@ -84,7 +84,15 @@ class ServersController < ApplicationController
 
   def conformance
     server = Server.find(params[:server_id])
-    render json: {conformance: server.load_conformance(params[:refresh])}
+    conformance = server.load_conformance(params[:refresh])
+
+    render json: {
+      conformance: conformance,
+      crucible_fhir_version: Rails.application.config.fhir_version,
+      crucible_fhir_sequence: Rails.application.config.fhir_sequence,
+      fhir_version: server.fhir_version,
+      fhir_sequence: server.fhir_sequence,
+    }
   end
 
   def summary
