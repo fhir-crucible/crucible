@@ -6,6 +6,9 @@ class TestResult
   belongs_to :server
   field :has_run, type: Boolean, default: false
   field :result
+  field :setup_message, type: String
+  field :setup_requests
+  field :teardown_requests
 
   def reissue_request(test_id, request_index)
     client = FHIR::Client.new(self.server.url)

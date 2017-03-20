@@ -68,6 +68,13 @@
   }
 }
 
+.suite-handle {
+  &.setup-teardown {
+    font-size: .9em;
+    color: #999
+  }
+}
+
 .tab-content-holder .test-results {
   .button-holder{
     margin-bottom: 10px;

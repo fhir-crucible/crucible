@@ -85,7 +85,6 @@ class TestRun
       result.test = t
       result.server = self.server
       result.has_run = true
-
       begin
 
         # Do not attempt to rerun this test if it caused a fatal error last time
@@ -123,6 +122,9 @@ class TestRun
       end
 
       result.result = val
+      result.setup_message = test.setup_failure_message unless test.setup_failed.nil?
+      result.setup_requests = test.setup_requests
+      result.teardown_requests = test.teardown_requests
 
       # If somebody else picked up this job while I was working on this, don't save these results and leave
       return false if TestRun.find(self.id).worker_id != this_worker_id

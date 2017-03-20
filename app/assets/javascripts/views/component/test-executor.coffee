@@ -189,7 +189,13 @@ class Crucible.TestExecutor
       $(data['test_run'].test_results).each (i, result) =>
         suiteId = result.test_id
         suiteElement = @element.find("#test-#{suiteId}")
-        @handleSuiteResult(@suitesById[suiteId], {tests: result.result}, suiteElement) if @suitesById[suiteId]
+        formatted_result = {
+          tests: result.result,
+          setup_requests: result.setup_requests,
+          setup_message: result.setup_message,
+          teardown_requests: result.teardown_requests
+        }
+        @handleSuiteResult(@suitesById[suiteId], formatted_result, suiteElement) if @suitesById[suiteId]
       if @defaultSelection
         @element.find("#test-#{@defaultSelection.suiteId} a.collapsed").click()
         @element.find("#test-#{@defaultSelection.suiteId} ##{@defaultSelection.testId}").click().closest(".suite-group").children('a').trigger('click')
@@ -470,6 +476,10 @@ class Crucible.TestExecutor
         testRunId = @runningTestRunId if @runningTestRunId
         @addClickPermalinkHandler(testRunId, suiteElement, test.id)
       @addClickTestHandler(test, suiteElement)
+
+    # Add in click handlers for setup, teardown (non-tests)
+    @addClickTestHandler({key: suite.id + '-setup', description: 'Set up test prerequisites', message: result.setup_message, requests: result.setup_requests}, suiteElement)
+    @addClickTestHandler({key: suite.id + '-teardown', description: 'Clean up after test', requests: result.teardown_requests}, suiteElement)
 
   displayError: (message) =>
     @element.find(".test-result-error").html(message)
