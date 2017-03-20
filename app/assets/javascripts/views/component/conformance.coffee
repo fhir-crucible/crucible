@@ -9,8 +9,10 @@ class Crucible.Conformance
 
   constructor: ->
     @element = $('#conformance-data')
+    @mismatch_alert_element = $('#fhir-sequence-mismatch')
     return unless @element.length
     @template = HandlebarsTemplates['views/templates/servers/conformance']
+    @version_mismatch_template = HandlebarsTemplates['views/templates/servers/partials/fhir_version_notification']
     @serverId = @element.data('server-id')
     @loadConformance()
 
@@ -21,6 +23,10 @@ class Crucible.Conformance
       .success ((data) =>
         @updateConformance(data)
         @removeConformanceSpinner()
+        @mismatch_alert_element.hide()
+        if data.fhir_sequence != data.crucible_fhir_sequence
+          @mismatch_alert_element.html(@version_mismatch_template(data))
+          @mismatch_alert_element.show()
         @element.trigger('conformanceInitialized') if data.conformance.updated
         @registerHandlers()
       )
