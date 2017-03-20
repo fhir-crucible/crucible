@@ -2,30 +2,30 @@
   <div class="row content">
     <div class="col-sm-12">
       <div class="palette report">
-          <% if flash[:notice] %>
-            <div class="alert alert-success alert-dismissible" role="alert">
-              <%= flash[:notice] %>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-          <% end %>
-          <% if flash[:alert] %>
-            <div class="alert alert-danger alert-dismissible" role="alert">
-              <%= flash[:alert] %>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-          <% end %>
+        <% if flash[:notice] %>
+          <div class="alert alert-success alert-dismissible" role="alert">
+            <%= flash[:notice] %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        <% end %>
+        <% if flash[:alert] %>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <%= flash[:alert] %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        <% end %>
         <div class="row">
           <div class="col-sm-12 server-test-details">
             <!-- START: server name and url -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
-                  <a data-toggle="modal" 
-                      data-target="#authorize-modal" 
-                      class="authorization-handle hidden" 
-                      href="#" 
-                      data-oauth-refresh-token="<%= @server.try(:oauth_token_opts) && @server.oauth_token_opts['refresh_token'] %>"
-                      data-oauth-client-Id="<%= @server.try(:client_id) %>"
-                      data-oauth-expires-at="<%= @server.try(:oauth_token_opts) && @server.oauth_token_opts['expires_at'] %>"><i class="fa fa-lock"></i></a>
+                <a data-toggle="modal" 
+                   data-target="#authorize-modal" 
+                   class="authorization-handle hidden" 
+                   href="#" 
+                   data-oauth-refresh-token="<%= @server.try(:oauth_token_opts) && @server.oauth_token_opts['refresh_token'] %>"
+                   data-oauth-client-Id="<%= @server.try(:client_id) %>"
+                   data-oauth-expires-at="<%= @server.try(:oauth_token_opts) && @server.oauth_token_opts['expires_at'] %>"><i class="fa fa-lock"></i></a>
               </div>
               <div class="server-url-name pull-left">
                 <div class="server-name-panel emphasize editToggle" data-toggle="tooltip" data-placement="bottom" title="<%= @server.name %>">
@@ -35,7 +35,7 @@
                   <a target="_blank" class="server-url-label" href="<%= @server.url %>"><%= @server.url %></a>
                 </div>
                 <div class="server-tags-panel emphasize editToggle">
-                    <div class="server-tags-label"></div>
+                  <div class="server-tags-label"></div>
                 </div>
               </div>
               <a class="edit-server-name-icon editToggle pull-left"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
@@ -55,8 +55,9 @@
                 </form>
               </div>
             </div>
-          <div class="alert alert-warning alert-dismissible" id="fhir-sequence-mismatch" role="alert"></div>
-            <!-- END: server name and url -->
+            <div class="alert alert-warning alert-dismissible" id="fhir-sequence-mismatch" role="alert"></div>
+          </div>
+          <!-- END: server name and url -->
         </div>
         <div class="row collapse">
           <div class="progress" id="execution-progress">
@@ -67,8 +68,8 @@
         </div>
         <div class="row">
           <ul class="nav nav-tabs tabbed-data-container">
-              <li class="tabbed-data test-run-summary-handle<%unless @server.summary_id.nil? %> active <%end%>" <%if @server.summary_id.nil? %>style="display:none"<%end%>><a data-toggle="tab" href="#test-run-summary-data" aria-expanded="true">Server Summary</a></li>
-              <li class="tabbed-data<%if @server.summary_id.nil? %> active<%end%>"><a data-toggle="tab" href="#test-data" id="test-data-tab" aria-expanded="false">Tests</a></li>
+            <li class="tabbed-data test-run-summary-handle<%unless @server.summary_id.nil? %> active <%end%>" <%if @server.summary_id.nil? %>style="display:none"<%end%>><a data-toggle="tab" href="#test-run-summary-data" aria-expanded="true">Server Summary</a></li>
+            <li class="tabbed-data<%if @server.summary_id.nil? %> active<%end%>"><a data-toggle="tab" href="#test-data" id="test-data-tab" aria-expanded="false">Tests</a></li>
             <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false"><i class="fa fa-lg fa-fw fa-spinner fa-pulse" id="conformance_spinner"></i>Capability Statement</a></li>
           </ul>
         </div>
@@ -139,7 +140,7 @@
                       </div>
                       <div class="col-sm-3 col-sm-offset-9">
                         <button class="btn cancel" data-toggle="modal" data-target="#cancel-modal" style="display:none">
-                            Cancel
+                          Cancel
                         </button>
                       </div>
                     </div>
@@ -180,7 +181,7 @@
     </div>
   </div>
 
- <!-- Modal Response Data-->
+  <!-- Modal Response Data-->
   <div class="modal fade" id="data-modal" tabindex="-1" role="dialog" aria-labelledby="Data for test result">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
