@@ -398,7 +398,7 @@ class Crucible.TestExecutor
     $.get("/servers/#{@serverId}/test_runs/#{@runningTestRunId}").success((result) =>
       test_run = result.test_run
       percent_complete = test_run.test_results.length / test_run.test_ids.length
-      @progress.find('.progress-bar').css('width',"#{(Math.max(2, percent_complete * 100))}%")
+      @progress.find('.progress-bar').css('width',"#{(Math.min(98, Math.max(2, percent_complete * 100)))}%")
       if Object.keys(@processedResults).length < test_run.test_results.length
         for result in test_run.test_results
           suiteId = result.test_id

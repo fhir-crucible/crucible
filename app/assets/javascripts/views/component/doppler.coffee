@@ -66,7 +66,7 @@ class Crucible.Doppler
     margin_top = 50
     cellSize = 14
     threshold = .65
-    format = d3.time.format("%Y-%m-%d")
+    format = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ")
     today = new Date()
     next_sunday = (new Date()).setDate(today.getDate() + (7-today.getDay()))
     monthNames =  [today.getFullYear(),'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
