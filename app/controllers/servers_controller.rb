@@ -103,21 +103,25 @@ class ServersController < ApplicationController
   def summary_history
     server = Server.find(params[:server_id])
 
-    sundays = (52.weeks.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
+    sundays = (51.weeks.ago.to_date..(sunday_after(Date.today))).to_a.select {|k| k.wday == 0}
     server.history.reject! do |entry|
-      sundays.exclude?(entry["date"]) && entry["date"] < sundays.last
+      sundays.exclude?(entry["date"]) && entry['date'] < Date.today
     end
 
-    if server.history.length == 0
+    if server.history.length == 0 || params[:regenerate]
       server.generate_history
     end
 
     sundays.reject! {|sunday| server.history.select{|entry| entry["date"] == sunday}.length > 0}
 
+    last_sunday = server.history.last
+
     sundays.each do |sunday|
-      server.history << server.history.last
+      server.history << last_sunday.clone
       server.history.last['date'] = sunday
     end
+
+    server.history.last['date'] = Time.parse(Date.today.to_s).utc #mark the last entry as today's date instead of next sunday
 
     render json: server.history.to_json
   end
@@ -207,6 +211,10 @@ class ServersController < ApplicationController
 
   def server_params
     params.require(:server).permit(:url, :name, tags: [])
+  end
+
+  def sunday_after(date)
+    date + (7-date.wday)
   end
 
 end

@@ -225,14 +225,14 @@ class Crucible.Doppler
       .append("rect")
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", (d) -> margin_left + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize))
+      .attr("x", (d) -> margin_left + (51 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize))
       .attr("y", (d) -> margin_top + (d.index+1) * cellSize)
       .style("fill", (d) -> color(d.value, threshold))
       .style("stroke", "#ccc")
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
       .on("click", (d) =>
-        index = weekdiff(format.parse(d.date), next_sunday) - 1
+        index = weekdiff(format.parse(d.date), next_sunday)
         if @data.length > 52
           index = index + 1
         switchDate(index)

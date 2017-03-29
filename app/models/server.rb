@@ -281,20 +281,17 @@ class Server
     zeroize_summary(summary_tree)
 
     # Generate list of sundays
-    sundays = (52.weeks.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
+    
+    sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
 
     # Put sundays into a hash and use to only save one data point per week
     sunday_index = sundays.inject({}) { |h,k| h[k] = nil; h}
-
-    sections = {} # store the sections that we come across
 
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
 
       # build the value for this run, which is a combination of the date and all the passed & total values for the categories
       all_nodes = all_nodes(e.compliance) # save in all_nodes hash
-
-      all_nodes.keys.each { |k| sections[k] = { 'passed' => 0, 'total' => 0} }
 
       new_tree = summary_tree.deep_dup
       new_tree['date'] = e.generated_at.to_date
@@ -307,7 +304,7 @@ class Server
       end
 
       #figure out the next sunday from this date
-      next_sunday = e.generated_at.to_date + (7 - e.generated_at.wday)
+      next_sunday = sunday_after(e.generated_at.to_date)
 
       # store this on the next sunday, as long as nothing from later in the week is already stored there
       # if before first sunday, don't store because we've already taken care of that
@@ -333,6 +330,47 @@ class Server
     end
 
     self.history = result
+    self.save
+
+  end
+
+  def update_history(summary)
+
+    #updates the history with a single summary
+    
+    summaries = Summary.where({server_id: self.id})
+    summary_tree = Crucible::FHIRStructure.get.deep_dup
+    
+    zeroize_summary(summary_tree)
+
+    sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
+    self.history.reject! do |entry|
+      sundays.exclude?(entry["date"]) && entry['date'] < Date.today
+    end
+
+    self.generate_history if self.history.length == 0
+
+    all_nodes = all_nodes(summary.compliance) # save in all_nodes hash
+    rebuild_summary(summary_tree, all_nodes)
+
+    if self.history.length == 0
+      self.history << summary_tree
+    else
+
+      sundays.reject! {|sunday| self.history.select{|entry| entry["date"] == sunday}.length > 0}
+
+      last_sunday = self.history.last
+
+      sundays.each do |sunday|
+        self.history << last_sunday.clone
+        self.history.last['date'] = sunday
+      end
+
+      self.history[self.history.length-1] = summary_tree
+
+    end
+
+    self.history.last['date'] = sunday_after(Date.today)
     self.save
 
   end
@@ -430,6 +468,11 @@ class Server
     end
 
   end
+
+  def sunday_after(date)
+    date + (7-date.wday)
+  end
+
 
   def patch_structure_change(template)
     total = template['children'].reduce(0) {|sum, x| sum += x['total']}

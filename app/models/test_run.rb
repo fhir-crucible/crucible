@@ -148,7 +148,7 @@ class TestRun
     self.server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
     self.server.last_run_at = Time.now
     summary.save!
-    self.server.generate_history
+    self.server.update_history(summary)
     self.server.save!
 
     self.status = 'finished'
