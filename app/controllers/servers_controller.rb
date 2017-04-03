@@ -101,64 +101,29 @@ class ServersController < ApplicationController
   end
 
   def summary_history
-    summaries = Summary.where({server_id: params[:server_id]})
-    summary_tree = Crucible::FHIRStructure.get.deep_dup
-    
-    zeroize_summary(summary_tree)
+    server = Server.find(params[:server_id])
 
-    # Generate list of sundays
-    sundays = (52.weeks.ago.to_date..Date.today).to_a.select {|k| k.wday == 0}
-
-    # Put sundays into a hash and use to only save one data point per week
-    sunday_index = sundays.inject({}) { |h,k| h[k] = nil; h}
-
-    sections = {} # store the sections that we come across
-
-    # loop through each summary and place in the sunday index
-    summaries.each_entry do |e|
-
-      # build the value for this run, which is a combination of the date and all the passed & total values for the categories
-      all_nodes = all_nodes(e.compliance) # save in all_nodes hash
-
-      all_nodes.keys.each { |k| sections[k] = { 'passed' => 0, 'total' => 0} }
-
-      new_tree = summary_tree.deep_dup
-      new_tree['date'] = e.generated_at.to_date
-
-      rebuild_summary(new_tree, all_nodes)
-
-      # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
-      if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
-        sunday_index[sundays.first] = new_tree 
-      end
-
-      #figure out the next sunday from this date
-      next_sunday = e.generated_at.to_date + (7 - e.generated_at.wday)
-
-      # store this on the next sunday, as long as nothing from later in the week is already stored there
-      # if before first sunday, don't store because we've already taken care of that
-      if next_sunday > sundays.first and (sunday_index[next_sunday].nil? or sunday_index[next_sunday]['date'] < e.generated_at.to_date)
-        sunday_index[next_sunday] = new_tree
-      end
+    sundays = (51.weeks.ago.to_date..(sunday_after(Date.today))).to_a.select {|k| k.wday == 0}
+    server.history.reject! do |entry|
+      sundays.exclude?(entry["date"]) && entry['date'] < Date.today
     end
 
-    # carry forward sundays with data to those without data
-    sundays.inject(nil) {|p, k| sunday_index[k] = sunday_index[k] || p }
-
-    # put the sunday_index into an array format for consumption by d3
-    result = sunday_index.values
-
-    # fix the dates on items to be on Sundays (since now it just stores the run date, not the date of the sunday)
-    # include dates and section names with null values if the date has no data (happens on dates before the first run)
-    sundays.each_with_index do |val, index| 
-      if (result[index])
-        result[index] = result[index].merge({'date'=>val})
-      else
-        result[index] = {'date' => val}.merge(summary_tree)
-      end
+    if server.history.length == 0 || params[:regenerate]
+      server.generate_history
     end
 
-    render json: result.to_json
+    sundays.reject! {|sunday| server.history.select{|entry| entry["date"] == sunday}.length > 0}
+
+    last_sunday = server.history.last
+
+    sundays.each do |sunday|
+      server.history << last_sunday.clone
+      server.history.last['date'] = sunday
+    end
+
+    server.history.last['date'] = Time.parse(Date.today.to_s).utc #mark the last entry as today's date instead of next sunday
+
+    render json: server.history.to_json
   end
 
   def supported_tests
@@ -248,49 +213,8 @@ class ServersController < ApplicationController
     params.require(:server).permit(:url, :name, tags: [])
   end
 
-  def zeroize_summary(hash)
-    hash['total'] = hash['passed'] = 0
-    unless hash['children'].nil?
-      hash['children'].each { |c| zeroize_summary(c) }
-    end
+  def sunday_after(date)
+    date + (7-date.wday)
   end
 
-  def all_nodes(hash, ret = {})
-
-    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total']}
-    hash['children'].each { |c| all_nodes(c, ret) } unless hash['children'].nil?
-
-    ret
-
-  end
-
-  def rebuild_summary(template, keys)
-
-    # collect the name and any aliases together then see if any of them have a matching node in the results
-    all_names = [template['name']] + (template['aka'] || [])
-    matching_node = all_names.map {|name| keys[name.downcase]}.compact.first
-    if matching_node
-      template['total'] = matching_node['total']
-      template['passed'] = matching_node['passed']
-    else
-      template['total'] = template['passed'] = 0
-    end
-
-    template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
-
-    if template['total'] == 0 && template['children']
-      # back fill the parent if we are missing data from the children. This can happen when the structure changes.
-      patch_structure_change(template)
-    end
-
-  end
-
-  def patch_structure_change(template)
-    total = template['children'].reduce(0) {|sum, x| sum += x['total']}
-    if total > 0
-      passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
-      template['total'] = total
-      template['passed'] = passed
-    end
-  end
 end

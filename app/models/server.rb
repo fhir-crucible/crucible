@@ -28,6 +28,7 @@ class Server
   field :fhir_sequence, type: String
   field :fhir_version, type: String
   field :hidden, type: Boolean, default: false
+  field :history, type: Array, default: []
 
   def get_default_scopes
     [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },
@@ -273,6 +274,107 @@ class Server
     end
   end
 
+  def generate_history
+    summaries = Summary.where({server_id: self.id})
+    summary_tree = Crucible::FHIRStructure.get.deep_dup
+    
+    zeroize_summary(summary_tree)
+
+    # Generate list of sundays
+    
+    sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
+
+    # Put sundays into a hash and use to only save one data point per week
+    sunday_index = sundays.inject({}) { |h,k| h[k] = nil; h}
+
+    # loop through each summary and place in the sunday index
+    summaries.each_entry do |e|
+
+      # build the value for this run, which is a combination of the date and all the passed & total values for the categories
+      all_nodes = all_nodes(e.compliance) # save in all_nodes hash
+
+      new_tree = summary_tree.deep_dup
+      new_tree['date'] = e.generated_at.to_date
+
+      rebuild_summary(new_tree, all_nodes)
+
+      # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
+      if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
+        sunday_index[sundays.first] = new_tree 
+      end
+
+      #figure out the next sunday from this date
+      next_sunday = sunday_after(e.generated_at.to_date)
+
+      # store this on the next sunday, as long as nothing from later in the week is already stored there
+      # if before first sunday, don't store because we've already taken care of that
+      if next_sunday > sundays.first and (sunday_index[next_sunday].nil? or sunday_index[next_sunday]['date'] < e.generated_at.to_date)
+        sunday_index[next_sunday] = new_tree
+      end
+    end
+
+    # carry forward sundays with data to those without data
+    sundays.inject(nil) {|p, k| sunday_index[k] = sunday_index[k] || p }
+
+    # put the sunday_index into an array format for consumption by d3
+    result = sunday_index.values
+
+    # fix the dates on items to be on Sundays (since now it just stores the run date, not the date of the sunday)
+    # include dates and section names with null values if the date has no data (happens on dates before the first run)
+    sundays.each_with_index do |val, index| 
+      if (result[index])
+        result[index] = result[index].merge({'date'=>val})
+      else
+        result[index] = {'date' => val}.merge(summary_tree)
+      end
+    end
+
+    self.history = result
+    self.save
+
+  end
+
+  def update_history(summary)
+
+    #updates the history with a single summary
+    
+    summaries = Summary.where({server_id: self.id})
+    summary_tree = Crucible::FHIRStructure.get.deep_dup
+    
+    zeroize_summary(summary_tree)
+
+    sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
+    self.history.reject! do |entry|
+      sundays.exclude?(entry["date"]) && entry['date'] < Date.today
+    end
+
+    self.generate_history if self.history.length == 0
+
+    all_nodes = all_nodes(summary.compliance) # save in all_nodes hash
+    rebuild_summary(summary_tree, all_nodes)
+
+    if self.history.length == 0
+      self.history << summary_tree
+    else
+
+      sundays.reject! {|sunday| self.history.select{|entry| entry["date"] == sunday}.length > 0}
+
+      last_sunday = self.history.last
+
+      sundays.each do |sunday|
+        self.history << last_sunday.clone
+        self.history.last['date'] = sunday
+      end
+
+      self.history[self.history.length-1] = summary_tree
+
+    end
+
+    self.history.last['date'] = sunday_after(Date.today)
+    self.save
+
+  end
+
   private
 
   def check_restriction(restriction, resource_operations, operations)
@@ -288,7 +390,6 @@ class Server
     end
     true
   end
-
 
   def rollup(node)
     if node['children']
@@ -330,4 +431,56 @@ class Server
       end
     end
   end
+
+  def zeroize_summary(hash)
+    hash['total'] = hash['passed'] = 0
+    unless hash['children'].nil?
+      hash['children'].each { |c| zeroize_summary(c) }
+    end
+  end
+
+  def all_nodes(hash, ret = {})
+
+    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total']}
+    hash['children'].each { |c| all_nodes(c, ret) } unless hash['children'].nil?
+
+    ret
+
+  end
+
+  def rebuild_summary(template, keys)
+
+    # collect the name and any aliases together then see if any of them have a matching node in the results
+    all_names = [template['name']] + (template['aka'] || [])
+    matching_node = all_names.map {|name| keys[name.downcase]}.compact.first
+    if matching_node
+      template['total'] = matching_node['total']
+      template['passed'] = matching_node['passed']
+    else
+      template['total'] = template['passed'] = 0
+    end
+
+    template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
+
+    if template['total'] == 0 && template['children']
+      # back fill the parent if we are missing data from the children. This can happen when the structure changes.
+      patch_structure_change(template)
+    end
+
+  end
+
+  def sunday_after(date)
+    date + (7-date.wday)
+  end
+
+
+  def patch_structure_change(template)
+    total = template['children'].reduce(0) {|sum, x| sum += x['total']}
+    if total > 0
+      passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
+      template['total'] = total
+      template['passed'] = passed
+    end
+  end
+
 end

@@ -66,7 +66,7 @@ class Crucible.Doppler
     margin_top = 50
     cellSize = 14
     threshold = .65
-    format = d3.time.format("%Y-%m-%d")
+    format = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ")
     today = new Date()
     next_sunday = (new Date()).setDate(today.getDate() + (7-today.getDay()))
     monthNames =  [today.getFullYear(),'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -225,14 +225,14 @@ class Crucible.Doppler
       .append("rect")
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", (d) -> margin_left + (52 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize))
+      .attr("x", (d) -> margin_left + (51 - weekdiff(format.parse(d.date), next_sunday)) * (3 + cellSize))
       .attr("y", (d) -> margin_top + (d.index+1) * cellSize)
       .style("fill", (d) -> color(d.value, threshold))
       .style("stroke", "#ccc")
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
       .on("click", (d) =>
-        index = weekdiff(format.parse(d.date), next_sunday) - 1
+        index = weekdiff(format.parse(d.date), next_sunday)
         if @data.length > 52
           index = index + 1
         switchDate(index)
