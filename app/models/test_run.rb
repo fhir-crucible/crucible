@@ -64,6 +64,8 @@ class TestRun
       return false
     end
 
+    self.server.load_conformance(true) if self.nightly # refresh conformance statement on nightlies
+
     # pull all the tests into memory with .map {} so that the cursor doesn't time out
     # sort because mongoid does not retain order using self.tests; only retains order when using test_ids
     self.tests.map {|n| n}.sort {|a, b| test_ids.index(a.id) <=> test_ids.index(b.id) }.each_with_index do |t, i|
