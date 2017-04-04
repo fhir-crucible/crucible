@@ -8,6 +8,7 @@ class Crucible.ServerFilter
   height: 700
   searchVisible: false
   active: true
+  sequence: "3"
 
   constructor: ->
     @element = $('.server-summaries')
@@ -16,6 +17,14 @@ class Crucible.ServerFilter
     @registerHandlers()
 
   registerHandlers: =>
+
+    # Sequence Dropdown
+    @element.find("#filter_version").on("select", () =>
+      @setSequence( @element.find("#filters_active").val())
+      @containerElement.trigger('filterchange')
+      false
+    )
+
     @element.find('#filters_active').on('click', () =>
       @element.find('#filters_active').parent().find('button').removeClass('active')
       @element.find('#filters_active').addClass('active')
@@ -98,13 +107,19 @@ class Crucible.ServerFilter
       @containerElement.trigger('filterchange', filter)
     )
 
-  setActive: (active) =>
-    @active = active
-    @containerElement.find('.server-item').each (index, item) =>
+  filter: () =>
+    @containerElement.find(".server-item").each(index, item) =>
       $item = $(item)
-      if !@active || $item.data('active')
+      if (!@active || $item.data('active')) && $item.data("sequence") == @sequence
         $item.show()
       else
         $item.hide()
-    
+
+  setActive: (active) =>
+    @active = active
+    @filter()
+
+  setSequence: (sequence) =>
+    @sequence = sequence
+    @filter()
 
