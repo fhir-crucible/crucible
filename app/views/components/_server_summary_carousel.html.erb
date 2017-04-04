@@ -30,7 +30,7 @@
       </div>-->
 
       <div class="server-filters pull-left">
-        <select class="filter-selector form-control" id="filters_version">
+        <select class="filter-selector form-control" id="filters_sequence">
           <option value="STU3" selected>STU3</option>
           <option value="DSTU2">DSTU2</option>
           <option value="DSTU1">DSTU1</option>
@@ -61,7 +61,8 @@
           count = 0
           servers.each_with_index do |server, index|
 
-            server_active = (server.last_run_at || Time.at(0)) > 2.weeks.ago
+            #server_active = (server.last_run_at || Time.at(0)) > 2.weeks.ago
+            server_active = true
             count+=1 if server_active
           %>
           <div id="server-item-<%= server.id %>"
