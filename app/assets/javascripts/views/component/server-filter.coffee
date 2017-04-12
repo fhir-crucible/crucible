@@ -111,7 +111,7 @@ class Crucible.ServerFilter
   filter: () =>
     @containerElement.find(".server-item").each((index, item) =>
       $item = $(item)
-      if (!@active || $item.data('active')) && $item.data("sequence") == @sequence
+      if (!@active || $item.data('active')) && ($item.data("sequence") == @sequence || @sequence == "all")
         $item.show()
       else
         $item.hide()

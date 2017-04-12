@@ -209,6 +209,16 @@ class Crucible.Starburst
         .attr("fill", "#999")
         .attr("text-anchor", "middle")
         .text( 'PASSING')
+
+    else
+      svg.append("text")
+        .attr("x", (d, i) -> width/2)
+        .attr("y", (d, i) -> height/2+50)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "20px")
+        .attr("fill", "#999")
+        .attr("text-anchor", "middle")
+        .text( '#{d.fhir_sequence}')
     
     # draw the element paths
     @starburst_path = svg.datum(@get('data')).selectAll("path")
