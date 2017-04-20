@@ -5,6 +5,7 @@ class SyntheaController < ApplicationController
   def index
     @testdata = []
     @resources_created = Hash.new(0)
+    @recent_runs = SyntheaRun.all.order_by(:date=>-1).limit(10)
   end
 
   # POST /testdata

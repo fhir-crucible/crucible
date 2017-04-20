@@ -122,6 +122,31 @@
           </table>
         <% end %>
 
+        <% if @recent_runs && !@recent_runs.empty? %>
+            <h2>Servers Using Synthea</h2>
+            <table class="table table-striped" style="border-width: 2px;border-style:solid;border-color:rgb(221,221,221)">
+              <thead style="font-size:18px;">
+                <tr>
+                  <th style="padding:5px;">URL</th>
+                  <th style="padding:5px;">Count</th>
+                  <th style="padding:5px;">Format</th>
+                  <th style="padding:5px;">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                <% @recent_runs.each do |run| %>
+                  <tr style="border-bottom:1px solid rgb(221,221,221);">
+                    <td style="padding:5px;"><%= run.url %></td>
+                    <td style="padding:5px;"><%= run.count %></td>
+                    <td style="padding:5px;"><%= run.format %></td>
+                    <td style="padding:5px;"><%= run.date.strftime("%m/%d/%y") %></td>
+                  </tr>
+                <% end %>
+              </tbody> 
+            </table>
+        <% end %>
+
       </div>
     </div>
   </div>
