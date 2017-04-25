@@ -4,4 +4,5 @@ class SyntheaRun
   field :format, type: String
   field :count, type: Integer
   field :date, type: DateTime
+  field :success, type: Boolean
 end

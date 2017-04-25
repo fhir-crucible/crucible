@@ -123,14 +123,15 @@
         <% end %>
 
         <% if @recent_runs && !@recent_runs.empty? %>
-            <h2>Servers Using Synthea</h2>
+            <h2>Recently Loaded Data</h2>
             <table class="table table-striped" style="border-width: 2px;border-style:solid;border-color:rgb(221,221,221)">
               <thead style="font-size:18px;">
                 <tr>
                   <th style="padding:5px;">URL</th>
-                  <th style="padding:5px;">Count</th>
-                  <th style="padding:5px;">Format</th>
-                  <th style="padding:5px;">Date</th>
+                  <th style="padding:5px;text-align: center;">Records</th>
+                  <th style="padding:5px;text-align: center;">Format</th>
+                  <th style="padding:5px;text-align: center;">Date</th>
+                  <th style="padding:5px;text-align:center;">Loaded?</th>
                 </tr>
               </thead>
               <tbody>
@@ -138,9 +139,10 @@
                 <% @recent_runs.each do |run| %>
                   <tr style="border-bottom:1px solid rgb(221,221,221);">
                     <td style="padding:5px;"><%= run.url %></td>
-                    <td style="padding:5px;"><%= run.count %></td>
-                    <td style="padding:5px;"><%= run.format %></td>
-                    <td style="padding:5px;"><%= run.date.strftime("%m/%d/%y") %></td>
+                    <td style="padding:5px;text-align: center;"><%= run.count %></td>
+                    <td style="padding:5px;text-align: center;"><%= run.format %></td>
+                    <td style="padding:5px;text-align: center;"><%= run.date.strftime("%H:%M, %m/%d/%y") %></td>
+                    <td style="padding:5px;text-align:center;"><% if run.success %><span class="glyphicon glyphicon-ok" style="color:green;" aria-hidden="true"></span> <% elsif run.success == false %><span class="glyphicon glyphicon-remove" style="color:red" aria-hidden="true"></span><% else %><span class="glyphicon glyphicon-minus" style="color:#505152" aria-hidden="true"></span><% end %>
                   </tr>
                 <% end %>
               </tbody> 
