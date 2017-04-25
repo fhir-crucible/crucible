@@ -2,9 +2,8 @@ class ScorecardsController < ApplicationController
 
   # GET /scorecards
   def index
-    @scorecards = [ ScorecardRun.all.order_by("result[0].points" => :desc).limit(5)[0].result[0] ]
-    # ScorecardRun.all.order_by("result[0].points" => :desc).limit(5)
-    @top_scorecards = ScorecardRun.all.order_by("result[0].points" => :desc).limit(5)
+    @scorecards = [  ]
+    @top_scorecards = ScorecardRun.all.order_by("result[0].points" => :desc).limit(10)
   end
 
   # POST /scorecards/score_url
@@ -66,6 +65,12 @@ class ScorecardsController < ApplicationController
     end
     log
     render action: 'index'    
+  end
+
+  # GET /scorecards/db/<id>
+  def score_db
+    @scorecards = ScorecardRun.find(params["id"]).result
+    render action: 'index'
   end
 
   def log(url=nil)
