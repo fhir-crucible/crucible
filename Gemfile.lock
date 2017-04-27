@@ -1,20 +1,42 @@
 GIT
-  remote: https://github.com/fhir-crucible/fhir_scorecard.git
-  revision: 7f3ea4abb3417acfeafd826fb5db7965b674c841
-  branch: master
+  remote: https://github.com/fhir-crucible/fhir_client.git
+  revision: 428d9268da584cef62d5750633c2aa5451a52c49
+  branch: 3.0.0-release
   specs:
-    fhir_scorecard (1.8.0)
-      fhir_models (~> 1.8)
+    fhir_client (3.0.0)
+      activesupport (>= 3)
+      addressable (>= 2.3)
+      nokogiri
+      oauth2 (~> 1.1)
+      rack (>= 1.5)
+      rest-client (~> 1.8)
+      tilt (>= 1.1)
+
+GIT
+  remote: https://github.com/fhir-crucible/fhir_models.git
+  revision: f30b2665fe8334e410c8372b2c70d825a3ffa753
+  branch: 3.0.0-release
+  specs:
+    fhir_models (3.0.0)
+      bcp47 (>= 0.3)
+      date_time_precision (>= 0.8)
+      mime-types (>= 1.16, < 3)
+      nokogiri (>= 1.6)
+
+GIT
+  remote: https://github.com/fhir-crucible/fhir_scorecard.git
+  revision: 9d52d975022656f89af81b9f05048721c8a850dc
+  branch: 3.0.0-release
+  specs:
+    fhir_scorecard (3.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 962a6434bd564444da6bcb0daf13727717e7d8d2
-  branch: master
+  revision: a349a73e06500fb2cfe17546bd431bc07e1e648a
+  branch: 3.0.0-release
   specs:
     plan_executor (1.8.0)
       ansi
-      fhir_client
-      fhir_models
       jsonpath
       method_source
       nokogiri
@@ -22,16 +44,15 @@ GIT
 
 GIT
   remote: https://github.com/synthetichealth/synthea.git
-  revision: eb6b6a07cca1a6ed50aab9c8ccfc6f4280cf7499
-  branch: master
+  revision: 4f5a72f545b1e8f7d9cb5c9781e40c7e5385eef9
+  branch: fhir_3
   specs:
     synthea (1.1.0)
       area
       chunky_png
       concurrent-ruby
+      distribution (~> 0.7.3)
       faker (~> 1.6, >= 1.6.0)
-      fhir_client (~> 1.8)
-      fhir_models
       georuby
       highline
       json
@@ -107,7 +128,7 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     columnize (0.8.9)
-    concurrent-ruby (1.0.4)
+    concurrent-ruby (1.0.5)
     connection_pool (2.0.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -126,6 +147,7 @@ GEM
       railties (>= 3.2.6, < 5)
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    distribution (0.7.3)
     docile (1.1.5)
     domain_name (0.5.20170223)
       unf (>= 0.0.5, < 1.0.0)
@@ -136,26 +158,12 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.8)
     execjs (2.2.1)
-    faker (1.7.2)
+    faker (1.7.3)
       i18n (~> 0.5)
     faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     ffi (1.9.10)
-    fhir_client (1.8.0)
-      activesupport (>= 3)
-      addressable (>= 2.3)
-      fhir_models (>= 1.8.0)
-      nokogiri
-      oauth2 (~> 1.1)
-      rack (>= 1.5)
-      rest-client (~> 1.8)
-      tilt (>= 1.1)
-    fhir_models (1.8.2)
-      bcp47 (>= 0.3)
-      date_time_precision (>= 0.8)
-      mime-types (>= 1.16, < 3)
-      nokogiri (>= 1.6)
     formatador (0.2.5)
     georuby (2.5.2)
     globalid (0.3.6)
@@ -234,7 +242,7 @@ GEM
     nenv (0.2.0)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (4.0.1)
+    net-ssh (4.1.0)
     netrc (0.11.0)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -296,14 +304,14 @@ GEM
       ffi (>= 0.5.0)
     rdoc (4.1.2)
       json (~> 1.4)
-    recursive-open-struct (1.0.2)
+    recursive-open-struct (1.0.3)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    ruby-graphviz (1.2.2)
+    ruby-graphviz (1.2.3)
     ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
     sass (3.2.19)
@@ -370,6 +378,8 @@ DEPENDENCIES
   date_time_precision
   delayed_job_mongoid
   devise
+  fhir_client!
+  fhir_models!
   fhir_scorecard!
   guard-livereload
   handlebars_assets
@@ -398,3 +408,6 @@ DEPENDENCIES
   teaspoon-jasmine
   uglifier (>= 1.3.0)
   webmock
+
+BUNDLED WITH
+   1.14.6
