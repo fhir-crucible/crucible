@@ -52,8 +52,8 @@ module Crucible
 
     # Configuration to show which version of crucible is the most recent and is being tested on this server
     config.fhir_sequence = 'STU3'
-    config.fhir_version = '1.8.0'
-    config.fhir_version_name = 'FHIR STU3 Candidate + Connectathon 14 (San Antonio)'
+    config.fhir_version = '3.0.1'
+    config.fhir_version_name = 'FHIR Release 3 with 1 technical errata'
 
     # Configuration to determine if localhost servers and servers referencing localhost IP addresses are allowed (127.0.0.1)
     # false: allows localhost urls
