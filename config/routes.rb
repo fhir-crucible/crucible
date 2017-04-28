@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     post 'scorecard/score_url' => :score_url
     post 'scorecard/score_upload' => :score_upload
     post 'scorecard/score_paste' => :score_paste
-    get 'scorecard/db/:id' => :score_db
+    get 'scorecard/:id' => :show
   end
 
   controller :synthea do
