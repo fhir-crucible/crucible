@@ -115,12 +115,14 @@
 
         <% if @top_scorecards && !@top_scorecards.empty? && @recent_scorecards && !@recent_scorecards.empty? %>
           <div class="row">
-            <div class="col-sm-6 tab-content">
-              <div class="recentScorecards" class="tab-pane fade in">
-                <h2 style="border-bottom:0px;padding-bottom:0px;">Recent Scorecards</h2>
-              </div>
-              <div class="topScorecards" class="tab-pane fade in active">
-                <h2 style="border-bottom:0px;padding-bottom:0px;">Top Scorecards</h2>
+            <div class="col-sm-6">
+              <div class="tab-content">
+                <div class="recentScorecards tab-pane fade in">
+                  <h2 style="border-bottom:0px;padding-bottom:0px;">Recent Scorecards</h2>
+                </div>
+                <div class="topScorecards tab-pane fade in active">
+                  <h2 style="border-bottom:0px;padding-bottom:0px;">Top Scorecards</h2>
+                </div>
               </div>
             </div>
 
@@ -134,7 +136,7 @@
             </div>
 
             <div class="tab-content">
-              <div id="bestScorecards" class="tab-pane fade in active">
+              <div class="topScorecards tab-pane fade in active">
                 <table class="table table-striped" style="border-width: 2px;border-style:solid;border-color:rgb(221,221,221)">
                   <thead style="font-size:18px;">
                     <tr>
@@ -162,7 +164,7 @@
                 </table>
               </div>
 
-              <div id="recentScorecards" class="tab-pane fade in">
+              <div class="recentScorecards tab-pane fade in">
                 <table class="table table-striped" style="border-width: 2px;border-style:solid;border-color:rgb(221,221,221)">
                   <thead style="font-size:18px;">
                     <tr>
