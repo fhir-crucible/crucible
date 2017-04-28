@@ -115,15 +115,20 @@
 
         <% if @top_scorecards && !@top_scorecards.empty? && @recent_scorecards && !@recent_scorecards.empty? %>
           <div class="row">
-            <div class="col-sm-6">
-              <h2 style="border-bottom:0px;padding-bottom:0px;">Scorecards</h2>
+            <div class="col-sm-6 tab-content">
+              <div class="recentScorecards" class="tab-pane fade in">
+                <h2 style="border-bottom:0px;padding-bottom:0px;">Recent Scorecards</h2>
+              </div>
+              <div class="topScorecards" class="tab-pane fade in active">
+                <h2 style="border-bottom:0px;padding-bottom:0px;">Top Scorecards</h2>
+              </div>
             </div>
 
             <div class="col-sm-6 server-filters" style="margin-top:11px;">
               
               <ul class="nav nav-pills nav-justified pull-right" style="width:200px;">
-                <li class="active"><a data-toggle="pill" href="#bestScorecards">Score</a></li>
-                <li><a data-toggle="pill" href="#recentScorecards">Recent</a></li>
+                <li class="active"><a data-toggle="pill" data-target=".topScorecards">Score</a></li>
+                <li><a data-toggle="pill" data-target=".recentScorecards">Recent</a></li>
               </ul>
               <p class="pull-right align-middle" style="padding-right:5px;margin-top:10px;">Sort by:</p>
             </div>
