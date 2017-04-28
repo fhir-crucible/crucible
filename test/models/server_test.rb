@@ -4,8 +4,26 @@ class ServerTest < ActiveSupport::TestCase
 
   def setup
     dump_database
-    @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','conformance', 'bonfire_conformance.xml'))
-    @partial_conformance_json = File.read(Rails.root.join('test','fixtures','json','conformance','partial_conformance.json'))
+    @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','capability_statement', 'full_capability_statement.xml'))
+    @partial_conformance_json = File.read(Rails.root.join('test','fixtures','json','capability_statement','partial_capability_statement.json'))
+  end
+
+  def test_conformance_fixtures
+    # make sure the conformance statements in the fixtures are up to date
+  
+    compliance_statement_xml = FHIR::Xml.from_xml(@conformance_xml)
+    compliance_statement_json = FHIR::Json.from_json(@partial_conformance_json)
+
+    assert compliance_statement_xml.rest.first.resource.length > compliance_statement_json.rest.first.resource.length, 'Partial statement should have fewer resources.'
+
+
+    [compliance_statement_xml, compliance_statement_json].each do |statement|
+      resources = statement.rest.first.resource.map(&:type).map(&:downcase)
+      unknown_resources = resources - FHIR::RESOURCES.map{|r| r.downcase.delete(' ')}
+
+      assert unknown_resources.length == 0, "Compliance statement fixture '#{statement.name}' has unknown resources: #{unknown_resources.join(', ')}."
+    end
+
   end
 
   def test_load_conformance
@@ -59,6 +77,7 @@ class ServerTest < ActiveSupport::TestCase
     someSuites = ["readtest", "format001", "resourcetest_allergyintolerance", "resourcetest_appointment", "searchtest_allergyintolerance",
                   "resourcetest_condition", "resourcetest_capabilitystatement", "resourcetest_observation", "resourcetest_patient", "resourcetest_practitioner",
                   "resourcetest_schedule", "resourcetest_slot", "searchtest_condition", "searchtest_observation", "searchtest_patient", "search001"]
+
 
     someTests = ["R002", "X000_Medication", "X020_Medication", "X000_MedicationRequest", "X020_MedicationRequest", "S000_Medication", "S001P_Medication",
                  "S003P_Medication", "SE01P_Medication", "S001G_Medication", "S003G_Medication", "SE01G_Medication"]

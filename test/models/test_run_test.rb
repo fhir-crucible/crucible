@@ -4,7 +4,7 @@ class TestRunTest < ActiveSupport::TestCase
 
   def setup
     dump_database
-    @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','conformance', 'bonfire_conformance.xml'))
+    @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','capability_statement', 'full_capability_statement.xml'))
   end
 
   def test_add_test
