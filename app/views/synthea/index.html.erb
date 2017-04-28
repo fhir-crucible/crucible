@@ -142,7 +142,7 @@
                     <td style="text-align: center;"><%= run.count %></td>
                     <td style="text-align: center;"><%= run.format %></td>
                     <td style="text-align: center;"><%= run.date.strftime("%H:%M, %m/%d/%y") %></td>
-                    <td style="text-align:center;"><% if run.success %><span class="glyphicon glyphicon-ok" style="color:green;" aria-hidden="true"></span> <% elsif run.success == false %><span class="glyphicon glyphicon-remove" style="color:red" aria-hidden="true"></span><% else %><span class="glyphicon glyphicon-minus" style="color:#505152" aria-hidden="true"></span><% end %>
+                    <td style="text-align:center;"><% if run.success %><span title="Loaded" class="glyphicon glyphicon-ok" style="color:green;" aria-hidden="true"></span> <% elsif run.success == false %><span class="glyphicon glyphicon-remove" title="Unable to load data" style="color:red" aria-hidden="true"></span><% else %><span class="glyphicon glyphicon-minus" title="Status unknown" style="color:#505152" aria-hidden="true"></span><% end %>
                   </tr>
                 <% end %>
               </tbody> 
