@@ -133,10 +133,10 @@
                 <table class="table table-striped" style="border-width: 2px;border-style:solid;border-color:rgb(221,221,221)">
                   <thead style="font-size:18px;">
                     <tr>
-                      <th style="padding:5px;">#</th>
-                      <th style="padding:5px;">Source</th>
-                      <th style="padding:5px;text-align: center;">Date</th>
-                      <th style="padding:5px;text-align: center;">Score</th>
+                      <th>#</th>
+                      <th>Source</th>
+                      <th style="text-align: center;">Date</th>
+                      <th style="text-align: center;">Score</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -147,10 +147,10 @@
                       <% index = index + 1 %>
                       <tr style="border-bottom:1px solid rgb(221,221,221);">
                         <td><%= index %></td>
-                        <td style="padding:5px;"><% if scorecard.url %><%= scorecard.url %><% else %>Bundle Upload<%end%></td>
-                        <td style="padding:5px;text-align:center;"><%= scorecard.date.strftime("%H:%M, %m/%d/%y") %></td>
-                        <td style="padding:5px;text-align:center"><% if scorecard.result.length > 0 %><%= scorecard.result[0]["points"] %><% end %> </td>
-                        <td style="padding:5px;text-align:center"><% if scorecard.result.length > 0 %><a aria-hidden="true" href="/scorecard/db/<%= scorecard._id %>">Report</a><% end %></td>            
+                        <td ><% if scorecard.url %><%= scorecard.url %><% else %>Bundle Upload<%end%></td>
+                        <td style="text-align:center;"><%= scorecard.date.strftime("%H:%M, %m/%d/%y") %></td>
+                        <td style="text-align:center"><% if scorecard.result.length > 0 %><%= scorecard.result[0]["points"] %><% end %> </td>
+                        <td style="text-align:center"><% if scorecard.result.length > 0 %><a aria-hidden="true" href="/scorecard/db/<%= scorecard._id %>">Report</a><% end %></td>            
                       </tr>
                     <% end %>
                   </tbody> 
