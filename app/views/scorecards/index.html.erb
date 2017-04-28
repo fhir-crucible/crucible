@@ -150,7 +150,7 @@
                         <td ><% if scorecard.url %><%= scorecard.url %><% else %>Bundle Upload<%end%></td>
                         <td style="text-align:center;"><%= scorecard.date.strftime("%H:%M, %m/%d/%y") %></td>
                         <td style="text-align:center"><% if scorecard.result.length > 0 %><%= scorecard.result[0]["points"] %><% end %> </td>
-                        <td style="text-align:center"><% if scorecard.result.length > 0 %><a aria-hidden="true" href="/scorecard/db/<%= scorecard._id %>">Report</a><% end %></td>            
+                        <td style="text-align:center"><% if scorecard.result.length > 0 %><a aria-hidden="true" href="/scorecard/<%= scorecard._id %>">Report</a><% end %></td>            
                       </tr>
                     <% end %>
                   </tbody> 
@@ -178,7 +178,7 @@
                         <td style="padding:5px;"><% if scorecard.url %><%= scorecard.url %><% else %>Bundle Upload<%end%></td>
                         <td style="padding:5px;text-align:center;"><%= scorecard.date.strftime("%H:%M, %m/%d/%y") %></td>
                         <td style="padding:5px;text-align:center"><% if scorecard.result.length > 0 %><%= scorecard.result[0]["points"] %><% end %> </td>
-                        <td style="padding:5px;text-align:center"><% if scorecard.result.length > 0 %><a aria-hidden="true" href="/scorecard/db/<%= scorecard._id %>">Report</a><% end %></td>            
+                        <td style="padding:5px;text-align:center"><% if scorecard.result.length > 0 %><a aria-hidden="true" href="/scorecard/<%= scorecard._id %>">Report</a><% end %></td>            
                       </tr>
                     <% end %>
                   </tbody> 
