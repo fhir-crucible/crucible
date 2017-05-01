@@ -122,6 +122,33 @@
           </table>
         <% end %>
 
+        <% if @recent_runs && !@recent_runs.empty? %>
+            <h2>Recently Loaded Data</h2>
+            <table class="table table-striped" style="border-width: 2px;border-style:solid;border-color:rgb(221,221,221)">
+              <thead style="font-size:18px;">
+                <tr>
+                  <th>URL</th>
+                  <th style="text-align: center;">Records</th>
+                  <th style="text-align: center;">Format</th>
+                  <th style="text-align: center;">Date</th>
+                  <th style="text-align:center;">Loaded?</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                <% @recent_runs.each do |run| %>
+                  <tr style="border-bottom:1px solid rgb(221,221,221);">
+                    <td><%= run.url %></td>
+                    <td style="text-align: center;"><%= run.count %></td>
+                    <td style="text-align: center;"><%= run.format %></td>
+                    <td style="text-align: center;"><%= run.date.strftime("%H:%M, %m/%d/%y") %></td>
+                    <td style="text-align:center;"><% if run.success %><span title="Loaded" class="glyphicon glyphicon-ok" style="color:green;" aria-hidden="true"></span> <% elsif run.success == false %><span class="glyphicon glyphicon-remove" title="Unable to load data" style="color:red" aria-hidden="true"></span><% else %><span class="glyphicon glyphicon-minus" title="Status unknown" style="color:#505152" aria-hidden="true"></span><% end %>
+                  </tr>
+                <% end %>
+              </tbody> 
+            </table>
+        <% end %>
+
       </div>
     </div>
   </div>

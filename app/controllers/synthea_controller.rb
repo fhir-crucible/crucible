@@ -5,6 +5,7 @@ class SyntheaController < ApplicationController
   def index
     @testdata = []
     @resources_created = Hash.new(0)
+    @recent_runs = SyntheaRun.all.order_by(:date=>-1).limit(10)
   end
 
   # POST /testdata
@@ -58,7 +59,7 @@ class SyntheaController < ApplicationController
           end
         end
       end
-      SyntheaRun.new(url: server_url, format: format_type, count: quantity, date: Time.now).save
+      SyntheaRun.new(url: server_url, format: format_type, count: quantity, date: Time.now, success: count > 0).save
       @notice = "Successfully loaded #{count} of #{quantity} record(s)." if count > 0
     rescue Exception => e 
       @message = "Failed to load records."
