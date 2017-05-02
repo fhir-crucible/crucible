@@ -257,7 +257,7 @@ class Server
           version_abbreviated = self.fhir_version
           version_abbreviated = self.fhir_version.split('-').first if self.fhir_version and self.fhir_version.include? '-'
           version = version_abbreviated.split('.').map(&:to_i)
-          if version[0] >= 1 and version[1] >= 1
+          if (version[0] >= 1 && version[1] >= 1) || version[0] == 3
             self.fhir_sequence = 'STU3'
           elsif ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
             self.fhir_sequence = 'DSTU2'

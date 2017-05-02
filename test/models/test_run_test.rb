@@ -4,7 +4,7 @@ class TestRunTest < ActiveSupport::TestCase
 
   def setup
     dump_database
-    @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','conformance', 'bonfire_conformance.xml'))
+    @conformance_xml = File.read(Rails.root.join('test','fixtures','xml','capability_statement', 'full_capability_statement.xml'))
   end
 
   def test_add_test
@@ -75,8 +75,8 @@ class TestRunTest < ActiveSupport::TestCase
     stub_request(:any, /www\.example\.com\/.*/).to_timeout
     stub_request(:get, "www.example.com/metadata").to_return(body: @conformance_xml).times(1)
 
-    # We need to exclude search tests, since they currently have at least 1 passing test
-    testrun.add_tests(Test.all().select { |t| !t.name.start_with?('SearchTest') }[0..9])
+    # Just use resource tests because we know they won't pass
+    testrun.add_tests(Test.all().select { |t| t.name.start_with?('ResourceTest')}[0..9])
 
     assert testrun.execute()
 
