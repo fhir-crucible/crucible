@@ -19,16 +19,15 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# note: chance branch back to master and comment these two out once we merge down 3.0.0
-gem 'fhir_models', :git => 'https://github.com/fhir-crucible/fhir_models.git', :branch => '3.0.0-release'
-gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => '3.0.0-release'
-#gem 'fhir_client', :path => '../fhir_client'
-#
-gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => '3.0.0-release'
-#gem 'plan_executor', :path => '../plan_executor'
-gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git', :branch => '3.0.0-release'
+# gem 'fhir_models', :git => 'https://github.com/fhir-crucible/fhir_models.git'
+# gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git'
+# gem 'fhir_client', :path => '../fhir_client'
+
+gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git'
+# gem 'plan_executor', :path => '../plan_executor'
+gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git'
 #gem 'fhir_scorecard', :path => '../fhir_scorecard'
-gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'fhir_3'
+gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'fhir_3' #this should be fixed when this branch merged.
 #gem 'synthea', :path => '../synthea'
 gem 'mongoid'
 gem 'devise'

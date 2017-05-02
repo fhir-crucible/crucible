@@ -1,42 +1,18 @@
 GIT
-  remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: 428d9268da584cef62d5750633c2aa5451a52c49
-  branch: 3.0.0-release
-  specs:
-    fhir_client (3.0.0)
-      activesupport (>= 3)
-      addressable (>= 2.3)
-      nokogiri
-      oauth2 (~> 1.1)
-      rack (>= 1.5)
-      rest-client (~> 1.8)
-      tilt (>= 1.1)
-
-GIT
-  remote: https://github.com/fhir-crucible/fhir_models.git
-  revision: f30b2665fe8334e410c8372b2c70d825a3ffa753
-  branch: 3.0.0-release
-  specs:
-    fhir_models (3.0.0)
-      bcp47 (>= 0.3)
-      date_time_precision (>= 0.8)
-      mime-types (>= 1.16, < 3)
-      nokogiri (>= 1.6)
-
-GIT
   remote: https://github.com/fhir-crucible/fhir_scorecard.git
-  revision: 9d52d975022656f89af81b9f05048721c8a850dc
-  branch: 3.0.0-release
+  revision: daf1d9854ae25c96e92ade7ba1e4e6f83967d32c
   specs:
-    fhir_scorecard (3.0.0)
+    fhir_scorecard (3.0.1)
+      fhir_models (>= 3.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: fffc69228ed20e0d07dfcbb03d728602492aec1b
-  branch: 3.0.0-release
+  revision: 802ea6b233022ff8a38f44697d37453c4cc6843c
   specs:
     plan_executor (1.8.0)
       ansi
+      fhir_client
+      fhir_models
       jsonpath
       method_source
       nokogiri
@@ -44,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/synthetichealth/synthea.git
-  revision: 4f5a72f545b1e8f7d9cb5c9781e40c7e5385eef9
+  revision: 1b939cc287dfba30e34e3d46c3c58677a93a0e06
   branch: fhir_3
   specs:
     synthea (1.1.0)
@@ -164,6 +140,20 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     ffi (1.9.10)
+    fhir_client (3.0.1)
+      activesupport (>= 3)
+      addressable (>= 2.3)
+      fhir_models (>= 3.0.0)
+      nokogiri
+      oauth2 (~> 1.1)
+      rack (>= 1.5)
+      rest-client (~> 1.8)
+      tilt (>= 1.1)
+    fhir_models (3.0.1)
+      bcp47 (>= 0.3)
+      date_time_precision (>= 0.8)
+      mime-types (>= 1.16, < 3)
+      nokogiri (>= 1.6)
     formatador (0.2.5)
     georuby (2.5.2)
     globalid (0.3.6)
@@ -196,7 +186,7 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.6)
-    jsonpath (0.5.8)
+    jsonpath (0.7.0)
       multi_json
     jwt (1.5.6)
     listen (3.0.3)
@@ -378,8 +368,6 @@ DEPENDENCIES
   date_time_precision
   delayed_job_mongoid
   devise
-  fhir_client!
-  fhir_models!
   fhir_scorecard!
   guard-livereload
   handlebars_assets
