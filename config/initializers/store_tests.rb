@@ -1,5 +1,5 @@
 # date based version to force tests to reload on startup
-LOAD_VERSION=20170402
+LOAD_VERSION=20170403
 
 Test.any_of({:load_version.exists => false},{:load_version.lt => LOAD_VERSION}).delete
 
@@ -20,7 +20,7 @@ Crucible::Tests::Executor.list_all.each do |key,value|
     test.details = value['details'] unless value['details'].blank?
 
     # Temporarily for connectathon 14, remove after
-    test.category = { id: 'connectathon-14-patient-track', title: "Connectathon 14 Patient Track" } if test.title.include? "connectathon-14-patient"
+    test.category = { id: 'connectathon-15-patient-track', title: "Connectathon 15 Patient Track" } if test.title.include? "connectathon-15-patient"
 
     crucibleTest = executor.find_test(value['title'])
     if value["resource_class"]
