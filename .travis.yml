@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 sudo: false
 rvm:
-  - 2.2.7
+  - 2.1.2
 services:
   - mongodb
 branches:
@@ -13,8 +13,6 @@ notifications:
     recipients:
       - fhir-testing-list@lists.mitre.org
     on_failure: change
-before_install:
-  - gem install bundler
 before_script:
   - npm -g install bower
   - bower install
