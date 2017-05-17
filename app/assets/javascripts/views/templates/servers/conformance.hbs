@@ -52,6 +52,8 @@
           {{> conformance_metadata title="MODE" value=conformance.rest.0.mode}}
           {{> conformance_metadata title="IDENTIFIER" value=conformance.identifier}}
           {{> conformance_metadata title="DOCUMENTATION" value=conformance.rest.0.documentation}}
+          {{> conformance_metadata title="OPERATIONS" value=conformance.rest.0.operation object=true}}
+          {{> conformance_metadata title="INTERACTIONS" value=conformance.rest.0.interaction array=true}}
         </div>
       </div>
 
@@ -90,34 +92,34 @@
           <thead>
             <tr>
               <th>Resource Type</th>
-              <th>Read</th>
-              <th>VRead</th>
-              <th>Update</th>
-              <th>Delete</th>
-              <th>History</th>
-              <th>Validate</th>
-              <th>History Type</th>
-              <th>Create</th>
-              <th>Search Type</th>
+              {{#each operations as |operation|}}
+                <th>{{title-case operation}}</th>
+              {{/each}}
             </tr>
           </thead>
           <tbody>
             {{#each testedResources as |res|}}
               <tr class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#resource-{{@index}}">
-                <td data-title="Read" class="test-circle-holder">
+                <td>
                   <a>{{title-case res.type}}</a>
                 </td>
                 {{#each ../operations as |operation|}}
-                  <td>
+                  <td title="{{title-case operation}} {{supported-status-text res operation}}">
                     {{> resource_operation resource=res validatedResources=validatedResources operation=operation }}
                   </td>
                 {{/each}}
               </tr>
               <tr id="resource-{{@index}}" class="panel-collapse collapse" aria-expanded="false">
-                <td colspan="10">
+                <td></td>
+                <td colspan="{{../operations.length}}">
                   <div>
-                    Conforms to
-                    <a href={{res.profile.reference}}>{{res.profile.reference}}</a>
+                    <h2>{{res.type}} Resource</h2>
+                    {{#if res.profile.reference }} 
+                      <h3>Profile</h3>
+                      Conforms to
+                      <a href={{res.profile.reference}}>{{res.profile.reference}}</a>
+                    {{/if}}
+                    <h3>Supported Search Parameters</h3>
                     <table class="table inner-table">
                       <tr>
                         <th>Search Param</th>
@@ -131,6 +133,41 @@
                           <td>{{param.documentation}}</td>
                         </tr>
                       {{/each}}
+                    </table>
+                    <h3>Additional Features</h3>
+                    <table class="table inner-table">
+                      <tr>
+                        <th>Feature</th>
+                        <th>Support</th>
+                      </tr>
+                      <tr>
+                        <td>Versioning</td>
+                        <td>{{res.versioning}}</td>
+                      </tr>
+                      <tr>
+                        <td>Read History</td>
+                        <td>{{res.readHistory}}</td>
+                      </tr>
+                      <tr>
+                        <td>Update Create</td>
+                        <td>{{res.updateCreate}}</td>
+                      </tr>
+                      <tr>
+                        <td>Conditional Create</td>
+                        <td>{{res.conditionalCreate}}</td>
+                      </tr>
+                      <tr>
+                        <td>Conditional Read</td>
+                        <td>{{res.conditionalRead}}</td>
+                      </tr>
+                      <tr>
+                        <td>Conditional Update</td>
+                        <td>{{res.conditionalUpdate}}</td>
+                      </tr>
+                      <tr>
+                        <td>Conditional Delete</td>
+                        <td>{{res.conditionalDelete}}</td>
+                      </tr>
                     </table>
                   </div>
                 </td>

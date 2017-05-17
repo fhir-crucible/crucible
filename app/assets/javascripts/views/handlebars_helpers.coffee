@@ -54,6 +54,13 @@ Handlebars.registerHelper('supported-status', (resource, operation) ->
     return "test-empty"
 )
 
+Handlebars.registerHelper('supported-status-text', (resource, operation) ->
+  if resource? && resource.operation? && resource.operation[operation] == true
+    return "Supported"
+  else
+    return "Not Supported"
+)
+
 Handlebars.registerHelper('percentage', (numerator, denominator) ->
   return "#{Math.round((numerator/denominator) * 100)}%"
 )
