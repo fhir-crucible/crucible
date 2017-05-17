@@ -10,6 +10,18 @@
       {{else}}
         No
       {{/if}}
+    {{else if object}}
+      {{#each value}}
+        {{#if this}}
+          ${{@key}},
+        {{/if}}
+      {{/each}}
+    {{else if array}}
+      {{#each value as |v|}}
+        {{#if v.code}}
+          {{v.code}},
+        {{/if}}
+      {{/each}}
     {{else}}
       {{#if value}}
         {{value}}
@@ -18,22 +30,4 @@
       {{/if}}
     {{/if}}
   </div>
-
-  {{#if isMultiple}}
-    <div class="col-sm-4 word-wrap">
-      {{#if boolean}}
-        {{#if value2}}
-          Yes
-        {{else}}
-          No
-        {{/if}}
-      {{else}}
-        {{#if value2}}
-          {{value2}}
-        {{else}}
-          --
-        {{/if}}
-      {{/if}}
-    </div>
-  {{/if}}
 </div>
