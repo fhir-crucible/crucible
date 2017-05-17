@@ -3,7 +3,7 @@ $(document).ready( ->
 )
 
 class Crucible.Conformance
-  @operations: ["read", "vread", "update", "delete", "history-instance", "validate", "history-type", "create", "search-type"]
+  @operations: ['read', 'vread', 'update', 'patch', 'delete', 'history-instance', 'history-type', 'create', 'search-type']
   templates:
     conformanceError: 'views/templates/servers/conformance_error'
 
