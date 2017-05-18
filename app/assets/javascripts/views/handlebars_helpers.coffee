@@ -64,3 +64,7 @@ Handlebars.registerHelper('supported-status-text', (resource, operation) ->
 Handlebars.registerHelper('percentage', (numerator, denominator) ->
   return "#{Math.round((numerator/denominator) * 100)}%"
 )
+
+Handlebars.registerHelper('format-date', (date) ->
+  return moment(date).format('MM/DD/YYYY HH:mm');
+)

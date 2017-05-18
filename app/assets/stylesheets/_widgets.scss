@@ -315,9 +315,39 @@
   }
 
   .common-failures {
+    border-right: 1px solid #ddd;
   }
 
   .test-failures {
     border-right: 1px solid #ddd;
   }
+}
+
+// ------------------------- RECENT TEST RUNS -------------------------------------- //
+.recent-runs {
+  .recent-runs-title {
+    text-align: left;
+    font-size: 24px;
+    border-bottom: 1px solid $structure;
+    margin-bottom: 15px;
+
+    .failures-count {
+      color: $brand-accent;
+    }
+  }
+  .recent-runs-container {
+    width: 100%
+  }
+  tr {
+    cursor: pointer;
+
+  }
+
+  td {
+    padding-bottom: 5px;
+    font-size: 0.9em;
+    color: #4a6e98;
+  }
+
+
 }

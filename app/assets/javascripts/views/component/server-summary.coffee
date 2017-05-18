@@ -5,6 +5,7 @@ $(document).ready( ->
 class Crucible.ServerSummary
   templates:
     failures: 'views/templates/servers/failures_report'
+    recentRuns: 'views/templates/servers/recent_runs'
 
   constructor: ->
     @element = $('.test-run-report')
@@ -12,6 +13,7 @@ class Crucible.ServerSummary
     @serverId = @element.data('server-id')
     @registerHandlers()
     @failuresReportElement = @element.find('.common-failures')
+    @recentRunsReportElement = @element.find('.recent-runs')
     @loadAggregateRun()
 
   registerHandlers: =>
@@ -21,6 +23,18 @@ class Crucible.ServerSummary
       @renderHeader(@starburst.selectedNode)
       @loadHistory()
       false
+    )
+    $('.past-test-runs-selector').on('testRunsLoaded', (event) =>
+      pastRunsSelector = $('.past-test-runs-selector')
+      pastRuns = pastRunsSelector.data('testRuns').past_runs
+      pastRuns = pastRuns.slice(0,50) # only show most cent
+      @recentRunsReportElement.html(HandlebarsTemplates[@templates.recentRuns]({pastRuns: pastRuns}))
+      @recentRunsReportElement.find('.recent-runs-item').click( (event) ->
+        id = $(@).data('id')
+        $('.change-test-run').trigger('click')
+        pastRunsSelector.val(id).trigger('change')
+        $('#test-data-tab').trigger('click')
+      )
     )
 
   renderFailures: ->
