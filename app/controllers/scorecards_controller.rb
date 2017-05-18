@@ -4,7 +4,7 @@ class ScorecardsController < ApplicationController
   def index
     @scorecards = [  ]
     @recent_scorecards = ScorecardRun.all.order_by(:date => :desc).limit(10)
-    @top_scorecards = ScorecardRun.all.sort! { |a| - a.get_score }[0..9]
+    @top_scorecards = ScorecardRun.all.sort! { |a,b| b.get_score <=> a.get_score }[0..9]
   end
 
   # POST /scorecards/score_url
