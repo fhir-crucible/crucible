@@ -1,0 +1,18 @@
+<div class="recent-runs-title">
+  Recent Test Runs
+</div>
+<table class="recent-runs-container">
+  {{#each pastRuns as |run|}}
+    <tr class="recent-runs-item" data-id="{{run.id}}" title='{{#if run.supported_only}}(S) Only test server supported resources and operations.{{/if}} {{#if run.nightly}}(N) Automated nightly test run.{{/if}}'>
+      <td>
+      {{format-date run.date}} 
+      </td><td>
+      {{run.test_ids.length}} Suite{{pluralize? run.test_ids.length}}
+      </td><td>
+      </td><td>
+        {{#if run.supported_only}}S{{#if run.nightly}}, {{/if}}{{/if}}
+        {{#if run.nightly}}N{{/if}}
+        </td>
+      </tr>
+    {{/each}}
+</table>

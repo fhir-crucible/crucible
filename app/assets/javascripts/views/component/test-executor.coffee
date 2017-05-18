@@ -132,6 +132,7 @@ class Crucible.TestExecutor
       return unless data
       foundDefaultSelection = false
       selector = @element.find('.past-test-runs-selector')
+      selector.data('testRuns', data).trigger('testRunsLoaded')
       selector.empty()
       if elementToAdd
         option = $("<option>#{elementToAdd.text}</option>")
