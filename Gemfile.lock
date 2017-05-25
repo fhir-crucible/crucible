@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 802ea6b233022ff8a38f44697d37453c4cc6843c
+  revision: 0a594e026e561c2fcb55dc07f62405bbd75c1bf3
   specs:
     plan_executor (1.8.0)
       ansi
@@ -186,7 +186,7 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.6)
-    jsonpath (0.7.0)
+    jsonpath (0.7.2)
       multi_json
     jwt (1.5.6)
     listen (3.0.3)

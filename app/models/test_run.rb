@@ -192,12 +192,14 @@ class TestRun
     results = []
 
     if testreport.setup
+      requests = []
       statuses = Hash.new(0)
       message = nil
       testreport.setup.action.each do |action|
         if action.operation
           statuses[action.operation.result] += 1
           message = action.operation.message if ['fail','error','skip'].include?(action.operation.result) && message.nil? && action.operation.message
+          requests.concat(action.operation.extension.select{|e| e.url.end_with? 'testscript-request'}.map{|r| JSON.parse(r.valueString)})
         elsif action.assert
           statuses[action.assert.result] += 1
           message = action.assert.message if ['fail','error','skip'].include?(action.assert.result) && message.nil? && action.assert.message
@@ -214,15 +216,18 @@ class TestRun
       end
       results << Crucible::Tests::TestResult.new('SETUP', 'Setup for TestScript', status, message, nil).to_hash
       results.last[:test_method] = 'SETUP'
+      results.last[:requests] = requests
     end
 
     testreport.test.each do |test|
+      requests = []
       statuses = Hash.new(0)
       message = nil
       test.action.each do |action|
         if action.operation
           statuses[action.operation.result] += 1
           message = action.operation.message if ['fail','error','skip'].include?(action.operation.result) && message.nil? && action.operation.message
+          requests.concat(action.operation.extension.select{|e| e.url.end_with? 'testscript-request'}.map{|r| JSON.parse(r.valueString)})
         elsif action.assert
           statuses[action.assert.result] += 1
           message = action.assert.message if ['fail','error','skip'].include?(action.assert.result) && message.nil? && action.assert.message
@@ -239,6 +244,7 @@ class TestRun
       end
       results << Crucible::Tests::TestResult.new(test.name, test.description, status, message, nil).to_hash
       results.last[:test_method] = test.name
+      results.last[:requests] = requests
     end
     results
   end
