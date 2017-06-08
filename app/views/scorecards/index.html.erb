@@ -214,19 +214,20 @@
             <div class="scorecard-table">
 
               <% scorecard.each do |key,value| %>
-                <% next if key=="points" or key==:points %>
+                <% rubric_name = key.to_s %>
+                <% next if rubric_name == 'points' %>
                 <% max_points = 10.0 %>
-                <% max_points = 20.0 if key==:completeness %>    
+                <% max_points = 20.0 if rubric_name == 'completeness' %>
                 <% index = (value[:points].to_f * (colors.length.to_f / max_points) ).to_i  %>
                 <% index -= 1 if index > 0 %>
-                <% index = (colors.length - index - 1) if key==:cvx_medications %>
+                <% index = (colors.length - index - 1) if rubric_name == 'cvx_medications' %>
                 <% color = colors[ index ]  %>
                 <div class="scorecard-row">
                   <!-- <td style="text&#45;align: center; background&#45;clip: padding&#45;box; background&#45;color: <%=color%>; color: white; border: 15px solid <%= color %>; border&#45;radius: 15px;"><%= value[:points].to_s %></td> -->
                   <div class="scorecard-score" style="background-color: <%=color%>"><%= value[:points].to_s %></div>
                   <div class="scorecard-rubric">
                     <div class="scorecard-name">
-                      <%= key.to_s.gsub('_',' ') %>
+                      <%= rubric_name.gsub('_',' ') %>
                     </div>
                     <div class="scorecard-out-of">
                       out of <%= max_points %> points
