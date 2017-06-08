@@ -42,8 +42,14 @@
                   </div>
                   <div class="col-sm-11 landing-page-form">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-8">
                         <input required placeholder="[FHIR Server URL]/Patient/[id]/$everything" type="text" name="bundle_url" class="form-control">
+                      </div>
+                      <div class="col-sm-2">
+                        <select name="bundle_version">
+                          <option value="STU3" selected>STU3</option>
+                          <option value="DSTU2">DSTU2</option>
+                        </select>
                       </div>
                       <div class="col-sm-2">
                         <input type="submit" class="btn begin" value="Score"></input>
@@ -65,8 +71,14 @@
                   </div>
                   <div class="col-sm-11 landing-page-form">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-8">
                         <%= file_field_tag 'bundle_contents' %>
+                      </div>
+                      <div class="col-sm-2">
+                        <select name="upload_version">
+                          <option value="STU3" selected>STU3</option>
+                          <option value="DSTU2">DSTU2</option>
+                        </select>
                       </div>
                       <div class="col-sm-2">
                         <input type="submit" class="btn begin" value="Score"></input>
@@ -88,8 +100,14 @@
                   </div>
                   <div class="col-sm-11 landing-page-form">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-8">
                         <textarea required rows="10" placeholder="Copy &amp; Paste FHIR Patient Record (as Bundle)" name="bundle_body" class="form-control"></textarea>
+                      </div>
+                      <div class="col-sm-2">
+                        <select name="paste_version">
+                          <option value="STU3" selected>STU3</option>
+                          <option value="DSTU2">DSTU2</option>
+                        </select>
                       </div>
                       <div class="col-sm-2">
                         <input type="submit" class="btn begin" value="Score"></input>
