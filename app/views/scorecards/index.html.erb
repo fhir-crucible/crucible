@@ -46,7 +46,7 @@
                         <input required placeholder="[FHIR Server URL]/Patient/[id]/$everything" type="text" name="bundle_url" class="form-control">
                       </div>
                       <div class="col-sm-2">
-                        <select name="bundle_version">
+                        <select class="form-control" name="bundle_version">
                           <option value="STU3" selected>STU3</option>
                           <option value="DSTU2">DSTU2</option>
                         </select>
@@ -75,7 +75,7 @@
                         <%= file_field_tag 'bundle_contents' %>
                       </div>
                       <div class="col-sm-2">
-                        <select name="upload_version">
+                        <select class="form-control" name="upload_version">
                           <option value="STU3" selected>STU3</option>
                           <option value="DSTU2">DSTU2</option>
                         </select>
@@ -104,7 +104,7 @@
                         <textarea required rows="10" placeholder="Copy &amp; Paste FHIR Patient Record (as Bundle)" name="bundle_body" class="form-control"></textarea>
                       </div>
                       <div class="col-sm-2">
-                        <select name="paste_version">
+                        <select class="form-control" name="paste_version">
                           <option value="STU3" selected>STU3</option>
                           <option value="DSTU2">DSTU2</option>
                         </select>
