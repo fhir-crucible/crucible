@@ -42,7 +42,7 @@ gem 'simple_token_authentication', '~> 1.8.0'
 gem 'bcp47'
 gem 'nokogiri-diff'
 gem 'addressable'
-gem 'handlebars_assets'
+gem 'handlebars_assets', '0.16' # pin to 0.16 for now as 0.17 introduces breaking changes
 gem 'oauth2'
 gem 'ruby-progressbar'
 gem "non-stupid-digest-assets"
