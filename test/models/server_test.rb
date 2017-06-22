@@ -71,7 +71,6 @@ class ServerTest < ActiveSupport::TestCase
     assert_equal someSuites.length, (server.supported_suites & someSuites).length
     assert_equal someTests.length, (server.supported_tests & someTests).length
 
-    binding.pry
     assert_equal 0, (server.supported_suites & excludedSuites).length
     assert_equal 0, (server.supported_tests & excludedTests).length
   end
