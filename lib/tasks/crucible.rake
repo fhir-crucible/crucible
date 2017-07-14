@@ -214,4 +214,99 @@ namespace :crucible do
     end
   end
 
+  desc "Adds badges to the database"
+  task :add_badges => [:environment] do
+    # Dummy (Always Pass)
+    Badge.new({
+      id: "DUMMY",
+      name: "Dummy",
+      suites: [],
+      tests: [],
+      description: "This server exists",
+      link: "www.google.com"
+    })
+    # Terminology
+    Badge.new({
+      id: "TERM",
+      name: "Terminology",
+      suites: ["FAIL"],
+      tests: [],
+      description: "This server...",
+      link: "https://www.hl7.org/fhir/terminology-service.html"
+    })
+    # Conformance Service
+    # Knowledge Repository
+    # Measure Processor
+
+    # Security
+    Badge.new({
+      id: "SEC",
+      name: "Security",
+      suites: [],
+      tests: ["CAEP1","CAEP3","CAEP5"],
+      description: "This server...",
+      link: ""
+    })
+    # EHR (Read-Only)
+    Badge.new({
+      id: "EHR",
+      name: "Electronic Health Record",
+      suites: ["readtest"],
+      tests: [],
+      description: "This server...",
+      link: ""
+    })
+    # HIE
+    Badge.new({
+      id: "HIE",
+      name: "Health Information Exchange",
+      suites: ["FAIL"],
+      tests: [],
+      description: "This server...",
+      link:""
+    })
+    # Claims
+    Badge.new({
+      id: "CLAIM",
+      name: "Claims",
+      suites: [
+        "connectathonfinancialtracktest",
+        "resourcetest_account",
+        "resourcetest_chargeitem",
+        "resourcetest_claim",
+        "resourcetest_claimresponse",
+        "resourcetest_contract",
+        "resourcetest_coverage",
+        "resourcetest_eligibilityrequest",
+        "resourcetest_eligibilityresponse",
+        "resourcetest_enrollmentrequest",
+        "resourcetest_enrollmentresponse",
+        "resourcetest_explanationofbenefit",
+        "resourcetest_paymentnotice",
+        "resourcetest_paymentreconciliation",
+        "searchtest_account",
+        "searchtest_chargeitem",
+        "searchtest_claim",
+        "searchtest_claimresponse",
+        "searchtest_contract",
+        "searchtest_coverage",
+        "searchtest_eligibilityrequest",
+        "searchtest_eligibilityresponse",
+        "searchtest_enrollmentrequest",
+        "searchtest_enrollmentresponse",
+        "searchtest_explanationofbenefit",
+        "searchtest_paymentnotice",
+        "searchtest_paymentreconciliation"
+      ],
+      tests: [],
+      description: "This server...",
+      link: ""
+    })
+    # Updates badges for all servers
+    Server.all.each do |server|
+      server.check_badges
+    end
+
+  end
+
 end

@@ -228,6 +228,26 @@ class Server
     self.save!
   end
 
+  def check_badges
+    badges = []
+    Badge.all.each do |badge|
+      earned = true
+      badge.suites.each do |suite|
+        if not self.supported_suites.include? suite
+          earned = false
+        end
+      end
+      badge.tests.each do |test|
+        if not self.supported_tests.include? test
+          earned = false
+        end
+      end
+      badges << badge.id
+    self.badges = badges
+    self.save!
+  end
+
+
   def guess_name(force=false)
     return unless (self.name.blank? || (force && self.name_guessed))
     if self.conformance
