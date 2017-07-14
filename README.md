@@ -3,7 +3,7 @@
 A simple Rails app for evaluating FHIR.
 
 ## Details ##
-  - Ruby 2.0.0+
+  - Ruby 2.2+
   - Rails 4.1+
   - Bootstrap
   - MongoDB
@@ -23,7 +23,7 @@ A simple Rails app for evaluating FHIR.
 #### Dependencies
 - Install [Homebrew](http://brew.sh/)
 - Install [RVM](https://rvm.io/)
-- Install Ruby 2.0.0+ via `rvm install 2.0.0`
+- Install Ruby 2.2+ via `rvm install 2.2.7`
 - Install [MongoDB](https://www.mongodb.org/) via `brew install mongodb`
 - Install [Bundler](http://bundler.io/) via `gem install bundler`
 - Install [Node](https://nodejs.org/) via `brew install node`

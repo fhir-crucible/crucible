@@ -128,8 +128,7 @@ class ServersController < ApplicationController
 
   def supported_tests
     server = Server.find(params[:server_id])
-    @@suites ||= Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}
-    @suites = @@suites
+    @suites = Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}
 
     server.collect_supported_tests rescue logger.error "error collecting supported tests"
     if server.supported_suites

@@ -27,9 +27,9 @@ gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git
 # gem 'plan_executor', :path => '../plan_executor'
 gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git'
 #gem 'fhir_scorecard', :path => '../fhir_scorecard'
-gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'fhir_3' #this should be fixed when this branch merged.
+gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git'
 #gem 'synthea', :path => '../synthea'
-gem 'mongoid'
+gem 'mongoid', '>= 4.0.0', '< 5' # lock mongoid below 5 for the moment, as it requires code changes
 gem 'devise'
 gem 'autoprefixer-rails'
 gem 'nokogiri'
@@ -42,7 +42,7 @@ gem 'simple_token_authentication', '~> 1.8.0'
 gem 'bcp47'
 gem 'nokogiri-diff'
 gem 'addressable'
-gem 'handlebars_assets'
+gem 'handlebars_assets', '0.16' # pin to 0.16 for now as 0.17 introduces breaking changes
 gem 'oauth2'
 gem 'ruby-progressbar'
 gem "non-stupid-digest-assets"

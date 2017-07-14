@@ -42,8 +42,14 @@
                   </div>
                   <div class="col-sm-11 landing-page-form">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-8">
                         <input required placeholder="[FHIR Server URL]/Patient/[id]/$everything" type="text" name="bundle_url" class="form-control">
+                      </div>
+                      <div class="col-sm-2">
+                        <select class="form-control" name="bundle_version">
+                          <option value="STU3" selected>STU3</option>
+                          <option value="DSTU2">DSTU2</option>
+                        </select>
                       </div>
                       <div class="col-sm-2">
                         <input type="submit" class="btn begin" value="Score"></input>
@@ -65,8 +71,14 @@
                   </div>
                   <div class="col-sm-11 landing-page-form">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-8">
                         <%= file_field_tag 'bundle_contents' %>
+                      </div>
+                      <div class="col-sm-2">
+                        <select class="form-control" name="upload_version">
+                          <option value="STU3" selected>STU3</option>
+                          <option value="DSTU2">DSTU2</option>
+                        </select>
                       </div>
                       <div class="col-sm-2">
                         <input type="submit" class="btn begin" value="Score"></input>
@@ -88,8 +100,14 @@
                   </div>
                   <div class="col-sm-11 landing-page-form">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-8">
                         <textarea required rows="10" placeholder="Copy &amp; Paste FHIR Patient Record (as Bundle)" name="bundle_body" class="form-control"></textarea>
+                      </div>
+                      <div class="col-sm-2">
+                        <select class="form-control" name="paste_version">
+                          <option value="STU3" selected>STU3</option>
+                          <option value="DSTU2">DSTU2</option>
+                        </select>
                       </div>
                       <div class="col-sm-2">
                         <input type="submit" class="btn begin" value="Score"></input>
@@ -214,19 +232,20 @@
             <div class="scorecard-table">
 
               <% scorecard.each do |key,value| %>
-                <% next if key=="points" or key==:points %>
+                <% rubric_name = key.to_s %>
+                <% next if rubric_name == 'points' %>
                 <% max_points = 10.0 %>
-                <% max_points = 20.0 if key==:completeness %>    
+                <% max_points = 20.0 if rubric_name == 'completeness' %>
                 <% index = (value[:points].to_f * (colors.length.to_f / max_points) ).to_i  %>
                 <% index -= 1 if index > 0 %>
-                <% index = (colors.length - index - 1) if key==:cvx_medications %>
+                <% index = (colors.length - index - 1) if rubric_name == 'cvx_medications' %>
                 <% color = colors[ index ]  %>
                 <div class="scorecard-row">
                   <!-- <td style="text&#45;align: center; background&#45;clip: padding&#45;box; background&#45;color: <%=color%>; color: white; border: 15px solid <%= color %>; border&#45;radius: 15px;"><%= value[:points].to_s %></td> -->
                   <div class="scorecard-score" style="background-color: <%=color%>"><%= value[:points].to_s %></div>
                   <div class="scorecard-rubric">
                     <div class="scorecard-name">
-                      <%= key.to_s.gsub('_',' ') %>
+                      <%= rubric_name.gsub('_',' ') %>
                     </div>
                     <div class="scorecard-out-of">
                       out of <%= max_points %> points
