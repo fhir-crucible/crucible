@@ -29,6 +29,7 @@ class Server
   field :fhir_version, type: String
   field :hidden, type: Boolean, default: false
   field :history, type: Array, default: []
+  field :badges, type: Array, default: []
 
   def get_default_scopes
     [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },
@@ -242,7 +243,10 @@ class Server
           earned = false
         end
       end
-      badges << badge.id
+      if earned
+        badges << badge.id
+      end
+    end
     self.badges = badges
     self.save!
   end

@@ -216,8 +216,9 @@ namespace :crucible do
 
   desc "Adds badges to the database"
   task :add_badges => [:environment] do
+    Badge.all.destroy
     # Dummy (Always Pass)
-    Badge.new({
+    dummy_badge = Badge.new({
       id: "DUMMY",
       name: "Dummy",
       suites: [],
@@ -225,8 +226,9 @@ namespace :crucible do
       description: "This server exists",
       link: "www.google.com"
     })
+    dummy_badge.save
     # Terminology
-    Badge.new({
+    term_badge = Badge.new({
       id: "TERM",
       name: "Terminology",
       suites: ["FAIL"],
@@ -239,7 +241,7 @@ namespace :crucible do
     # Measure Processor
 
     # Security
-    Badge.new({
+    sec_badge = Badge.new({
       id: "SEC",
       name: "Security",
       suites: [],
@@ -247,8 +249,9 @@ namespace :crucible do
       description: "This server...",
       link: ""
     })
+    sec_badge.save
     # EHR (Read-Only)
-    Badge.new({
+    ehr_badge = Badge.new({
       id: "EHR",
       name: "Electronic Health Record",
       suites: ["readtest"],
@@ -256,6 +259,7 @@ namespace :crucible do
       description: "This server...",
       link: ""
     })
+    ehr_badge.save
     # HIE
     Badge.new({
       id: "HIE",
@@ -266,7 +270,7 @@ namespace :crucible do
       link:""
     })
     # Claims
-    Badge.new({
+    claims_badge = Badge.new({
       id: "CLAIM",
       name: "Claims",
       suites: [
@@ -302,6 +306,7 @@ namespace :crucible do
       description: "This server...",
       link: ""
     })
+    claims_badge.save
     # Updates badges for all servers
     Server.all.each do |server|
       server.check_badges

@@ -5,5 +5,7 @@ class Badge
 	field :name, type: String
 	field :suites, type: Array
 	field :tests, type: Array
-	field :description, type: String,
-	field :link
+	field :description, type: String
+	field :link, type: String
+
+end
