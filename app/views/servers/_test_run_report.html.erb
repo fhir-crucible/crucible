@@ -4,6 +4,21 @@
   </div>
   <div class="server-history server-history-loading">
   </div>
+  <!-- START: badges -->
+  <% if @server.badges %>
+  <div class="row" style="height:50px;">
+    <% for badge in Badge.all %>
+    <div class="col-sm-3">
+      <% if @server.badges.include? badge.id %>
+      <span style="background-color:orange;padding:10px;margin:10px" title="badge description">
+        <%= badge.id %>
+      </span>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+  <!-- END: badges -->
   <div class="failures row">
     <div class="common-failures col-sm-6">
       <div class="failures-title">

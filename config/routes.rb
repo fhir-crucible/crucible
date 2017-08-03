@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     post 'testdata' => :load_data
   end
 
+  controller :badges do
+    get 'badges' => :index
+  end
+  
   resources :test_results, only: [:show] do
     get 'reissue_request', default: {format: :json}
   end
