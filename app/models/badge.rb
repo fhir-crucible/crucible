@@ -9,6 +9,37 @@ class Badge
 	field :link, type: String
 	field :image, type: String
 
+	def resource_string
+		string = ""
+		self.suites.each do |suite|
+			if suite.start_with? "resourcetest"
+				if string.length > 0
+					string += ", "
+				end
+				string += suite.split("_")[1]
+			end
+		end
+		if string.length > 0
+			string += "."
+		end
+		return string
+	end
+
+	def suite_string
+		string = ""
+		self.suites.each do |suite|
+			#if !suite.start_with? "resourcetest" and !suite.start_with? "searchtest"
+			if string.length > 0
+				string += ", "
+			end
+			string += suite
+			#end
+		end
+		if string.length > 0
+			string += "."
+		end
+		return string
+	end
 	def self.create_badges
 		# Dummy (Always Pass)
 	    dummy_badge = Badge.new({
@@ -71,11 +102,11 @@ class Badge
 	      name: "Electronic Health Record",
 	      suites: ["readtest"],
 	      tests: [],
-	      description: "An Electronic Health Record server provides all the functionality necessary for a user to access a patients medical history including all key administrative clinicla data such as demographics, progress notes, medications, etc.",
+	      description: "An Electronic Health Record server provides all the functionality necessary for a user to access a patients medical history including all key administrative clinical data such as demographics, progress notes, medications, etc.",
 	      link: "",
 	      image: "EHR"
 	    })
-	    ehr_badge.save
+	    #ehr_badge.save
 
 	    # Foundation
 	    foundation_badge = Badge.new({
@@ -236,9 +267,9 @@ class Badge
 	      tests:[],
 	      description:"The <a href='https://www.hl7.org/fhir/administration-module.html'>administration module</a> covers the base data that is then linked into other modules for clinical content, finance/billing, workflow, etc. Before any clinical data can be recorded, the basic information on the patient must be recorded, and then often the bases of the interaction, such as an encounter.",
 	      link:"https://www.hl7.org/fhir/administration-module.html",
-	      image: "admin.jpg"
+	      image: "EHR"
 	    })
-	    #admin_badge.save
+	    admin_badge.save
 
 	    # Clinical
 	    clinical_badge = Badge.new({
