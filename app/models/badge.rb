@@ -9,7 +9,7 @@ class Badge
 	field :link, type: String
 	field :image, type: String
 
-	def create_badges
+	def self.create_badges
 		# Dummy (Always Pass)
 	    dummy_badge = Badge.new({
 	      id: "DUMMY",
@@ -21,6 +21,7 @@ class Badge
 	      image: "logo.png"
 	    })
 	    #dummy_badge.save
+	    
 	    # Terminology
 	    term_badge = Badge.new({
 	      id: "TERM",
@@ -37,11 +38,10 @@ class Badge
 	      tests: [],
 	      description: "A Terminology server lets healthcare applications make use of codes and value sets without having to become experts in the fine details of code system, value set and concept map resources, and the underlying code systems and terminological principles.",
 	      link: "https://www.hl7.org/fhir/terminology-service.html",
-	      image: "logo.png"
+	      image: "Term"
 	    })
 	    term_badge.save
 
-	    # Conformance Service
 	    # Knowledge Repository
 	    # Measure Processor
 
@@ -49,13 +49,22 @@ class Badge
 	    sec_badge = Badge.new({
 	      id: "SEC",
 	      name: "Security",
-	      suites: ["connectathonauditeventandprovenancetracktest"],
+	      suites: [
+	      	"connectathonauditeventandprovenancetracktest",
+	      	"resourcetest_consent",
+	      	"resourcetest_provenance",
+	      	"resourcetest_auditevent",
+	      	"searchtest_consent",
+	      	"searchtest_provenance",
+	      	"searchtest_auditevent"
+	      ],
 	      tests: [],
-	      description: "A Security badge is earned when a server complies with OAuth2 protocol.",
-	      link: "",
-	      image: "logo.png"
+	      description: "The Security and Privacy Module describes how to protect a FHIR server (through access control and authorization), how to document what permissions a user has granted (consent), and how to keep records about what events have been performed (audit logging and provenance). FHIR does not mandate a single technical approach to security and privacy; rather, the specification provides a set of building blocks that can be applied to create secure, private systems.",
+	      link: "https://www.hl7.org/fhir/secpriv-module.html",
+	      image: "Sec"
 	    })
 	    sec_badge.save
+	    
 	    # EHR (Read-Only)
 	    ehr_badge = Badge.new({
 	      id: "EHR",
@@ -64,7 +73,7 @@ class Badge
 	      tests: [],
 	      description: "An Electronic Health Record server provides all the functionality necessary for a user to access a patients medical history including all key administrative clinicla data such as demographics, progress notes, medications, etc.",
 	      link: "",
-	      image: "logo.png"
+	      image: "EHR"
 	    })
 	    ehr_badge.save
 
@@ -114,30 +123,64 @@ class Badge
 	      link: "https://www.hl7.org/fhir/foundation-module.html",
 	      image: "foundation.png"
 	    })
-	    foundation_badge.save
+	    #foundation_badge.save
 
 	    # Diagnostics
 	    diag_badge = Badge.new({
 	      id:"DIAGNOSTICS",
 	      name:"Diagnostics",
-	      suites:[],
+	      suites:[
+	      	"connectathongenomicstracktest",
+	      	"resourcetest_observation",
+	      	"resourcetest_diagnosticreport",
+	      	"resourcetest_procedurerequest",
+	      	"resourcetest_imagingstudy",
+	      	"resourcetest_imagingmanifest",
+	      	"resourcetest_sequence",
+	      	"resourcetest_speciment",
+	      	"resourcetest_bodysite",
+	      	"searchtest_observation",
+	      	"searchtest_diagnosticreport",
+	      	"searchtest_procedurerequest",
+	      	"searchtest_imagingstudy",
+	      	"searchtest_imagingmanifest",
+	      	"searchtest_sequence",
+	      	"searchtest_speciment",
+	      	"searchtest_bodysite"
+	      ],
 	      tests:[],
 	      description: "Tests for the diagnostics module",
 	      link:"",
 	      image: "logo.png"
 	    })
-	    diag_badge.save
+	    #diag_badge.save
 
 	    # Conformance
 	    conformance_badge = Badge.new({
 	      id: "CONFORM",
 	      name: "Conformance",
-	      suites:[],
+	      suites:[
+	      	"resourcetest_capabilitystatement",
+	      	"resourcetest_structuredefinition",
+	      	"resourcetest_operationdefinition",
+	      	"resourcetest_searchparameter",
+	      	"resourcetest_compartmentdefinition",
+	      	"resourcetest_dataelement",
+	      	"resourcetest_implementationguide",
+	      	"searchtest_capabilitystatement",
+	      	"searchtest_structuredefinition",
+	      	"searchtest_operationdefinition",
+	      	"searchtest_searchparameter",
+	      	"searchtest_compartmentdefinition",
+	      	"searchtest_dataelement",
+	      	"searchtest_implementationguide"
+	      ],
 	      tests:[],
-	      description:"Tests for the conformance module",
-	      link:"",
-	      image: "logo.png"
+	      description:"The conformance module represents metadata about the datatypes, resources and API features of the FHIR specification and can be used to create derived specifications.",
+	      link:"https://www.hl7.org/fhir/conformance-module.html",
+	      image: "conformance.jpg"
 	    })
+	    #conformance_badge.save
 
 	    # Administration
 	    admin_badge = Badge.new({
@@ -195,17 +238,40 @@ class Badge
 	      link:"https://www.hl7.org/fhir/administration-module.html",
 	      image: "admin.jpg"
 	    })
-	    admin_badge.save
+	    #admin_badge.save
 
 	    # Clinical
 	    clinical_badge = Badge.new({
 	      id: "CLINICAL",
 	      name: "Clinical",
-	      suites: [],
+	      suites: [
+	      	"resourcetest_allergyintolerance",
+	      	"resourcetest_careplan",
+	      	"resourcetest_adverseevent",
+	      	"resourcetest_condition",
+	      	"resourcetest_goal",
+	      	"resourcetest_detectedissue",
+	      	"resourcetest_procedure",
+	      	"resourcetest_careteam",
+	      	"resourcetest_riskassessment",
+	      	"resourcetest_familymemberhistory",
+	      	"resourcetest_clinicalimpression",
+	      	"searchtest_allergyintolerance",
+	      	"searchtest_careplan",
+	      	"searchtest_adverseevent",
+	      	"searchtest_condition",
+	      	"searchtest_goal",
+	      	"searchtest_detectedissue",
+	      	"searchtest_procedure",
+	      	"searchtest_careteam",
+	      	"searchtest_riskassessment",
+	      	"searchtest_familymemberhistory",
+	      	"searchtest_clinicalimpression"
+	      ],
 	      tests: [],
-	      description: "Clinical elements and stuff",
+	      description: "This Clinical Summary Module focuses on the FHIR Resources that represent core clinical information for a patient. The information contained in these Resources are those frequently documented, created or retrieved by healthcare providers during the course of clinical care.",
 	      link: "",
-	      image: "logo.png"
+	      image: "HIE"
 	    })
 	    clinical_badge.save
 
@@ -221,7 +287,7 @@ class Badge
 	      link:"",
 	      image: "logo.png"
 	    })
-	    med_badge.save
+	    #med_badge.save
 
 	    # Workflow
 	    workflow_badge = Badge.new( {
@@ -233,7 +299,7 @@ class Badge
 	      link:"",
 	      image: "logo.png"
 	    })
-	    workflow_badge.save
+	    #workflow_badge.save
 
 	    # Clinical Reasoning
 	    reason_badge = Badge.new({
@@ -245,7 +311,7 @@ class Badge
 	      link:"",
 	      image: "logo.png"
 	    })
-	    reason_badge.save
+	    #reason_badge.save
 
 	    # Claims
 	    claims_badge = Badge.new({
@@ -282,9 +348,9 @@ class Badge
 	        "searchtest_paymentreconciliation"
 	      ],
 	      tests: [],
-	      description: "A claims server provides financial services related to the processing of claims and payments",
+	      description: "The Financial module covers the resources and services provided by FHIR to support the costing, financial transactions and billing which occur within a healthcare provider as well as the eligibility, enrollment, authorizations, claims and payments which occur between healthcare providers and insurers and the reporting and notification between insurers and subscribers and patients.",
 	      link: "",
-	      image: "logo.png"
+	      image: "Claim"
 	    })
 	    claims_badge.save
 	end

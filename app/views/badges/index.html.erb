@@ -12,7 +12,7 @@
 				<% for badge in @badges %>
 
 				<div class="col-sm-12 panel" style="min-height:130px">
-					<div class="col-sm-2"><img style="width:50px;padding-top:10px;padding-bottom:10px;" src="<%= image_path(badge.image) %>"></div>
+					<div class="col-sm-2"><img style="width:100px;padding-top:20px;padding-bottom:20px;" src="<%= image_path("badges/" + badge.image + ".svg") %>"></div>
 					<div class="col-sm-10" style="padding-bottom:10px;">
 						<h4 style="text-align:left"><%= badge.name %></h4>
 						<div style="font-size:14px;text-align:left"><%= raw badge.description %></div>
@@ -23,11 +23,22 @@
   							<div class="well" style="text-align:left;font-size:14px;">
   							<table class="table" style="margin-top:0px;margin-bottom:0px;border: none;">
   							<% if !badge.suites.empty? %>
+  							<tr style="border: none">
+  								<td style="border: none;">Resources</td>
+  								<td style="border: none;">
+  									<% for suite in badge.suites %>
+  										<% if suite.start_with? "resourcetest" %>
+  											<%= suite.split("_")[1] %>,
+  										<% end %>
+  									<% end %>
+  							</tr>
   							<tr style="border: none;">
   								<td style="border: none;">Suites</td>
   								<td style="border: none;">
 	   								<% for suite in badge.suites %>
-										<%= suite %>,
+										<% if ! suite.start_with? "resourcetest" and ! suite.start_with? "searchtest" %> 
+											<%= suite %>,
+										<% end %>
 									<% end %>
 								</td>
 							</tr>

@@ -217,7 +217,7 @@ namespace :crucible do
   desc "Adds badges to the database"
   task :add_badges => [:environment] do
     Badge.all.destroy
-    badge.create_badges
+    Badge.create_badges
     # Updates badges for all servers
     Server.all.each do |server|
       server.check_badges
