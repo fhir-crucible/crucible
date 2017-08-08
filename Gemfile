@@ -34,7 +34,6 @@ gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git'
 # Remove this when synthea uses the multiversion client
 gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'multiversion'
 
-
 gem 'mongoid', '>= 4.0.0', '< 5' # lock mongoid below 5 for the moment, as it requires code changes
 gem 'devise'
 gem 'autoprefixer-rails'

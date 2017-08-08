@@ -1,0 +1,2 @@
+module SmartsHelper
+end
