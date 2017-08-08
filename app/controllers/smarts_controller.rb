@@ -8,6 +8,6 @@ class SmartsController < ApplicationController
   def launch
   end
 
-  def config
+  def cfg
   end
 end

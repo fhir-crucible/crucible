@@ -1,12 +1,4 @@
 Rails.application.routes.draw do
-  get 'smarts/index'
-
-  get 'smarts/app'
-
-  get 'smarts/launch'
-
-  get 'smarts/config'
-
   mount MagicLamp::Genie, at: "/magic_lamp" if defined?(MagicLamp)
 
   resources :tests, defaults: { format: :json }, only: [ :index ]
@@ -39,6 +31,13 @@ Rails.application.routes.draw do
   controller :synthea do
     get 'testdata' => :index
     post 'testdata' => :load_data
+  end
+
+  controller :smarts do
+    get 'smart' => :index
+    get 'smart/app' => :app
+    get 'smart/launch' => :launch
+    get 'smart/cfg' => :cfg
   end
 
   resources :test_results, only: [:show] do
