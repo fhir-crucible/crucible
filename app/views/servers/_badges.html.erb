@@ -1,0 +1,51 @@
+<!-- START: badges -->
+<style>
+  /* relevant styles */
+  .img__wrap {
+    position: relative;
+    height: 50px;
+    width:50px;
+    display:inline-block;
+  }
+
+  .img__description {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(51,51,51, 0.72);
+    color: #fff;
+    visibility: hidden;
+    opacity: 0;
+    border-radius:50%;
+    height:50px;
+    width:50px;
+    font-size:8px;
+
+    /* transition effect. not necessary */
+    transition: opacity .2s, visibility .2s;
+  }
+
+  .img__wrap:hover .img__description {
+    visibility: visible;
+    opacity: 1;
+  }
+</style>
+<% if !@server.badges.empty? %>
+<div class="row" style="height:50px;margin-top:-20px;margin-bottom:20px;text-align:center">
+  <% for badge in Badge.all %>
+  <% if @server.badges.include? badge.id %>
+  <div class="col-xs-1" style="display:inline-block;float:none;text-align:center;
+">
+    
+    <div class="img__wrap">
+    <img class="img__img" src="<%= image_path("badges/" + badge.image + ".png") %>" title="<%= badge.description %>" style="height:50px;width:50px;">
+    <div class="img__description" style="display:table"><div style="display:table-cell;vertical-align:middle"><%= badge.name %></div></div>
+    </div>
+  </div>
+  <% end %>
+  <% end %>
+</div>
+<% end %>
+<!-- END: badges -->

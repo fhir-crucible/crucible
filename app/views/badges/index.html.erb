@@ -4,9 +4,9 @@
 			<div class="palette report">
 				<h1>Server <span style="color: #B74C18">Badges</span></h1>
 				<div class="well helper_text">
-					Servers can earn badges by fullfilling requirements for different types of FHIR services. The badges are based off the <a href="https://www.hl7.org/fhir/modules.html#modules">FHIR modules</a> laid out by HL7.
+					Servers can earn badges by passing groups of tests related to a particular server function. The badges are based off the <a href="https://www.hl7.org/fhir/modules.html#modules">FHIR modules</a> laid out by HL7. Any badges a server has earned can be found in the summary section of the server's profile.
 					<br/><br/>
-					The different types of badges that can be earned as well as their testing requirements are listed below.
+					The required tests usually include resource tests related to the module as well as Connectathon test suites or other tests related to the specific modules. The different types of badges that can be earned as well as their testing requirements are listed below.
 				</div>
 				<div class="col-sm-12 panel-group">
 				<% for badge in @badges %>
@@ -14,7 +14,7 @@
 				<div class="col-sm-12 panel" style="min-height:130px">
 					<div class="col-sm-2"><img style="width:100px;margin:20px auto" src="<%= image_path("badges/" + badge.image + ".svg") %>"></div>
 					<div class="col-sm-10" style="padding-bottom:10px;">
-						<h4 style="text-align:left"><%= badge.name %></h4>
+						<h4 style="text-align:left;color: #B74C18"><%= badge.name %></h4>
 						<div style="font-size:14px;text-align:left"><%= raw badge.description %></div>
 						<div style="text-align:left;font-size:12px;padding-top:10px">
 							<a role="button" data-toggle="collapse" href="#<%= badge.id %>requirements" aria-expanded="false" aria-controls="collapseExample">Requirements</a>
