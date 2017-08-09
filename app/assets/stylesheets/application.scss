@@ -16,6 +16,7 @@ $fa-font-path: "font-awesome/fonts";
 @import "tests";
 @import "server";
 @import "scorecard";
+@import "smart";
 
 @import "alert";
 @import "buttons";
@@ -35,7 +36,7 @@ $fa-font-path: "font-awesome/fonts";
 @import "widgets";
 @import "application";
 
-/*standard format for scss files 
+/*standard format for scss files
 .class{
   style for class
   style for &:state (i.e. &:hover)
