@@ -6,6 +6,7 @@
     height: 50px;
     width:50px;
     display:inline-block;
+    border-radius:50%;
   }
 
   .img__description {
@@ -38,11 +39,12 @@
   <% if @server.badges.include? badge.id %>
   <div class="col-xs-1" style="display:inline-block;float:none;text-align:center;
 ">
-    
-    <div class="img__wrap">
-    <img class="img__img" src="<%= image_path("badges/" + badge.image + ".png") %>" title="<%= badge.description %>" style="height:50px;width:50px;">
-    <div class="img__description" style="display:table"><div style="display:table-cell;vertical-align:middle"><%= badge.name %></div></div>
-    </div>
+    <a href="/badges">
+      <div class="img__wrap">
+      <img class="img__img" src="<%= image_path("badges/" + badge.image + ".png") %>" style="height:50px;width:50px;">
+      <div class="img__description" style="display:table" title="<%= badge.description %>"><div href="/badges" style="display:table-cell;vertical-align:middle"><%= badge.name %></div></div>
+      </div>
+    </a>
   </div>
   <% end %>
   <% end %>
