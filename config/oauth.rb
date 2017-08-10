@@ -36,7 +36,7 @@ module Crucible
         rows = []
         OAUTH['client_id'].each do |client,client_id|
           scopes = OAUTH['scopes'][client]
-          rows << [ client, client_id, scopes ]
+          rows << { client: client, client_id: client_id, scopes: scopes }
         end
         rows
       end

@@ -6,16 +6,28 @@
         <%= render "info" %>
 
         <div id="accordion" aria-multiselectable="true">
-          <a class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion" href="#end_points" aria-expanded="true" aria-controls="end_points">
+          <a href="#end_points" class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" aria-controls="end_points">
             <div align="left">End Points</div>
           </a>
           <div id="end_points" class="collapse in">
             <table class="table">
               <tbody>
-                <tr><td>/smart/</td><td>this page</td></tr>
-                <tr><td>/smart/app</td><td>the app (also the redirect_uri after authz)</td></tr>
-                <tr><td>/smart/launch</td><td>the launch url</td></tr>
-                <tr><td>/smart/cfg</td><td>configure client ID and scopes</td></tr>
+                <tr>
+                  <td>/smart/</td>
+                  <td>this page</td>
+                </tr>
+                <tr>
+                  <td>/smart/app</td>
+                  <td>the app (also the redirect_uri after authz)</td>
+                </tr>
+                <tr>
+                  <td>/smart/launch</td>
+                  <td>the launch url</td>
+                </tr>
+                <tr>
+                  <td>/smart/cfg</td>
+                  <td>configure client ID and scopes</td>
+                </tr>
               </tbody>
             </table>
           </div>
