@@ -33,7 +33,7 @@
     opacity: 1;
   }
 </style>
-<% if !@server.badges.empty? %>
+<% if true#!@server.badges.empty? %>
 <div class="row" style="height:50px;margin-top:-20px;margin-bottom:20px;text-align:center">
   <% for badge in Badge.all %>
   <% if @server.badges.include? badge.id %>
@@ -42,7 +42,7 @@
     <a href="/badges">
       <div class="img__wrap">
       <img class="img__img" src="<%= image_path("badges/" + badge.image + ".png") %>" style="height:50px;width:50px;">
-      <div class="img__description" style="display:table" title="<%= badge.description %>"><div href="/badges" style="display:table-cell;vertical-align:middle"><%= badge.name %></div></div>
+      <div class="img__description" style="display:table"><div href="/badges" style="display:table-cell;vertical-align:middle"><%= badge.short_name %></div></div>
       </div>
     </a>
   </div>

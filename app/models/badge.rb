@@ -8,6 +8,7 @@ class Badge
 	field :description, type: String
 	field :link, type: String
 	field :image, type: String
+	field :short_name, type: String
 
 	def resource_string
 		string = ""
@@ -49,7 +50,8 @@ class Badge
 	      tests: [],
 	      description: "This server exists",
 	      link: "www.google.com",
-	      image: "logo.png"
+	      image: "logo.png",
+	      short_name:"dummy"
 	    })
 	    #dummy_badge.save
 	    
@@ -57,6 +59,7 @@ class Badge
 	    term_badge = Badge.new({
 	      id: "TERM",
 	      name: "Terminology",
+	      short_name: "Terminology",
 	      suites: [
 	        "connectathonterminologytracktest",
 	        "resourcetest_conceptmap",
@@ -80,6 +83,7 @@ class Badge
 	    sec_badge = Badge.new({
 	      id: "SEC",
 	      name: "Security",
+	      short_name: "Security",
 	      suites: [
 	      	"connectathonauditeventandprovenancetracktest",
 	      	"resourcetest_consent",
@@ -100,6 +104,7 @@ class Badge
 	    ehr_badge = Badge.new({
 	      id: "EHR",
 	      name: "Electronic Health Record",
+	      short_name: "EHR",
 	      suites: ["readtest"],
 	      tests: [],
 	      description: "An Electronic Health Record server provides all the functionality necessary for a user to access a patients medical history including all key administrative clinical data such as demographics, progress notes, medications, etc.",
@@ -112,6 +117,7 @@ class Badge
 	    foundation_badge = Badge.new({
 	      id: "FOUND",
 	      name: "Foundations",
+	      short_name: "Foundations",
 	      suites: [
 	        # Framework
 	        "resourcetest_bundle",
@@ -160,6 +166,7 @@ class Badge
 	    diag_badge = Badge.new({
 	      id:"DIAGNOSTICS",
 	      name:"Diagnostics",
+	      short_name: "Diagnostics",
 	      suites:[
 	      	"connectathongenomicstracktest",
 	      	"resourcetest_observation",
@@ -190,6 +197,7 @@ class Badge
 	    conformance_badge = Badge.new({
 	      id: "CONFORM",
 	      name: "Conformance",
+	      short_name:"Conformance",
 	      suites:[
 	      	"resourcetest_capabilitystatement",
 	      	"resourcetest_structuredefinition",
@@ -217,6 +225,7 @@ class Badge
 	    admin_badge = Badge.new({
 	      id: "ADMIN",
 	      name: "Administration",
+	      short_name:"Admin",
 	      suites: [
 	        "connectathonfetchpatientrecordtest",
 	        "connectathon_patient_track",
@@ -275,6 +284,7 @@ class Badge
 	    clinical_badge = Badge.new({
 	      id: "CLINICAL",
 	      name: "Clinical",
+	      short_name:"Clinical",
 	      suites: [
 	      	"resourcetest_allergyintolerance",
 	      	"resourcetest_careplan",
@@ -310,6 +320,7 @@ class Badge
 	    med_badge = Badge.new( {
 	      id: "MEDS",
 	      name: "Medications",
+	      short_name: "Meds",
 	      suites:[
 	        "connectathonpatchtracktest"
 	      ],
@@ -324,6 +335,7 @@ class Badge
 	    workflow_badge = Badge.new( {
 	      id: "WORK",
 	      name: "Workflow",
+	      short_name:"Workflow",
 	      suites:[],
 	      tests:[],
 	      description: "Workflow of stuff",
@@ -336,6 +348,7 @@ class Badge
 	    reason_badge = Badge.new({
 	      id:"REASON",
 	      name: "Clinical Reasoning",
+	      short_name: "Reasoning",
 	      suites:["connectathon_care_plan_track"],
 	      tests:[],
 	      description: "Tests related to the clinical reasoning module",
@@ -348,6 +361,7 @@ class Badge
 	    claims_badge = Badge.new({
 	      id: "CLAIM",
 	      name: "Claims",
+	      short_name:"Claims",
 	      suites: [
 	        "connectathonfinancialtracktest",
 	        "connectathonattachmenttest",
