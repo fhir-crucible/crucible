@@ -35,6 +35,10 @@ $fa-font-path: "font-awesome/fonts";
 @import "widgets";
 @import "application";
 
+// Needs to be after panels
+@import "badges";
+
+
 /*standard format for scss files 
 .class{
   style for class
