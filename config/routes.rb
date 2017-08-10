@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     get 'smart/app' => :app
     get 'smart/launch' => :launch
     get 'smart/cfg' => :cfg
+    post 'smart/cfg' => :update_cfg
   end
 
   resources :test_results, only: [:show] do

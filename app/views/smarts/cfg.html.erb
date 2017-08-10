@@ -23,7 +23,12 @@
                     <td><%= row[:client] %></td>
                     <td><%= row[:client_id] %></td>
                     <td><%= row[:scopes] %></td>
-                    <td></td>
+                    <td>
+                      <form action="cfg" method="POST">
+                        <input type="hidden" name="delete" value="<%= row[:client] %>">
+                        <input type="submit" class="btn begin" value="Delete">
+                      </form>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>

@@ -57,7 +57,7 @@ module Crucible
 
       # Save the current state of the CONFIGURATION to the config.yml file.
       def self.save
-        File.open(File.join(File.dirname(File.absolute_path(__FILE__)),'..','oauth.yml'),'w:UTF-8') do |file|
+        File.open(File.join(File.dirname(File.absolute_path(__FILE__)),'oauth.yml'),'w:UTF-8') do |file|
           file.write OAUTH.to_yaml
         end
       end
