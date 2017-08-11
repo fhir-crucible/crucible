@@ -13,22 +13,12 @@
             <div id="params" class="collapse in">
               <table class="table">
                 <tbody>
-                  <tr>
-                    <td>/smart/</td>
-                    <td>this page</td>
-                  </tr>
-                  <tr>
-                    <td>/smart/app</td>
-                    <td>the app (also the redirect_uri after authz)</td>
-                  </tr>
-                  <tr>
-                    <td>/smart/launch</td>
-                    <td>the launch url</td>
-                  </tr>
-                  <tr>
-                    <td>/smart/cfg</td>
-                    <td>configure client ID and scopes</td>
-                  </tr>
+                  <% @launch_params.each do |key, value| %>
+                    <tr>
+                      <td><%= key %></td>
+                      <td><%= value %></td>
+                    </tr>
+                  <% end %>
                 </tbody>
               </table>
             </div>
@@ -39,20 +29,19 @@
               <table class="table">
                 <tbody>
                   <tr>
-                    <td>/smart/</td>
-                    <td>this page</td>
+                    <th>Status</th>
+                    <th>Description</th>
+                    <th>Detail</th>
                   </tr>
                   <tr>
-                    <td>/smart/app</td>
-                    <td>the app (also the redirect_uri after authz)</td>
-                  </tr>
-                  <tr>
-                    <td>/smart/launch</td>
-                    <td>the launch url</td>
-                  </tr>
-                  <tr>
-                    <td>/smart/cfg</td>
-                    <td>configure client ID and scopes</td>
+                    <td><span class="fail">FAIL</span></td>
+                    <td>OAuth2 Launch Parameters</td>
+                    <td>
+                      The <span>/launch</span> endpoint requires <span>iss</span> and <span>launch</span> parameters.
+                      <br/>
+                      <br/>
+                      Please read the <a href="http://docs.smarthealthit.org/authorization/">SMART "launch sequence"</a> for more information.
+                    </td>
                   </tr>
                 </tbody>
               </table>

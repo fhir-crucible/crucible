@@ -7,88 +7,10 @@ class SmartsController < ApplicationController
   end
 
   def app
-    # if params['error']
-    #   if params['error_uri']
-    #     redirect_to params['error_uri']
-    #   else
-    #     @invalid_launch = true
-    #     response.open.echo_hash('Invalid Launch!',params).close
-    #   end
-    # elsif params['state'] != session[:state]
-    #   response.open
-    #   response.echo_hash('OAuth2 Redirect Parameters',params)
-    #   response.echo_hash('Session State',session)
-    #   response.start_table('Errors',['Status','Description','Detail'])
-    #   message = 'The <span>state</span> parameter did not match the session <span>state</span> set at launch.
-    #             <br/>&nbsp;<br/>
-    #             Please read the <a href="http://docs.smarthealthit.org/authorization/">SMART "launch sequence"</a> for more information.'
-    #   response.assert('Invalid Launch State',false,message).end_table
-    #   response.instructions.close
-    # elsif params['state'].nil? || params['code'].nil? || session[:client_id].nil? || session[:token_url].nil? || session[:fhir_url].nil?
-    #   response.open
-    #   response.echo_hash('OAuth2 Redirect Parameters',params)
-    #   response.echo_hash('Session State',session)
-    #   response.start_table('Errors',['Status','Description','Detail'])
-    #   message = 'The <span>/app</span> endpoint requires <span>code</span> and <span>state</span> parameters.
-    #             <br/>&nbsp;<br/>
-    #             The session state should also have been set at <span>/launch</span> with <span>client_id</span>, <span>token_url</span>, and <span>fhir_url</span> information.
-    #             <br/>&nbsp;<br/>
-    #              Please read the <a href="http://docs.smarthealthit.org/authorization/">SMART "launch sequence"</a> for more information.'
-    #   response.assert('OAuth2 Launch Parameters',false,message).end_table
-    #   response.instructions.close
-    # else
-    #   start_time = Time.now
-    #   # Get the OAuth2 token
-    #   puts "App Params: #{params}"
-    #
-    #   oauth2_params = {
-    #     'grant_type' => 'authorization_code',
-    #     'code' => params['code'],
-    #     'redirect_uri' => Crucible::App::Config::CONFIGURATION['redirect_url'],
-    #     'client_id' => session[:client_id]
-    #   }
-    #   puts "Token Params: #{oauth2_params}"
-    #   token_response = RestClient.post(session[:token_url], oauth2_params)
-    #   token_response = JSON.parse(token_response.body)
-    #   puts "Token Response: #{token_response}"
-    #   token = token_response['access_token']
-    #   patient_id = token_response['patient']
-    #   scopes = token_response['scope']
-    #   if scopes.nil?
-    #     scopes = Crucible::App::Config.get_scopes(session[:fhir_url])
-    #   end
-    #
-    #   # Begin outputting the response body
-    #   response.open
-    #   response.echo_hash('OAuth2 Redirect Parameters',params)
-    #   response.echo_hash('Token Response',token_response)
-    #   response.start_table('Crucible Test Results',['Status','Description','Detail'])
-    #
-    #   # Configure the FHIR Client
-    #   client = FHIR::Client.new(session[:fhir_url])
-    #   version = client.detect_version
-    #   client.set_bearer_token(token)
-    #   client.default_json
-    #
-    #   smart = FHIR::SMART.new
-    #   report = smart.run_tests(client,scopes,patient_id)
-    #
-    #   report.each do |key, value|
-    #     response.add_table_row([value[:status], value[:description], value[:detail]])
-    #   end
-    #
-    #   response.end_table
-    #
-    #   # Output the time spent
-    #   end_time = Time.now
-    #   response.output "</div><div><br/><p>Tests completed in #{TimeDifference.between(start_time,end_time).humanize}.</p><br/>"
-    #   response.close
-    # end
-    #
-    # render stream: true
   end
 
   def launch
+    @launch_params = params
     if params && params['iss'] && params['launch']
       @valid_launch_params = true
       client_id = Crucible::SMART::OAuth.get_client_id(params['iss'])
