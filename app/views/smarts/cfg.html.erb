@@ -36,6 +36,29 @@
           </div>
         </div>
 
+        <div align="left">
+          <h2>Add New Configuration</h2>
+          <form action="cfg" method="POST">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>Server</td>
+                  <td><input type="text" size="50" name="Server" value="" class="form-control"></td>
+                </tr>
+                <tr>
+                  <td>Client ID</td>
+                  <td><input type="text" size="50" name="Client ID" value="" class="form-control"></td>
+                </tr>
+                <tr>
+                  <td>Scopes</td>
+                  <td><input type="text" size="50" name="Scopes" value="launch openid profile patient/*.read" class="form-control"></td>
+                </tr>
+              </tbody>
+            </table>
+            <input type="submit" class="btn begin">
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
