@@ -3,7 +3,64 @@
     <div class="col-sm-12">
       <div class="palette report">
 
-        <%= render "info" %>
+        <% unless @valid_launch_params %>
+          <%= render "info" %>
+
+          <div id="accordion" aria-multiselectable="true">
+            <a href="#params" class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" aria-controls="params">
+              <div align="left">params</div>
+            </a>
+            <div id="params" class="collapse in">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>/smart/</td>
+                    <td>this page</td>
+                  </tr>
+                  <tr>
+                    <td>/smart/app</td>
+                    <td>the app (also the redirect_uri after authz)</td>
+                  </tr>
+                  <tr>
+                    <td>/smart/launch</td>
+                    <td>the launch url</td>
+                  </tr>
+                  <tr>
+                    <td>/smart/cfg</td>
+                    <td>configure client ID and scopes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <a href="#errors" class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" aria-controls="errors">
+              <div align="left">Errors</div>
+            </a>
+            <div id="errors" class="collapse in">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>/smart/</td>
+                    <td>this page</td>
+                  </tr>
+                  <tr>
+                    <td>/smart/app</td>
+                    <td>the app (also the redirect_uri after authz)</td>
+                  </tr>
+                  <tr>
+                    <td>/smart/launch</td>
+                    <td>the launch url</td>
+                  </tr>
+                  <tr>
+                    <td>/smart/cfg</td>
+                    <td>configure client ID and scopes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <%= render "instructions" %>
+        <% end %>
 
       </div>
     </div>
