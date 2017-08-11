@@ -29,6 +29,12 @@ gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.g
 #gem 'fhir_scorecard', :path => '../fhir_scorecard'
 gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git'
 #gem 'synthea', :path => '../synthea'
+
+# Including this because synthea is using old version of gem and overwriting
+# Remove this when synthea uses the multiversion client
+gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'multiversion'
+
+
 gem 'mongoid', '>= 4.0.0', '< 5' # lock mongoid below 5 for the moment, as it requires code changes
 gem 'devise'
 gem 'autoprefixer-rails'
