@@ -7,6 +7,54 @@ class SmartsController < ApplicationController
   end
 
   def app
+    @app_params = params
+    @app_session = session
+    @invalid_launch = false
+    @invalid_launch_state = false
+    @other_launch_error = false
+    if params['error']
+      if params['error_uri']
+        redirect_to params['error_uri']
+      else
+        @invalid_launch = true
+      end
+    elsif params['state'] != session[:state]
+      @invalid_launch_state = true
+    elsif params['state'].nil? || params['code'].nil? || session[:client_id].nil? || session[:token_url].nil? || session[:fhir_url].nil?
+      @other_launch_error = true
+    else
+      # Get the OAuth2 token
+      puts "App Params: #{params}"
+
+      oauth2_params = {
+        'grant_type' => 'authorization_code',
+        'code' => params['code'],
+        'redirect_uri' => Crucible::SMART::OAuth::OAUTH['redirect_url'],
+        'client_id' => session[:client_id]
+      }
+      puts "Token Params: #{oauth2_params}"
+      token_response = RestClient.post(session[:token_url], oauth2_params)
+      token_response = JSON.parse(token_response.body)
+      @token_response = token_response
+      puts "Token Response: #{token_response}"
+      token = token_response['access_token']
+      patient_id = token_response['patient']
+      scopes = token_response['scope']
+      if scopes.nil?
+        scopes = Crucible::SMART::OAuth.get_scopes(session[:fhir_url])
+      end
+
+      # Configure the FHIR Client
+      client = FHIR::Client.new(session[:fhir_url])
+      version = client.detect_version
+      client.set_bearer_token(token)
+      client.default_json
+
+      smart = FHIR::SMART.new
+      @report = smart.run_tests(client,scopes,patient_id)
+    end
+
+    render stream: true
   end
 
   def launch
