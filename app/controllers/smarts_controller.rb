@@ -23,6 +23,7 @@ class SmartsController < ApplicationController
     elsif params['state'].nil? || params['code'].nil? || session[:client_id].nil? || session[:token_url].nil? || session[:fhir_url].nil?
       @other_launch_error = true
     else
+      start_time = Time.now
       # Get the OAuth2 token
       puts "App Params: #{params}"
 
@@ -52,6 +53,9 @@ class SmartsController < ApplicationController
 
       smart = FHIR::SMART.new
       @report = smart.run_tests(client,scopes,patient_id)
+
+      end_time = Time.now
+      @time_diff = TimeDifference.between(start_time,end_time).humanize
     end
 
     render stream: true
