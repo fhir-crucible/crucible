@@ -14,3 +14,19 @@ table {
   border-style: solid;
   border-color: rgb(221, 221, 221);
 }
+
+span.pass {
+  color: #008000;
+}
+
+span.not_found {
+  color: #FF4500;
+}
+
+span.skip {
+  color: #0000FF;
+}
+
+span.fail {
+  color: #B22222;
+}

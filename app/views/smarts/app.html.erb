@@ -192,7 +192,17 @@
                   </tr>
                   <% @report.each do |key, value| %>
                     <tr>
-                      <td><%= value[:status] %></td>
+                      <td>
+                        <% if value[:success] == :not_found %>
+                          <span class="not_found"><%= value[:status] %></span>
+                        <% elsif value[:success] == :skip %>
+                          <span class="skip"><%= value[:status] %></span>
+                        <% elsif value[:success] %>
+                          <span class="pass"><%= value[:status] %></span>
+                        <% else %>
+                          <span class="fail"><%= value[:status] %></span>
+                        <% end %>
+                      </td>
                       <td><%= value[:description] %></td>
                       <td><%= value[:detail] %></td>
                     </tr>
