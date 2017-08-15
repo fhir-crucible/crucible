@@ -200,6 +200,7 @@ class Server
     self.supported_tests = []
     self.supported_suites = []
     value = JSON.parse(self.conformance)
+    server_version = (self.fhir_sequence || 'STU3').downcase.to_sym
 
     operations = []
     resource_operations = []
@@ -208,19 +209,22 @@ class Server
     operations = rest['operation'].map {|o| "$#{o['name']}"} if rest['operation']
     resource_operations = Hash[rest['resource'].select{|r| !r['interaction'].nil?}.map{ |r| [r['type'], r['interaction'].map {|i| translator[i['code']] || i['code']}]}] if rest['resource']
 
+
     Test.all.each do |suite|
       at_least_one_test = false
-      suite.methods.each do |test|
-        supported = true
-        test['requires'].each do |requirement|
-          supported &&= check_restriction(requirement, resource_operations, operations)
-        end if test['requires']
-        test['validates'].each do |validation|
-          supported &&= check_restriction(validation, resource_operations, operations)
-        end if test['validates']
-        if supported
-          at_least_one_test = true
-          self.supported_tests << test['id']
+      if suite['supported_versions'].include? server_version
+        suite.methods.each do |test|
+          supported = true
+          test['requires'].each do |requirement|
+            supported &&= check_restriction(requirement, resource_operations, operations)
+          end if test['requires']
+          test['validates'].each do |validation|
+            supported &&= check_restriction(validation, resource_operations, operations)
+          end if test['validates']
+          if supported
+            at_least_one_test = true
+            self.supported_tests << test['id']
+          end
         end
       end
       self.supported_suites << suite.id if at_least_one_test

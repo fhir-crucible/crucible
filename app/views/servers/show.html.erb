@@ -16,7 +16,7 @@
         <% end %>
         <div class="row">
           <div class="col-sm-12 server-test-details">
-            <!-- START: server name and url -->
+            <!-- START: server name,  url, and fhir_sequence -->
             <div class="server-details" data-server-id="<%=@server.id%>">
               <div class="authorize-icon pull-left">
                 <a data-toggle="modal" 
@@ -36,6 +36,9 @@
                 </div>
                 <div class="server-tags-panel emphasize editToggle">
                   <div class="server-tags-label"></div>
+                </div>
+                <div class="server-sequence-panel editToggle">
+                  <div class="server-sequence-label">FHIR Version: <%= @server.fhir_sequence || 'STU3' %></div>
                 </div>
               </div>
               <a class="edit-server-name-icon editToggle pull-left"><i class="fa fa-pencil-square-o edit-server-name"></i></a>

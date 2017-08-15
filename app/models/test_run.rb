@@ -38,7 +38,7 @@ class TestRun
 
     client1 = FHIR::Client.new(self.server.url)
 
-    if self.fhir_version == 'dstu2'
+    if self.fhir_version.downcase == 'dstu2'
       client1.use_dstu2
     else
       client1.use_stu3

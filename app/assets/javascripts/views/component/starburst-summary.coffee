@@ -24,6 +24,7 @@ class Crucible.StarburstSummary
               summaryElement.find('.hidden').removeClass('hidden')
               starburstElement = summaryElement.find('.starburst')
               summaryElement.show()
+              data.summary.compliance.fhir_sequence = data.fhir_sequence
               # TODO: _renderChart seems messy... this could use a better interface
               starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance, extended)
               starburst._renderChart()

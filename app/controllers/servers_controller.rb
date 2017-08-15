@@ -96,8 +96,10 @@ class ServersController < ApplicationController
   end
 
   def summary
-    summary = Server.find(params[:server_id]).summary
-    render json: {summary: summary}
+    server = Server.find(params[:server_id])
+    fhir_sequence = server.fhir_sequence || 'STU3'
+    summary = server.summary
+    render json: {summary: summary, fhir_sequence: fhir_sequence}
   end
 
   def summary_history
@@ -131,6 +133,10 @@ class ServersController < ApplicationController
     @suites = Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}
 
     server.collect_supported_tests rescue logger.error "error collecting supported tests"
+
+    server_version = (server.fhir_sequence || 'STU3').downcase.to_sym
+    @suites.select!{|s| s.supported_versions.include? server_version}
+
     if server.supported_suites
       @suites.each do |suite|
         if server.supported_suites.include? suite.id
