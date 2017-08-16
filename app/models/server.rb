@@ -115,7 +115,7 @@ class Server
 
   def get_compliance()
     #todo: investigate moving this elsewhere.
-    compliance = Crucible::FHIRStructure.get
+    compliance = Crucible::FHIRStructure.get(self.fhir_sequence.downcase.to_sym)
 
     node_map = {}
     build_compliance_node_map(compliance, node_map)
@@ -280,7 +280,7 @@ class Server
 
   def generate_history
     summaries = Summary.where({server_id: self.id})
-    summary_tree = Crucible::FHIRStructure.get.deep_dup
+    summary_tree = Crucible::FHIRStructure.get(self.fhir_sequence.downcase.to_sym)
     
     zeroize_summary(summary_tree)
 
@@ -343,7 +343,7 @@ class Server
     #updates the history with a single summary
     
     summaries = Summary.where({server_id: self.id})
-    summary_tree = Crucible::FHIRStructure.get.deep_dup
+    summary_tree = Crucible::FHIRStructure.get(self.fhir_sequence.downcase.to_sym)
     
     zeroize_summary(summary_tree)
 

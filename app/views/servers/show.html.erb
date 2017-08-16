@@ -38,7 +38,7 @@
                   <div class="server-tags-label"></div>
                 </div>
                 <div class="server-sequence-panel editToggle">
-                  <div class="server-sequence-label">FHIR Version: <%= @server.fhir_sequence || 'STU3' %></div>
+                  <div class="server-sequence-label">FHIR Version: <span id='server-fhir-version'><%= @server.fhir_sequence || 'STU3' %></span></div>
                 </div>
               </div>
               <a class="edit-server-name-icon editToggle pull-left"><i class="fa fa-pencil-square-o edit-server-name"></i></a>
