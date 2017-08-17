@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_smart.git
-  revision: 84ed9ec306b2f440dacadd66b66d7795f08d3dcb
+  revision: 943759dc184c375edf02d4f6fdb3f9a078ec1e91
   branch: initial-build
   specs:
     fhir_smart (0.0.0)
@@ -112,7 +112,7 @@ GEM
     area (0.10.0)
       fastercsv (~> 1.5)
     arel (6.0.4)
-    autoprefixer-rails (7.1.2.4)
+    autoprefixer-rails (7.1.2.6)
       execjs
     bcp47 (0.3.3)
       i18n
@@ -233,7 +233,7 @@ GEM
     mime-types (2.99.3)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
-    minitest-reporters (1.1.14)
+    minitest-reporters (1.1.15)
       ansi
       builder
       minitest (>= 5.0)
@@ -369,7 +369,7 @@ GEM
       railties (>= 3.2.5, < 6)
     teaspoon-jasmine (2.3.4)
       teaspoon (>= 1.0.0)
-    thor (0.19.4)
+    thor (0.20.0)
     thread_safe (0.3.6)
     tilt (1.4.1)
     time_difference (0.5.0)
