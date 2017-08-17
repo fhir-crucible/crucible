@@ -1,3 +1,11 @@
-<div>
-  <p>{{report}}</p>
-</div>
+<table class="table">
+  <tbody>
+    {{#each report}}
+      <tr>
+        <td><span class={{smart-status this.success}}>{{this.status}}</span></td>
+        <td>{{this.description}}</td>
+        <td>{{this.detail}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
