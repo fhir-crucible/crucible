@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_smart.git
-  revision: 943759dc184c375edf02d4f6fdb3f9a078ec1e91
+  revision: 96a4ae1272d5e97718d984f127b9b4680c8e5e0a
   branch: initial-build
   specs:
     fhir_smart (0.0.0)
