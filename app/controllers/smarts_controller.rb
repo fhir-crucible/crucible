@@ -23,7 +23,6 @@ class SmartsController < ApplicationController
     elsif params['state'].nil? || params['code'].nil? || session[:client_id].nil? || session[:token_url].nil? || session[:fhir_url].nil?
       @other_launch_error = true
     else
-      start_time = Time.now
       # Get the OAuth2 token
       puts "App Params: #{params}"
 
@@ -39,26 +38,36 @@ class SmartsController < ApplicationController
       @token_response = token_response
       puts "Token Response: #{token_response}"
       token = token_response['access_token']
+      session[:token] = token
+      fhir_url = session[:fhir_url]
       patient_id = token_response['patient']
+      session[:patient_id] = patient_id
       scopes = token_response['scope']
       if scopes.nil?
-        scopes = Crucible::SMART::OAuth.get_scopes(session[:fhir_url])
+        scopes = Crucible::SMART::OAuth.get_scopes(fhir_url)
       end
-
-      # Configure the FHIR Client
-      client = FHIR::Client.new(session[:fhir_url])
-      version = client.detect_version
-      client.set_bearer_token(token)
-      client.default_json
-
-      smart = FHIR::SMART.new
-      @report = smart.run_tests(client,scopes,patient_id)
-
-      end_time = Time.now
-      @time_diff = TimeDifference.between(start_time,end_time).humanize
+      session[:scopes] = scopes
     end
 
     render stream: true
+  end
+
+  def show
+    token = session[:token]
+    fhir_url = session[:fhir_url]
+    scopes = session[:scopes]
+    patient_id = session[:patient_id]
+
+    # Configure the FHIR Client
+    client = FHIR::Client.new(fhir_url)
+    version = client.detect_version
+    client.set_bearer_token(token)
+    client.default_json
+
+    smart = FHIR::SMART.new
+    report = smart.run_tests(client,scopes,patient_id)
+
+    render json: { report: report }
   end
 
   def launch

@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   controller :smarts do
     get 'smart' => :index
     get 'smart/app' => :app
+    get 'smart/app/show' => :show
     get 'smart/launch' => :launch
     get 'smart/cfg' => :cfg
     post 'smart/cfg' => :update_cfg
