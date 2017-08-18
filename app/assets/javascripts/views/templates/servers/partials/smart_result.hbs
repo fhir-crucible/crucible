@@ -1,5 +1,10 @@
 <table class="table">
   <tbody>
+      <tr>
+        <td>Status</td>
+        <td>Description</td>
+        <td>Detail</td>
+      </tr>
     {{#each report}}
       <tr>
         <td><span class={{smart-status this.success}}>{{this.status}}</span></td>
@@ -9,3 +14,8 @@
     {{/each}}
   </tbody>
 </table>
+<div align="left">
+  <br/>
+  <p>Tests completed in {{time_diff}}.</p>
+  <br/>
+</div>

@@ -14,5 +14,5 @@ class Crucible.SmartExecutor
 
   loadResults: =>
     $.getJSON("/smart/app/show").success((data) =>
-      @element.html(HandlebarsTemplates[@templates.smartResult]({report: data.report}))
+      @element.html(HandlebarsTemplates[@templates.smartResult]({report: data.report, time_diff: data.time_diff}))
     )
