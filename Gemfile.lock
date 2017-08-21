@@ -24,10 +24,10 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/fhir_smart.git
-  revision: 96a4ae1272d5e97718d984f127b9b4680c8e5e0a
+  revision: c780c3056e41186a067108aaca22b29b3a02f099
   branch: initial-build
   specs:
-    fhir_smart (0.0.0)
+    fhir_smart (1.0.0)
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git

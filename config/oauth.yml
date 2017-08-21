@@ -4,7 +4,6 @@ client_id:
   epic: 6c12dff4-24e7-4475-a742-b08972c4ea27
   smart: 00000000-0000-0000-0000-000000000000
   mitre: test-test-test-test
-  crucibledstu2: 7f872385-82bf-42cc-ac55-42d044235bbc
   cruciblestu3: 31ed51dd-dc4e-45d3-8002-4bfefdab5806
 scopes:
   cerner: online_access launch openid profile patient/AllergyIntolerance.read patient/Appointment.read
@@ -15,7 +14,6 @@ scopes:
   epic: launch openid profile patient/*.read
   smart: launch openid profile patient/*.read
   mitre: launch openid profile patient/*.read
-  crucibledstu2: launch patient/*.read openid profile
   cruciblestu3: launch patient/*.read openid profile
 base_url: ''
 redirect_url: http://localhost:3000/smart/app
