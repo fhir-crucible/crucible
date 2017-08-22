@@ -23,13 +23,6 @@ GIT
       fhir_models (>= 3.0.0)
 
 GIT
-  remote: https://github.com/fhir-crucible/fhir_smart.git
-  revision: c780c3056e41186a067108aaca22b29b3a02f099
-  branch: initial-build
-  specs:
-    fhir_smart (1.0.0)
-
-GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
   revision: c9a13785377662818e686b450d573bb5712b005d
   specs:
@@ -119,7 +112,7 @@ GEM
     bcrypt (3.1.11)
     bson (3.2.7)
     builder (3.2.3)
-    byebug (9.0.6)
+    byebug (9.1.0)
     case_transform (0.2)
       activesupport
     chunky_png (1.3.8)
@@ -403,7 +396,6 @@ DEPENDENCIES
   devise
   fhir_client!
   fhir_scorecard!
-  fhir_smart!
   guard-livereload
   handlebars_assets (= 0.16)
   jbuilder (~> 2.0)
