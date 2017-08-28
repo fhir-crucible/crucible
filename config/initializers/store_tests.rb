@@ -1,5 +1,5 @@
 # date based version to force tests to reload on startup
-LOAD_VERSION=20170409
+LOAD_VERSION=20170415
 
 Test.any_of({:load_version.exists => false},{:load_version.lt => LOAD_VERSION}).delete
 
@@ -35,6 +35,8 @@ Crucible::Tests::Executor.list_all.each do |key,value|
     test.methods = metadata.values.first.map do |method|
       method.except('data','code', 'status', 'message')
     end
+
+    test.supported_versions = value['supported_versions']
 
     test.save()
 

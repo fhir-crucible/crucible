@@ -8,7 +8,8 @@ class TestRunsController < ApplicationController
   end
 
   def create
-    run = TestRun.new({server_id: params[:server_id], date: Time.now, supported_only: (params[:supported_only]=='true')})
+    server = Server.find(params[:server_id])
+    run = TestRun.new({server_id: server.id.to_s, date: Time.now, supported_only: (params[:supported_only]=='true'), fhir_version: server.fhir_sequence.downcase})
     tests = params[:test_ids].map {|i| Test.find(i)}
 
     run.add_tests(tests)

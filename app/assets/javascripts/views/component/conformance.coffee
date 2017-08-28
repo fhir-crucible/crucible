@@ -9,6 +9,7 @@ class Crucible.Conformance
 
   constructor: ->
     @element = $('#conformance-data')
+    @server_fhir_version = $('#server-fhir-version')
     @mismatch_alert_element = $('#fhir-sequence-mismatch')
     return unless @element.length
     @template = HandlebarsTemplates['views/templates/servers/conformance']
@@ -24,7 +25,8 @@ class Crucible.Conformance
         @updateConformance(data)
         @removeConformanceSpinner()
         @mismatch_alert_element.hide()
-        if data.fhir_sequence != data.crucible_fhir_sequence
+        @server_fhir_version.html("#{data.fhir_sequence} (#{data.fhir_version})")
+        if data.fhir_sequence != 'DSTU2' && data.fhir_sequence != 'STU3'
           @mismatch_alert_element.html(@version_mismatch_template(data))
           @mismatch_alert_element.show()
         @element.trigger('conformanceInitialized') if data.conformance.updated
