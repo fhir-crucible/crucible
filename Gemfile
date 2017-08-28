@@ -23,7 +23,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git'
 # gem 'fhir_client', :path => '../fhir_client'
 
-gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git', :branch => 'multiversion'
+gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git'
 # gem 'plan_executor', :path => '../plan_executor'
 gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git'
 #gem 'fhir_scorecard', :path => '../fhir_scorecard'
