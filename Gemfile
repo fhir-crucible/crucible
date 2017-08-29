@@ -20,7 +20,6 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # gem 'fhir_models', :git => 'https://github.com/fhir-crucible/fhir_models.git'
-gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'multiversion'
 # gem 'fhir_client', :path => '../fhir_client'
 
 gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git'
