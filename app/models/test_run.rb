@@ -11,12 +11,12 @@ class TestRun
   field :is_multiserver, type: Boolean, default: false
   field :status, type: String, default: "pending"
   field :supported_only, type: Boolean, default: false
-
   belongs_to :server, class_name: "Server", index: true
   belongs_to :destination_server, class_name:" Server"
   field :nightly, type: Boolean, default: false
   has_and_belongs_to_many :tests, inverse_of: nil
   has_many :test_results, autosave: true
+  field :fhir_version, type: String, default: 'stu3'
 
   def add_tests(tests)
     self.tests.push(*tests)
@@ -37,6 +37,13 @@ class TestRun
     self.save
 
     client1 = FHIR::Client.new(self.server.url)
+
+    if self.fhir_version.downcase == 'dstu2'
+      client1.use_dstu2
+    else
+      client1.use_stu3
+    end
+
     client1.default_format = self.server.default_format if self.server.default_format
     if self.server.oauth_token_opts
       client1.client = self.server.get_oauth2_client
@@ -145,7 +152,7 @@ class TestRun
 
     self.server.aggregate(self)
     compliance = server.get_compliance()
-    summary = Summary.new({server_id: self.server.id, test_run: self, compliance: compliance, generated_at: Time.now})
+    summary = Summary.new({server_id: self.server.id, test_run: self, compliance: compliance, generated_at: Time.now, fhir_version: self.fhir_version})
     self.server.summary = summary
     self.server.percent_passing = (compliance['passed'].to_f / ([compliance['total'].to_f || 0, 1].max)) * 100.0
     self.server.last_run_at = Time.now

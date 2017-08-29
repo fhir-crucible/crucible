@@ -10,7 +10,7 @@ class TestRunTest < ActiveSupport::TestCase
   def test_add_test
 
     server = Server.new ({url: 'www.example.com'})
-    testrun = TestRun.new({server: server})
+    testrun = TestRun.new({server: server, fhir_version: 'stu3'})
 
     assert_equal 0, testrun.tests.length
     assert_equal "pending", testrun.status
@@ -32,7 +32,7 @@ class TestRunTest < ActiveSupport::TestCase
   def test_execute_success
 
     server = Server.new ({url: 'www.example.com'})
-    testrun = TestRun.new({server: server})
+    testrun = TestRun.new({server: server, fhir_version: 'stu3'})
 
     stub_request(:any, /www\.example\.com\/.*/).to_return(status: 404)
     stub_request(:get, "www.example.com/metadata").to_return(body: @conformance_xml).times(1)
@@ -55,7 +55,7 @@ class TestRunTest < ActiveSupport::TestCase
   def test_execute_unavailable
 
     server = Server.new ({url: 'www.example.com'})
-    testrun = TestRun.new({server: server})
+    testrun = TestRun.new({server: server, fhir_version: 'stu3'})
 
     stub_request(:any, /www\.example\.com\/.*/).to_return(status: 404)
     stub_request(:get, "www.example.com/metadata").to_return(status: 500)
@@ -70,7 +70,7 @@ class TestRunTest < ActiveSupport::TestCase
   def test_execute_errors
 
     server = Server.new ({url: 'www.example.com'})
-    testrun = TestRun.new({server: server})
+    testrun = TestRun.new({server: server, fhir_version: 'stu3'})
 
     stub_request(:any, /www\.example\.com\/.*/).to_timeout
     stub_request(:get, "www.example.com/metadata").to_return(body: @conformance_xml).times(1)

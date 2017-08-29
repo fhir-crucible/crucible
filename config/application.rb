@@ -50,7 +50,7 @@ module Crucible
     # true: only allow requests to 443, 80, 8080
     config.restrict_test_ports = false
 
-    # Configuration to show which version of crucible is the most recent and is being tested on this server
+    # Configuration to show which version of crucible is the most recent
     config.fhir_sequence = 'STU3'
     config.fhir_version = '3.0.1'
     config.fhir_version_name = 'FHIR Release 3 with 1 technical errata'

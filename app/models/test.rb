@@ -16,6 +16,7 @@ class Test
   field :tags, type: Array
   field :details, type: Hash
   field :category, type: Hash
+  field :supported_versions, type: Array, default: [] # stu3, dstu2, etc
 
   def serializable_hash(options = nil)
     hash = super(options)
