@@ -19,9 +19,9 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
+# these are now included automatically in plan_executor
 # gem 'fhir_models', :git => 'https://github.com/fhir-crucible/fhir_models.git'
-gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'multiversion'
-# gem 'fhir_client', :path => '../fhir_client'
+# gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git'
 
 gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git'
 # gem 'plan_executor', :path => '../plan_executor'
@@ -30,10 +30,9 @@ gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.g
 gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git'
 #gem 'synthea', :path => '../synthea'
 
-# Including this because synthea is using old version of gem and overwriting
-# Remove this when synthea uses the multiversion client
+# Synthea is still pointing at old client potentially, this overwrites it
+# When multiversion branch of client gets merged down, update synthea and remove this
 gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'multiversion'
-
 
 gem 'mongoid', '>= 4.0.0', '< 5' # lock mongoid below 5 for the moment, as it requires code changes
 gem 'devise'

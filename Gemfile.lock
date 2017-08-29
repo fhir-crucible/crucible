@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/fhir-crucible/fhir_client.git
-  revision: 319482b0105301902ee8b0371b3fae5e75c7c7e0
+  revision: bfe951252ed2fef3c0dd3d2df8d3c1bded98bc82
   branch: multiversion
   specs:
-    fhir_client (3.0.1)
+    fhir_client (3.0.2)
       activesupport (>= 3)
       addressable (>= 2.3)
       fhir_dstu2_models (>= 1.0.3)
@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/synthetichealth/synthea.git
-  revision: 0e9cfd20c4ace8324d53ba6f72a119eaacb3ddce
+  revision: cf93729d0d2ef4428d3d67a3deff165fd6c4f40f
   specs:
     synthea (1.2.0)
       area
