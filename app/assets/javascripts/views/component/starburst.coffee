@@ -5,23 +5,23 @@ colors = ["#bd0026", "#f03b20", "#fd8d3c", "#fecc5c", "#c2e699", "#78c679", "#31
 
 # returns appropriate color of section (recursive)
 color = (data) ->
-  if data.total == 0
+  if data.supportedtotal == 0
     '#bbb'
   else
-      colors[Math.floor((data.passed / data.total) * (colors.length-1))]
+      colors[Math.floor((data.supportedpassed / data.supportedtotal) * (colors.length-1))]
 
 # returns percent passing of a section
 percentMe = (data) ->
-  if data.total == 0
+  if data.supportedtotal == 0
     0
   else
-    Math.round(data.passed / data.total * 100)
+    Math.round(data.supportedpassed / data.supportedtotal * 100)
 
 # returns appropriate tool tip for section
 tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
-  .html((d) -> "#{d.name}:<br>#{d.passed} / #{d.total} passed (#{percentMe(d)}%)")
+  .html((d) -> "#{d.name}:<br>#{d.supportedpassed} / #{d.supportedtotal} passed (#{percentMe(d)}%)")
 
 class Crucible.Starburst
   nodeMap: {}
@@ -102,7 +102,7 @@ class Crucible.Starburst
 
     # define partition layout
     # The value used to be the following
-    # logScale(Math.max(d.total ,@get('minSize'))))
+    # logScale(Math.max(d.supportedtotal ,@get('minSize'))))
     # but changed it to just being 1 so the starburst structure stays the same
     partition = d3.layout.partition()
       .sort(null)
@@ -117,7 +117,7 @@ class Crucible.Starburst
 
     # updates node name text element
     updateNodeName = (d) ->
-      title.html("#{d.name}:<p>#{d.passed} / #{d.total} passed (#{percentMe(d)}%)</p>")
+      title.html("#{d.name}:<p>#{d.supportedpassed} / #{d.supportedtotal} passed (#{percentMe(d)}%)</p>")
 
     # when zooming: interpolate the scales
     arcTweenZoom = (c) =>
@@ -176,7 +176,7 @@ class Crucible.Starburst
 
       if @get("extended")
         node_name.text("#{new_node.name}")
-      
+
       updateNodeName(new_node)
 
     @center_percentage = svg.selectAll("text")
@@ -218,7 +218,7 @@ class Crucible.Starburst
         .attr("fill", "#999")
         .attr("text-anchor", "middle")
         .text( @get('data').fhir_sequence )
-    
+
     # draw the element paths
     @starburst_path = svg.datum(@get('data')).selectAll("path")
       .data(partition.nodes)
@@ -329,7 +329,7 @@ class Crucible.Starburst
       for item in labels
         if x(item.x + (item.dx / 2)) > Math.PI + .1
           item.indexY = leftIndex++
-          item.labelY = 20 + leftIndex * 30 
+          item.labelY = 20 + leftIndex * 30
           item.labelX = 150
           item.percentX = item.labelX + 100
           item.text_anchor = "end"
@@ -413,7 +413,7 @@ class Crucible.Starburst
 
        # animate the labels
        # this is for flair and can be removed if they are too distracting
-       
+
        for item in [nameLabel, @labels_text,@labels_background]
          item.style("opacity", 0)
            .transition()
@@ -447,7 +447,7 @@ class Crucible.Starburst
   getTransitionSpeed: ->
     speed = @animationTransition
     if @animationTransitionTmp?
-      speed = @animationTransitionTmp 
+      speed = @animationTransitionTmp
       @animationTransitionTmp = null
     speed
 
@@ -471,10 +471,10 @@ class Crucible.Starburst
       .duration(@getTransitionSpeed())
       .styleTween("fill", (n) =>
         new_n = data_lookup[n.name]
-        new_n = {total: 0, passed: 0} if !new_n
+        new_n = {supportedtotal: 0, supportedpassed: 0} if !new_n
         interpolate = d3.interpolateRgb(color(n), color(new_n))
-        n.total = new_n.total
-        n.passed = new_n.passed
+        n.supportedtotal = new_n.supportedtotal
+        n.supportedpassed = new_n.supportedpassed
         interpolate
       )
 

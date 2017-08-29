@@ -281,11 +281,11 @@ class Server
   def generate_history
     summaries = Summary.where({server_id: self.id})
     summary_tree = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
-    
+
     zeroize_summary(summary_tree)
 
     # Generate list of sundays
-    
+
     sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
 
     # Put sundays into a hash and use to only save one data point per week
@@ -304,7 +304,7 @@ class Server
 
       # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
       if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
-        sunday_index[sundays.first] = new_tree 
+        sunday_index[sundays.first] = new_tree
       end
 
       #figure out the next sunday from this date
@@ -325,7 +325,7 @@ class Server
 
     # fix the dates on items to be on Sundays (since now it just stores the run date, not the date of the sunday)
     # include dates and section names with null values if the date has no data (happens on dates before the first run)
-    sundays.each_with_index do |val, index| 
+    sundays.each_with_index do |val, index|
       if (result[index])
         result[index] = result[index].merge({'date'=>val})
       else
@@ -341,10 +341,10 @@ class Server
   def update_history(summary)
 
     #updates the history with a single summary
-    
+
     summaries = Summary.where({server_id: self.id})
     summary_tree = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
-    
+
     zeroize_summary(summary_tree)
 
     sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
@@ -400,23 +400,31 @@ class Server
       node['children'].each do |child|
         rollup(child)
       end
-      ['passed', 'failed', 'errors', 'skipped'].each do |key|
+      ['passed', 'failed', 'errors', 'skipped', 'total', 'supportedpassed', 'supportedtotal'].each do |key|
         node["#{key}Ids"].concat(node['children'].map {|n| n["#{key}Ids"]}.flatten.uniq)
         node["#{key}Ids"].uniq!
         node[key] = node["#{key}Ids"].count
-        node['total'] += node[key]
       end
     end
   end
 
   def update_node(node_map, key, result)
-    status_map = {'pass'=>'passed', 'fail'=>'failed','error'=>'errors', 'skip'=>'skipped'}
+    status_map = {'pass'=>'passed', 'fail'=>'failed', 'error'=>'errors', 'skip'=>'skipped'}
     node = node_map[key]
     if (node)
       result['status'] = 'error' if result['status'].nil?
       node[status_map[result['status']]] += 1
       node["#{status_map[result['status']]}Ids"] << result['id']
       node['total'] += 1
+      node['totalIds'] << result['id']
+      if (self.supported_tests.include?(result['id']))
+        node['supportedtotal'] += 1
+        node['supportedtotalIds'] << result['id']
+        if (result['status'] == 'pass')
+          node['supportedpassed'] += 1
+          node['supportedpassedIds'] << result['id']
+        end
+      end
     else
       puts "\t KEY NOT FOUND: #{key}"
     end
@@ -424,8 +432,8 @@ class Server
 
   def build_compliance_node_map(node, map)
     node_defaults = {
-      'passed'=>0,'failed'=>0, 'errors'=>0, 'skipped'=>0, 'total'=>0,
-      'passedIds'=>[],'failedIds'=>[], 'errorsIds'=>[], 'skippedIds'=>[]
+      'passed'=>0,'failed'=>0, 'errors'=>0, 'skipped'=>0, 'total'=>0, 'supportedpassed'=>0, 'supportedtotal'=>0,
+      'passedIds'=>[],'failedIds'=>[], 'errorsIds'=>[], 'skippedIds'=>[], 'totalIds'=>[], 'supportedpassedIds'=>[], 'supportedtotalIds'=>[]
     }
     raise "duplicate node: #{node['name']}" if map[node['name']]
     map[node['name']] = node.merge!(node_defaults)
@@ -437,7 +445,7 @@ class Server
   end
 
   def zeroize_summary(hash)
-    hash['total'] = hash['passed'] = 0
+    hash['total'] = hash['supportedtotal'] = hash['passed'] = hash['supportedpassed'] = 0
     unless hash['children'].nil?
       hash['children'].each { |c| zeroize_summary(c) }
     end
