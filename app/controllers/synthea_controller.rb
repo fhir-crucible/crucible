@@ -73,7 +73,7 @@ class SyntheaController < ApplicationController
         end
       end
       SyntheaRun.new(url: server_url, format: format_type, count: quantity, date: Time.now, success: count > 0).save
-      @notice = "Successfully loaded #{count} of #{quantity} record(s)." if count > 0
+      @notice = "Successfully loaded #{count} of #{quantity} #{fhir_version.upcase} record(s)." if count > 0
     rescue Exception => e 
       @message = "Failed to load records."
       @error = "Unexpected error: #{e.message}"
