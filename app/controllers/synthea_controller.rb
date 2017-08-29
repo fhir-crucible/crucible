@@ -16,11 +16,18 @@ class SyntheaController < ApplicationController
     begin
       server_url = params['server_url']
       format_type = params['format_type']
+      fhir_version = params['fhir_version']
       quantity = params['quantity'].to_i
       redirected = false
 
       client = FHIR::Client.new(server_url)
       client.default_format = FHIR::Formats::ResourceFormat::RESOURCE_JSON if format_type.upcase=='JSON'
+      if fhir_version == 'dstu2'
+        client.use_dstu2
+      else 
+        # assume stu3 by default
+        client.use_stu3
+      end
 
       world = Synthea::World::Sequential.new
       world.population_count = 0
@@ -38,7 +45,13 @@ class SyntheaController < ApplicationController
         # add a record of the demographics to @testdata
         @testdata << [ record[:name_last], record[:name_first], record[:age], record[:gender], record[:race], 'FAILED' ]
         # convert to FHIR
-        bundle = Synthea::Output::FhirRecord.convert_to_fhir(record)
+        if fhir_version == 'dstu2'
+          bundle = Synthea::Output::FhirDstu2Record.convert_to_fhir(record)
+        else
+          # assume stu3 by default
+          bundle = Synthea::Output::FhirRecord.convert_to_fhir(record)
+        end
+        
         # record some counts of Resource types
         bundle.entry.each do |entry|
           type = entry.resource.resourceType
@@ -60,7 +73,7 @@ class SyntheaController < ApplicationController
         end
       end
       SyntheaRun.new(url: server_url, format: format_type, count: quantity, date: Time.now, success: count > 0).save
-      @notice = "Successfully loaded #{count} of #{quantity} record(s)." if count > 0
+      @notice = "Successfully loaded #{count} of #{quantity} #{fhir_version.upcase} record(s)." if count > 0
     rescue Exception => e 
       @message = "Failed to load records."
       @error = "Unexpected error: #{e.message}"
