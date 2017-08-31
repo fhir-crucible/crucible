@@ -294,7 +294,7 @@ class Server
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
 
-      # build the value for this run, which is a combination of the date and all the passed & total values for the categories
+      # build the value for this run, which is a combination of the date and all the passed & total (and supportedpassed and supportedtotal) values for the categories
       all_nodes = all_nodes(e.compliance) # save in all_nodes hash
 
       new_tree = summary_tree.deep_dup
@@ -453,7 +453,7 @@ class Server
 
   def all_nodes(hash, ret = {})
 
-    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total']}
+    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total'], 'supportedpassed' => hash['supportedpassed'], 'supportedtotal' => hash['supportedtotal']}
     hash['children'].each { |c| all_nodes(c, ret) } unless hash['children'].nil?
 
     ret
@@ -468,8 +468,10 @@ class Server
     if matching_node
       template['total'] = matching_node['total']
       template['passed'] = matching_node['passed']
+      template['supportedtotal'] = matching_node['supportedtotal']
+      template['supportedpassed'] = matching_node['supportedpassed']
     else
-      template['total'] = template['passed'] = 0
+      template['total'] = template['passed'] = template['supportedtotal'] = template['supportedpassed'] = 0
     end
 
     template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
@@ -490,8 +492,12 @@ class Server
     total = template['children'].reduce(0) {|sum, x| sum += x['total']}
     if total > 0
       passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
+      supportedtotal = template['children'].reduce(0) {|sum, x| sum += x['supportedtotal']}
+      supportedpassed = template['children'].reduce(0) {|sum, x| sum += x['supportedpassed']}
       template['total'] = total
       template['passed'] = passed
+      template['supportedtotal'] = supportedtotal
+      template['supportedpassed'] = supportedpassed
     end
   end
 

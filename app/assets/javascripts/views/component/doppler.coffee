@@ -8,26 +8,26 @@ weekdiff = (first, second) ->
 
 color = (data, threshold) ->
   colors = ["#bd0026", "#f03b20", "#fd8d3c", "#fecc5c", "#c2e699", "#78c679", "#31a354", "#006837"]
-  data.total = 0 if !data.total
-  data.passed = 0 if !data.passed
-  if data.total == 0
+  data.supportedtotal = 0 if !data.supportedtotal
+  data.supportedpassed = 0 if !data.supportedpassed
+  if data.supportedtotal == 0
     '#bbb'
   else
-    colors[Math.floor((data.passed / data.total) * (colors.length-1))]
+    colors[Math.floor((data.supportedpassed / data.supportedtotal) * (colors.length-1))]
 
 percentMe = (data) ->
-  data.total = 0 if !data.total
-  data.passed = 0 if !data.passed
-  if data.total == 0
+  data.supportedtotal = 0 if !data.supportedtotal
+  data.supportedpassed = 0 if !data.supportedpassed
+  if data.supportedtotal == 0
     0
   else
-    Math.round(data.passed / data.total * 100)
+    Math.round(data.supportedpassed / data.supportedtotal * 100)
 
 # returns appropriate tool tip for section
 tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
-  .html((d) -> "#{d.date}<br/> #{d.type}:<br>#{d.value.passed} / #{d.value.total} passed (#{percentMe(d.value)}%)")
+  .html((d) -> "#{d.date}<br/> #{d.type}:<br>#{d.value.supportedpassed} / #{d.value.supportedtotal} passed (#{percentMe(d.value)}%)")
 
 class Crucible.Doppler
 
@@ -60,7 +60,7 @@ class Crucible.Doppler
             setCurrentNode(nodeName, c, new_path)
 
     setCurrentNode(nodeName, @data[0], [])
-    
+
   render: ->
     margin_left = 65
     margin_top = 50
@@ -106,12 +106,12 @@ class Crucible.Doppler
 
       if current.children
         for item, index in current.children
-          processed_data.push(date: row.date, type: item.name, index: index, value: {total: item.total, passed: item.passed})
+          processed_data.push(date: row.date, type: item.name, index: index, value: {total: item.total, passed: item.passed, supportedtotal: item.supportedtotal, supportedpassed: item.supportedpassed})
 
           # for just the first row, build out the labels in a form consumable by d3
           labels.push(key: item.name, index: index) if !row_index
       else
-        processed_data.push(date: row.date, type: current.name, index: 0, value: {total: current.total, passed: current.passed})
+        processed_data.push(date: row.date, type: current.name, index: 0, value: {total: current.total, passed: current.passed, supportedtotal: current.supportedtotal, supportedpassed: current.supportedpassed})
 
         # for just the first row, build out the labels in a form consumable by d3
         labels.push(key: current.name, index: 0) if !row_index
@@ -268,5 +268,3 @@ class Crucible.Doppler
 
     # activate tool tip
     @svg.call(tip)
-
-
