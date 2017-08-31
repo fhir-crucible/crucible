@@ -105,14 +105,14 @@ GEM
     area (0.10.0)
       fastercsv (~> 1.5)
     arel (6.0.4)
-    autoprefixer-rails (7.1.2.4)
+    autoprefixer-rails (7.1.2.6)
       execjs
     bcp47 (0.3.3)
       i18n
     bcrypt (3.1.11)
     bson (3.2.7)
     builder (3.2.3)
-    byebug (9.0.6)
+    byebug (9.1.0)
     case_transform (0.2)
       activesupport
     chunky_png (1.3.8)
@@ -226,7 +226,7 @@ GEM
     mime-types (2.99.3)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
-    minitest-reporters (1.1.14)
+    minitest-reporters (1.1.15)
       ansi
       builder
       minitest (>= 5.0)
@@ -342,11 +342,11 @@ GEM
       actionmailer (>= 3.2.6, < 5)
       actionpack (>= 3.2.6, < 5)
       devise (~> 3.2)
-    simplecov (0.14.1)
+    simplecov (0.15.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.1)
+    simplecov-html (0.10.2)
     slop (3.6.0)
     sprockets (2.12.4)
       hike (~> 1.2)
@@ -362,9 +362,11 @@ GEM
       railties (>= 3.2.5, < 6)
     teaspoon-jasmine (2.3.4)
       teaspoon (>= 1.0.0)
-    thor (0.19.4)
+    thor (0.20.0)
     thread_safe (0.3.6)
     tilt (1.4.1)
+    time_difference (0.5.0)
+      activesupport
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uglifier (3.2.0)
@@ -419,8 +421,9 @@ DEPENDENCIES
   simplecov
   synthea!
   teaspoon-jasmine
+  time_difference
   uglifier (>= 1.3.0)
   webmock
 
 BUNDLED WITH
-   1.15.1
+   1.15.3
