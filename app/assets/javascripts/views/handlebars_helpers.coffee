@@ -68,3 +68,14 @@ Handlebars.registerHelper('percentage', (numerator, denominator) ->
 Handlebars.registerHelper('format-date', (date) ->
   return moment(date).format('MM/DD/YYYY HH:mm');
 )
+
+Handlebars.registerHelper('smart-status', (success) ->
+  if success == 'not_found'
+    return 'not_found'
+  else if success == 'skip'
+    return 'skip'
+  else if success
+    return 'pass'
+  else
+    return 'fail'
+)

@@ -1,0 +1,65 @@
+<div class="container main servers-show">
+  <div class="row content">
+    <div class="col-sm-12">
+      <div class="palette report">
+
+        <%= render "info" %>
+
+        <div id="accordion" aria-multiselectable="true">
+          <a href="#configuration" class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="configuration">
+            <div align="left">Configuration</div>
+          </a>
+          <div id="configuration" class="collapse in">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>Server</th>
+                  <th>Client ID</th>
+                  <th>Scopes</th>
+                  <th></th>
+                </tr>
+                <% @config_data.each do |row| %>
+                  <tr>
+                    <td><%= row[:client] %></td>
+                    <td><%= row[:client_id] %></td>
+                    <td><%= row[:scopes] %></td>
+                    <td>
+                      <form action="cfg" method="POST">
+                        <input type="hidden" name="delete" value="<%= row[:client] %>">
+                        <input type="submit" class="btn begin" value="Delete">
+                      </form>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div align="left">
+          <h2>Add New Configuration</h2>
+          <form action="cfg" method="POST">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>Server</td>
+                  <td><input type="text" size="50" name="Server" value="" class="form-control"></td>
+                </tr>
+                <tr>
+                  <td>Client ID</td>
+                  <td><input type="text" size="50" name="Client ID" value="" class="form-control"></td>
+                </tr>
+                <tr>
+                  <td>Scopes</td>
+                  <td><input type="text" size="50" name="Scopes" value="launch openid profile patient/*.read" class="form-control"></td>
+                </tr>
+              </tbody>
+            </table>
+            <input type="submit" class="btn begin">
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
