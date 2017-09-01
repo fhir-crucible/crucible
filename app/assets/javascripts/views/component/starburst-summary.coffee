@@ -5,10 +5,10 @@ $(document).ready( ->
 # returns percent passing of a section
 # TODO: this needs to be somewhere better... also on starburst
 percentMe = (data) ->
-  if data.supportedtotal == 0
+  if data.supportedTotal == 0
     0
   else
-    Math.round(data.supportedpassed / data.supportedtotal * 100)
+    Math.round(data.supportedPassed / data.supportedTotal * 100)
 
 class Crucible.StarburstSummary
   constructor: ->

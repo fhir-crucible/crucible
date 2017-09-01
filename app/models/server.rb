@@ -294,7 +294,7 @@ class Server
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
 
-      # build the value for this run, which is a combination of the date and all the passed & total (and supportedpassed and supportedtotal) values for the categories
+      # build the value for this run, which is a combination of the date and all the passed & total (and supportedPassed and supportedTotal) values for the categories
       all_nodes = all_nodes(e.compliance) # save in all_nodes hash
 
       new_tree = summary_tree.deep_dup
@@ -379,6 +379,21 @@ class Server
 
   end
 
+  def update_supported_data(node, supported_tests)
+    node['totalIds'] = [node['passedIds'], node['failedIds'], node['errorsIds'], node['skippedIds']].reduce([], :concat)
+
+    node['supportedTotalIds'] = node['totalIds'].select {|id| supported_tests.include?(id)}
+    node['supportedTotal'] = node['supportedTotalIds'].count
+    node['supportedPassedIds'] = node['passedIds'].select {|id| supported_tests.include?(id)}
+    node['supportedPassed'] = node['supportedPassedIds'].count
+
+    if node['children']
+      node['children'].each do |child|
+        update_supported_data(child, supported_tests)
+      end
+    end
+  end
+
   private
 
   def check_restriction(restriction, resource_operations, operations)
@@ -400,7 +415,7 @@ class Server
       node['children'].each do |child|
         rollup(child)
       end
-      ['passed', 'failed', 'errors', 'skipped', 'total', 'supportedpassed', 'supportedtotal'].each do |key|
+      ['passed', 'failed', 'errors', 'skipped', 'total', 'supportedPassed', 'supportedTotal'].each do |key|
         node["#{key}Ids"].concat(node['children'].map {|n| n["#{key}Ids"]}.flatten.uniq)
         node["#{key}Ids"].uniq!
         node[key] = node["#{key}Ids"].count
@@ -418,11 +433,11 @@ class Server
       node['total'] += 1
       node['totalIds'] << result['id']
       if (self.supported_tests.include?(result['id']))
-        node['supportedtotal'] += 1
-        node['supportedtotalIds'] << result['id']
+        node['supportedTotal'] += 1
+        node['supportedTotalIds'] << result['id']
         if (result['status'] == 'pass')
-          node['supportedpassed'] += 1
-          node['supportedpassedIds'] << result['id']
+          node['supportedPassed'] += 1
+          node['supportedPassedIds'] << result['id']
         end
       end
     else
@@ -432,8 +447,8 @@ class Server
 
   def build_compliance_node_map(node, map)
     node_defaults = {
-      'passed'=>0,'failed'=>0, 'errors'=>0, 'skipped'=>0, 'total'=>0, 'supportedpassed'=>0, 'supportedtotal'=>0,
-      'passedIds'=>[],'failedIds'=>[], 'errorsIds'=>[], 'skippedIds'=>[], 'totalIds'=>[], 'supportedpassedIds'=>[], 'supportedtotalIds'=>[]
+      'passed'=>0,'failed'=>0, 'errors'=>0, 'skipped'=>0, 'total'=>0, 'supportedPassed'=>0, 'supportedTotal'=>0,
+      'passedIds'=>[],'failedIds'=>[], 'errorsIds'=>[], 'skippedIds'=>[], 'totalIds'=>[], 'supportedPassedIds'=>[], 'supportedTotalIds'=>[]
     }
     raise "duplicate node: #{node['name']}" if map[node['name']]
     map[node['name']] = node.merge!(node_defaults)
@@ -445,7 +460,7 @@ class Server
   end
 
   def zeroize_summary(hash)
-    hash['total'] = hash['supportedtotal'] = hash['passed'] = hash['supportedpassed'] = 0
+    hash['total'] = hash['supportedTotal'] = hash['passed'] = hash['supportedPassed'] = 0
     unless hash['children'].nil?
       hash['children'].each { |c| zeroize_summary(c) }
     end
@@ -453,7 +468,7 @@ class Server
 
   def all_nodes(hash, ret = {})
 
-    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total'], 'supportedpassed' => hash['supportedpassed'], 'supportedtotal' => hash['supportedtotal']}
+    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total'], 'supportedPassed' => hash['supportedPassed'], 'supportedTotal' => hash['supportedTotal']}
     hash['children'].each { |c| all_nodes(c, ret) } unless hash['children'].nil?
 
     ret
@@ -468,10 +483,10 @@ class Server
     if matching_node
       template['total'] = matching_node['total']
       template['passed'] = matching_node['passed']
-      template['supportedtotal'] = matching_node['supportedtotal']
-      template['supportedpassed'] = matching_node['supportedpassed']
+      template['supportedTotal'] = matching_node['supportedTotal']
+      template['supportedPassed'] = matching_node['supportedPassed']
     else
-      template['total'] = template['passed'] = template['supportedtotal'] = template['supportedpassed'] = 0
+      template['total'] = template['passed'] = template['supportedTotal'] = template['supportedPassed'] = 0
     end
 
     template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
@@ -492,12 +507,12 @@ class Server
     total = template['children'].reduce(0) {|sum, x| sum += x['total']}
     if total > 0
       passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
-      supportedtotal = template['children'].reduce(0) {|sum, x| sum += x['supportedtotal']}
-      supportedpassed = template['children'].reduce(0) {|sum, x| sum += x['supportedpassed']}
+      supportedTotal = template['children'].reduce(0) {|sum, x| sum += x['supportedTotal']}
+      supportedPassed = template['children'].reduce(0) {|sum, x| sum += x['supportedPassed']}
       template['total'] = total
       template['passed'] = passed
-      template['supportedtotal'] = supportedtotal
-      template['supportedpassed'] = supportedpassed
+      template['supportedTotal'] = supportedTotal
+      template['supportedPassed'] = supportedPassed
     end
   end
 

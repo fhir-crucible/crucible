@@ -154,7 +154,7 @@ class TestRun
     compliance = server.get_compliance()
     summary = Summary.new({server_id: self.server.id, test_run: self, compliance: compliance, generated_at: Time.now, fhir_version: self.fhir_version})
     self.server.summary = summary
-    self.server.percent_passing = (compliance['supportedpassed'].to_f / ([compliance['supportedtotal'].to_f || 0, 1].max)) * 100.0
+    self.server.percent_passing = (compliance['supportedPassed'].to_f / ([compliance['supportedTotal'].to_f || 0, 1].max)) * 100.0
     self.server.last_run_at = Time.now
     summary.save!
     self.server.update_history(summary)

@@ -5,23 +5,23 @@ colors = ["#bd0026", "#f03b20", "#fd8d3c", "#fecc5c", "#c2e699", "#78c679", "#31
 
 # returns appropriate color of section (recursive)
 color = (data) ->
-  if data.supportedtotal == 0
+  if data.supportedTotal == 0
     '#bbb'
   else
-      colors[Math.floor((data.supportedpassed / data.supportedtotal) * (colors.length-1))]
+      colors[Math.floor((data.supportedPassed / data.supportedTotal) * (colors.length-1))]
 
 # returns percent passing of a section
 percentMe = (data) ->
-  if data.supportedtotal == 0
+  if data.supportedTotal == 0
     0
   else
-    Math.round(data.supportedpassed / data.supportedtotal * 100)
+    Math.round(data.supportedPassed / data.supportedTotal * 100)
 
 # returns appropriate tool tip for section
 tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
-  .html((d) -> "#{d.name}:<br>#{d.supportedpassed} / #{d.supportedtotal} passed (#{percentMe(d)}%)")
+  .html((d) -> "#{d.name}:<br>#{d.supportedPassed} / #{d.supportedTotal} passed (#{percentMe(d)}%)")
 
 class Crucible.Starburst
   nodeMap: {}
@@ -102,7 +102,7 @@ class Crucible.Starburst
 
     # define partition layout
     # The value used to be the following
-    # logScale(Math.max(d.supportedtotal ,@get('minSize'))))
+    # logScale(Math.max(d.supportedTotal ,@get('minSize'))))
     # but changed it to just being 1 so the starburst structure stays the same
     partition = d3.layout.partition()
       .sort(null)
@@ -117,7 +117,7 @@ class Crucible.Starburst
 
     # updates node name text element
     updateNodeName = (d) ->
-      title.html("#{d.name}:<p>#{d.supportedpassed} / #{d.supportedtotal} passed (#{percentMe(d)}%)</p>")
+      title.html("#{d.name}:<p>#{d.supportedPassed} / #{d.supportedTotal} passed (#{percentMe(d)}%)</p>")
 
     # when zooming: interpolate the scales
     arcTweenZoom = (c) =>
@@ -471,10 +471,10 @@ class Crucible.Starburst
       .duration(@getTransitionSpeed())
       .styleTween("fill", (n) =>
         new_n = data_lookup[n.name]
-        new_n = {supportedtotal: 0, supportedpassed: 0} if !new_n
+        new_n = {supportedTotal: 0, supportedPassed: 0} if !new_n
         interpolate = d3.interpolateRgb(color(n), color(new_n))
-        n.supportedtotal = new_n.supportedtotal
-        n.supportedpassed = new_n.supportedpassed
+        n.supportedTotal = new_n.supportedTotal
+        n.supportedPassed = new_n.supportedPassed
         interpolate
       )
 
