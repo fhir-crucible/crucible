@@ -33,6 +33,15 @@ Rails.application.routes.draw do
     post 'testdata' => :load_data
   end
 
+  controller :smarts do
+    get 'smart' => :index
+    get 'smart/app' => :app
+    get 'smart/app/show' => :show
+    get 'smart/launch' => :launch
+    get 'smart/cfg' => :cfg
+    post 'smart/cfg' => :update_cfg
+  end
+
   resources :test_results, only: [:show] do
     get 'reissue_request', default: {format: :json}
   end

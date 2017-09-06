@@ -1,0 +1,57 @@
+<div class="container main servers-show">
+  <div class="row content">
+    <div class="col-sm-12">
+      <div class="palette report">
+
+        <% unless @valid_launch_params %>
+          <%= render "info" %>
+
+          <div id="accordion" aria-multiselectable="true">
+            <a href="#params" class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" aria-controls="params">
+              <div align="left">params</div>
+            </a>
+            <div id="params" class="collapse in">
+              <table class="table">
+                <tbody>
+                  <% @launch_params.each do |key, value| %>
+                    <tr>
+                      <td><%= key %></td>
+                      <td><%= value %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            <a href="#errors" class="btn btn-accent-inverse" role="button" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" aria-controls="errors">
+              <div align="left">Errors</div>
+            </a>
+            <div id="errors" class="collapse in">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th>Status</th>
+                    <th>Description</th>
+                    <th>Detail</th>
+                  </tr>
+                  <tr>
+                    <td><span class="fail">FAIL</span></td>
+                    <td>OAuth2 Launch Parameters</td>
+                    <td>
+                      The <span>/launch</span> endpoint requires <span>iss</span> and <span>launch</span> parameters.
+                      <br/>
+                      <br/>
+                      Please read the <a href="http://docs.smarthealthit.org/authorization/">SMART "launch sequence"</a> for more information.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <%= render "instructions" %>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
