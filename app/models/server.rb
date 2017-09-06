@@ -265,17 +265,26 @@ class Server
             self.fhir_sequence = 'STU3'
           elsif ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
             self.fhir_sequence = 'DSTU2'
-          elsif  ['0.0.82', '0.11', '0.06', '0.05'].include? version_abbreviated
-            self.fhir_sequence = 'DSTU1'
-          else
-            self.fhir_sequence = ''
+          # currently not supporting DSTU1
+          # elsif  ['0.0.82', '0.11', '0.06', '0.05'].include? version_abbreviated
+          #   self.fhir_sequence = 'DSTU1'
+          else # Set to most recent sequence and version if not STU3 or DSTU2
+            self.fhir_sequence = 'STU3'
+            self.fhir_version = '3.0.1'
           end
-        rescue
-          self.fhir_sequence = ''
+        rescue # Set to most recent sequence and version if unexpected input
+          self.fhir_sequence = 'STU3'
+          self.fhir_version = '3.0.1'
         end
-        self.save
+      else # Set to most recent sequence and version if no conformance value
+        self.fhir_sequence = 'STU3'
+        self.fhir_version = '3.0.1'
       end
+    else # Set to most recent sequence and version if no conformance
+      self.fhir_sequence = 'STU3'
+      self.fhir_version = '3.0.1'
     end
+    self.save
   end
 
   def generate_history
@@ -382,9 +391,14 @@ class Server
   def update_supported_data(node, supported_tests)
     node['totalIds'] = [node['passedIds'], node['failedIds'], node['errorsIds'], node['skippedIds']].reduce([], :concat)
 
-    node['supportedTotalIds'] = node['totalIds'].select {|id| supported_tests.include?(id)}
+    if self.conformance
+      node['supportedTotalIds'] = node['totalIds'].select {|id| supported_tests.include?(id)}
+      node['supportedPassedIds'] = node['passedIds'].select {|id| supported_tests.include?(id)}
+    else
+      node['supportedTotalIds'] = node['totalIds']
+      node['supportedPassedIds'] = node['passedIds']
+    end
     node['supportedTotal'] = node['supportedTotalIds'].count
-    node['supportedPassedIds'] = node['passedIds'].select {|id| supported_tests.include?(id)}
     node['supportedPassed'] = node['supportedPassedIds'].count
 
     if node['children']
@@ -432,13 +446,20 @@ class Server
       node["#{status_map[result['status']]}Ids"] << result['id']
       node['total'] += 1
       node['totalIds'] << result['id']
-      if (self.supported_tests.include?(result['id']))
-        node['supportedTotal'] += 1
-        node['supportedTotalIds'] << result['id']
-        if (result['status'] == 'pass')
-          node['supportedPassed'] += 1
-          node['supportedPassedIds'] << result['id']
+      if self.conformance
+        if (self.supported_tests.include?(result['id']))
+          node['supportedTotal'] += 1
+          node['supportedTotalIds'] << result['id']
+          if (result['status'] == 'pass')
+            node['supportedPassed'] += 1
+            node['supportedPassedIds'] << result['id']
+          end
         end
+      else # Set supported data to original data if conformance is nil
+        node['supportedTotal'] = node['total']
+        node['supportedTotalIds'] = node['totalIds']
+        node['supportedPassed'] = node['passed']
+        node['supportedPassedIds'] = node['passedIds']
       end
     else
       puts "\t KEY NOT FOUND: #{key}"
