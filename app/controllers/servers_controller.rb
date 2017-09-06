@@ -79,7 +79,7 @@ class ServersController < ApplicationController
     else
       render status: 500, text: 'State not found'
     end
-    
+
   end
 
   def conformance
@@ -165,7 +165,7 @@ class ServersController < ApplicationController
     return unless aggregate_run
     if (params[:only_failures])
       tests = Test.all.map{|m| m} # force mongo to load all these into memory
-      aggregate_run.results.select! {|r| r if r['status'] == 'fail' and tests.any? {|t| t["_id"] == r['test_id']} }
+      aggregate_run.results.select! {|r| r if r['status'] == 'fail' && tests.any? {|t| t["_id"] == r['test_id']} && server.supported_tests.include?(r['id'])}
     end
     render json: aggregate_run
   end
@@ -195,13 +195,13 @@ class ServersController < ApplicationController
     server = Server.find(params[:server_id])
     if server
       server.unset(
-        :token, 
-        :client_id, 
-        :client_secret, 
+        :token,
+        :client_id,
+        :client_secret,
         :oauth_token_opts,
-        :scopes, 
-        :authorize_url, 
-        :token_url, 
+        :scopes,
+        :authorize_url,
+        :token_url,
         :patient_id,
         :scopes,
         :launch_param

@@ -15,9 +15,11 @@ require 'webmock/minitest'
 class ActiveSupport::TestCase
 
   def dump_database
-    Mongoid.default_session.collections.each do |c|
-      c.drop() unless c.name == 'tests'
-    end
+    # TODO: Fix issue where default_session.collections is empty on certain machines
+    # Mongoid.default_session.collections.each do |c|
+    #   c.drop() unless c.name == 'tests'
+    # end
+    [AggregateRun, Server, Statistics, Summary, TestResult, TestRun].each {|m| m.delete_all}
   end
 
   def collection_fixtures(*collection_names)
@@ -43,7 +45,7 @@ class ActiveSupport::TestCase
             json[k] = BSON::ObjectId.from_string(v["$oid"])
           else
             set_mongoid_ids(v)
-          end  
+          end
         end
       end
     end
