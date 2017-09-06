@@ -10,7 +10,7 @@ class ServerTest < ActiveSupport::TestCase
 
   def test_conformance_fixtures
     # make sure the conformance statements in the fixtures are up to date
-  
+
     compliance_statement_xml = FHIR::Xml.from_xml(@conformance_xml)
     compliance_statement_json = FHIR::Json.from_json(@partial_conformance_json)
 
@@ -73,7 +73,7 @@ class ServerTest < ActiveSupport::TestCase
     conformance = server.load_conformance
 
     server.collect_supported_tests
-    
+
     someSuites = ["readtest", "format001", "resourcetest_allergyintolerance", "resourcetest_appointment", "searchtest_allergyintolerance",
                   "resourcetest_condition", "resourcetest_observation", "resourcetest_patient", "resourcetest_practitioner",
                   "resourcetest_schedule", "resourcetest_slot", "searchtest_condition", "searchtest_observation", "searchtest_patient", "search001"]
@@ -103,7 +103,7 @@ class ServerTest < ActiveSupport::TestCase
 
     full_run = TestRun.find('560f068c4d4d3266f8840200')
     partial_run = TestRun.find('560f068c4d4d3266f8840201')
-    
+
     assert server.aggregate(partial_run)
     assert_not_nil server.aggregate_run
     assert_equal TestResult.where({test_run_id: partial_run.id}).map(&:result).flatten.count, server.aggregate_run.results.count
@@ -137,7 +137,7 @@ class ServerTest < ActiveSupport::TestCase
     # check test run serializable hash
     assert (JSON.parse(partial_run.to_json).keys & ['_id']).empty?
 
-    
+
     assert server.aggregate(partial_run)
 
     compliance = server.get_compliance
