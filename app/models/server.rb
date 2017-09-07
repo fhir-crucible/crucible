@@ -67,7 +67,18 @@ class Server
       self.supported_tests = []
       self.supported_suites = []
       collect_supported_tests
-      self.default_format = client.default_format if client.default_format
+
+      # This should be revisited
+      # This ensures that the right media type is sent based on version and is saved on the server
+      if client.default_format
+        if client.default_format.include?('xml')
+          client.use_xml
+        else
+          client.use_json
+        end
+        self.default_format = client.default_format
+      end
+
       self.save!
       guess_name(true)
       extract_version_from_conformance
