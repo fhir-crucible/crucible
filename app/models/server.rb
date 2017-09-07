@@ -72,9 +72,9 @@ class Server
       # This ensures that the right media type is sent based on version and is saved on the server
       if client.default_format
         if client.default_format.include?('xml')
-          client.use_xml
+          client.default_xml
         else
-          client.use_json
+          client.default_json
         end
         self.default_format = client.default_format
       end
