@@ -96,7 +96,7 @@ class ServersController < ApplicationController
   end
 
   def summary
-    server = Server.find(params[:server_id])
+    server = Server.where(_id: params[:server_id]).only(:fhir_sequence, :summary).first
     fhir_sequence = server.fhir_sequence || 'STU3'
     summary = server.summary
     render json: {summary: summary, fhir_sequence: fhir_sequence}
