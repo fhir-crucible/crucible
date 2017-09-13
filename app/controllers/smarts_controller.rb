@@ -32,7 +32,7 @@ class SmartsController < ApplicationController
       oauth2_params = {
         'grant_type' => 'authorization_code',
         'code' => params['code'],
-        'redirect_uri' => Crucible::SMART::OAuth::OAUTH['redirect_url'],
+        'redirect_uri' => Crucible::SMART::OAuth::REDIRECT_URL,
         'client_id' => session[:client_id]
       }
       puts "Token Params: #{oauth2_params}"
@@ -369,12 +369,12 @@ class SmartsController < ApplicationController
       session[:authorize_url] = auth_info[:authorize_url]
       session[:token_url] = auth_info[:token_url]
       @fhir_url = params['iss']
-      puts "Launch Client ID: #{client_id}\nLaunch Auth Info: #{auth_info}\nLaunch Redirect: #{Crucible::SMART::OAuth::OAUTH['redirect_url']}"
+      puts "Launch Client ID: #{client_id}\nLaunch Auth Info: #{auth_info}\nLaunch Redirect: #{Crucible::SMART::OAuth::REDIRECT_URL}"
       session[:state] = SecureRandom.uuid
       oauth2_params = {
         'response_type' => 'code',
         'client_id' => client_id,
-        'redirect_uri' => Crucible::SMART::OAuth::OAUTH['redirect_url'],
+        'redirect_uri' => Crucible::SMART::OAuth::REDIRECT_URL,
         'scope' => Crucible::SMART::OAuth.get_scopes(params['iss']),
         'launch' => params['launch'],
         'state' => session[:state],
