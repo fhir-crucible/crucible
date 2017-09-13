@@ -1,4 +1,4 @@
-require './config/oauth'
+require './config/smart_oauth'
 
 class SmartsController < ApplicationController
   before_filter :set_oauth

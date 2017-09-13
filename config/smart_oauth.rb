@@ -4,6 +4,8 @@ module Crucible
 
       # Load the client_ids and scopes from a configuration file
       OAUTH = SmartClient.all
+
+      # Define constants for the base url and redirect url
       BASE_URL = ""
       REDIRECT_URL = "http://localhost:3000/smart/app"
 
@@ -42,7 +44,7 @@ module Crucible
         rows
       end
 
-      # Add a client ID and scopes to the CONFIGURATION
+      # Add a smart_client to the database
       def self.add_client(name,client_id,scopes)
         client = SmartClient.new
         client.name = name
@@ -51,7 +53,7 @@ module Crucible
         client.save
       end
 
-      # Delete a client ID and scopes from the CONFIGURATION
+      # Delete a smart_client from the database
       def self.delete_client(name)
         client = SmartClient.find_by(name: name)
         client.destroy if client
