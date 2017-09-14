@@ -5,10 +5,6 @@ module Crucible
       # Load the client_ids and scopes from a configuration file
       OAUTH = SmartClient.all
 
-      # Define constants for the base url and redirect url
-      BASE_URL = ""
-      REDIRECT_URL = "http://localhost:3000/smart/app"
-
       # Given a URL, choose a client_id to use
       def self.get_client_id(url)
         return nil unless url
