@@ -19,7 +19,7 @@ class ActiveSupport::TestCase
     # Mongoid.default_session.collections.each do |c|
     #   c.drop() unless c.name == 'tests'
     # end
-    [AggregateRun, Server, Statistics, Summary, TestResult, TestRun].each {|m| m.delete_all}
+    [AggregateRun, Server, SmartClient, Statistics, Summary, TestResult, TestRun].each {|m| m.delete_all}
   end
 
   def collection_fixtures(*collection_names)

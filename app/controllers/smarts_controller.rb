@@ -1,5 +1,3 @@
-require './config/oauth'
-
 class SmartsController < ApplicationController
   before_filter :set_oauth
 
@@ -32,7 +30,7 @@ class SmartsController < ApplicationController
       oauth2_params = {
         'grant_type' => 'authorization_code',
         'code' => params['code'],
-        'redirect_uri' => Crucible::SMART::OAuth::OAUTH['redirect_url'],
+        'redirect_uri' => Rails.application.config.smart_redirect_url,
         'client_id' => session[:client_id]
       }
       puts "Token Params: #{oauth2_params}"
@@ -47,7 +45,7 @@ class SmartsController < ApplicationController
       session[:patient_id] = patient_id
       scopes = token_response['scope']
       if scopes.nil?
-        scopes = Crucible::SMART::OAuth.get_scopes(fhir_url)
+        scopes = get_scopes(fhir_url)
       end
       session[:scopes] = scopes
     end
@@ -362,20 +360,20 @@ class SmartsController < ApplicationController
     @launch_params = params
     if params && params['iss'] && params['launch']
       @valid_launch_params = true
-      client_id = Crucible::SMART::OAuth.get_client_id(params['iss'])
-      auth_info = Crucible::SMART::OAuth.get_auth_info(params['iss'])
+      client_id = get_client_id(params['iss'])
+      auth_info = get_auth_info(params['iss'])
       session[:client_id] = client_id
       session[:fhir_url] = params['iss']
       session[:authorize_url] = auth_info[:authorize_url]
       session[:token_url] = auth_info[:token_url]
       @fhir_url = params['iss']
-      puts "Launch Client ID: #{client_id}\nLaunch Auth Info: #{auth_info}\nLaunch Redirect: #{Crucible::SMART::OAuth::OAUTH['redirect_url']}"
+      puts "Launch Client ID: #{client_id}\nLaunch Auth Info: #{auth_info}\nLaunch Redirect: #{Rails.application.config.smart_redirect_url}"
       session[:state] = SecureRandom.uuid
       oauth2_params = {
         'response_type' => 'code',
         'client_id' => client_id,
-        'redirect_uri' => Crucible::SMART::OAuth::OAUTH['redirect_url'],
-        'scope' => Crucible::SMART::OAuth.get_scopes(params['iss']),
+        'redirect_uri' => Rails.application.config.smart_redirect_url,
+        'scope' => get_scopes(params['iss']),
         'launch' => params['launch'],
         'state' => session[:state],
         'aud' => params['iss']
@@ -399,13 +397,13 @@ class SmartsController < ApplicationController
   def update_cfg
     if params['delete']
       puts "Deleting configuration: #{params['delete']}"
-      Crucible::SMART::OAuth.delete_client(params['delete'])
+      delete_client(params['delete'])
     else
       puts "Saving configuration: #{params}"
-      Crucible::SMART::OAuth.add_client(params['Server'],params['Client ID'],params['Scopes'])
+      add_client(params['Server'],params['Client ID'],params['Scopes'])
     end
     puts "Configuration saved."
-    @config_data = Crucible::SMART::OAuth.get_config
+    @config_data = get_config
     redirect_to "/smart/cfg"
   end
 
@@ -428,8 +426,58 @@ class SmartsController < ApplicationController
     { success: success, status: status, description: description, detail: detail }
   end
 
+  # Given a URL, choose a client_id to use
+  def get_client_id(url)
+    return nil unless url
+    SmartClient.all.each do |client|
+      return client.id if url.include?(client.name)
+    end
+    nil
+  end
+
+  # Given a URL, choose the OAuth2 scopes to request
+  def get_scopes(url)
+    return nil unless url
+    SmartClient.all.each do |client|
+      return client.scopes if url.include?(client.name)
+    end
+    nil
+  end
+
+  # Extract the Authorization and Token URLs
+  # from the FHIR Conformance
+  def get_auth_info(issuer)
+    return {} unless issuer
+    client = FHIR::Client.new(issuer)
+    client.default_json
+    client.get_oauth2_metadata_from_conformance
+  end
+
+  def get_config
+    rows = []
+    SmartClient.all.each do |client|
+      rows << { client: client.name, client_id: client.id, scopes: client.scopes }
+    end
+    rows
+  end
+
+  # Add a smart_client to the database
+  def add_client(name,client_id,scopes)
+    client = SmartClient.new
+    client.name = name
+    client.id = client_id
+    client.scopes = scopes
+    client.save
+  end
+
+  # Delete a smart_client from the database
+  def delete_client(name)
+    client = SmartClient.find_by(name: name)
+    client.destroy if client
+  end
+
   private
   def set_oauth
-    @config_data = Crucible::SMART::OAuth.get_config
+    @config_data = get_config
   end
 end
