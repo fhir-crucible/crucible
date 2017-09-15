@@ -62,7 +62,7 @@ module Crucible
 
     # Configuration to set SMART on FHIR base url and redirect url
     config.smart_base_url = ''
-    config.smart_redirect_url = 'https://projectcrucible.org/smart/app'
+    config.smart_redirect_url = 'http://localhost:3000/smart/app'
 
     FHIR::Terminology.set_terminology_root(Rails.root.join('terminology').to_s)
 
