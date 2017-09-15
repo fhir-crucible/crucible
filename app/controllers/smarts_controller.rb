@@ -467,6 +467,12 @@ class SmartsController < ApplicationController
     client.name = name
     client.id = client_id
     client.scopes = scopes
+    # Destroy smart_client if it shares new smart_client name
+    SmartClient.all.each do |other|
+      unless other == client
+        other.destroy if other.name == client.name
+      end
+    end
     client.save
   end
 
