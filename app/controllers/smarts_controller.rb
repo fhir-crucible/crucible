@@ -351,7 +351,10 @@ class SmartsController < ApplicationController
 
     session[:end_time] = Time.now
     time_diff = TimeDifference.between(session[:start_time],session[:end_time]).humanize
-
+    run = SmartRun.new
+    run.report = report
+    run.time_diff = time_diff
+    run.save
     render json: { report: report, time_diff: time_diff }
   end
 
@@ -430,7 +433,7 @@ class SmartsController < ApplicationController
   def get_client_id(url)
     return nil unless url
     SmartClient.all.each do |client|
-      return client.id if url.include?(client.name)
+      return client.client_id if url.include?(client.name)
     end
     nil
   end
@@ -456,7 +459,7 @@ class SmartsController < ApplicationController
   def get_config
     rows = []
     SmartClient.all.each do |client|
-      rows << { client: client.name, client_id: client.id, scopes: client.scopes }
+      rows << { client: client.name, client_id: client.client_id, scopes: client.scopes }
     end
     rows
   end
@@ -465,7 +468,7 @@ class SmartsController < ApplicationController
   def add_client(name,client_id,scopes)
     client = SmartClient.new
     client.name = name
-    client.id = client_id
+    client.client_id = client_id
     client.scopes = scopes
     # Destroy smart_client if it shares new smart_client name
     SmartClient.all.each do |other|
