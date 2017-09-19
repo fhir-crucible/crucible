@@ -354,6 +354,7 @@ class SmartsController < ApplicationController
     run = SmartRun.new
     run.report = report
     run.time_diff = time_diff
+    run.smart_client = SmartClient.find_by(client_id: session[:client_id])
     run.save
     render json: { report: report, time_diff: time_diff }
   end
