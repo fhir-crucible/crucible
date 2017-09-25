@@ -234,13 +234,19 @@ class Server
     Badge.all.each do |badge|
       earned = true
       badge.suites.each do |suite|
-        if not self.supported_suites.include? suite
+        unless self.supported_suites.include? suite
           earned = false
+        end
+        unless earned
+          break
         end
       end
       badge.tests.each do |test|
-        if not self.supported_tests.include? test
+        unless self.supported_tests.include? test
           earned = false
+        end
+        unless earned
+          break
         end
       end
       if earned

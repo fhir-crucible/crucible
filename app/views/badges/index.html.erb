@@ -23,7 +23,7 @@
                 <div class="well req-container">
                 <table class="table req-table">
                 <tbody>
-                  <% if !badge.suites.empty? %>
+                  <% unless badge.suites.empty? %>
                   <tr>
                     <td class="highlight-text">Resources</td>
                     <td>
@@ -37,7 +37,7 @@
                     </td>
                   </tr>
                   <% end %>
-                  <% if !badge.tests.empty? %>
+                  <% unless badge.tests.empty? %>
                   <tr>
                     <td>Tests</td>
                       <td><% for test in badge.tests %>
