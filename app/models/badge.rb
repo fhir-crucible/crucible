@@ -42,18 +42,6 @@ class Badge
 		return string
 	end
 	def self.create_badges
-		# Dummy (Always Pass)
-	    dummy_badge = Badge.new({
-	      id: "DUMMY",
-	      name: "Dummy",
-	      suites: [],
-	      tests: [],
-	      description: "This server exists",
-	      link: "www.google.com",
-	      image: "logo.png",
-	      short_name:"dummy"
-	    })
-	    #dummy_badge.save
 	    
 	    # Terminology
 	    term_badge = Badge.new({
