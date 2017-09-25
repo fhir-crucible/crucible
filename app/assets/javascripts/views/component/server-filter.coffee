@@ -8,6 +8,7 @@ class Crucible.ServerFilter
   height: 700
   searchVisible: false
   active: true
+  fhirVersion: 'all'
 
   constructor: ->
     @element = $('.server-summaries')
@@ -16,6 +17,30 @@ class Crucible.ServerFilter
     @registerHandlers()
 
   registerHandlers: =>
+    @element.find('#filters_stu3').on('click', () =>
+      @element.find('#filters_stu3').parent().find('button').removeClass('active')
+      @element.find('#filters_stu3').addClass('active')
+      @setVersion('STU3')
+      @containerElement.trigger('filterchange')
+      false
+    )
+
+    @element.find('#filters_dstu2').on('click', () =>
+      @element.find('#filters_dstu2').parent().find('button').removeClass('active')
+      @element.find('#filters_dstu2').addClass('active')
+      @setVersion('DSTU2')
+      @containerElement.trigger('filterchange')
+      false
+    )
+
+    @element.find('#filters_all_versions').on('click', () =>
+      @element.find('#filters_all_versions').parent().find('button').removeClass('active')
+      @element.find('#filters_all_versions').addClass('active')
+      @setVersion('all')
+      @containerElement.trigger('filterchange')
+      false
+    )
+
     @element.find('#filters_active').on('click', () =>
       @element.find('#filters_active').parent().find('button').removeClass('active')
       @element.find('#filters_active').addClass('active')
@@ -100,9 +125,16 @@ class Crucible.ServerFilter
 
   setActive: (active) =>
     @active = active
+    @filterElements()
+
+  setVersion: (fhirVersion) =>
+    @fhirVersion = fhirVersion
+    @filterElements()
+
+  filterElements: =>
     @containerElement.find('.server-item').each (index, item) =>
       $item = $(item)
-      if !@active || $item.data('active')
+      if (!@active || $item.data('active')) && (@fhirVersion == 'all' || $item.data('fhirVersion') == @fhirVersion)
         $item.show()
       else
         $item.hide()

@@ -33,14 +33,21 @@
 
                 </div>                
                 <div class="row" style="margin: 10px">
-                  <div class="col-sm-3">
+                  <div class="col-sm-2">
                     Format
                     <select required name="format_type">
                       <option value="json">JSON</option>
                       <option value="xml">XML</option>
                     </select>
                   </div>
-                  <div class="col-sm-5">
+                  <div class="col-sm-3">
+                    FHIR Version
+                    <select required name="fhir_version">
+                      <option value="dstu2">DSTU2</option>
+                      <option selected value="stu3">STU3</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-3">
                     Number of Records
                     <select required name="quantity">
                       <option value="1">1</option>

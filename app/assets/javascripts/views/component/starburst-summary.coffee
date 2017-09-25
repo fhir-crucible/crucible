@@ -1,14 +1,14 @@
-$(document).ready( -> 
+$(document).ready( ->
   new Crucible.StarburstSummary()
 )
 
 # returns percent passing of a section
 # TODO: this needs to be somewhere better... also on starburst
 percentMe = (data) ->
-  if data.total == 0
+  if data.supportedTotal == 0
     0
   else
-    Math.round(data.passed / data.total * 100)
+    Math.round(data.supportedPassed / data.supportedTotal * 100)
 
 class Crucible.StarburstSummary
   constructor: ->
@@ -24,6 +24,7 @@ class Crucible.StarburstSummary
               summaryElement.find('.hidden').removeClass('hidden')
               starburstElement = summaryElement.find('.starburst')
               summaryElement.show()
+              data.summary.compliance.fhir_sequence = data.fhir_sequence
               # TODO: _renderChart seems messy... this could use a better interface
               starburst = new Crucible.Starburst(starburstElement[0], data.summary.compliance, extended)
               starburst._renderChart()

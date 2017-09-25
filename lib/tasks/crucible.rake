@@ -74,7 +74,7 @@ namespace :crucible do
       test_run.save
 
       RunTestsJob.perform_later(test_run.id.to_s)
-      
+
     end
 
   end
@@ -146,7 +146,7 @@ namespace :crucible do
   end
 
   desc "Update servers with version information stored in their conformance statement"
-  task :update_version_information => [:environment] do 
+  task :update_version_information => [:environment] do
     Server.each do |server|
       # server.load_conformance
       server.extract_version_from_conformance
@@ -156,7 +156,7 @@ namespace :crucible do
   end
 
   desc "List any duplicate urls in the system"
-  task :list_duplicate_urls => [:environment] do 
+  task :list_duplicate_urls => [:environment] do
     duplicate_urls = Server.all.group_by{ |e| e.url}.select {|k, v| v.size > 1}.map(&:first).sort
 
     duplicate_urls.each do |url|
@@ -222,7 +222,61 @@ namespace :crucible do
     Server.all.each do |server|
       server.check_badges
     end
+  end
 
+  desc "Add data for supported test calculations to history of all servers"
+  task :add_supported_data_to_history => [:environment] do
+    server_count = Server.all.count
+    Server.all.map {|n| n}.each_with_index do |server, server_index|
+      server.extract_version_from_conformance
+      unless (['STU3', 'DSTU2'].include?(server.fhir_sequence))
+        puts "#{server.id} - Skipped Server #{server_index+1} of #{server_count}."
+        $stdout.flush
+        next
+      end
+
+      summaries = Summary.where({server_id: server.id})
+      summary_count = summaries.count
+      unless summary_count > 0
+        puts "#{server.id} - Skipped Server #{server_index+1} of #{server_count}."
+        $stdout.flush
+        next
+      end
+
+      puts "#{server.id} - #{server.fhir_sequence} | #{server.fhir_version} -  Starting Server #{server_index+1} of #{server_count}."
+      $stdout.flush
+
+      summaries.each_with_index do |summary, summary_index|
+        unless summary.compliance.nil?
+          server.update_supported_data(summary.compliance, server.supported_tests)
+          summary.save
+          puts "  Updated Summary #{summary_index+1} of #{summary_count}."
+          $stdout.flush
+        else
+          puts "  Skipped Summary #{summary_index+1} of #{summary_count}."
+          $stdout.flush
+        end
+      end
+      server.generate_history
+    end
+  end
+
+  desc "Update percent passing with supported test data to all servers"
+  task :update_percent_passing_with_supported_data => [:environment] do
+    server_count = Server.all.count
+    Server.all.map {|n| n}.each_with_index do |server, server_index|
+      if !server.summary.nil? && !server.summary.compliance.nil? && !server.summary.compliance['supportedPassed'].nil? && !server.summary.compliance['supportedTotal'].nil?
+        # overwrites percent_passing calculated with passed and total
+        # change to passed and total to revert
+        server.percent_passing = (server.summary.compliance['supportedPassed'].to_f / ([server.summary.compliance['supportedTotal'].to_f || 0, 1].max)) * 100.0
+        server.save
+        puts "Updated #{server_index+1} of #{server_count}."
+        $stdout.flush
+      else
+        puts "Skipped #{server_index+1} of #{server_count}."
+        $stdout.flush
+      end
+    end
   end
 
 end

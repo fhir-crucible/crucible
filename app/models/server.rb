@@ -116,7 +116,7 @@ class Server
 
   def get_compliance()
     #todo: investigate moving this elsewhere.
-    compliance = Crucible::FHIRStructure.get
+    compliance = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
 
     node_map = {}
     build_compliance_node_map(compliance, node_map)
@@ -201,6 +201,7 @@ class Server
     self.supported_tests = []
     self.supported_suites = []
     value = JSON.parse(self.conformance)
+    server_version = (self.fhir_sequence || 'STU3').downcase.to_sym
 
     operations = []
     resource_operations = []
@@ -209,19 +210,22 @@ class Server
     operations = rest['operation'].map {|o| "$#{o['name']}"} if rest['operation']
     resource_operations = Hash[rest['resource'].select{|r| !r['interaction'].nil?}.map{ |r| [r['type'], r['interaction'].map {|i| translator[i['code']] || i['code']}]}] if rest['resource']
 
+
     Test.all.each do |suite|
       at_least_one_test = false
-      suite.methods.each do |test|
-        supported = true
-        test['requires'].each do |requirement|
-          supported &&= check_restriction(requirement, resource_operations, operations)
-        end if test['requires']
-        test['validates'].each do |validation|
-          supported &&= check_restriction(validation, resource_operations, operations)
-        end if test['validates']
-        if supported
-          at_least_one_test = true
-          self.supported_tests << test['id']
+      if suite['supported_versions'].include? server_version
+        suite.methods.each do |test|
+          supported = true
+          test['requires'].each do |requirement|
+            supported &&= check_restriction(requirement, resource_operations, operations)
+          end if test['requires']
+          test['validates'].each do |validation|
+            supported &&= check_restriction(validation, resource_operations, operations)
+          end if test['validates']
+          if supported
+            at_least_one_test = true
+            self.supported_tests << test['id']
+          end
         end
       end
       self.supported_suites << suite.id if at_least_one_test
@@ -291,27 +295,36 @@ class Server
             self.fhir_sequence = 'STU3'
           elsif ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
             self.fhir_sequence = 'DSTU2'
-          elsif  ['0.0.82', '0.11', '0.06', '0.05'].include? version_abbreviated
-            self.fhir_sequence = 'DSTU1'
-          else
-            self.fhir_sequence = ''
+          # currently not supporting DSTU1
+          # elsif  ['0.0.82', '0.11', '0.06', '0.05'].include? version_abbreviated
+          #   self.fhir_sequence = 'DSTU1'
+          else # Set to most recent sequence and version if not STU3 or DSTU2
+            self.fhir_sequence = 'STU3'
+            self.fhir_version = '3.0.1'
           end
-        rescue
-          self.fhir_sequence = ''
+        rescue # Set to most recent sequence and version if unexpected input
+          self.fhir_sequence = 'STU3'
+          self.fhir_version = '3.0.1'
         end
-        self.save
+      else # Set to most recent sequence and version if no conformance value
+        self.fhir_sequence = 'STU3'
+        self.fhir_version = '3.0.1'
       end
+    else # Set to most recent sequence and version if no conformance
+      self.fhir_sequence = 'STU3'
+      self.fhir_version = '3.0.1'
     end
+    self.save
   end
 
   def generate_history
     summaries = Summary.where({server_id: self.id})
-    summary_tree = Crucible::FHIRStructure.get.deep_dup
-    
+    summary_tree = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
+
     zeroize_summary(summary_tree)
 
     # Generate list of sundays
-    
+
     sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
 
     # Put sundays into a hash and use to only save one data point per week
@@ -320,7 +333,7 @@ class Server
     # loop through each summary and place in the sunday index
     summaries.each_entry do |e|
 
-      # build the value for this run, which is a combination of the date and all the passed & total values for the categories
+      # build the value for this run, which is a combination of the date and all the passed & total (and supportedPassed and supportedTotal) values for the categories
       all_nodes = all_nodes(e.compliance) # save in all_nodes hash
 
       new_tree = summary_tree.deep_dup
@@ -330,7 +343,7 @@ class Server
 
       # if this is before our first sunday, and is after others stored in the first sunday, then have it register on the first sunday
       if e.generated_at < sundays.first  and (sunday_index[sundays.first].nil? or sunday_index[sundays.first]['date'] < e.generated_at.to_date)
-        sunday_index[sundays.first] = new_tree 
+        sunday_index[sundays.first] = new_tree
       end
 
       #figure out the next sunday from this date
@@ -351,7 +364,7 @@ class Server
 
     # fix the dates on items to be on Sundays (since now it just stores the run date, not the date of the sunday)
     # include dates and section names with null values if the date has no data (happens on dates before the first run)
-    sundays.each_with_index do |val, index| 
+    sundays.each_with_index do |val, index|
       if (result[index])
         result[index] = result[index].merge({'date'=>val})
       else
@@ -367,10 +380,10 @@ class Server
   def update_history(summary)
 
     #updates the history with a single summary
-    
+
     summaries = Summary.where({server_id: self.id})
-    summary_tree = Crucible::FHIRStructure.get.deep_dup
-    
+    summary_tree = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
+
     zeroize_summary(summary_tree)
 
     sundays = (51.weeks.ago.to_date..sunday_after(Date.today)).to_a.select {|k| k.wday == 0}
@@ -405,6 +418,26 @@ class Server
 
   end
 
+  def update_supported_data(node, supported_tests)
+    node['totalIds'] = [node['passedIds'], node['failedIds'], node['errorsIds'], node['skippedIds']].reduce([], :concat)
+
+    if self.conformance
+      node['supportedTotalIds'] = node['totalIds'].select {|id| supported_tests.include?(id)}
+      node['supportedPassedIds'] = node['passedIds'].select {|id| supported_tests.include?(id)}
+    else
+      node['supportedTotalIds'] = node['totalIds']
+      node['supportedPassedIds'] = node['passedIds']
+    end
+    node['supportedTotal'] = node['supportedTotalIds'].count
+    node['supportedPassed'] = node['supportedPassedIds'].count
+
+    if node['children']
+      node['children'].each do |child|
+        update_supported_data(child, supported_tests)
+      end
+    end
+  end
+
   private
 
   def check_restriction(restriction, resource_operations, operations)
@@ -426,23 +459,38 @@ class Server
       node['children'].each do |child|
         rollup(child)
       end
-      ['passed', 'failed', 'errors', 'skipped'].each do |key|
+      ['passed', 'failed', 'errors', 'skipped', 'total', 'supportedPassed', 'supportedTotal'].each do |key|
         node["#{key}Ids"].concat(node['children'].map {|n| n["#{key}Ids"]}.flatten.uniq)
         node["#{key}Ids"].uniq!
         node[key] = node["#{key}Ids"].count
-        node['total'] += node[key]
       end
     end
   end
 
   def update_node(node_map, key, result)
-    status_map = {'pass'=>'passed', 'fail'=>'failed','error'=>'errors', 'skip'=>'skipped'}
+    status_map = {'pass'=>'passed', 'fail'=>'failed', 'error'=>'errors', 'skip'=>'skipped'}
     node = node_map[key]
     if (node)
       result['status'] = 'error' if result['status'].nil?
       node[status_map[result['status']]] += 1
       node["#{status_map[result['status']]}Ids"] << result['id']
       node['total'] += 1
+      node['totalIds'] << result['id']
+      if self.conformance
+        if (self.supported_tests.include?(result['id']))
+          node['supportedTotal'] += 1
+          node['supportedTotalIds'] << result['id']
+          if (result['status'] == 'pass')
+            node['supportedPassed'] += 1
+            node['supportedPassedIds'] << result['id']
+          end
+        end
+      else # Set supported data to original data if conformance is nil
+        node['supportedTotal'] = node['total']
+        node['supportedTotalIds'] = node['totalIds']
+        node['supportedPassed'] = node['passed']
+        node['supportedPassedIds'] = node['passedIds']
+      end
     else
       puts "\t KEY NOT FOUND: #{key}"
     end
@@ -450,8 +498,8 @@ class Server
 
   def build_compliance_node_map(node, map)
     node_defaults = {
-      'passed'=>0,'failed'=>0, 'errors'=>0, 'skipped'=>0, 'total'=>0,
-      'passedIds'=>[],'failedIds'=>[], 'errorsIds'=>[], 'skippedIds'=>[]
+      'passed'=>0,'failed'=>0, 'errors'=>0, 'skipped'=>0, 'total'=>0, 'supportedPassed'=>0, 'supportedTotal'=>0,
+      'passedIds'=>[],'failedIds'=>[], 'errorsIds'=>[], 'skippedIds'=>[], 'totalIds'=>[], 'supportedPassedIds'=>[], 'supportedTotalIds'=>[]
     }
     raise "duplicate node: #{node['name']}" if map[node['name']]
     map[node['name']] = node.merge!(node_defaults)
@@ -463,7 +511,7 @@ class Server
   end
 
   def zeroize_summary(hash)
-    hash['total'] = hash['passed'] = 0
+    hash['total'] = hash['supportedTotal'] = hash['passed'] = hash['supportedPassed'] = 0
     unless hash['children'].nil?
       hash['children'].each { |c| zeroize_summary(c) }
     end
@@ -471,7 +519,7 @@ class Server
 
   def all_nodes(hash, ret = {})
 
-    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total']}
+    ret[hash['name'].downcase] = {'passed' => hash['passed'], 'total' => hash['total'], 'supportedPassed' => hash['supportedPassed'], 'supportedTotal' => hash['supportedTotal']}
     hash['children'].each { |c| all_nodes(c, ret) } unless hash['children'].nil?
 
     ret
@@ -486,8 +534,10 @@ class Server
     if matching_node
       template['total'] = matching_node['total']
       template['passed'] = matching_node['passed']
+      template['supportedTotal'] = matching_node['supportedTotal']
+      template['supportedPassed'] = matching_node['supportedPassed']
     else
-      template['total'] = template['passed'] = 0
+      template['total'] = template['passed'] = template['supportedTotal'] = template['supportedPassed'] = 0
     end
 
     template['children'].each { |c| rebuild_summary(c, keys) } unless template['children'].nil?
@@ -508,8 +558,12 @@ class Server
     total = template['children'].reduce(0) {|sum, x| sum += x['total']}
     if total > 0
       passed = template['children'].reduce(0) {|sum, x| sum += x['passed']}
+      supportedTotal = template['children'].reduce(0) {|sum, x| sum += x['supportedTotal']}
+      supportedPassed = template['children'].reduce(0) {|sum, x| sum += x['supportedPassed']}
       template['total'] = total
       template['passed'] = passed
+      template['supportedTotal'] = supportedTotal
+      template['supportedPassed'] = supportedPassed
     end
   end
 

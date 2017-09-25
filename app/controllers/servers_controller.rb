@@ -79,7 +79,7 @@ class ServersController < ApplicationController
     else
       render status: 500, text: 'State not found'
     end
-    
+
   end
 
   def conformance
@@ -96,8 +96,10 @@ class ServersController < ApplicationController
   end
 
   def summary
-    summary = Server.find(params[:server_id]).summary
-    render json: {summary: summary}
+    server = Server.where(_id: params[:server_id]).only(:fhir_sequence, :summary).first
+    fhir_sequence = server.fhir_sequence || 'STU3'
+    summary = server.summary
+    render json: {summary: summary, fhir_sequence: fhir_sequence}
   end
 
   def summary_history
@@ -131,6 +133,10 @@ class ServersController < ApplicationController
     @suites = Test.where({multiserver: false}).sort {|l,r| l.name <=> r.name}
 
     server.collect_supported_tests rescue logger.error "error collecting supported tests"
+
+    server_version = (server.fhir_sequence || 'STU3').downcase.to_sym
+    @suites.select!{|s| s.supported_versions.include? server_version}
+
     if server.supported_suites
       @suites.each do |suite|
         if server.supported_suites.include? suite.id
@@ -159,7 +165,7 @@ class ServersController < ApplicationController
     return unless aggregate_run
     if (params[:only_failures])
       tests = Test.all.map{|m| m} # force mongo to load all these into memory
-      aggregate_run.results.select! {|r| r if r['status'] == 'fail' and tests.any? {|t| t["_id"] == r['test_id']} }
+      aggregate_run.results.select! {|r| r if r['status'] == 'fail' && tests.any? {|t| t["_id"] == r['test_id']} && server.supported_tests.include?(r['id'])}
     end
     render json: aggregate_run
   end
@@ -189,13 +195,13 @@ class ServersController < ApplicationController
     server = Server.find(params[:server_id])
     if server
       server.unset(
-        :token, 
-        :client_id, 
-        :client_secret, 
+        :token,
+        :client_id,
+        :client_secret,
         :oauth_token_opts,
-        :scopes, 
-        :authorize_url, 
-        :token_url, 
+        :scopes,
+        :authorize_url,
+        :token_url,
         :patient_id,
         :scopes,
         :launch_param

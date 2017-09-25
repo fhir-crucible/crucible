@@ -4,7 +4,9 @@ class HomeController < ApplicationController
   def index
     #@servers = Server.all.order_by("percent_passing"=>:desc)
     # show all until issue is resolved
-    @servers = Server.where({percent_passing: {"$gte" => 0}, fhir_sequence: Rails.application.config.fhir_sequence, hidden: {"$ne" => true}}).order_by("percent_passing"=>:desc)
+    @servers = Server.where({percent_passing: {"$gte" => 0}, hidden: {"$ne" => true}})
+                     .only(:id, :name, :last_run_at, :url, :active, :fhir_sequence, :fhir_version, :percent_passing)
+                     .order_by("percent_passing"=>:desc)
     @server_count = Server.count
     @test_run_count = TestRun.count
 
@@ -17,7 +19,7 @@ class HomeController < ApplicationController
   def server_scrollbar_data
 
     total_tests = Test.all.inject([]) { |a,i| a.concat i.methods}.count
-    servers = Server.where({percent_passing: {"$gte" => 0}, fhir_sequence: Rails.application.config.fhir_sequence, hidden: {"$ne" => true}}).map do |server|
+    servers = Server.where({percent_passing: {"$gte" => 0}, hidden: {"$ne" => true}}).only(:id, :name, :percent_passing).map do |server|
       {
         id: server._id.to_s,
         name: server.name,
