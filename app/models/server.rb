@@ -29,6 +29,7 @@ class Server
   field :fhir_version, type: String
   field :hidden, type: Boolean, default: false
   field :history, type: Array, default: []
+  field :badges, type: Array, default: []
 
   def get_default_scopes
     [{ name: 'launch', description: 'Simulate an EHR launch profile', elem_id: 'launch_check' },
@@ -231,6 +232,35 @@ class Server
     end
     self.save!
   end
+
+  def check_badges
+    badges = []
+    Badge.all.each do |badge|
+      earned = true
+      badge.suites.each do |suite|
+        unless self.supported_suites.include? suite
+          earned = false
+        end
+        unless earned
+          break
+        end
+      end
+      badge.tests.each do |test|
+        unless self.supported_tests.include? test
+          earned = false
+        end
+        unless earned
+          break
+        end
+      end
+      if earned
+        badges << badge.id
+      end
+    end
+    self.badges = badges
+    self.save!
+  end
+
 
   def guess_name(force=false)
     return unless (self.name.blank? || (force && self.name_guessed))

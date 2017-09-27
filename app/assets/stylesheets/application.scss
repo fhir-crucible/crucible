@@ -36,7 +36,11 @@ $fa-font-path: "font-awesome/fonts";
 @import "widgets";
 @import "application";
 
-/*standard format for scss files
+// Needs to be after panels
+@import "badges";
+
+/*standard format for scss files 
+
 .class{
   style for class
   style for &:state (i.e. &:hover)

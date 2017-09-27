@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     post 'testdata' => :load_data
   end
 
+  controller :badges do
+    get 'badges' => :index
+  end
+  
   controller :smarts do
     get 'smart' => :index
     get 'smart/app' => :app
