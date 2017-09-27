@@ -61,7 +61,9 @@
             <div class="alert alert-warning alert-dismissible" id="fhir-sequence-mismatch" role="alert"></div>
           </div>
           <!-- END: server name and url -->
+
         </div>
+
         <div class="row collapse">
           <div class="progress" id="execution-progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;">
@@ -76,6 +78,7 @@
             <li class="tabbed-data"><a data-toggle="tab" href="#conformance-data" aria-expanded="false"><i class="fa fa-lg fa-fw fa-spinner fa-pulse" id="conformance_spinner"></i>Capability Statement</a></li>
           </ul>
         </div>
+
         <div class="row">
           <div class="tab-content">
             <!-- SERVER SUMMARY START -->
@@ -83,6 +86,8 @@
               <div class="col-sm-12">
                 <%= render partial: 'test_run_report', locals: {server: @server}%>
               </div>
+
+              
             </div>
             <!-- TEST PANEL START -->
             <div class="tab-pane test-results<%if @server.summary_id.nil?%> active<%end%>" id="test-data">

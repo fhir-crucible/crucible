@@ -160,6 +160,7 @@ class TestRun
     self.server.last_run_at = Time.now
     summary.save!
     self.server.update_history(summary)
+    self.server.check_badges
     self.server.save!
 
     self.status = 'finished'

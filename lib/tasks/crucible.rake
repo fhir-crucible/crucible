@@ -214,6 +214,16 @@ namespace :crucible do
     end
   end
 
+  desc "Adds badges to the database"
+  task :add_badges => [:environment] do
+    Badge.all.destroy
+    Badge.create_badges
+    # Updates badges for all servers
+    Server.all.each do |server|
+      server.check_badges
+    end
+  end
+
   desc "Add data for supported test calculations to history of all servers"
   task :add_supported_data_to_history => [:environment] do
     server_count = Server.all.count
