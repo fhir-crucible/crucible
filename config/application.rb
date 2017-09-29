@@ -31,7 +31,7 @@ module Crucible
       config.sass.load_paths << bower_path
       config.assets.paths << bower_path
     end
-    
+
     HandlebarsAssets::Config.compiler_path = Rails.root.join('vendor/assets/bower_components/handlebars')
 
     # Precompile Bootstrap fonts
@@ -59,6 +59,10 @@ module Crucible
     # false: allows localhost urls
     # true: rejects localhost urls to either localhost or localhost IP addresses
     config.restrict_localhost_urls = false
+
+    # Configuration to set SMART on FHIR base url and redirect url
+    config.smart_base_url = ''
+    config.smart_redirect_url = 'https://projectcrucible.org/smart/app'
 
     FHIR::Terminology.set_terminology_root(Rails.root.join('terminology').to_s)
 
