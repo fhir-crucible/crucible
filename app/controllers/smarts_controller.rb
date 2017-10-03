@@ -467,18 +467,9 @@ class SmartsController < ApplicationController
 
   # Add a smart_client to the database or update existing
   def add_client(name,client_id,scopes)
-    client = nil
-    # Search for smart_client with name
-    SmartClient.all.each do |other|
-      if other.name == name
-        client = other
-        break
-      end
-    end
+    client = SmartClient.find_by(name: name) rescue nil
     # Create new smart_client if none exist
-    if client.nil?
-      client = SmartClient.new
-    end
+    client = SmartClient.new if client.nil?
     client.name = name
     client.client_id = client_id
     client.scopes = scopes
@@ -487,8 +478,8 @@ class SmartsController < ApplicationController
 
   # Delete a smart_client from the database
   def delete_client(name)
-    client = SmartClient.find_by(name: name)
-    client.destroy if client
+    client = SmartClient.find_by(name: name) rescue nil
+    client.destroy unless client.nil?
   end
 
   private
