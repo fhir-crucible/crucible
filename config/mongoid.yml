@@ -1,7 +1,7 @@
 development:
   sessions:
     default:
-      database: crucible_development
+      database: crucible_09_26
       hosts:
         - localhost:27017
 test:
