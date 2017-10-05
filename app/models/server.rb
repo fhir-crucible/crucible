@@ -421,7 +421,7 @@ class Server
         end
       end
     end
-    if restriction['formats']
+    if restriction['formats'] && formats
       required_formats = restriction['formats']
       required_formats.each do |format|
         return false if !formats.include?(format.downcase)
