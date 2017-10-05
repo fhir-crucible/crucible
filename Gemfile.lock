@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/synthetichealth/synthea.git
-  revision: d65456df6e59629f974172777e2b2613336e5ac2
+  revision: 01d01d675c68502483be0eb37fb293bba5371d7f
   specs:
     synthea (1.2.0)
       area
@@ -93,6 +93,12 @@ GEM
       activemodel (= 4.2.4)
       activesupport (= 4.2.4)
       arel (~> 6.0)
+    activerecord-session_store (1.1.0)
+      actionpack (>= 4.0, < 5.2)
+      activerecord (>= 4.0, < 5.2)
+      multi_json (~> 1.11, >= 1.11.2)
+      rack (>= 1.5.2, < 3)
+      railties (>= 4.0, < 5.2)
     activesupport (4.2.4)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -207,7 +213,7 @@ GEM
       multi_json (>= 1.2)
     json (1.8.6)
     jsonapi-renderer (0.1.3)
-    jsonpath (0.8.7)
+    jsonpath (0.8.8)
       multi_json
     jwt (1.5.6)
     listen (3.1.5)
@@ -326,7 +332,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     ruby-graphviz (1.2.3)
-    ruby-progressbar (1.8.3)
+    ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     sass (3.2.19)
@@ -386,6 +392,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  activerecord-session_store
   addressable
   autoprefixer-rails
   bcp47
