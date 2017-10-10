@@ -7,7 +7,6 @@ require "action_mailer/railtie"
 require "rails/test_unit/railtie"
 require "sprockets/railtie" # Uncomment this line for Rails 3.1+
 require "fhir_scorecard"
-require "active_record"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -63,8 +62,8 @@ module Crucible
 
     # Configuration to set SMART on FHIR base url and redirect url
     config.smart_base_url = ''
-    config.smart_redirect_url = 'http://localhost:3000/smart/app'
-
+    config.smart_redirect_url = 'https://projectcrucible.org/smart/app'
+    
     FHIR::Terminology.set_terminology_root(Rails.root.join('terminology').to_s)
 
   end
