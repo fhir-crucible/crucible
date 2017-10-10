@@ -93,12 +93,6 @@ GEM
       activemodel (= 4.2.4)
       activesupport (= 4.2.4)
       arel (~> 6.0)
-    activerecord-session_store (1.1.0)
-      actionpack (>= 4.0, < 5.2)
-      activerecord (>= 4.0, < 5.2)
-      multi_json (~> 1.11, >= 1.11.2)
-      rack (>= 1.5.2, < 3)
-      railties (>= 4.0, < 5.2)
     activesupport (4.2.4)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -111,7 +105,7 @@ GEM
     area (0.10.0)
       fastercsv (~> 1.5)
     arel (6.0.4)
-    autoprefixer-rails (7.1.4.1)
+    autoprefixer-rails (7.1.5)
       execjs
     bcp47 (0.3.3)
       i18n
@@ -201,7 +195,7 @@ GEM
       multi_json
       sprockets (>= 2.0.3)
       tilt
-    hashdiff (0.3.6)
+    hashdiff (0.3.7)
     highline (1.7.8)
     hike (1.2.3)
     http-cookie (1.0.3)
@@ -239,6 +233,8 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    mongo_session_store-rails4 (6.0.0)
+      actionpack (>= 3.1)
     mongoid (4.0.2)
       activemodel (~> 4.0)
       moped (~> 2.0.0)
@@ -382,7 +378,7 @@ GEM
     unf_ext (0.0.7.4)
     warden (1.2.7)
       rack (>= 1.0)
-    webmock (3.0.1)
+    webmock (3.1.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -392,7 +388,6 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
-  activerecord-session_store
   addressable
   autoprefixer-rails
   bcp47
@@ -409,6 +404,7 @@ DEPENDENCIES
   magic_lamp
   minitest
   minitest-reporters
+  mongo_session_store-rails4
   mongoid (>= 4.0.0, < 5)
   mongoid-history
   nokogiri
@@ -433,4 +429,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.0.pre.2
+   1.16.0.pre.3
