@@ -205,7 +205,7 @@ class Server
 
     operations = []
     resource_operations = []
-
+    format = value['format']
     rest = value['rest'].first
     operations = rest['operation'].map {|o| "$#{o['name']}"} if rest['operation']
     resource_operations = Hash[rest['resource'].select{|r| !r['interaction'].nil?}.map{ |r| [r['type'], r['interaction'].map {|i| translator[i['code']] || i['code']}]}] if rest['resource']
@@ -217,10 +217,10 @@ class Server
         suite.methods.each do |test|
           supported = true
           test['requires'].each do |requirement|
-            supported &&= check_restriction(requirement, resource_operations, operations)
+            supported &&= check_restriction(requirement, resource_operations, operations, format)
           end if test['requires']
           test['validates'].each do |validation|
-            supported &&= check_restriction(validation, resource_operations, operations)
+            supported &&= check_restriction(validation, resource_operations, operations, format)
           end if test['validates']
           if supported
             at_least_one_test = true
@@ -440,7 +440,7 @@ class Server
 
   private
 
-  def check_restriction(restriction, resource_operations, operations)
+  def check_restriction(restriction, resource_operations, operations, formats)
     resource = restriction['resource']
     if resource
       if !resource_operations.empty? && resource_operations[resource].nil?
@@ -449,6 +449,12 @@ class Server
         if !((restriction['methods'] - resource_operations[resource]) - operations).empty?
           return false
         end
+      end
+    end
+    if restriction['formats'] && formats
+      required_formats = restriction['formats']
+      required_formats.each do |format|
+        return false if !formats.include?(format.downcase)
       end
     end
     true
