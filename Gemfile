@@ -54,6 +54,7 @@ gem "non-stupid-digest-assets"
 gem 'delayed_job_mongoid'
 gem 'daemons'
 gem 'time_difference'
+gem 'mongo_session_store-rails4'
 
 group :development, :test do
   gem 'pry-byebug'
