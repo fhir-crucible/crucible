@@ -27,25 +27,18 @@ gem 'plan_executor', :git => 'https://github.com/fhir-crucible/plan_executor.git
 # gem 'plan_executor', :path => '../plan_executor'
 gem 'fhir_scorecard', :git => 'https://github.com/fhir-crucible/fhir_scorecard.git'
 #gem 'fhir_scorecard', :path => '../fhir_scorecard'
-gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git'
+gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch => 'ruby'
 #gem 'synthea', :path => '../synthea'
-
-# Synthea is still pointing at old client potentially, this overwrites it
-# When multiversion branch of client gets merged down, update synthea and remove this
-gem 'fhir_client', :git => 'https://github.com/fhir-crucible/fhir_client.git', :branch => 'multiversion'
 
 gem 'mongoid', '>= 4.0.0', '< 5' # lock mongoid below 5 for the moment, as it requires code changes
 gem 'devise'
 gem 'autoprefixer-rails'
-gem 'nokogiri'
 gem 'date_time_precision'
 gem 'rest-client'
-gem 'mongoid-history'
 gem 'active_model_serializers'
 gem 'pry'
 gem 'simple_token_authentication', '~> 1.8.0'
 gem 'bcp47'
-gem 'nokogiri-diff'
 gem 'addressable'
 gem 'handlebars_assets', '0.16' # pin to 0.16 for now as 0.17 introduces breaking changes
 gem 'oauth2'
