@@ -23,7 +23,7 @@ A simple Rails app for evaluating FHIR.
 #### Dependencies
 - Install [Homebrew](http://brew.sh/)
 - Install [RVM](https://rvm.io/)
-- Install Ruby 2.2+ via `rvm install 2.2.7`
+- Install Ruby 2.3+ via `rvm install 2.3.7`
 - Install [MongoDB](https://www.mongodb.org/) via `brew install mongodb`
 - Install [Bundler](http://bundler.io/) via `gem install bundler`
 - Install [Node](https://nodejs.org/) via `brew install node`
@@ -126,7 +126,7 @@ If no refresh token is available, or the refresh attempt fails, the lock icon wi
 
 # License
 
-Copyright 2015 The MITRE Corporation
+Copyright 2015-2018 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
