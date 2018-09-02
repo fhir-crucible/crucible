@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-  # before_action :authenticate_user!
 
   def index
     #@servers = Server.all.order_by("percent_passing"=>:desc)
@@ -40,7 +39,7 @@ class HomeController < ApplicationController
            :count => { "$sum" => 1 }
          }
        }
-      ] 
+      ]
     )
     render json: { tests_by_date: tests_by_date }
   end
