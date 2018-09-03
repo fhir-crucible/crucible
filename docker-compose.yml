@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:4.0
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    environment:
+      - MONGODB_HOST=mongo:27017
+    volumes:
+      - ".:/crucible"
+    ports:
+      - "3000:3000"
+    links:
+      - mongo:mongo
+  tasks:
+    build: .
+    command: bundle exec rake jobs:work
+    environment:
+      - MONGODB_HOST=mongo:27017
+    volumes:
+      - ".:/crucible"
+    depends_on:
+      - mongo
+    links:
+      - mongo:mongo
