@@ -15,12 +15,13 @@ services:
       - mongo:mongo
   tasks:
     build: .
-    command: bundle exec rake jobs:work
+    command: '/crucible/bin/docker-start-tasks.sh 3000'
     environment:
       - MONGODB_HOST=mongo:27017
     volumes:
       - ".:/crucible"
     depends_on:
+      - web
       - mongo
     links:
       - mongo:mongo
