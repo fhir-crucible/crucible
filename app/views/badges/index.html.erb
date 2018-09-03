@@ -12,7 +12,7 @@
         <% for badge in @badges %>
 
         <div class="col-sm-12 panel badge-panel">
-          <div class="col-sm-2"><img class="badge-image" src="<%= image_path("badges/" + badge.image + ".svg") %>"></div>
+          <div class="col-sm-2"><img class="badge-image" src="<%= image_path('badge-' + badge.image + ".png") %>"></div>
           <div class="col-sm-10 badge-description">
             <h4 class="highlight-text"><%= badge.name %></h4>
             <div style="font-size:14px;"><%= raw badge.description %></div>
