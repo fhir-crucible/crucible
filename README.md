@@ -17,6 +17,7 @@ A simple Rails app for evaluating FHIR.
 
 - Install [Docker](https://www.docker.com/)
 - Checkout Crucible: `git clone https://github.com/fhir-crucible/crucible.git`
+- Build the server: `docker-compose build`
 - Start the server: `docker-compose up`
 - Navigate to `http://localhost:3000`
 
