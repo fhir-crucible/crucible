@@ -3,13 +3,13 @@ development:
     default:
       database: crucible_development
       hosts:
-        - localhost:27017
+        - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>
 test:
   sessions:
     default:
       database: crucible_test
       hosts:
-        - localhost:27017
+        - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>
       options:
         read: primary
         # In the test environment we lower the retries and retry interval to
@@ -21,4 +21,4 @@ production:
     default:
       database: crucible_production
       hosts:
-        - localhost:27017
+        - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>

@@ -6,19 +6,22 @@ A simple Rails app for evaluating FHIR.
   - Ruby 2.3+
   - Rails 4.1+
   - Bootstrap
-  - MongoDB
+  - MongoDB 2.6
   - Bundler
   - Node
   - Bower
 
 ## Getting Started ##
 
-### Linux ###
+### Docker Installation
 
-- [Ubuntu Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-%28Ubuntu-14.04%29)
-- [CentOS Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-%28CentOS-7.1.1503%29)
+- Install [Docker](https://www.docker.com/)
+- Checkout Crucible: `git clone https://github.com/fhir-crucible/crucible.git`
+- Build the server: `docker-compose build`
+- Start the server: `docker-compose up`
+- Navigate to `http://localhost:3000`
 
-### OSX ###
+### OSX Installation ###
 
 #### Dependencies
 - Install [Homebrew](http://brew.sh/)
@@ -45,6 +48,11 @@ A simple Rails app for evaluating FHIR.
 - Install phantomjs: `brew install phantomjs`
 - Install istanbul: `npm install -g istanbul`
 - Execute: `bundle exec rake teaspoon`
+
+### Production Linux Installation ###
+
+- [Ubuntu Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-%28Ubuntu-14.04%29)
+- [CentOS Install Instructions](https://github.com/fhir-crucible/crucible/wiki/Installation-Instructions-%28CentOS-7.1.1503%29)
 
 ## Authentication With Scopes
 
