@@ -6,7 +6,7 @@ A simple Rails app for evaluating FHIR.
   - Ruby 2.3+
   - Rails 4.1+
   - Bootstrap
-  - MongoDB
+  - MongoDB 2.6
   - Bundler
   - Node
   - Bower

@@ -1,10 +1,11 @@
 version: '3'
+#set volumes so thes echanges don't get saved to moint points
 volumes:
   rails_tmp:
   rails_vendor:
 services:
   mongo:
-    image: mongo:4.0
+    image: mongo:2.6
   web:
     build: .
     command: /crucible/bin/docker-start-web.sh 3000

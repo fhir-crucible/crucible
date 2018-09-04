@@ -13,5 +13,3 @@ COPY Gemfile.lock ./
 RUN bundle install
 
 COPY . ./
-# RUN npm install bower -g
-# RUN bower install --allow-root
