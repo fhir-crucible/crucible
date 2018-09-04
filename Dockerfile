@@ -7,7 +7,6 @@ RUN npm install bower -g
 RUN mkdir /crucible
 WORKDIR /crucible
 
-RUN npm install bower -g
 COPY Gemfile ./
 COPY Gemfile.lock ./
 RUN bundle install
