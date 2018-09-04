@@ -1,5 +1,5 @@
 version: '3'
-#set volumes so thes echanges don't get saved to moint points
+#set volumes so these changes don't get saved to mount points
 volumes:
   rails_tmp:
   rails_vendor:
