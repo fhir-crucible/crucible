@@ -1,25 +1,30 @@
 version: '3'
+volumes:
+  rails_tmp:
+  rails_vendor:
 services:
   mongo:
     image: mongo:4.0
   web:
     build: .
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    command: /crucible/bin/docker-start-web.sh 3000
     environment:
       - MONGODB_HOST=mongo:27017
     volumes:
-      - ".:/crucible"
+      - .:/crucible
+      - rails_tmp:/crucible/tmp
+      - rails_vendor:/crucible/vendor
     ports:
-      - "3000:3000"
+      - 3000:3000
     links:
       - mongo:mongo
   tasks:
     build: .
-    command: '/crucible/bin/docker-start-tasks.sh 3000'
+    command: /crucible/bin/docker-start-tasks.sh 3000
     environment:
       - MONGODB_HOST=mongo:27017
     volumes:
-      - ".:/crucible"
+      - .:/crucible
     depends_on:
       - web
       - mongo
