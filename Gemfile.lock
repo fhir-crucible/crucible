@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 1ad0ccf9b70070692a0d19a32a32b3876753759a
+  revision: 4bb62b6cf7d515340ca085b53ec1bfa724237769
   specs:
     plan_executor (1.8.0)
       bcp47
@@ -150,7 +150,7 @@ GEM
       rack (>= 1.5)
       rest-client (~> 2.0)
       tilt (>= 1.1)
-    fhir_dstu2_models (1.0.7)
+    fhir_dstu2_models (1.0.8)
       bcp47 (>= 0.3)
       date_time_precision (>= 0.8)
       mime-types (>= 1.16, < 3)
