@@ -116,7 +116,7 @@ class Server
 
   def get_compliance()
     #todo: investigate moving this elsewhere.
-    compliance = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
+    compliance = Crucible::FHIRStructure.get((self.fhir_sequence || 'R4').downcase.to_sym)
 
     node_map = {}
     build_compliance_node_map(compliance, node_map)
@@ -201,7 +201,7 @@ class Server
     self.supported_tests = []
     self.supported_suites = []
     value = JSON.parse(self.conformance)
-    server_version = (self.fhir_sequence || 'STU3').downcase.to_sym
+    server_version = (self.fhir_sequence || 'R4').downcase.to_sym
 
     operations = []
     resource_operations = []
@@ -288,38 +288,54 @@ class Server
       if value
         self.fhir_version = value['fhirVersion']
         begin
+
+          # 4.0.0	FHIR Release #4: First Normative Content (Permanent Home)
+          # 2018-11-09	3.5a.0	Special R4 Ballot #3 : Normative Packages for Terminology / Conformance + Observation
+          # 2018-08-21	3.5.0	R4 Ballot #2 : Mixed Normative/Trial use (Second Normative ballot + Baltimore Connectathon)
+          # 2018-04-02	3.3.0	R4 Ballot #1 : Mixed Normative/Trial use (First Normative ballot)
+          # 2018-04-02	3.2.0
+
+          # 3.0.1	
+          # FHIR Release 3 (STU) with 1 technical errata (Permanent Home)
+
+          # Technical Errata Archive (zip): v3.0.0
+
+          # 2016-12-06	1.8.0	FHIR STU3 Candidate + Connectathon 14 (San Antonio)
+          # 2016-08-11	1.6.0	FHIR STU3 Ballot + Connectathon 13 (Baltimore)
+          # 2016-03-30	1.4.0	CQF on FHIR Ballot + Connectathon 12 (Montreal)
+          # 2015-12-11	1.2.0	Draft for comment
+          # 2015-12-03	1.1.0
+
           version_abbreviated = self.fhir_version
           version_abbreviated = self.fhir_version.split('-').first if self.fhir_version and self.fhir_version.include? '-'
           version = version_abbreviated.split('.').map(&:to_i)
-          if (version[0] >= 1 && version[1] >= 1) || version[0] == 3
-            self.fhir_sequence = 'STU3'
-          elsif ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
+
+          if ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
             self.fhir_sequence = 'DSTU2'
-          # currently not supporting DSTU1
-          # elsif  ['0.0.82', '0.11', '0.06', '0.05'].include? version_abbreviated
-          #   self.fhir_sequence = 'DSTU1'
-          else # Set to most recent sequence and version if not STU3 or DSTU2
+          elsif ['3.0.0', '3.0.1', '1.8.0', '1.6.0', '1.4.0', '1.2.0', '1.1.0'].include? version_abbreviated
             self.fhir_sequence = 'STU3'
-            self.fhir_version = '3.0.1'
+          else # Set to most recent sequence and version if not STU3 or DSTU2
+            self.fhir_sequence = 'R4'
+            self.fhir_version = '4.0.0'
           end
         rescue # Set to most recent sequence and version if unexpected input
-          self.fhir_sequence = 'STU3'
-          self.fhir_version = '3.0.1'
+          self.fhir_sequence = 'R4'
+          self.fhir_version = '4.0.0'
         end
       else # Set to most recent sequence and version if no conformance value
-        self.fhir_sequence = 'STU3'
-        self.fhir_version = '3.0.1'
+        self.fhir_sequence = 'R4'
+        self.fhir_version = '4.0.0'
       end
     else # Set to most recent sequence and version if no conformance
-      self.fhir_sequence = 'STU3'
-      self.fhir_version = '3.0.1'
+      self.fhir_sequence = 'R4'
+      self.fhir_version = '4.0.0'
     end
     self.save
   end
 
   def generate_history
     summaries = Summary.where({server_id: self.id})
-    summary_tree = Crucible::FHIRStructure.get((self.fhir_sequence || 'STU3').downcase.to_sym)
+    summary_tree = Crucible::FHIRStructure.get((self.fhir_sequence || 'R4').downcase.to_sym)
 
     zeroize_summary(summary_tree)
 

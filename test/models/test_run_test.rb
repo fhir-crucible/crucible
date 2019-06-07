@@ -29,7 +29,30 @@ class TestRunTest < ActiveSupport::TestCase
 
   end
 
-  def test_execute_success
+  def test_execute_success_r4
+
+    server = Server.new ({url: 'www.example.com'})
+    testrun = TestRun.new({server: server, fhir_version: 'r4'})
+
+    stub_request(:any, /www\.example\.com\/.*/).to_return(status: 404)
+    stub_request(:get, "www.example.com/metadata").to_return(body: @conformance_xml).times(1)
+
+    testrun.add_tests(Test.all().limit(3))
+    assert testrun.execute()
+
+    assert_equal "finished", testrun.status
+
+    assert_equal 3, testrun.test_results.length
+
+    # assert_equal testrun.server.percent_passing, 0
+    refute_nil  testrun.server.summary
+
+    #don't allow it to be run again
+    refute testrun.execute()
+
+  end
+
+  def test_execute_success_stu3
 
     server = Server.new ({url: 'www.example.com'})
     testrun = TestRun.new({server: server, fhir_version: 'stu3'})
@@ -52,10 +75,11 @@ class TestRunTest < ActiveSupport::TestCase
 
   end
 
+
   def test_execute_unavailable
 
     server = Server.new ({url: 'www.example.com'})
-    testrun = TestRun.new({server: server, fhir_version: 'stu3'})
+    testrun = TestRun.new({server: server, fhir_version: 'r4'})
 
     stub_request(:any, /www\.example\.com\/.*/).to_return(status: 404)
     stub_request(:get, "www.example.com/metadata").to_return(status: 500)

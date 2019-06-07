@@ -17,6 +17,13 @@ class Crucible.ServerFilter
     @registerHandlers()
 
   registerHandlers: =>
+    @element.find('#filters_r4').on('click', () =>
+      @element.find('#filters_r4').parent().find('button').removeClass('active')
+      @element.find('#filters_r4').addClass('active')
+      @setVersion('R4')
+      @containerElement.trigger('filterchange')
+      false
+    )
     @element.find('#filters_stu3').on('click', () =>
       @element.find('#filters_stu3').parent().find('button').removeClass('active')
       @element.find('#filters_stu3').addClass('active')

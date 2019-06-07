@@ -51,9 +51,9 @@ module Crucible
     config.restrict_test_ports = false
 
     # Configuration to show which version of crucible is the most recent
-    config.fhir_sequence = 'STU3'
-    config.fhir_version = '3.0.1'
-    config.fhir_version_name = 'FHIR Release 3 with 1 technical errata'
+    config.fhir_sequence = 'R4'
+    config.fhir_version = '4.0.0'
+    config.fhir_version_name = 'FHIR Release 4'
 
     # Configuration to determine if localhost servers and servers referencing localhost IP addresses are allowed (127.0.0.1)
     # false: allows localhost urls
