@@ -134,7 +134,7 @@ If no refresh token is available, or the refresh attempt fails, the lock icon wi
 
 # License
 
-Copyright 2015-2018 The MITRE Corporation
+Copyright 2015-2019 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
