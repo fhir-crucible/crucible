@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: e591b5d963bf80958afdb9383d36b39091e8003e
+  revision: 6bf47a43de1f9df8582bf39f4474b2d9c61a8a0d
   branch: r4
   specs:
     plan_executor (1.8.0)
@@ -205,10 +205,10 @@ GEM
       multi_json (>= 1.2)
     json (1.8.6)
     jsonapi-renderer (0.2.0)
-    jsonpath (1.0.1)
+    jsonpath (1.0.4)
       multi_json
       to_regexp (~> 0.2.1)
-    jwt (2.1.0)
+    jwt (2.2.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -256,7 +256,7 @@ GEM
       optionable (~> 0.2.0)
     multi_json (1.13.1)
     multi_xml (0.6.0)
-    multipart-post (2.0.0)
+    multipart-post (2.1.1)
     nenv (0.3.0)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
@@ -287,7 +287,7 @@ GEM
     pry-byebug (3.7.0)
       byebug (~> 11.0)
       pry (~> 0.10)
-    public_suffix (3.0.3)
+    public_suffix (3.1.0)
     rack (1.6.11)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -422,4 +422,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.2
+   1.17.3

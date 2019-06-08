@@ -109,7 +109,13 @@ class TestRun
 
         if t.resource_class?
           resource = t.resource_class.constantize
-          resource = "FHIR::DSTU2::#{t.resource_class.demodulize}".constantize if self.fhir_version.downcase == 'dstu2'
+
+          if self.fhir_version.downcase == 'dstu2'
+            resource = "FHIR::DSTU2::#{t.resource_class.demodulize}".constantize
+          elsif self.fhir_version.downcase == 'stu3'
+            resource = "FHIR::STU3::#{t.resource_class.demodulize}".constantize
+          end
+
           val = test.execute(resource).values.first
         else
           val = test.execute().values.first
