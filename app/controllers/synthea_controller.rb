@@ -24,11 +24,11 @@ class SyntheaController < ApplicationController
       client.default_format = FHIR::Formats::ResourceFormat::RESOURCE_JSON if format_type.upcase=='JSON'
       if fhir_version == 'dstu2'
         client.use_dstu2
-      elsif fhir_version == 'stu3'
-        client.use_dstu2
-      else 
-        # assume r4 by default
-        client.use_r4
+      else
+        # Assume stu3 by default
+        # We do not support R4 in the Ruby version of Synthea
+        fhir_version = 'stu3'
+        client.use_stu3
       end
 
       world = Synthea::World::Sequential.new
