@@ -8,18 +8,18 @@ class ServerTest < ActiveSupport::TestCase
     @partial_conformance_json = File.read(Rails.root.join('test','fixtures','json','capability_statement','partial_capability_statement.json'))
   end
 
-  def test_conformance_fixtures
+  def test_stu3_capabilitystatement_fixtures
     # make sure the conformance statements in the fixtures are up to date
 
-    compliance_statement_xml = FHIR::Xml.from_xml(@conformance_xml)
-    compliance_statement_json = FHIR::Json.from_json(@partial_conformance_json)
+    compliance_statement_xml = FHIR::STU3::Xml.from_xml(@conformance_xml)
+    compliance_statement_json = FHIR::STU3::Json.from_json(@partial_conformance_json)
 
     assert compliance_statement_xml.rest.first.resource.length > compliance_statement_json.rest.first.resource.length, 'Partial statement should have fewer resources.'
 
 
     [compliance_statement_xml, compliance_statement_json].each do |statement|
       resources = statement.rest.first.resource.map(&:type).map(&:downcase)
-      unknown_resources = resources - FHIR::RESOURCES.map{|r| r.downcase.delete(' ')}
+      unknown_resources = resources - FHIR::STU3::RESOURCES.map{|r| r.downcase.delete(' ')}
 
       assert unknown_resources.length == 0, "Compliance statement fixture '#{statement.name}' has unknown resources: #{unknown_resources.join(', ')}."
     end
@@ -63,8 +63,8 @@ class ServerTest < ActiveSupport::TestCase
 
   end
 
-  def test_collect_supported_tests
-    conformance = FHIR::Json.from_json(@partial_conformance_json)
+  def test_collect_stu3_supported_tests
+    conformance = FHIR::STU3::Json.from_json(@partial_conformance_json)
     server = Server.new ({url: 'www.example.com'})
 
     # the server will try xml conformance first, so respond with a 404
