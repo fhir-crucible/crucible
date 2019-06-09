@@ -22,5 +22,5 @@ before_script:
   - bower install
   - npm install -g istanbul
 script:
-  - ./bin/rake test
+  - FHIR_LOG_LEVEL=fatal ./bin/rake test # lower log levels overwhelm travis
   - ./bin/teaspoon

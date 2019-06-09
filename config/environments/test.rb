@@ -39,4 +39,8 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   
   config.active_job.queue_adapter = :inline
+
+  if ['debug', 'info', 'warn', 'error', 'fatal', 'unknown'].include? ENV['FHIR_LOG_LEVEL']&.downcase
+    FHIR::logger.level = ENV['FHIR_LOG_LEVEL'].downcase
+  end
 end
