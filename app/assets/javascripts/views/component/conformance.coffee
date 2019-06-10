@@ -26,7 +26,7 @@ class Crucible.Conformance
         @removeConformanceSpinner()
         @mismatch_alert_element.hide()
         @server_fhir_version.html("#{data.fhir_sequence} (#{data.fhir_version})")
-        if data.fhir_sequence != 'DSTU2' && data.fhir_sequence != 'STU3'
+        if data.fhir_sequence != 'DSTU2' && data.fhir_sequence != 'STU3' && data.fhir_sequence != 'R4'
           @mismatch_alert_element.html(@version_mismatch_template(data))
           @mismatch_alert_element.show()
         @element.trigger('conformanceInitialized') if data.conformance.updated

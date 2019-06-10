@@ -16,7 +16,7 @@ class TestRun
   field :nightly, type: Boolean, default: false
   has_and_belongs_to_many :tests, inverse_of: nil
   has_many :test_results, autosave: true
-  field :fhir_version, type: String, default: 'stu3'
+  field :fhir_version, type: String, default: 'r4'
 
   def add_tests(tests)
     self.tests.push(*tests)
@@ -40,8 +40,10 @@ class TestRun
 
     if self.fhir_version.downcase == 'dstu2'
       client1.use_dstu2
-    else
+    elsif self.fhir_version.downcase == 'stu3'
       client1.use_stu3
+    else
+      client1.use_r4
     end
 
     client1.default_format = self.server.default_format if self.server.default_format
@@ -107,7 +109,13 @@ class TestRun
 
         if t.resource_class?
           resource = t.resource_class.constantize
-          resource = "FHIR::DSTU2::#{t.resource_class.demodulize}".constantize if self.fhir_version.downcase == 'dstu2'
+
+          if self.fhir_version.downcase == 'dstu2'
+            resource = "FHIR::DSTU2::#{t.resource_class.demodulize}".constantize
+          elsif self.fhir_version.downcase == 'stu3'
+            resource = "FHIR::STU3::#{t.resource_class.demodulize}".constantize
+          end
+
           val = test.execute(resource).values.first
         else
           val = test.execute().values.first

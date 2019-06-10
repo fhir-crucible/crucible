@@ -229,7 +229,7 @@ namespace :crucible do
     server_count = Server.all.count
     Server.all.map {|n| n}.each_with_index do |server, server_index|
       server.extract_version_from_conformance
-      unless (['STU3', 'DSTU2'].include?(server.fhir_sequence))
+      unless (['R4', 'STU3', 'DSTU2'].include?(server.fhir_sequence))
         puts "#{server.id} - Skipped Server #{server_index+1} of #{server_count}."
         $stdout.flush
         next

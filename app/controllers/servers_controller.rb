@@ -97,7 +97,7 @@ class ServersController < ApplicationController
 
   def summary
     server = Server.where(_id: params[:server_id]).only(:fhir_sequence, :summary).first
-    fhir_sequence = server.fhir_sequence || 'STU3'
+    fhir_sequence = server.fhir_sequence || 'R4'
     summary = server.summary
     render json: {summary: summary, fhir_sequence: fhir_sequence}
   end
@@ -134,8 +134,8 @@ class ServersController < ApplicationController
 
     server.collect_supported_tests rescue logger.error "error collecting supported tests"
 
-    server_version = (server.fhir_sequence || 'STU3').downcase.to_sym
-    @suites.select!{|s| s.supported_versions.include? server_version}
+    server_version = (server.fhir_sequence || 'R4').downcase.to_sym
+    @suites.select!{|s|s.supported_versions.include? server_version}
 
     if server.supported_suites
       @suites.each do |suite|

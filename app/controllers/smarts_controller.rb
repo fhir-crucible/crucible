@@ -104,6 +104,32 @@ class SmartsController < ApplicationController
       }
     elsif client.detect_version == :stu3
       version = client.detect_version
+      klass_header = "FHIR::STU3::"
+      conformance_klass = FHIR::CapabilityStatement
+      supporting_resources = [
+        FHIR::AllergyIntolerance, FHIR::CarePlan, FHIR::CareTeam, FHIR::Condition, FHIR::Device,
+        FHIR::DiagnosticReport, FHIR::Goal, FHIR::Immunization, FHIR::MedicationRequest,
+        FHIR::MedicationStatement, FHIR::Observation, FHIR::Procedure, FHIR::RelatedPerson, FHIR::Specimen
+      ]
+      # Vital Signs includes these codes as defined in http://hl7.org/fhir/STU3/observation-vitalsigns.html
+      vital_signs = {
+        '85353-1' => 'Vital signs, weight, height, head circumference, oxygen saturation and BMI panel',
+        '9279-1' => 'Respiratory Rate',
+        '8867-4' => 'Heart rate',
+        '59408-5' => 'Oxygen saturation in Arterial blood by Pulse oximetry',
+        '8310-5' => 'Body temperature',
+        '8302-2' => 'Body height',
+        '8306-3' => 'Body height --lying',
+        '8287-5' => 'Head Occipital-frontal circumference by Tape measure',
+        '29463-7' => 'Body weight',
+        '39156-5' => 'Body mass index (BMI) [Ratio]',
+        '85354-9' => 'Blood pressure systolic and diastolic',
+        '8480-6' => 'Systolic blood pressure',
+        '8462-4' => 'Diastolic blood pressure'
+      }
+    elsif client.detect_version == :R4
+      ## TODO
+      version = client.detect_version
       klass_header = "FHIR::"
       conformance_klass = FHIR::CapabilityStatement
       supporting_resources = [
@@ -128,7 +154,7 @@ class SmartsController < ApplicationController
         '8462-4' => 'Diastolic blood pressure'
       }
     else
-      raise "Invalid FHIR client. Expected STU3 or DSTU2 version."
+      raise "Invalid FHIR client. Expected STU3, DSTU2 or R4 version."
     end
 
     # Parse accessible resources from scopes
