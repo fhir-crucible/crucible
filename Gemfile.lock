@@ -94,8 +94,6 @@ GEM
     area (0.10.0)
       fastercsv (~> 1.5)
     arel (6.0.4)
-    autoprefixer-rails (9.5.1)
-      execjs
     bcp47 (0.3.3)
       i18n
     bson (3.2.7)
@@ -385,7 +383,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   addressable
-  autoprefixer-rails
   bcp47
   coffee-rails (~> 4.0.0)
   daemons

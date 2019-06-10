@@ -31,7 +31,7 @@ gem 'synthea', :git => 'https://github.com/synthetichealth/synthea.git', :branch
 #gem 'synthea', :path => '../synthea'
 
 gem 'mongoid', '>= 4.0.0', '< 5' # lock mongoid below 5 for the moment, as it requires code changes
-gem 'autoprefixer-rails'
+# gem 'autoprefixer-rails'
 gem 'nokogiri'
 gem 'date_time_precision'
 gem 'rest-client'
