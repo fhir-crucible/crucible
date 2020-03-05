@@ -312,23 +312,25 @@ class Server
 
           if ['1.0.2', '1.0.1', '1.0.0', '0.5.0', '0.4.0', '0.40'].include? version_abbreviated
             self.fhir_sequence = 'DSTU2'
-          elsif ['3.0.0', '3.0.1', '1.8.0', '1.6.0', '1.4.0', '1.2.0', '1.1.0'].include? version_abbreviated
+          elsif ['3.0.0', '3.0.1', '3.0.2', '1.8.0', '1.6.0', '1.4.0', '1.2.0', '1.1.0'].include? version_abbreviated
             self.fhir_sequence = 'STU3'
+          elsif ['4.0.0', '4.0.1'].include? version_abbreviated
+            self.fhir_sequence = 'R4'
           else # Set to most recent sequence and version if not STU3 or DSTU2
             self.fhir_sequence = 'R4'
-            self.fhir_version = '4.0.0'
+            self.fhir_version = '4.0.1'
           end
         rescue # Set to most recent sequence and version if unexpected input
           self.fhir_sequence = 'R4'
-          self.fhir_version = '4.0.0'
+          self.fhir_version = '4.0.1'
         end
       else # Set to most recent sequence and version if no conformance value
         self.fhir_sequence = 'R4'
-        self.fhir_version = '4.0.0'
+        self.fhir_version = '4.0.1'
       end
     else # Set to most recent sequence and version if no conformance
       self.fhir_sequence = 'R4'
-      self.fhir_version = '4.0.0'
+      self.fhir_version = '4.0.1'
     end
     self.save
   end
