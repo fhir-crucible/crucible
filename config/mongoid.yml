@@ -5,12 +5,12 @@ development:
       hosts:
         - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>
         
-      options:
+     
 <% if ENV['MONGODB_USER'] != nil %>       
-        user: <%= ENV['MONGODB_USER'] %>
+      user: <%= ENV['MONGODB_USER'] %>
 <% end %>
 <% if ENV['MONGODB_PASSWORD'] != nil %>       
-        password: <%= ENV['MONGODB_PASSWORD'] %>
+      password: <%= ENV['MONGODB_PASSWORD'] %>
 <% end %>
 
 test:
@@ -26,10 +26,10 @@ test:
         max_retries: 1
         retry_interval: 0
 <% if ENV['MONGODB_USER'] != nil %>       
-        user: <%= ENV['MONGODB_USER'] %>
+      user: <%= ENV['MONGODB_USER'] %>
 <% end %>
 <% if ENV['MONGODB_PASSWORD'] != nil %>       
-        password: <%= ENV['MONGODB_PASSWORD'] %>
+      password: <%= ENV['MONGODB_PASSWORD'] %>
 <% end %>
 
 production:
@@ -39,10 +39,9 @@ production:
       hosts:
         - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>
 
-      options:
 <% if ENV['MONGODB_USER'] != nil %>       
-        user: <%= ENV['MONGODB_USER'] %>
+      user: <%= ENV['MONGODB_USER'] %>
 <% end %>
 <% if ENV['MONGODB_PASSWORD'] != nil %>       
-        password: <%= ENV['MONGODB_PASSWORD'] %>
+      password: <%= ENV['MONGODB_PASSWORD'] %>
 <% end %>
