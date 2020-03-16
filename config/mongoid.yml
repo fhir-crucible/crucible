@@ -10,7 +10,7 @@ development:
         user: <%= ENV['MONGODB_USER'] %>
 <% end %>
 <% if ENV['MONGODB_PASSWORD'] != nil %>       
-        user: <%= ENV['MONGODB_PASSWORD'] %>
+        password: <%= ENV['MONGODB_PASSWORD'] %>
 <% end %>
 
 test:
@@ -29,7 +29,7 @@ test:
         user: <%= ENV['MONGODB_USER'] %>
 <% end %>
 <% if ENV['MONGODB_PASSWORD'] != nil %>       
-        user: <%= ENV['MONGODB_PASSWORD'] %>
+        password: <%= ENV['MONGODB_PASSWORD'] %>
 <% end %>
 
 production:
@@ -44,5 +44,5 @@ production:
         user: <%= ENV['MONGODB_USER'] %>
 <% end %>
 <% if ENV['MONGODB_PASSWORD'] != nil %>       
-        user: <%= ENV['MONGODB_PASSWORD'] %>
+        password: <%= ENV['MONGODB_PASSWORD'] %>
 <% end %>
