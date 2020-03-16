@@ -2,8 +2,10 @@ development:
   sessions:
     default:
       database: crucible_development
-      hosts:
-        - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>
+      uri: <%= ENV['MONGODB_URI'] || "localhost:27017" %>
+      options:
+        user: <%= ENV['MONGODB_USER'] || nil %>
+        password: <%= ENV['MONGODB_PASSWORD'] || nil %>
 test:
   sessions:
     default:
@@ -16,9 +18,16 @@ test:
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+        user: <%= ENV['MONGODB_USER'] || nil %>
+        password: <%= ENV['MONGODB_PASSWORD'] || nil" %>
+
 production:
   sessions:
     default:
       database: crucible_production
       hosts:
         - <%= ENV['MONGODB_HOST'] || "localhost:27017" %>
+
+      options:
+        user: <%= ENV['MONGODB_USER'] || nil %>
+        password: <%= ENV['MONGODB_PASSWORD'] || nil %>
