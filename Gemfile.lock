@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/fhir-crucible/plan_executor.git
-  revision: 2bd7047e1f35bc701995d512e45f890b81edd5d7
+  revision: d3ac531a79a9a963db8d95187fdbd2e14805e6c8
   branch: r4
   specs:
     plan_executor (1.8.0)
@@ -203,9 +203,8 @@ GEM
       multi_json (>= 1.2)
     json (1.8.6)
     jsonapi-renderer (0.2.0)
-    jsonpath (1.0.4)
+    jsonpath (1.1.0)
       multi_json
-      to_regexp (~> 0.2.1)
     jwt (2.2.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -364,7 +363,6 @@ GEM
     tilt (1.4.1)
     time_difference (0.5.0)
       activesupport
-    to_regexp (0.2.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uglifier (4.1.20)
