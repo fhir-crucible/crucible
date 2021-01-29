@@ -5,7 +5,7 @@ volumes:
   rails_vendor:
 services:
   mongo:
-    image: mongo:2.6
+    image: mongo:3.6
   web:
     build: .
     command: /crucible/bin/docker-start-web.sh 3000
