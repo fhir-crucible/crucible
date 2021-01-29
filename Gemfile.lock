@@ -415,6 +415,3 @@ DEPENDENCIES
   time_difference
   uglifier (>= 1.3.0)
   webmock
-
-BUNDLED WITH
-   1.17.3
