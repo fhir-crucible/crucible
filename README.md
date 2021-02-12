@@ -21,6 +21,16 @@ A simple Rails app for evaluating FHIR.
 - Start the server: `docker-compose up`
 - Navigate to `http://localhost:3000`
 
+
+#### Docker ENV Variables
+
+To configure the image in docker the following env variables can be used:
+
+- `MONGODB_HOST` : Host
+- `MONGODB_USER` : User
+- `MONGODB_PASSWORD` : Password
+- `CRUCIBLE_SERVER` : Hostname of the Crucible server (for the task runner)
+
 ### OSX Installation ###
 
 #### Dependencies

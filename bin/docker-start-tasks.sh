@@ -1,6 +1,8 @@
 #!/bin/bash
 
-while ! nc -w 10 -z web $1;
+SERVER=${CRUCIBLE_SERVER:-web}
+
+while ! nc -w 10 -z $SERVER $1;
 do
   echo Task runner waiting for crucible web app to load on port $1;
   sleep 10;
