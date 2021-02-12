@@ -6,4 +6,5 @@ do
   sleep 10;
 done;
 echo Task runner starting
-bundle exec rake jobs:work
+
+bin/delayed_job -n 3 start
